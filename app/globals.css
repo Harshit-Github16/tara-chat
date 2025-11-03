@@ -2,25 +2,143 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2937;
+  /* gray-800 */
+  --primary: #f43f5e;
+  /* rose-500 */
+  --primary-light: #fff1f2;
+  /* rose-50 */
+  --primary-dark: #e11d48;
+  /* rose-600 */
+  --secondary: #fffbfb;
+  /* rose-25 */
+  --accent: #fda4af;
+  /* rose-300 */
+  --border: #ffe4e6;
+  /* rose-100 */
+  --muted: #fafafa;
+  /* neutral-50 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-sans);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #fff1f2;
+    /* rose-50 for light theme even in dark mode */
+    --foreground: #1f2937;
+    /* gray-800 */
+    --primary: #f43f5e;
+    /* rose-500 */
+    --primary-light: #ffffff;
+    --secondary: #ffffff;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+/* Global form element text colors for better visibility */
+input,
+textarea,
+select {
+  color: #374151;
+  /* gray-700 */
+  caret-color: var(--primary);
+  border-color: var(--border);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+  /* gray-400 */
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
+/* Theme utility classes */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary-light {
+  background-color: var(--primary-light);
+}
+
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+.bg-muted {
+  background-color: var(--muted);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-dark {
+  color: var(--primary-dark);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+
+.border-light {
+  border-color: var(--border);
+}
+
+.btn-primary {
+  background: linear-gradient(to right, white, var(--primary));
+  color: var(--primary-dark);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(244, 63, 94, 0.1);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+  color: white;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: linear-gradient(to right, white, var(--primary-light));
+  color: var(--primary);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(to right, var(--primary-light), var(--primary));
+  border-color: var(--primary);
+  color: white;
 }
