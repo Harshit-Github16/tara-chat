@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComments,
@@ -32,17 +33,23 @@ export default function Home() {
       <header className="sticky top-0 z-50 border-b border-rose-100 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-rose-200"></div>
+            <Image
+              src="/taralogo.jpg"
+              alt="Tara Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 rounded-full object-cover"
+            />
             <span className="text-xl font-bold text-rose-600">Tara</span>
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
+            {/* <Link
               href="/login"
               className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
             >
               Sign In
-            </Link>
+            </Link> */}
             <Link
               href="/login"
               className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
@@ -112,10 +119,16 @@ export default function Home() {
                   </div>
                   <div className="mt-6 rounded-2xl bg-rose-200 p-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-rose-200"></div>
+                      <Image
+                        src="/taralogo.jpg"
+                        alt="Life Coach Avatar"
+                        width={40}
+                        height={40}
+                        className="h-10 w-10 rounded-full object-cover"
+                      />
                       <div>
-                        <div className="text-sm font-semibold text-gray-900">Wellness Buddy</div>
-                        <div className="text-xs text-gray-600">I'm here to support your emotional journey ✨</div>
+                        <div className="text-sm font-semibold text-gray-900">Life Coach</div>
+                        <div className="text-xs text-gray-600">Ready to unlock your potential? Let's grow together! 🚀</div>
                       </div>
                     </div>
                   </div>
@@ -821,7 +834,13 @@ export default function Home() {
             {/* Brand Section */}
             <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <div className="h-10 w-10 rounded-full bg-rose-200"></div>
+                <Image
+                  src="/taralogo.jpg"
+                  alt="Tara Logo"
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-full object-cover"
+                />
                 <span className="text-2xl font-bold text-rose-600">Tara</span>
               </div>
               <p className="text-gray-600 mb-6 leading-relaxed">
@@ -895,7 +914,13 @@ export default function Home() {
           {/* Bottom Bar */}
           <div className="mt-8 border-t border-rose-100 pt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-full bg-rose-200"></div>
+              <Image
+                src="/taralogo.jpg"
+                alt="Tara Logo"
+                width={24}
+                height={24}
+                className="h-6 w-6 rounded-full object-cover"
+              />
               <span className="text-sm font-semibold text-rose-600">Tara</span>
               <span className="text-gray-400">•</span>
               <span className="text-sm text-gray-500">Emotional Wellness Platform</span>
