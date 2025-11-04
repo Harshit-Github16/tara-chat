@@ -155,15 +155,15 @@ export default function ChatListPage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
       {/* Optional minimal header */}
       <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+        <div className="mx-auto flex max-w-9xl items-center justify-between px-4 py-3">
           <div className="text-lg font-semibold text-rose-600">Tara</div>
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 gap-4 px-4 py-4 sm:grid-cols-12">
+      <div className="mx-auto grid w-full max-w-9xl flex-1 grid-cols-1  px-4  sm:grid-cols-12">
         {/* Sidebar */}
         <aside className="sm:col-span-4 lg:col-span-3">
-          <div className="rounded-2xl border border-rose-100 bg-white p-3 shadow-sm">
+          <div className=" border border-rose-100 bg-white p-3 shadow-sm">
             <div className="mb-3 flex items-center justify-between">
               <div className="text-sm font-semibold text-gray-700">Chats</div>
               <button
@@ -179,8 +179,8 @@ export default function ChatListPage() {
                   key={c.id}
                   onClick={() => setActiveId(c.id)}
                   className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${c.id === activeId
-                    ? "border-rose-300 bg-rose-200 text-rose-700"
-                    : "border-rose-100 bg-white text-gray-700 hover:bg-rose-200"
+                    ? "border-rose-200 bg-rose-100 text-rose-700"
+                    : "border-rose-100 bg-white text-gray-700 hover:bg-rose-100"
                     }`}
                 >
                   <div className="flex items-center justify-between">
@@ -200,7 +200,7 @@ export default function ChatListPage() {
 
         {/* Chat view */}
         <section className="sm:col-span-8 lg:col-span-9">
-          <div className="flex h-[calc(100vh-180px)] flex-col rounded-2xl border border-rose-100 bg-white shadow-sm">
+          <div className="flex h-[calc(100vh-120px)] flex-col  border border-rose-100 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
               <div>
                 <div className="text-sm font-semibold text-gray-900">
@@ -415,8 +415,8 @@ function ChatBubble({ who, type = 'text', content, duration }) {
     <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[70%] rounded-2xl px-4 py-3 text-sm shadow ${isMe
-          ? "rounded-br-sm bg-rose-200 text-rose-700"
-          : "rounded-bl-sm bg-rose-200 text-gray-800"
+          ? "rounded-br-sm bg-rose-100 text-rose-700"
+          : "rounded-bl-sm bg-rose-100 text-gray-800"
           }`}
       >
         {type === 'text' ? (
