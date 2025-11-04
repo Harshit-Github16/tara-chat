@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 border-b border-indigo-100 bg-white/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-50 border-b border-rose-100 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-2">
             <Image
@@ -40,19 +40,19 @@ export default function Home() {
               height={32}
               className="h-8 w-8 rounded-full object-cover"
             />
-            <span className="text-xl font-bold text-indigo-600">Tara</span>
+            <span className="text-xl font-bold text-rose-600">Tara</span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* <Link
               href="/login"
-              className="rounded-full border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-200 transition-all"
+              className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
             >
               Sign In
             </Link> */}
             <Link
               href="/login"
-              className="rounded-full bg-indigo-200 px-5 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-300 transition-all"
+              className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
             >
               Get Started
             </Link>
@@ -62,16 +62,16 @@ export default function Home() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.1),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.05),transparent_50%)]"></div>
+        <section className="relative overflow-hidden bg-gradient-to-br from-rose-50/50 via-white to-rose-50/30">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.1),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.05),transparent_50%)]"></div>
 
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-32">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
               <div className="text-center lg:text-left">
                 <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
                   Your Personal
-                  <span className="bg-gradient-to-r from-indigo-500 to-indigo-600 bg-clip-text text-transparent"> Emotional </span>
+                  <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Emotional </span>
                   Wellness Companion
                 </h1>
                 <p className="mt-6 text-lg text-gray-600 sm:text-xl">
@@ -81,13 +81,13 @@ export default function Home() {
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
                   <Link
                     href="/login"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-indigo-200 px-8 py-4 text-base font-semibold text-indigo-700 shadow-lg hover:bg-indigo-300 transition-all"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
                   >Get Started
                     <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                   <Link
                     href="#demo"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-indigo-200 px-8 py-4 text-base font-medium text-indigo-600 hover:bg-indigo-200 transition-all"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
                   >
                     <FontAwesomeIcon icon={faPlay} className="h-4 w-4" />
                     Watch Demo
@@ -95,29 +95,29 @@ export default function Home() {
                 </div>
                 <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500 lg:justify-start">
                   <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-indigo-500" />
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
                     Free to start
                   </div>
                   <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-indigo-500" />
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
                     No credit card required
                   </div>
                   <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-indigo-500" />
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
                     Privacy focused
                   </div>
                 </div>
               </div>
 
               <div className="relative">
-                <div className="relative rounded-3xl border border-indigo-100 bg-white p-8 shadow-2xl">
+                <div className="relative rounded-3xl border border-rose-100 bg-white p-8 shadow-2xl">
                   <div className="grid grid-cols-2 gap-4">
                     <FeaturePreview icon={faComments} title="Emotional Chat" desc="Express & reflect" />
                     <FeaturePreview icon={faBookOpen} title="Smart Journaling" desc="Guided insights" />
                     <FeaturePreview icon={faChartLine} title="Mood Analytics" desc="Track progress" />
                     <FeaturePreview icon={faUserAstronaut} title="100+ Characters" desc="Find your guide" />
                   </div>
-                  <div className="mt-6 rounded-2xl bg-indigo-200 p-4">
+                  <div className="mt-6 rounded-2xl bg-rose-200 p-4">
                     <div className="flex items-center gap-3">
                       <Image
                         src="/taralogo.jpg"
@@ -133,8 +133,8 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-indigo-200 opacity-20"></div>
-                <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-indigo-200 opacity-30"></div>
+                <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-rose-200 opacity-20"></div>
+                <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-rose-200 opacity-30"></div>
               </div>
             </div>
           </div>
@@ -194,14 +194,14 @@ export default function Home() {
         </section>
 
         {/* How It Works */}
-        <section id="how-it-works" className="py-20 bg-gradient-to-br from-indigo-50/30 via-white to-indigo-50/20 relative overflow-hidden">
+        <section id="how-it-works" className="py-20 bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20 relative overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(99,102,241,0.05),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.03),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(244,63,94,0.05),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(244,63,94,0.03),transparent_50%)]"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-medium text-rose-700 mb-6">
                 <FontAwesomeIcon icon={faHeart} className="h-4 w-4" />
                 Simple & Effective
               </div>
@@ -264,12 +264,12 @@ export default function Home() {
 
             {/* Call to action */}
             <div className="mt-16 text-center">
-              <div className="inline-flex items-center gap-4 rounded-2xl bg-white border border-indigo-100 p-6 shadow-lg">
+              <div className="inline-flex items-center gap-4 rounded-2xl bg-white border border-rose-100 p-6 shadow-lg">
                 <div className="flex -space-x-2">
-                  <div className="h-10 w-10 rounded-full bg-indigo-200 border-2 border-white flex items-center justify-center text-indigo-700 font-semibold text-sm">SJ</div>
-                  <div className="h-10 w-10 rounded-full bg-indigo-200 border-2 border-white flex items-center justify-center text-indigo-700 font-semibold text-sm">MC</div>
-                  <div className="h-10 w-10 rounded-full bg-indigo-300 border-2 border-white flex items-center justify-center text-indigo-800 font-semibold text-sm">ER</div>
-                  <div className="h-10 w-10 rounded-full bg-indigo-300 border-2 border-white flex items-center justify-center text-indigo-800 font-semibold text-sm">+5K</div>
+                  <div className="h-10 w-10 rounded-full bg-rose-200 border-2 border-white flex items-center justify-center text-rose-700 font-semibold text-sm">SJ</div>
+                  <div className="h-10 w-10 rounded-full bg-rose-200 border-2 border-white flex items-center justify-center text-rose-700 font-semibold text-sm">MC</div>
+                  <div className="h-10 w-10 rounded-full bg-rose-300 border-2 border-white flex items-center justify-center text-rose-800 font-semibold text-sm">ER</div>
+                  <div className="h-10 w-10 rounded-full bg-rose-300 border-2 border-white flex items-center justify-center text-rose-800 font-semibold text-sm">+5K</div>
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-semibold text-gray-900">Join 10,000+ users already improving their wellness</p>
@@ -281,10 +281,10 @@ export default function Home() {
         </section>
 
         {/* Social Proof */}
-        <section className="py-20 bg-gradient-to-br from-white via-indigo-50/20 to-white relative overflow-hidden">
+        <section className="py-20 bg-gradient-to-br from-white via-rose-50/20 to-white relative overflow-hidden">
           {/* Background elements */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.03),transparent_70%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.02),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.03),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.02),transparent_70%)]"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center">
@@ -362,9 +362,9 @@ export default function Home() {
                   {['SJ', 'MC', 'ER', 'DK', 'LT', 'AM', 'JS', 'KP'].map((initials, index) => (
                     <div
                       key={initials}
-                      className={`h-12 w-12 rounded-full border-3 border-white flex items-center justify-center text-white font-semibold text-sm shadow-lg ${index % 4 === 0 ? 'bg-indigo-400' :
-                        index % 4 === 1 ? 'bg-indigo-400' :
-                          index % 4 === 2 ? 'bg-indigo-500' : 'bg-indigo-500'
+                      className={`h-12 w-12 rounded-full border-3 border-white flex items-center justify-center text-white font-semibold text-sm shadow-lg ${index % 4 === 0 ? 'bg-rose-400' :
+                        index % 4 === 1 ? 'bg-rose-400' :
+                          index % 4 === 2 ? 'bg-rose-500' : 'bg-rose-500'
                         }`}
                       style={{ zIndex: 10 - index }}
                     >
@@ -382,7 +382,7 @@ export default function Home() {
         </section>
 
         {/* Customer Reviews */}
-        <section className="py-20 bg-gradient-to-br from-indigo-50/30 to-white overflow-hidden relative">
+        <section className="py-20 bg-gradient-to-br from-rose-50/30 to-white overflow-hidden relative">
           {/* Header with container */}
           <div className="mx-auto max-w-7xl px-6 mb-16">
             <div className="text-center">
@@ -615,10 +615,10 @@ export default function Home() {
                 </div>
               </div>
               <div className="relative">
-                <div className="rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-white p-8 shadow-xl">
+                <div className="rounded-3xl border border-rose-100 bg-gradient-to-br from-rose-50 to-white p-8 shadow-xl">
                   <div className="text-center">
-                    <div className="mx-auto h-20 w-20 rounded-full bg-indigo-200 flex items-center justify-center mb-6">
-                      <FontAwesomeIcon icon={faHeart} className="h-10 w-10 text-indigo-600" />
+                    <div className="mx-auto h-20 w-20 rounded-full bg-rose-200 flex items-center justify-center mb-6">
+                      <FontAwesomeIcon icon={faHeart} className="h-10 w-10 text-rose-600" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-4">Start Your Journey Today</h3>
                     <p className="text-gray-600 mb-6">Join thousands who have already improved their emotional wellness</p>
@@ -636,7 +636,7 @@ export default function Home() {
         </section>
 
         {/* Blog Section */}
-        <section className="py-20 bg-gradient-to-br from-indigo-50/30 to-white">
+        <section className="py-20 bg-gradient-to-br from-rose-50/30 to-white">
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
@@ -675,7 +675,7 @@ export default function Home() {
               <div className="flex justify-center mt-8">
                 <Link
                   href="/blog"
-                  className="inline-flex items-center gap-2 rounded-full border border-indigo-200 px-6 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-200 transition-all"
+                  className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-6 py-3 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
                 >
                   View All Articles
                   <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
@@ -719,7 +719,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-indigo-100 bg-white p-8 shadow-lg">
+              <div className="rounded-2xl border border-rose-100 bg-white p-8 shadow-lg">
                 <form className="space-y-6">
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div>
@@ -729,7 +729,7 @@ export default function Home() {
                       <input
                         type="text"
                         id="firstName"
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                         placeholder="John"
                       />
                     </div>
@@ -740,7 +740,7 @@ export default function Home() {
                       <input
                         type="text"
                         id="lastName"
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                         placeholder="Doe"
                       />
                     </div>
@@ -753,7 +753,7 @@ export default function Home() {
                     <input
                       type="email"
                       id="email"
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                       placeholder="john@example.com"
                     />
                   </div>
@@ -765,7 +765,7 @@ export default function Home() {
                     <input
                       type="text"
                       id="subject"
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                       placeholder="How can we help?"
                     />
                   </div>
@@ -777,14 +777,14 @@ export default function Home() {
                     <textarea
                       id="message"
                       rows={4}
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                       placeholder="Tell us more about your question or feedback..."
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-200 px-6 py-3 text-base font-semibold text-indigo-700 shadow-sm hover:bg-indigo-300 transition-all"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-rose-200 px-6 py-3 text-base font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
                   >
                     <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4" />
                     Send Message
@@ -796,7 +796,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-indigo-50 to-white">
+        <section className="py-20 bg-gradient-to-r from-rose-50 to-white">
           <div className="mx-auto max-w-4xl px-6 text-center">
             <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
               Ready to start your emotional wellness journey?
@@ -807,14 +807,14 @@ export default function Home() {
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-200 px-8 py-4 text-base font-semibold text-indigo-700 shadow-lg hover:bg-indigo-300 transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
               >
                 <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
                 Continue with Google
               </Link>
               <Link
                 href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-indigo-200 px-8 py-4 text-base font-medium text-indigo-600 hover:bg-indigo-200 transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
               >
                 <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
                 Continue with Apple
@@ -828,25 +828,25 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-indigo-50/30 via-white to-indigo-50/20 border-t border-indigo-100">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
+      <footer className="bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20 border-t border-rose-100">
+        <div className="mx-auto max-w-7xl px-6 py-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             {/* Brand Section */}
-            <div className="lg:col-span-1">
-              <div className="flex items-center gap-3 mb-6">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
                 <Image
                   src="/taralogo.jpg"
                   alt="Tara Logo"
-                  width={40}
-                  height={40}
-                  className="h-10 w-10 rounded-full object-cover"
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full object-cover"
                 />
-                <span className="text-2xl font-bold text-indigo-600">Tara</span>
+                <span className="text-xl font-bold text-rose-600">Tara</span>
               </div>
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                Your personal emotional wellness companion. Connect, reflect, and grow with AI-powered support that's always there for you.
+              <p className="text-gray-600 mb-4 text-sm">
+                Your personal emotional wellness companion.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex space-x-3">
                 <LightSocialLink icon={faTwitter} href="#" />
                 <LightSocialLink icon={faLinkedin} href="#" />
                 <LightSocialLink icon={faInstagram} href="#" />
@@ -854,80 +854,34 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Product Links */}
+            {/* Quick Links */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Product</h3>
-              <ul className="space-y-3">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Quick Links</h3>
+              <ul className="space-y-2 text-sm">
                 <LightFooterLink href="#features" text="Features" />
                 <LightFooterLink href="#how-it-works" text="How it Works" />
-                <LightFooterLink href="/pricing" text="Pricing" />
-                <LightFooterLink href="/api" text="API" />
-                <LightFooterLink href="/integrations" text="Integrations" />
+                <LightFooterLink href="/login" text="Get Started" />
               </ul>
             </div>
 
-            {/* Company Links */}
+            {/* Legal */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Company</h3>
-              <ul className="space-y-3">
-                <LightFooterLink href="/about" text="About Us" />
-                <LightFooterLink href="/blog" text="Blog" />
-                <LightFooterLink href="/careers" text="Careers" />
-                <LightFooterLink href="/press" text="Press Kit" />
-                <LightFooterLink href="/partners" text="Partners" />
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Legal</h3>
+              <ul className="space-y-2 text-sm">
+                <LightFooterLink href="#" text="Privacy Policy" />
+                <LightFooterLink href="#" text="Terms of Service" />
+                <LightFooterLink href="#" text="Contact Us" />
               </ul>
-            </div>
-
-            {/* Support & Legal */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">Support</h3>
-              <ul className="space-y-3">
-                <LightFooterLink href="/help" text="Help Center" />
-                <LightFooterLink href="/contact" text="Contact Us" />
-                <LightFooterLink href="/status" text="System Status" />
-                <LightFooterLink href="/privacy" text="Privacy Policy" />
-                <LightFooterLink href="/terms" text="Terms of Service" />
-              </ul>
-            </div>
-          </div>
-
-          {/* Newsletter Signup */}
-          <div className="mt-12 border-t border-indigo-100 pt-8">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 items-center">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Stay updated</h3>
-                <p className="text-gray-600">Get the latest tips and insights delivered to your inbox.</p>
-              </div>
-              <div className="flex gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 rounded-lg border border-indigo-200 bg-white px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                />
-                <button className="rounded-lg bg-indigo-200 px-6 py-3 font-semibold text-indigo-700 hover:bg-indigo-300 transition-all">
-                  Subscribe
-                </button>
-              </div>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-8 border-t border-indigo-100 pt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/taralogo.jpg"
-                alt="Tara Logo"
-                width={24}
-                height={24}
-                className="h-6 w-6 rounded-full object-cover"
-              />
-              <span className="text-sm font-semibold text-indigo-600">Tara</span>
-              <span className="text-gray-400">•</span>
-              <span className="text-sm text-gray-500">Emotional Wellness Platform</span>
-            </div>
-            <div className="flex items-center gap-6 text-sm text-gray-500">
+          <div className="mt-6 border-t border-rose-100 pt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>© 2024 Tara. All rights reserved.</span>
-              <span>Made with ❤️ for better mental health</span>
+            </div>
+            <div className="text-sm text-gray-500">
+              <span>Made with ❤️ for better mental wellness</span>
             </div>
           </div>
         </div>
@@ -938,9 +892,9 @@ export default function Home() {
 
 function FeaturePreview({ icon, title, desc }) {
   return (
-    <div className="rounded-xl border border-indigo-100 p-3">
+    <div className="rounded-xl border border-rose-100 p-3">
       <div className="flex items-center gap-2">
-        <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-200 text-indigo-600">
+        <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-rose-200 text-rose-600">
           <FontAwesomeIcon icon={icon} className="h-4 w-4" />
         </span>
         <div>
@@ -954,9 +908,9 @@ function FeaturePreview({ icon, title, desc }) {
 
 function FeatureCard({ icon, title, description, features }) {
   return (
-    <div className="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-200 text-indigo-600">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-200 text-rose-600">
           <FontAwesomeIcon icon={icon} className="h-6 w-6" />
         </span>
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
@@ -965,7 +919,7 @@ function FeatureCard({ icon, title, description, features }) {
       <ul className="mt-4 space-y-2">
         {features.map((feature, index) => (
           <li key={index} className="flex items-center gap-2 text-sm text-gray-600">
-            <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-indigo-500" />
+            <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-rose-500" />
             {feature}
           </li>
         ))}
@@ -977,11 +931,11 @@ function FeatureCard({ icon, title, description, features }) {
 function StepCard({ step, title, description, icon }) {
   return (
     <div className="text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-indigo-200 text-indigo-600 text-xl font-bold">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-rose-200 text-rose-600 text-xl font-bold">
         {step}
       </div>
       <div className="mt-4 flex justify-center">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-200 text-indigo-500">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-200 text-rose-500">
           <FontAwesomeIcon icon={icon} className="h-6 w-6" />
         </span>
       </div>
@@ -993,13 +947,13 @@ function StepCard({ step, title, description, icon }) {
 
 function EnhancedStepCard({ step, title, description, icon, features, color }) {
   const colorClasses = {
-    indigo: 'from-indigo-50 to-indigo-100 border-indigo-200 text-indigo-600',
-    indigo: 'from-indigo-50 to-indigo-100 border-indigo-200 text-indigo-600'
+    rose: 'from-rose-50 to-rose-100 border-rose-200 text-rose-600',
+    indigo: 'from-rose-50 to-rose-100 border-rose-200 text-rose-600'
   };
 
   return (
     <div className="relative group">
-      <div className="rounded-3xl border border-indigo-100 bg-white p-8 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+      <div className="rounded-3xl border border-rose-100 bg-white p-8 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
         {/* Step number */}
         <div className="absolute -top-4 left-8">
           <div className={`h-12 w-12 rounded-full bg-gradient-to-br ${colorClasses[color]} border-4 border-white shadow-lg flex items-center justify-center text-xl font-bold`}>
@@ -1023,7 +977,7 @@ function EnhancedStepCard({ step, title, description, icon, features, color }) {
           <div className="space-y-2">
             {features.map((feature, index) => (
               <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
-                <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-indigo-500 flex-shrink-0" />
+                <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-rose-500 flex-shrink-0" />
                 <span>{feature}</span>
               </div>
             ))}
@@ -1031,7 +985,7 @@ function EnhancedStepCard({ step, title, description, icon, features, color }) {
         </div>
 
         {/* Hover effect */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-rose-500/5 to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
     </div>
   );
@@ -1040,7 +994,7 @@ function EnhancedStepCard({ step, title, description, icon, features, color }) {
 function StatCard({ number, label }) {
   return (
     <div className="text-center">
-      <div className="text-3xl font-bold text-indigo-600">{number}</div>
+      <div className="text-3xl font-bold text-rose-600">{number}</div>
       <div className="text-sm text-gray-600">{label}</div>
     </div>
   );
@@ -1049,10 +1003,10 @@ function StatCard({ number, label }) {
 function EnhancedStatCard({ number, label, description, icon, trend }) {
   return (
     <div className="group relative">
-      <div className="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
+      <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
         {/* Icon */}
         <div className="flex items-center justify-between mb-4">
-          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-50 to-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform duration-300">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition-transform duration-300">
             <FontAwesomeIcon icon={icon} className="h-6 w-6" />
           </div>
           <div className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
@@ -1062,7 +1016,7 @@ function EnhancedStatCard({ number, label, description, icon, trend }) {
 
         {/* Stats */}
         <div className="text-center">
-          <div className="text-3xl font-bold text-gray-900 mb-1 group-hover:text-indigo-600 transition-colors">
+          <div className="text-3xl font-bold text-gray-900 mb-1 group-hover:text-rose-600 transition-colors">
             {number}
           </div>
           <div className="text-sm font-semibold text-gray-900 mb-1">{label}</div>
@@ -1070,7 +1024,7 @@ function EnhancedStatCard({ number, label, description, icon, trend }) {
         </div>
 
         {/* Hover effect */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-rose-500/5 to-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       </div>
     </div>
   );
@@ -1079,7 +1033,7 @@ function EnhancedStatCard({ number, label, description, icon, trend }) {
 function TrustIndicator({ icon, title, description, badge }) {
   return (
     <div className="text-center group">
-      <div className="relative inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-indigo-100 text-indigo-600 mb-4 group-hover:scale-110 transition-transform duration-300">
+      <div className="relative inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100 text-rose-600 mb-4 group-hover:scale-110 transition-transform duration-300">
         <FontAwesomeIcon icon={icon} className="h-8 w-8" />
         <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
           ✓
@@ -1087,7 +1041,7 @@ function TrustIndicator({ icon, title, description, badge }) {
       </div>
       <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-600 text-sm mb-3">{description}</p>
-      <div className="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 text-xs font-medium px-3 py-1 rounded-full">
+      <div className="inline-flex items-center gap-1 bg-rose-50 text-rose-700 text-xs font-medium px-3 py-1 rounded-full">
         <FontAwesomeIcon icon={faCheck} className="h-3 w-3" />
         {badge}
       </div>
@@ -1097,18 +1051,18 @@ function TrustIndicator({ icon, title, description, badge }) {
 
 function ReviewCard({ name, role, rating, review, avatar }) {
   return (
-    <div className="flex-shrink-0 w-80 rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+    <div className="flex-shrink-0 w-80 rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
       <div className="flex items-center gap-1 mb-4">
         {[...Array(rating)].map((_, i) => (
           <FontAwesomeIcon key={i} icon={faStar} className="h-4 w-4 text-yellow-400" />
         ))}
       </div>
       <div className="relative mb-6">
-        <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-1 h-6 w-6 text-indigo-200" />
+        <FontAwesomeIcon icon={faQuoteLeft} className="absolute -top-2 -left-1 h-6 w-6 text-rose-200" />
         <p className="text-gray-700 leading-relaxed pl-6 text-sm">{review}</p>
       </div>
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-200 to-indigo-300 flex items-center justify-center text-indigo-700 font-semibold text-sm shadow-sm">
+        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-rose-200 to-rose-300 flex items-center justify-center text-rose-700 font-semibold text-sm shadow-sm">
           {avatar}
         </div>
         <div>
@@ -1124,7 +1078,7 @@ function BenefitItem({ icon, title, description }) {
   return (
     <div className="flex gap-4">
       <div className="flex-shrink-0">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-200 text-indigo-600">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-200 text-rose-600">
           <FontAwesomeIcon icon={icon} className="h-6 w-6" />
         </span>
       </div>
@@ -1138,15 +1092,15 @@ function BenefitItem({ icon, title, description }) {
 
 function BlogCard({ title, excerpt, date, readTime, category }) {
   return (
-    <div className="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+    <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
       <div className="flex items-center gap-2 mb-4">
-        <span className="inline-flex items-center rounded-full bg-indigo-200 px-3 py-1 text-xs font-medium text-indigo-700">
+        <span className="inline-flex items-center rounded-full bg-rose-200 px-3 py-1 text-xs font-medium text-rose-700">
           {category}
         </span>
         <span className="text-xs text-gray-500">•</span>
         <span className="text-xs text-gray-500">{readTime}</span>
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors">
+      <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-rose-600 transition-colors">
         {title}
       </h3>
       <p className="text-gray-600 mb-4 leading-relaxed">{excerpt}</p>
@@ -1155,7 +1109,7 @@ function BlogCard({ title, excerpt, date, readTime, category }) {
           <FontAwesomeIcon icon={faCalendarAlt} className="h-3 w-3" />
           {date}
         </div>
-        <div className="text-indigo-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
+        <div className="text-rose-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
           Read more
           <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
         </div>
@@ -1168,13 +1122,13 @@ function ContactInfo({ icon, title, info, description }) {
   return (
     <div className="flex gap-4">
       <div className="flex-shrink-0">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-200 text-indigo-600">
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-rose-200 text-rose-600">
           <FontAwesomeIcon icon={icon} className="h-5 w-5" />
         </span>
       </div>
       <div>
         <h3 className="font-semibold text-gray-900">{title}</h3>
-        <p className="text-indigo-600 font-medium">{info}</p>
+        <p className="text-rose-600 font-medium">{info}</p>
         <p className="text-sm text-gray-600">{description}</p>
       </div>
     </div>
@@ -1185,7 +1139,7 @@ function SocialLink({ icon, href }) {
   return (
     <a
       href={href}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800 text-gray-400 hover:bg-indigo-200 hover:text-indigo-700 transition-all"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800 text-gray-400 hover:bg-rose-200 hover:text-rose-700 transition-all"
     >
       <FontAwesomeIcon icon={icon} className="h-5 w-5" />
     </a>
@@ -1196,7 +1150,7 @@ function LightSocialLink({ icon, href }) {
   return (
     <a
       href={href}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 hover:bg-indigo-200 hover:text-indigo-700 transition-all"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-rose-600 hover:bg-rose-200 hover:text-rose-700 transition-all"
     >
       <FontAwesomeIcon icon={icon} className="h-5 w-5" />
     </a>
@@ -1206,7 +1160,7 @@ function LightSocialLink({ icon, href }) {
 function FooterLink({ href, text }) {
   return (
     <li>
-      <a href={href} className="text-gray-300 hover:text-indigo-400 transition-colors">
+      <a href={href} className="text-gray-300 hover:text-rose-400 transition-colors">
         {text}
       </a>
     </li>
@@ -1216,7 +1170,7 @@ function FooterLink({ href, text }) {
 function LightFooterLink({ href, text }) {
   return (
     <li>
-      <a href={href} className="text-gray-600 hover:text-indigo-600 transition-colors">
+      <a href={href} className="text-gray-600 hover:text-rose-600 transition-colors">
         {text}
       </a>
     </li>

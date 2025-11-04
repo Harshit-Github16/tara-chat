@@ -10,6 +10,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const checkUserStatus = () => {
+    // Check if user has completed onboarding
+    const userProfile = localStorage.getItem('userProfile');
+    const isNewUser = localStorage.getItem('isNewUser');
+
+    if (!userProfile || isNewUser === 'true') {
+      // New user - redirect to onboarding
+      router.replace("/onboarding");
+    } else {
+      // Existing user - redirect to welcome
+      router.replace("/welcome");
+    }
+  };
+
   async function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
@@ -19,7 +33,15 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: "credentials", email, password }),
       });
-      router.replace("/welcome");
+
+      // Simulate new user check (in real app, this would come from API)
+      // For demo, we'll mark as new user if no profile exists
+      const existingProfile = localStorage.getItem('userProfile');
+      if (!existingProfile) {
+        localStorage.setItem('isNewUser', 'true');
+      }
+
+      checkUserStatus();
     } finally {
       setLoading(false);
     }
@@ -33,7 +55,15 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider: "google" }),
       });
-      router.replace("/welcome");
+
+      // Simulate new user check (in real app, this would come from API)
+      // For demo, we'll mark as new user if no profile exists
+      const existingProfile = localStorage.getItem('userProfile');
+      if (!existingProfile) {
+        localStorage.setItem('isNewUser', 'true');
+      }
+
+      checkUserStatus();
     } finally {
       setLoading(false);
     }
