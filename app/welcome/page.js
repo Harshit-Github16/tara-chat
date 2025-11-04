@@ -1,36 +1,48 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFaceSmile,
   faHeart,
   faLeaf,
   faBolt,
-  faCloudRain,
   faFaceFrown,
   faSun,
   faStar,
   faBrain,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 const MOODS = [
-  { key: "joyful", label: "Joyful", icon: faFaceSmile, color: "bg-yellow-100 text-yellow-700 border-yellow-200" },
-  { key: "grateful", label: "Grateful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200" },
-  { key: "calm", label: "Calm", icon: faLeaf, color: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-  { key: "energized", label: "Energized", icon: faBolt, color: "bg-amber-100 text-amber-700 border-amber-200" },
-  { key: "rainy", label: "Rainy", icon: faCloudRain, color: "bg-sky-100 text-sky-700 border-sky-200" },
-  { key: "down", label: "Down", icon: faFaceFrown, color: "bg-slate-100 text-slate-700 border-slate-200" },
-  { key: "bright", label: "Bright", icon: faSun, color: "bg-orange-100 text-orange-700 border-orange-200" },
-  { key: "inspired", label: "Inspired", icon: faStar, color: "bg-indigo-100 text-indigo-700 border-indigo-200" },
-  { key: "focused", label: "Focused", icon: faBrain, color: "bg-purple-100 text-purple-700 border-purple-200" },
-  { key: "hopeful", label: "Hopeful", icon: faStar, color: "bg-fuchsia-100 text-fuchsia-700 border-fuchsia-200" },
+  { key: "joyful", label: "Joyful", icon: faFaceSmile, color: "bg-rose-50 text-rose-700 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "grateful", label: "Grateful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "calm", label: "Calm", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "energized", label: "Energized", icon: faBolt, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "peaceful", label: "Peaceful", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "down", label: "Reflective", icon: faFaceFrown, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "bright", label: "Bright", icon: faSun, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "inspired", label: "Inspired", icon: faStar, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "focused", label: "Focused", icon: faBrain, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "hopeful", label: "Hopeful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
 ];
 
 export default function WelcomePage() {
   const [selected, setSelected] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [showCrackers, setShowCrackers] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    // Show crackers animation on page load
+    setShowCrackers(true);
+    const timer = setTimeout(() => {
+      setShowCrackers(false);
+    }, 3000); // Hide after 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   async function saveMood() {
     if (!selected) return;
@@ -48,57 +60,160 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-white to-pink-200">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50/50 via-white to-rose-50/30 p-4 relative overflow-hidden">
       {/* Decorative gradients */}
-      <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-pink-300/30 blur-3xl" />
-      <div className="pointer-events-none absolute -right-24 -bottom-24 h-80 w-80 rounded-full bg-pink-300/30 blur-3xl" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-300/20 blur-3xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.1),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.05),transparent_50%)]"></div>
 
-      <div className="relative z-10 mx-auto max-w-5xl px-6 py-16">
-        <div className="mx-auto max-w-3xl rounded-3xl border border-white/60 bg-white/70 p-8 shadow-xl backdrop-blur">
-          <h1 className="bg-gradient-to-r from-pink-600 to-pink-600 bg-clip-text text-center text-4xl font-extrabold text-transparent">
-            Welcome back to Tara ✨
-          </h1>
-          <p className="mt-2 text-center text-base text-gray-600">
-            Check in with your mood to personalize your chat and journaling experience today.
-          </p>
+      {/* Balloons Animation */}
+      {showCrackers && (
+        <>
+          {/* Falling balloons from top */}
+          <div className="absolute inset-0 z-40 pointer-events-none">
+            {[...Array(12)].map((_, i) => (
+              <div
+                key={i}
+                className={`absolute animate-balloon-fall-${i % 4 + 1}`}
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `-50px`,
+                  animationDelay: `${Math.random() * 2}s`
+                }}
+              >
+                <div className="text-3xl">🎈</div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-5">
+      <div className="relative z-10 w-full max-w-4xl">
+        <div className="rounded-3xl border border-rose-100 bg-white/90 backdrop-blur-sm p-6 shadow-xl">
+          {/* Logo and Welcome Header */}
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Image
+                src="/taralogo.jpg"
+                alt="Tara Logo"
+                width={48}
+                height={48}
+                className="h-12 w-12 rounded-full object-cover"
+              />
+              <span className="text-2xl font-bold text-rose-600">Tara</span>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Welcome back! How are you feeling today?
+            </h1>
+            <p className="text-sm text-gray-600">
+              Your mood helps us personalize your experience
+            </p>
+          </div>
+
+          {/* Mood Selection Grid */}
+          <div className="grid grid-cols-5 gap-3 mb-6">
             {MOODS.map((m) => (
               <button
                 key={m.key}
                 onClick={() => setSelected(m.key)}
-                className={`group rounded-2xl border px-4 py-4 text-sm font-semibold transition ${selected === m.key
-                  ? `ring-2 ring-pink-500 ${m.color}`
-                  : `bg-white/80 text-gray-700 border-pink-100 hover:bg-white ${m.color}`
+                className={`group rounded-xl border p-3 text-xs font-medium transition-all duration-200 ${selected === m.key
+                    ? `ring-2 ring-rose-500 bg-gradient-to-br ${m.gradient} border-rose-300 shadow-md`
+                    : `bg-white hover:bg-rose-50 border-rose-100 hover:border-rose-200 hover:shadow-sm`
                   }`}
               >
-                <span className="flex flex-col items-center gap-2">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/70 text-current shadow">
-                    <FontAwesomeIcon icon={m.icon} />
+                <div className="flex flex-col items-center gap-2">
+                  <div className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all ${selected === m.key
+                      ? 'bg-white/90 text-rose-600'
+                      : 'bg-rose-50 text-rose-500 group-hover:bg-rose-100'
+                    }`}>
+                    <FontAwesomeIcon icon={m.icon} className="h-3 w-3" />
+                  </div>
+                  <span className={selected === m.key ? 'text-rose-700' : 'text-gray-700'}>
+                    {m.label}
                   </span>
-                  {m.label}
-                </span>
+                </div>
               </button>
             ))}
           </div>
 
-          <div className="mt-8 flex items-center justify-center gap-3">
+          {/* Continue Button and Benefits */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4 text-xs text-gray-500">
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faHeart} className="h-3 w-3 text-rose-500" />
+                <span>Personalized AI</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faBrain} className="h-3 w-3 text-rose-500" />
+                <span>Smart Insights</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-rose-500" />
+                <span>Daily Growth</span>
+              </div>
+            </div>
+
             <button
               onClick={saveMood}
               disabled={!selected || saving}
-              className="rounded-full bg-pink-500 px-6 py-3 text-sm font-bold text-white shadow hover:bg-pink-600 disabled:opacity-60"
+              className="group inline-flex items-center gap-2 rounded-full bg-rose-200 px-6 py-3 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {saving ? "Saving..." : "Continue"}
+              {saving ? (
+                <>
+                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-rose-700 border-t-transparent"></div>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  Continue
+                  <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                </>
+              )}
             </button>
-            <span className="text-xs text-gray-500">
-              Your selection helps tailor prompts and character suggestions.
-            </span>
           </div>
+
+          {/* Selected mood feedback */}
+          {selected && (
+            <div className="mt-4 text-center">
+              <p className="text-xs text-gray-500 animate-fade-in">
+                Perfect! We'll customize your experience based on your {MOODS.find(m => m.key === selected)?.label.toLowerCase()} mood.
+              </p>
+            </div>
+          )}
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(5px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+
+        /* Balloon falling animations */
+        @keyframes balloon-fall {
+          0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+          10% { opacity: 1; }
+          100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .animate-balloon-fall-1 {
+          animation: balloon-fall 4s linear;
+        }
+
+        .animate-balloon-fall-2 {
+          animation: balloon-fall 4.5s linear;
+        }
+
+        .animate-balloon-fall-3 {
+          animation: balloon-fall 3.5s linear;
+        }
+
+        .animate-balloon-fall-4 {
+          animation: balloon-fall 5s linear;
+        }
+      `}</style>
     </div>
   );
 }
-
-
