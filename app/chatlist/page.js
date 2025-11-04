@@ -9,13 +9,53 @@ import {
   faUser,
   faPlus,
   faPaperPlane,
+  faSmile,
+  faMicrophone,
+  faStop,
+  faPlay,
+  faPause,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 const INITIAL_CHATS = [
   { id: "c1", name: "Calm Coach", last: "How was your day?", unread: 2 },
   { id: "c2", name: "Gratitude Guru", last: "One win today?", unread: 0 },
   { id: "c3", name: "Motivation Buddy", last: "Small step next?", unread: 1 },
-  { id: "c4", name: "Compassionate Listener", last: "I’m here.", unread: 0 },
+  { id: "c4", name: "Compassionate Listener", last: "I'm here.", unread: 0 },
+];
+
+const POPULAR_EMOJIS = ["😀", "😂", "😍", "😊", "😎", "🤔", "👍", "❤️", "🔥", "💯", "🎉", "✨"];
+
+const EMOJIS = [
+  "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "😘",
+  "😗", "😙", "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🤓", "😎", "🤩", "😏", "😒", "😞", "😔",
+  "😟", "😕", "🙁", "😣", "😖", "😫", "😩", "😢", "😭", "😤", "😠", "😡", "🤬", "🤯", "😳", "😱",
+  "😨", "😰", "😥", "😓", "🤗", "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯", "😦",
+  "😧", "😮", "😲", "😴", "🤤", "😪", "😵", "🤐", "🤢", "🤮", "🤧", "😷", "🤒", "🤕", "🤑", "🤠",
+  "😈", "👿", "👹", "👺", "🤡", "💩", "👻", "💀", "👽", "👾", "🤖", "🎃", "😺", "😸", "😹", "😻",
+  "😼", "😽", "🙀", "😿", "😾", "❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "💕",
+  "💞", "💓", "💗", "💖", "💘", "💝", "💟", "👋", "🤚", "✋", "🖖", "👌", "🤏", "✌️", "🤞", "🤟",
+  "🤘", "🤙", "👈", "👉", "👆", "👇", "☝️", "👍", "👎", "👊", "✊", "🤛", "🤜", "👏", "🙌", "👐",
+  "🤲", "🤝", "🙏", "✍️", "💅", "🤳", "💪", "👂", "👃", "👀", "👅", "👄", "💋", "👶", "🧒", "👦",
+  "👧", "👨", "👩", "👴", "👵", "🙍", "🙎", "🙅", "🙆", "💁", "🙋", "🙇", "🤦", "🤷", "👮", "👷",
+  "🤴", "👸", "👳", "👲", "🤵", "👰", "🤰", "🤱", "👼", "🎅", "🤶", "💆", "💇", "🚶", "🏃", "💃",
+  "🕺", "👯", "🧘", "🛀", "🛌", "👭", "👫", "👬", "💏", "💑", "👪", "👤", "👥", "👣", "🐵", "🐒",
+  "🐶", "🐕", "🐩", "🐺", "🦊", "🐱", "🐈", "🦁", "🐯", "🐅", "🐆", "🐴", "🐎", "🦄", "🦓", "🦌",
+  "🐮", "🐂", "🐃", "🐄", "🐷", "🐖", "🐗", "🐽", "🐏", "🐑", "🐐", "🐪", "🐫", "🐘", "🐭", "🐁",
+  "🐀", "🐹", "🐰", "🐇", "🐻", "🐨", "🐼", "🐾", "🦃", "🐔", "🐓", "🐣", "🐤", "🐥", "🐦", "🐧",
+  "🦅", "🦆", "🦢", "🦉", "🐸", "🐊", "🐢", "🦎", "🐍", "🐲", "🐉", "🐳", "🐋", "🐬", "🐟", "🐠",
+  "🐡", "🦈", "🐙", "🐚", "🐌", "🦋", "🐛", "🐜", "🐝", "🐞", "💐", "🌸", "🌹", "🌺", "🌻", "🌼",
+  "🌷", "🌱", "🌲", "🌳", "🌴", "🌵", "🍄", "🌰", "🍞", "🥐", "🥖", "🥨", "🥯", "🥞", "🧇", "🧀",
+  "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🥙", "🧆", "🥚", "🍳", "🥘",
+  "🍲", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🍙", "🍚", "🍛", "🍜", "🍝", "🍠", "🍢",
+  "🍣", "🍤", "🍥", "🥮", "🍡", "🥟", "🥠", "🥡", "🦀", "🦞", "🦐", "🦑", "🦪", "🍦", "🍧", "🍨",
+  "🍩", "🍪", "🎂", "🍰", "🧁", "🥧", "🍫", "🍬", "🍭", "🍮", "🍯", "🍼", "🥛", "☕", "🍵", "🧃",
+  "🥤", "🍶", "🍾", "🍷", "🍸", "🍹", "🍺", "🍻", "🥂", "🥃", "🧋", "🧉", "🧊", "⚽", "🏀", "🏈",
+  "⚾", "🥎", "🎾", "🏐", "🏉", "🥏", "🎱", "🪀", "🏓", "🏸", "🏒", "🏑", "🥍", "🏏", "🪃", "🥅",
+  "⛳", "🪁", "🏹", "🎣", "🤿", "🥊", "🥋", "🎽", "🛹", "🛷", "⛸️", "🥌", "🎿", "⛷️", "🏂", "🪂",
+  "🏋️", "🤼", "🤸", "⛹️", "🤺", "🤾", "🏌️", "🏇", "🧘", "🏄", "🏊", "🤽", "🚣", "🧗", "🚵", "🚴",
+  "🏆", "🥇", "🥈", "🥉", "🏅", "🎖️", "🏵️", "🎗️", "🎫", "🎟️", "🎪", "🤹", "🎭", "🩰", "🎨", "🎬",
+  "🎤", "🎧", "🎼", "🎵", "🎶", "🥇", "🥈", "🥉", "🏆", "🏅", "🎖️", "🏵️", "🎗️", "🎫", "🎟️", "🎪"
 ];
 
 export default function ChatListPage() {
@@ -23,11 +63,97 @@ export default function ChatListPage() {
   const [activeId, setActiveId] = useState(INITIAL_CHATS[0].id);
   const [message, setMessage] = useState("");
   const [showAdd, setShowAdd] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [messages, setMessages] = useState([
+    { id: 1, type: 'text', content: "Hey! How are you feeling after your check-in?", sender: 'them', timestamp: new Date() },
+    { id: 2, type: 'text', content: "Better. I chose 'Inspired'.", sender: 'me', timestamp: new Date() },
+    { id: 3, type: 'text', content: "Great! What's one small step you can take today?", sender: 'them', timestamp: new Date() },
+  ]);
   const activeChat = useMemo(() => chats.find((c) => c.id === activeId), [chats, activeId]);
+
+  // Audio recording functions
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
+
+      recorder.ondataavailable = (e) => chunks.push(e.data);
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/wav' });
+        setAudioBlob(blob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      alert('Could not access microphone. Please check permissions.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const sendAudioMessage = () => {
+    if (audioBlob) {
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const newMessage = {
+        id: Date.now(),
+        type: 'audio',
+        content: audioUrl,
+        sender: 'me',
+        timestamp: new Date(),
+        duration: '0:05'
+      };
+      setMessages(prev => [...prev, newMessage]);
+      setAudioBlob(null);
+    }
+  };
+
+  const cancelAudio = () => {
+    if (audioBlob) {
+      URL.revokeObjectURL(URL.createObjectURL(audioBlob));
+    }
+    setAudioBlob(null);
+    if (isRecording) {
+      stopRecording();
+    }
+  };
+
+  // Emoji handling
+  const addEmoji = (emoji) => {
+    setMessage(prev => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+
+    const newMessage = {
+      id: Date.now(),
+      type: 'text',
+      content: message,
+      sender: 'me',
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, newMessage]);
+    setMessage("");
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
-      {/* Optional minimal header (no nav, since nav is at bottom) */}
+      {/* Optional minimal header */}
       <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="text-lg font-semibold text-rose-600">Tara</div>
@@ -85,38 +211,145 @@ export default function ChatListPage() {
             </div>
 
             <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-              <ChatBubble who="them" text="Hey! How are you feeling after your check-in?" />
-              <ChatBubble who="me" text="Better. I chose 'Inspired'." />
-              <ChatBubble who="them" text="Great! What’s one small step you can take today?" />
+              {messages.map((msg) => (
+                <ChatBubble
+                  key={msg.id}
+                  who={msg.sender}
+                  type={msg.type}
+                  content={msg.content}
+                  duration={msg.duration}
+                />
+              ))}
             </div>
 
+            {/* Audio Recording Preview */}
+            {audioBlob && (
+              <div className="border-t border-rose-100 p-3 bg-rose-50">
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 text-sm text-gray-700">
+                      <FontAwesomeIcon icon={faMicrophone} className="text-rose-500" />
+                      <span>Audio message recorded</span>
+                      <audio controls className="flex-1">
+                        <source src={URL.createObjectURL(audioBlob)} type="audio/wav" />
+                      </audio>
+                    </div>
+                  </div>
+                  <button
+                    onClick={sendAudioMessage}
+                    className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                  >
+                    Send
+                  </button>
+                  <button
+                    onClick={cancelAudio}
+                    className="rounded-full border border-rose-200 px-3 py-2 text-rose-600 hover:bg-rose-50"
+                  >
+                    <FontAwesomeIcon icon={faTimes} />
+                  </button>
+                </div>
+              </div>
+            )}
+
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (!message.trim()) return;
-                setMessage("");
-              }}
-              className="flex items-center gap-2 border-t border-rose-100 p-3"
+              onSubmit={sendMessage}
+              className="relative border-t border-rose-100 p-3"
             >
-              <input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="flex-1 rounded-full border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring"
-                placeholder="Write a message..."
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300"
-              >
-                <FontAwesomeIcon icon={faPaperPlane} />
-                Send
-              </button>
+              {/* Emoji Picker */}
+              {showEmojiPicker && (
+                <div className="absolute bottom-full left-3 right-3 mb-2 rounded-2xl border border-rose-100 bg-white shadow-xl z-50">
+                  {/* Header */}
+                  <div className="flex items-center justify-between p-3 border-b border-rose-100">
+                    <span className="text-sm font-medium text-gray-700">Choose Emoji</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowEmojiPicker(false)}
+                      className="text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  {/* Emoji Grid with Scroll */}
+                  <div className="h-48 overflow-y-auto p-3">
+                    <div className="grid grid-cols-8 gap-1">
+                      {EMOJIS.map((emoji, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => addEmoji(emoji)}
+                          className="aspect-square flex items-center justify-center text-lg rounded-lg hover:bg-rose-50 transition-colors"
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Popular Emojis Quick Access */}
+                  <div className="border-t border-rose-100 p-2">
+                    <div className="flex gap-1 justify-center">
+                      {POPULAR_EMOJIS.map((emoji, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          onClick={() => addEmoji(emoji)}
+                          className="w-8 h-8 flex items-center justify-center text-lg rounded-lg hover:bg-rose-50 transition-colors"
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2">
+                {/* Emoji Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
+                >
+                  <FontAwesomeIcon icon={faSmile} className="h-5 w-5" />
+                </button>
+
+                {/* Message Input */}
+                <input
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="flex-1 rounded-full border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring"
+                  placeholder="Write a message..."
+                />
+
+                {/* Audio Recording Button */}
+                <button
+                  type="button"
+                  onClick={isRecording ? stopRecording : startRecording}
+                  className={`rounded-full p-3 transition-colors ${isRecording
+                    ? 'bg-red-500 text-white animate-pulse'
+                    : 'text-rose-600 hover:bg-rose-50'
+                    }`}
+                >
+                  <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} className="h-5 w-5" />
+                </button>
+
+                {/* Send Button */}
+                <button
+                  type="submit"
+                  disabled={!message.trim()}
+                  className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                  Send
+                </button>
+              </div>
             </form>
           </div>
         </section>
       </div>
 
-      {/* Bottom Navbar (all sizes) */}
+      {/* Bottom Navbar */}
       <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
         <div className="mx-auto grid max-w-7xl grid-cols-4 px-2 py-2 text-xs text-gray-600 sm:text-sm">
           <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
@@ -150,19 +383,6 @@ export default function ChatListPage() {
   );
 }
 
-function NavLink({ href, icon, label, active }) {
-  return (
-    <Link
-      href={href}
-      className={`inline-flex items-center gap-2 rounded-full px-3 py-2 ${active ? "bg-rose-200 text-rose-600" : "hover:bg-rose-200"
-        }`}
-    >
-      <FontAwesomeIcon icon={icon} className="h-4 w-4" />
-      {label}
-    </Link>
-  );
-}
-
 function MobileNavLink({ href, icon, label, active }) {
   return (
     <Link
@@ -176,8 +396,21 @@ function MobileNavLink({ href, icon, label, active }) {
   );
 }
 
-function ChatBubble({ who, text }) {
+function ChatBubble({ who, type = 'text', content, duration }) {
   const isMe = who === "me";
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const toggleAudio = () => {
+    const audio = document.getElementById(`audio-${content}`);
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play();
+      setIsPlaying(true);
+    }
+  };
+
   return (
     <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
       <div
@@ -186,14 +419,42 @@ function ChatBubble({ who, text }) {
           : "rounded-bl-sm bg-rose-200 text-gray-800"
           }`}
       >
-        {text}
+        {type === 'text' ? (
+          <span>{content}</span>
+        ) : (
+          <div className="flex items-center gap-3 min-w-[200px]">
+            <button
+              onClick={toggleAudio}
+              className="rounded-full bg-white/20 p-2 hover:bg-white/30 transition-colors"
+            >
+              <FontAwesomeIcon
+                icon={isPlaying ? faPause : faPlay}
+                className="h-3 w-3"
+              />
+            </button>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <FontAwesomeIcon icon={faMicrophone} className="h-3 w-3 opacity-70" />
+                <span className="text-xs opacity-70">Audio message</span>
+              </div>
+              <div className="text-xs opacity-70 mt-1">{duration || '0:05'}</div>
+            </div>
+            <audio
+              id={`audio-${content}`}
+              onEnded={() => setIsPlaying(false)}
+              className="hidden"
+            >
+              <source src={content} type="audio/wav" />
+            </audio>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 function AddUserModal({ onClose, onCreate }) {
-  const [tab, setTab] = useState("user"); // 'user' | 'celebs'
+  const [tab, setTab] = useState("user");
   const [name, setName] = useState("");
   const [gender, setGender] = useState("male");
   const [avatar, setAvatar] = useState(AVATARS[0]);
@@ -263,7 +524,6 @@ function AddUserModal({ onClose, onCreate }) {
                     className={`aspect-square w-full overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
                       }`}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={a} alt="avatar" className="h-full w-full object-cover" />
                   </button>
                 ))}
@@ -291,7 +551,7 @@ function AddUserModal({ onClose, onCreate }) {
               </button>
               <button
                 type="submit"
-                className="rounded-full bg-rose-200 px-4 py-2 text-sm foink-500bold text-rose-700 hover:bg-rose-300 shadow-sm"
+                className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-700 hover:bg-rose-300 shadow-sm"
               >
                 Create
               </button>
@@ -315,7 +575,6 @@ function AddUserModal({ onClose, onCreate }) {
                   }
                   className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-200"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(person)}`}
                     alt={person}
@@ -384,5 +643,3 @@ const CELEBRITIES = [
   "Rahul gandhi",
   "Virat kohli",
 ];
-
-
