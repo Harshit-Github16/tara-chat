@@ -63,8 +63,8 @@ export default function Home() {
       <main>
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-br from-indigo-50/50 via-white to-indigo-50/30">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.1),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.05),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.1),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.05),transparent_50%)]"></div>
 
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-32">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -196,8 +196,8 @@ export default function Home() {
         {/* How It Works */}
         <section id="how-it-works" className="py-20 bg-gradient-to-br from-indigo-50/30 via-white to-indigo-50/20 relative overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(244,63,94,0.05),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(244,63,94,0.03),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(99,102,241,0.05),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.03),transparent_50%)]"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center">
@@ -283,8 +283,8 @@ export default function Home() {
         {/* Social Proof */}
         <section className="py-20 bg-gradient-to-br from-white via-indigo-50/20 to-white relative overflow-hidden">
           {/* Background elements */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.03),transparent_70%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.02),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.03),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(99,102,241,0.02),transparent_70%)]"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center">
