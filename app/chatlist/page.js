@@ -16,6 +16,7 @@ import {
   faPause,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
 
 const INITIAL_CHATS = [
   { id: "c1", name: "Calm Coach", last: "How was your day?", unread: 2 },
@@ -24,7 +25,9 @@ const INITIAL_CHATS = [
   { id: "c4", name: "Compassionate Listener", last: "I'm here.", unread: 0 },
 ];
 
-const POPULAR_EMOJIS = ["😀", "😂", "😍", "😊", "😎", "🤔", "👍", "❤️", "🔥", "💯", "🎉", "✨"];
+
+
+const POPULAR_EMOJIS = ["😀", "😂", "😍", "😊", "😎", "🤔", "👍", "❤️", "🔥", "💯"]
 
 const EMOJIS = [
   "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "😘",
@@ -195,6 +198,58 @@ export default function ChatListPage() {
                 </button>
               ))}
             </div>
+
+            {/* Celebrities Section at Bottom */}
+            <div className="mt-4 pt-3 border-t border-rose-100">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="text-xs font-semibold text-gray-600">Celebrities</div>
+              </div>
+
+              {/* Horizontal Celebrities List */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                {CELEBRITIES.slice(0, 3).map((celebrity) => (
+                  <Link
+                    key={celebrity.id}
+                    href={`/chat/celebrity/${celebrity.id}`}
+                    className="shrink-0 group cursor-pointer"
+                  >
+                    <div className="flex flex-col items-center gap-1">
+                      {/* Rounded Avatar */}
+                      <div className="w-12 h-12 bg-linear-to-br from-rose-100 to-rose-200 rounded-full flex items-center justify-center text-xl group-hover:scale-105 transition-transform border border-rose-200 overflow-hidden">
+                        <Image
+                          src={`/celebrities/${celebrity.image_url}`}
+                          alt={celebrity.name}
+                          width={48}
+                          height={48}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      </div>
+                      {/* Name */}
+                      <div className="text-xs font-medium text-gray-700 text-center leading-tight max-w-[48px] truncate">
+                        {celebrity.name}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+
+                {/* View More Button */}
+                <Link
+                  href="/celebrities"
+                  className="shrink-0 group cursor-pointer ml-1"
+                >
+                  <div className="flex flex-col items-center gap-1">
+                    {/* Plus Button */}
+                    <div className="w-12 h-12 bg-linear-to-br from-rose-200 to-rose-300 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform border border-rose-300">
+                      <FontAwesomeIcon icon={faPlus} className="h-4 w-4 text-rose-700" />
+                    </div>
+                    {/* View More Text */}
+                    <div className="text-xs font-medium text-rose-600 text-center leading-tight">
+                      More
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </aside>
 
@@ -272,7 +327,7 @@ export default function ChatListPage() {
 
                   {/* Emoji Grid with Scroll */}
                   <div className="h-48 overflow-y-auto p-3">
-                    <div className="grid grid-cols-8 gap-1">
+                    <div className="grid grid-cols-30 max-md:grid-cols-10 gap-1">
                       {EMOJIS.map((emoji, index) => (
                         <button
                           key={index}
@@ -468,7 +523,8 @@ function AddUserModal({ onClose, onCreate }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-2xl rounded-3xl border border-rose-100 bg-white p-6 shadow-xl">
+      <div className={`w-full rounded-3xl border border-rose-100 bg-white p-4 sm:p-6 shadow-xl
+         h-auto ${tab === "celebs" ? "max-w-5xl " : "max-w-5xl sm:max-w-md  max-md:overflow-auto"}`}>
         <div className="mb-4 flex items-center justify-between">
           <div className="text-lg font-bold text-gray-900">{tab === "user" ? "Add New User" : "Talk with Celebrities"}</div>
           <div className="flex gap-2 rounded-full bg-rose-200 p-1 text-xs font-semibold text-rose-600">
@@ -490,7 +546,7 @@ function AddUserModal({ onClose, onCreate }) {
         </div>
 
         {tab === "user" ? (
-          <form onSubmit={submit} className="space-y-4">
+          <form onSubmit={submit} className="space-y-3 sm:space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Name</label>
               <input
@@ -515,13 +571,13 @@ function AddUserModal({ onClose, onCreate }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Choose Avatar</label>
-              <div className="mt-2 grid grid-cols-5 gap-2">
+              <div className="mt-2 grid grid-cols-4 sm:grid-cols-5 gap-2">
                 {AVATARS.map((a) => (
                   <button
                     type="button"
                     key={a}
                     onClick={() => setAvatar(a)}
-                    className={`aspect-square w-full overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
+                    className={`aspect-square w-full h-20 sm:h-16 overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
                       }`}
                   >
                     <img src={a} alt="avatar" className="h-full w-full object-cover" />
@@ -560,30 +616,33 @@ function AddUserModal({ onClose, onCreate }) {
         ) : (
           <div className="space-y-4">
             <p className="text-sm text-gray-600">Pick a celebrity character to start chatting instantly.</p>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {CELEBRITIES.map((person) => (
-                <button
-                  key={person}
-                  type="button"
-                  onClick={() =>
-                    onCreate({
-                      name: person,
-                      gender: "other",
-                      avatar: `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(person)}`,
-                      role: "Celebrity",
-                    })
-                  }
-                  className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-200"
-                >
-                  <img
-                    src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(person)}`}
-                    alt={person}
-                    className="h-16 w-16 rounded-xl"
-                  />
-                  <span className="font-semibold text-gray-800 text-center leading-tight">{person}</span>
-                  <span className="text-[10px] text-rose-600">Start chat</span>
-                </button>
-              ))}
+            {/* Fixed height container with scroll */}
+            <div className="h-96 overflow-y-auto border border-rose-100 rounded-2xl p-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                {CELEBRITIES.map((person) => (
+                  <button
+                    key={person.id}
+                    type="button"
+                    onClick={() =>
+                      onCreate({
+                        name: person.name,
+                        gender: "other",
+                        avatar: `/${person.image_url}`,
+                        role: "Celebrity",
+                      })
+                    }
+                    className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-200"
+                  >
+                    <img
+                      src={`/celebrities/${person.image_url}`}
+                      alt={person.name}
+                      className="h-16 w-16 rounded-xl object-cover"
+                    />
+                    <span className="font-semibold text-gray-800 text-center leading-tight">{person.name}</span>
+                    <span className="text-[10px] text-rose-600">Start chat</span>
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="flex justify-end pt-2">
               <button
@@ -630,16 +689,33 @@ const ROLES = [
 ];
 
 const CELEBRITIES = [
-  "Sachin Tendulkar",
-  "Amitabh Bachchan",
-  "Cristiano Ronaldo",
-  "Lionel Messi",
-  "Katrina Kaif",
-  "Elon Musk",
-  "Donald Trump",
-  "Narendra Modi",
-  "Dwene Johnson",
-  "Sunidhi chouhan",
-  "Rahul gandhi",
-  "Virat kohli",
+  { id: "shahrukh", name: "Shahrukh Khan", image_url: "shahrukh.jpeg" },
+  { id: "elonmusk", name: "Elon Musk", image_url: "elonmusk.jpeg" },
+  { id: "amitabh", name: "Amitabh Bachchan", image_url: "amitabh.jpeg" },
+  { id: "premanandji", name: "Premanand Ji Maharaj", image_url: "premanandji.jpeg" },
+  { id: "Rashmika", name: "Rashmika mandhana", image_url: "crush.jpeg" },
+  { id: "deepika", name: "Deepika Padukone", image_url: "deepika.jpeg" },
+  { id: "gaurgopal", name: "Gaur Gopal Das", image_url: "gaurgopal.jpeg" },
+  { id: "ambani", name: "Mukesh Ambani", image_url: "ambani.jpeg" },
+
+  { id: "guthi", name: "Guthi", image_url: "guthi.jpeg" },
+  { id: "aasharam", name: "Aasharam Bapu", image_url: "aasharam.jpeg" },
+  { id: "baburao", name: "Baburao Ganpatrao", image_url: "baburao.jpeg" },
+  { id: "pushpa", name: "Pushpa Raj", image_url: "pushpa.jpeg" },
+  { id: "honeysingh", name: "Honey Singh", image_url: "honeysingh.jpeg" },
+  { id: "jahanvikapoor", name: "Janhvi Kapoor", image_url: "jahanvikapoor.jpeg" },
+  { id: "katrina", name: "Katrina Kaif", image_url: "katrina.jpeg" },
+  { id: "modi", name: "Narendra Modi", image_url: "modi.jpeg" },
+  { id: "nora", name: "Nora Fatehi", image_url: "nora.jpeg" },
+
+  { id: "priyanka", name: "Priyanka Chopra", image_url: "priyanka.jpeg" },
+
+  { id: "ranbir", name: "Ranbir Kapoor", image_url: "ranbir.jpeg" },
+  { id: "sachin", name: "Sachin Tendulkar", image_url: "sachin.jpeg" },
+  { id: "salman", name: "Salman Khan", image_url: "salman.jpeg" },
+
+  { id: "shraddha", name: "Shraddha Kapoor", image_url: "shraddha.jpeg" },
+  { id: "tammanna", name: "Tamannaah Bhatia", image_url: "tammanna.jpeg" },
+  { id: "trump", name: "Donald Trump", image_url: "trump.jpeg" },
+  { id: "virat", name: "Virat Kohli", image_url: "virat.jpeg" },
 ];
