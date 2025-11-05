@@ -16,6 +16,7 @@ import {
   faPause,
   faTimes,
   faSignOutAlt,
+  faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
@@ -312,7 +313,7 @@ export default function ChatListPage() {
 
         {/* Chat view */}
         <section className="sm:col-span-8 lg:col-span-9">
-          <div className="flex h-[calc(100vh-120px)] flex-col  border border-rose-100 bg-white shadow-sm">
+          <div className="flex h-[calc(100vh-130px)] flex-col  border border-rose-100 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
               <div className="flex items-center gap-3">
                 {/* Active Chat Avatar */}
@@ -381,8 +382,8 @@ export default function ChatListPage() {
 
             {/* Suggested Messages */}
             {messages.length <= 3 && (
-              <div className="border-t border-rose-100 p-3 bg-rose-50/30">
-                <div className="mb-2 text-xs font-medium text-gray-600">Suggested messages:</div>
+              <div className=" p-3 ">
+
                 <div className="flex flex-wrap gap-2">
                   {SUGGESTED_MESSAGES.slice(0, 3).map((suggestion, index) => (
                     <button
@@ -497,10 +498,11 @@ export default function ChatListPage() {
 
       {/* Bottom Navbar */}
       <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl grid-cols-4 px-2 py-2 text-xs text-gray-600 sm:text-sm">
+        <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
           <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
           <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
           <MobileNavLink href="/chatlist" icon={faComments} label="Chats" active />
+          <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
           <MobileNavLink href="/profile" icon={faUser} label="Profile" />
         </div>
       </nav>

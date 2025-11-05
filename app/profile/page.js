@@ -24,7 +24,8 @@ import {
     faStar,
     faMessage,
     faJournalWhills,
-    faLightbulb
+    faLightbulb,
+    faNewspaper
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
@@ -139,7 +140,7 @@ export default function ProfilePage() {
                                 className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-colors"
                             >
                                 <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
-                                Edit Profile
+                                Edit
                             </button>
                         ) : (
                             <div className="flex gap-2">
@@ -317,8 +318,8 @@ export default function ProfilePage() {
                                                 type="button"
                                                 onClick={() => handleArrayToggle('interests', interest)}
                                                 className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${editData.interests?.includes(interest)
-                                                        ? 'bg-rose-50 text-rose-600 border-rose-200'
-                                                        : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
+                                                    ? 'bg-rose-50 text-rose-600 border-rose-200'
+                                                    : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
                                                     }`}
                                             >
                                                 {interest}
@@ -357,8 +358,8 @@ export default function ProfilePage() {
                                                 type="button"
                                                 onClick={() => handleArrayToggle('personalityTraits', trait)}
                                                 className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${editData.personalityTraits?.includes(trait)
-                                                        ? 'bg-rose-50 text-rose-600 border-rose-200'
-                                                        : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
+                                                    ? 'bg-rose-50 text-rose-600 border-rose-200'
+                                                    : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
                                                     }`}
                                             >
                                                 {trait}
@@ -388,25 +389,7 @@ export default function ProfilePage() {
                     {/* Right Column - Stats & Activity */}
                     <div className="space-y-6">
                         {/* Stats Card */}
-                        <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <FontAwesomeIcon icon={faChartLine} className="h-4 w-4 text-rose-400" />
-                                Your Stats
-                            </h3>
-                            <div className="space-y-4">
-                                {stats.map((stat, index) => (
-                                    <div key={index} className="flex items-center justify-between p-3 bg-rose-50 rounded-lg">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-8 h-8 rounded-lg bg-white flex items-center justify-center ${stat.color}`}>
-                                                <FontAwesomeIcon icon={stat.icon} className="h-4 w-4" />
-                                            </div>
-                                            <span className="text-sm font-medium text-gray-700">{stat.label}</span>
-                                        </div>
-                                        <span className="text-lg font-bold text-gray-800">{stat.value}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+
 
                         {/* Recent Activity Card */}
                         <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
@@ -429,46 +412,18 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
-                        {/* Quick Actions Card */}
-                        <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                <FontAwesomeIcon icon={faStar} className="h-4 w-4 text-rose-400" />
-                                Quick Actions
-                            </h3>
-                            <div className="space-y-3">
-                                <Link
-                                    href="/chatlist"
-                                    className="flex items-center gap-3 p-3 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={faComments} className="h-4 w-4 text-rose-400" />
-                                    <span className="text-sm font-medium text-gray-700">Start New Chat</span>
-                                </Link>
-                                <Link
-                                    href="/journal"
-                                    className="flex items-center gap-3 p-3 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={faBookOpen} className="h-4 w-4 text-rose-400" />
-                                    <span className="text-sm font-medium text-gray-700">Write Journal</span>
-                                </Link>
-                                <Link
-                                    href="/insights"
-                                    className="flex items-center gap-3 p-3 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors"
-                                >
-                                    <FontAwesomeIcon icon={faChartLine} className="h-4 w-4 text-rose-400" />
-                                    <span className="text-sm font-medium text-gray-700">View Insights</span>
-                                </Link>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </main>
 
             {/* Bottom Navbar */}
             <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
-                <div className="mx-auto grid max-w-7xl grid-cols-4 px-2 py-2 text-xs text-gray-600 sm:text-sm">
+                <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
                     <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
                     <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
                     <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
+                    <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
                     <MobileNavLink href="/profile" icon={faUser} label="Profile" active />
                 </div>
             </nav>
