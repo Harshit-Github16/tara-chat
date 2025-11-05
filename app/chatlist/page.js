@@ -264,7 +264,7 @@ export default function ChatListPage() {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-9xl flex-1 relative px-2 sm:px-4">
+      <div className="mx-auto flex w-full max-w-9xl flex-1 relative px-1 sm:px-3 gap-0 sm:gap-2">
         {/* Mobile Sidebar Overlay */}
         {showMobileSidebar && (
           <div
@@ -399,7 +399,7 @@ export default function ChatListPage() {
         </aside>
 
         {/* Chat view */}
-        <section className="flex-1 sm:ml-2">
+        <section className="flex-1">
           <div className="flex h-[calc(100vh-140px)] flex-col border border-rose-100 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
               <div className="flex items-center gap-3">
