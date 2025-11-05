@@ -78,14 +78,21 @@ export default function ChatListPage() {
   const [message, setMessage] = useState("");
   const [showAdd, setShowAdd] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showAllCelebrities, setShowAllCelebrities] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [messages, setMessages] = useState([
-    { id: 1, type: 'text', content: "Hey! How are you feeling after your check-in?", sender: 'them', timestamp: new Date() },
-    { id: 2, type: 'text', content: "Better. I chose 'Inspired'.", sender: 'me', timestamp: new Date() },
-    { id: 3, type: 'text', content: "Great! What's one small step you can take today?", sender: 'them', timestamp: new Date() },
-  ]);
+  // Store messages per chat ID
+  const [chatMessages, setChatMessages] = useState({
+    [INITIAL_CHATS[0].id]: [
+      { id: 1, type: 'text', content: "Hey! How are you feeling after your check-in?", sender: 'them', timestamp: new Date() },
+      { id: 2, type: 'text', content: "Better. I chose 'Inspired'.", sender: 'me', timestamp: new Date() },
+      { id: 3, type: 'text', content: "Great! What's one small step you can take today?", sender: 'them', timestamp: new Date() },
+    ]
+  });
+
+  // Get messages for current active chat
+  const messages = chatMessages[activeId] || [];
   const activeChat = useMemo(() => chats.find((c) => c.id === activeId), [chats, activeId]);
 
   // Audio recording functions
@@ -129,7 +136,12 @@ export default function ChatListPage() {
         timestamp: new Date(),
         duration: '0:05'
       };
-      setMessages(prev => [...prev, newMessage]);
+
+      // Add audio message to the specific chat
+      setChatMessages(prev => ({
+        ...prev,
+        [activeId]: [...(prev[activeId] || []), newMessage]
+      }));
       setAudioBlob(null);
     }
   };
@@ -161,7 +173,12 @@ export default function ChatListPage() {
       sender: 'me',
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, newMessage]);
+
+    // Add message to the specific chat
+    setChatMessages(prev => ({
+      ...prev,
+      [activeId]: [...(prev[activeId] || []), newMessage]
+    }));
     setMessage("");
   };
 
@@ -173,7 +190,51 @@ export default function ChatListPage() {
       sender: 'me',
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, newMessage]);
+
+    // Add suggested message to the specific chat
+    setChatMessages(prev => ({
+      ...prev,
+      [activeId]: [...(prev[activeId] || []), newMessage]
+    }));
+  };
+
+  const addCelebrityToChat = (celebrity) => {
+    // Check if celebrity is already in chat list
+    const existingChat = chats.find(chat => chat.id === `celebrity-${celebrity.id}`);
+    if (existingChat) {
+      setActiveId(existingChat.id);
+      return;
+    }
+
+    // Add celebrity to chat list
+    const newChatId = `celebrity-${celebrity.id}`;
+    const newChat = {
+      id: newChatId,
+      name: celebrity.name,
+      last: "Ready to chat with you!",
+      unread: 0,
+      avatar: `/celebrities/${celebrity.image_url}`,
+      role: "Celebrity",
+      type: "celebrity"
+    };
+
+    // Initialize messages for this new chat
+    setChatMessages(prev => ({
+      ...prev,
+      [newChatId]: [
+        {
+          id: Date.now(),
+          type: 'text',
+          content: `Hello! I'm ${celebrity.name}. How can I help you today?`,
+          sender: 'them',
+          timestamp: new Date()
+        }
+      ]
+    }));
+
+    setChats(prev => [newChat, ...prev]);
+    setActiveId(newChatId);
+    setShowAllCelebrities(false);
   };
 
   return (
@@ -256,9 +317,9 @@ export default function ChatListPage() {
               {/* Horizontal Celebrities List */}
               <div className="flex items-center gap-2 overflow-x-auto pb-1">
                 {CELEBRITIES.slice(0, 3).map((celebrity) => (
-                  <Link
+                  <button
                     key={celebrity.id}
-                    href={`/chat/celebrity/${celebrity.id}`}
+                    onClick={() => addCelebrityToChat(celebrity)}
                     className="shrink-0 group cursor-pointer"
                   >
                     <div className="flex flex-col items-center gap-1">
@@ -277,12 +338,12 @@ export default function ChatListPage() {
                         {celebrity.name}
                       </div>
                     </div>
-                  </Link>
+                  </button>
                 ))}
 
                 {/* View More Button */}
-                <Link
-                  href="/celebrities"
+                <button
+                  onClick={() => setShowAllCelebrities(true)}
                   className="shrink-0 group cursor-pointer ml-1"
                 >
                   <div className="flex flex-col items-center gap-1">
@@ -295,7 +356,7 @@ export default function ChatListPage() {
                       More
                     </div>
                   </div>
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -339,6 +400,25 @@ export default function ChatListPage() {
                   duration={msg.duration}
                 />
               ))}
+
+              {/* Recording Indicator in Chat - WhatsApp Style */}
+              {isRecording && (
+                <div className="flex justify-end">
+                  <div className="bg-red-500 text-white rounded-2xl px-4 py-3 max-w-xs shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      <FontAwesomeIcon icon={faMicrophone} className="h-4 w-4" />
+                      <span className="text-sm">Recording...</span>
+                      <button
+                        onClick={stopRecording}
+                        className="ml-2 bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors"
+                      >
+                        <FontAwesomeIcon icon={faStop} className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Audio Recording Preview */}
@@ -512,6 +592,21 @@ export default function ChatListPage() {
                 gender: payload.gender,
                 role: payload.role,
               };
+
+              // Initialize messages for this new chat
+              setChatMessages(prev => ({
+                ...prev,
+                [id]: [
+                  {
+                    id: Date.now(),
+                    type: 'text',
+                    content: `Hi! I'm ${payload.name}, your ${payload.role}. How can I assist you today?`,
+                    sender: 'them',
+                    timestamp: new Date()
+                  }
+                ]
+              }));
+
               setChats((prev) => [newChat, ...prev]);
               setActiveId(id);
               setShowAdd(false);
@@ -519,6 +614,60 @@ export default function ChatListPage() {
           />
         )
       }
+
+      {/* All Celebrities Modal */}
+      {showAllCelebrities && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-2xl rounded-3xl border border-rose-100 bg-white p-6 shadow-xl">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="text-lg font-bold text-gray-900">Choose Celebrity</div>
+              <button
+                onClick={() => setShowAllCelebrities(false)}
+                className="rounded-full p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              >
+                <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-600 mb-4">Select a celebrity to start chatting with them.</p>
+
+            {/* Scrollable Celebrities Grid */}
+            <div className="h-80 overflow-y-auto border border-rose-100 rounded-2xl p-4">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                {CELEBRITIES.map((celebrity) => (
+                  <button
+                    key={celebrity.id}
+                    onClick={() => addCelebrityToChat(celebrity)}
+                    className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-50 hover:border-rose-200 transition-colors"
+                  >
+                    <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200">
+                      <Image
+                        src={`/celebrities/${celebrity.image_url}`}
+                        alt={celebrity.name}
+                        width={64}
+                        height={64}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <span className="font-medium text-gray-800 text-center leading-tight">{celebrity.name}</span>
+                    <span className="text-xs text-rose-600">Start Chat</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button
+                onClick={() => setShowAllCelebrities(false)}
+                className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div >
   );
 }
@@ -708,14 +857,42 @@ function AddUserModal({ onClose, onCreate }) {
                   <button
                     key={person.id}
                     type="button"
-                    onClick={() =>
-                      onCreate({
+                    onClick={() => {
+                      const id = `celebrity-${person.id}`;
+                      const newChat = {
                         name: person.name,
                         gender: "other",
                         avatar: `/celebrities/${person.image_url}`,
                         role: "Celebrity",
-                      })
-                    }
+                      };
+
+                      // Check if celebrity already exists
+                      const existingChat = chats.find(chat => chat.id === id);
+                      if (existingChat) {
+                        setActiveId(id);
+                        onClose();
+                        return;
+                      }
+
+                      // Initialize messages for celebrity
+                      setChatMessages(prev => ({
+                        ...prev,
+                        [id]: [
+                          {
+                            id: Date.now(),
+                            type: 'text',
+                            content: `Hello! I'm ${person.name}. How can I help you today?`,
+                            sender: 'them',
+                            timestamp: new Date()
+                          }
+                        ]
+                      }));
+
+                      onCreate({
+                        ...newChat,
+                        id
+                      });
+                    }}
                     className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-200"
                   >
                     <img

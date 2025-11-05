@@ -15,7 +15,6 @@ import {
   faArrowRight,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
 
 const MOODS = [
   { key: "joyful", label: "Joyful", icon: faFaceSmile, color: "bg-rose-50 text-rose-700 border-rose-200", gradient: "from-rose-100 to-rose-50" },
@@ -30,6 +29,11 @@ const MOODS = [
   { key: "hopeful", label: "Hopeful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
 ];
 
+const FACE_EMOJIS = [
+  "😊", "😍", "😄", "😃", "🙂", "😎", "😋", "😉", "😌", "🤗",
+  "😘", "🤩", "😚", "😙", "🤔", "😏", "😴", "😀", "😇", "🥳"
+];
+
 export default function WelcomePage() {
   const [selected, setSelected] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -37,12 +41,10 @@ export default function WelcomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Show hearts animation on page load
     setShowCrackers(true);
     const timer = setTimeout(() => {
       setShowCrackers(false);
-    }, 5000); // Hide after 5 seconds (enough time for all hearts to fall)
-
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -63,35 +65,33 @@ export default function WelcomePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50/50 via-white to-rose-50/30 p-4 relative overflow-hidden">
-      {/* Decorative gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.1),transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.05),transparent_50%)]"></div>
-
-      {/* Hearts Animation */}
+      {/* Emojis Animation */}
       {showCrackers && (
         <>
-          {/* Falling hearts from top */}
+          {/* Falling emojis from top */}
           <div className="absolute inset-0 z-40 pointer-events-none">
             {[...Array(25)].map((_, i) => {
-              const colors = ['text-rose-400', 'text-rose-500', 'text-rose-600', 'text-pink-400', 'text-pink-500', 'text-red-400', 'text-red-500'];
+              const emojis = [
+                '😊', '😍', '😄', '😁', '🙂', '😎', '😋', '😉', '😘',
+                '🤩', '🥳', '😚', '😙', '🤫', '😏', '🤤', '😀', '😂', '😅', '😇'
+              ];
               const sizes = ['text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
-              const randomColor = colors[i % colors.length];
-              const randomSize = sizes[i % sizes.length];
+              const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+              const randomSize = sizes[Math.floor(Math.random() * sizes.length)];
 
               return (
                 <div
                   key={i}
-                  className={`absolute animate-heart-fall-${i % 6 + 1}`}
+                  className={`absolute animate-emoji-fall-${(i % 6) + 1}`}
                   style={{
                     left: `${Math.random() * 100}%`,
                     top: `-50px`,
                     animationDelay: `${Math.random() * 4}s`
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className={`${randomColor} ${randomSize}`}
-                  />
+                  <span className={randomSize}>{randomEmoji}</span>
                 </div>
               );
             })}
@@ -99,9 +99,34 @@ export default function WelcomePage() {
         </>
       )}
 
+      {showCrackers && (
+        <div className="absolute inset-0 z-40 pointer-events-none">
+          {[...Array(25)].map((_, i) => {
+            const sizes = ['text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl'];
+            const randomEmoji = FACE_EMOJIS[i % FACE_EMOJIS.length];
+            const randomSize = sizes[i % sizes.length];
+
+            return (
+              <div
+                key={i}
+                className={`absolute animate-emoji-fall-${i % 6 + 1}`}
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `-50px`,
+                  animationDelay: `${Math.random() * 4}s`
+                }}
+              >
+                <span className={randomSize}>
+                  {randomEmoji}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       <div className="relative z-10 w-full max-w-4xl">
         <div className="rounded-3xl border border-rose-100 bg-white/90 backdrop-blur-sm p-6 shadow-xl">
-          {/* Header with Profile Link */}
           <div className="flex items-center justify-center mb-6">
             <div className="flex items-center gap-3">
               <Image
@@ -113,16 +138,8 @@ export default function WelcomePage() {
               />
               <span className="text-2xl font-bold text-rose-600">Tara</span>
             </div>
-            {/* <Link
-              href="/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors"
-            >
-              <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
-              Profile
-            </Link> */}
           </div>
 
-          {/* Welcome Header */}
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Welcome back! How are you feeling today?
@@ -132,8 +149,7 @@ export default function WelcomePage() {
             </p>
           </div>
 
-          {/* Mood Selection Grid */}
-          <div className="grid grid-cols-5 gap-3 mb-6">
+          <div className="grid lg:grid-cols-5 grid-cols-4 gap-2 mb-6">
             {MOODS.map((m) => (
               <button
                 key={m.key}
@@ -158,50 +174,24 @@ export default function WelcomePage() {
             ))}
           </div>
 
-          {/* Continue Button and Benefits */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-xs text-gray-500">
-              <div className="flex items-center gap-1">
-                <FontAwesomeIcon icon={faHeart} className="h-3 w-3 text-rose-500" />
-                <span>Personalized AI</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FontAwesomeIcon icon={faBrain} className="h-3 w-3 text-rose-500" />
-                <span>Smart Insights</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-rose-500" />
-                <span>Daily Growth</span>
-              </div>
-            </div>
+          <div className="flex items-center justify-end">
+
 
             <button
               onClick={saveMood}
               disabled={!selected || saving}
               className="group inline-flex items-center gap-2 rounded-full bg-rose-200 px-6 py-3 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {saving ? (
-                <>
-                  <div className="h-3 w-3 animate-spin rounded-full border-2 border-rose-700 border-t-transparent"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  Continue
-                  <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-                </>
-              )}
+
+              <>
+
+                <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+              </>
+
             </button>
           </div>
 
-          {/* Selected mood feedback */}
-          {selected && (
-            <div className="mt-4 text-center">
-              <p className="text-xs text-gray-500 animate-fade-in">
-                Perfect! We'll customize your experience based on your {MOODS.find(m => m.key === selected)?.label.toLowerCase()} mood.
-              </p>
-            </div>
-          )}
+
         </div>
       </div>
 
@@ -214,8 +204,7 @@ export default function WelcomePage() {
           animation: fade-in 0.3s ease-out;
         }
 
-        /* Heart falling animations */
-        @keyframes heart-fall {
+        @keyframes emoji-fall {
           0% { 
             transform: translateY(-100px) rotate(0deg) scale(0.5); 
             opacity: 0; 
@@ -230,29 +219,12 @@ export default function WelcomePage() {
           }
         }
 
-        .animate-heart-fall-1 {
-          animation: heart-fall 3s linear;
-        }
-
-        .animate-heart-fall-2 {
-          animation: heart-fall 3.5s linear;
-        }
-
-        .animate-heart-fall-3 {
-          animation: heart-fall 2.5s linear;
-        }
-
-        .animate-heart-fall-4 {
-          animation: heart-fall 4s linear;
-        }
-
-        .animate-heart-fall-5 {
-          animation: heart-fall 2.8s linear;
-        }
-
-        .animate-heart-fall-6 {
-          animation: heart-fall 3.2s linear;
-        }
+        .animate-emoji-fall-1 { animation: emoji-fall 3s linear; }
+        .animate-emoji-fall-2 { animation: emoji-fall 3.5s linear; }
+        .animate-emoji-fall-3 { animation: emoji-fall 2.5s linear; }
+        .animate-emoji-fall-4 { animation: emoji-fall 4s linear; }
+        .animate-emoji-fall-5 { animation: emoji-fall 2.8s linear; }
+        .animate-emoji-fall-6 { animation: emoji-fall 3.2s linear; }
       `}</style>
     </div>
   );
