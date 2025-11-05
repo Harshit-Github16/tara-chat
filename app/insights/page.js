@@ -13,6 +13,7 @@ import {
     faBullseye,
     faCalendar,
     faClock,
+    faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function InsightsPage() {
@@ -23,28 +24,48 @@ export default function InsightsPage() {
             {/* Header */}
             <header className="sticky top-0 z-10 border-b border-pink-100 bg-white/80 backdrop-blur">
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-                    <div className="text-lg font-semibold text-pink-600">Tara Insights</div>
-                    <div className="flex gap-2 rounded-full bg-pink-50 p-1 text-xs font-medium">
+                    <div className="flex items-center gap-3">
+                        <img
+                            src="/taralogo.jpg"
+                            alt="Tara Logo"
+                            className="h-8 w-8 rounded-full object-cover"
+                        />
+                        <span className="text-lg font-semibold text-pink-600">Tara</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="flex gap-2 rounded-full bg-pink-50 p-1 text-xs font-medium">
+                            <button
+                                onClick={() => setSelectedPeriod("week")}
+                                className={`rounded-full px-3 py-1 ${selectedPeriod === "week" ? "bg-white shadow text-pink-600" : "text-gray-600"
+                                    }`}
+                            >
+                                Week
+                            </button>
+                            <button
+                                onClick={() => setSelectedPeriod("month")}
+                                className={`rounded-full px-3 py-1 ${selectedPeriod === "month" ? "bg-white shadow text-pink-600" : "text-gray-600"
+                                    }`}
+                            >
+                                Month
+                            </button>
+                            <button
+                                onClick={() => setSelectedPeriod("year")}
+                                className={`rounded-full px-3 py-1 ${selectedPeriod === "year" ? "bg-white shadow text-pink-600" : "text-gray-600"
+                                    }`}
+                            >
+                                Year
+                            </button>
+                        </div>
                         <button
-                            onClick={() => setSelectedPeriod("week")}
-                            className={`rounded-full px-3 py-1 ${selectedPeriod === "week" ? "bg-white shadow text-pink-600" : "text-gray-600"
-                                }`}
+                            onClick={() => {
+                                localStorage.removeItem('userProfile');
+                                localStorage.removeItem('isNewUser');
+                                window.location.href = '/login';
+                            }}
+                            className="rounded-full p-2 text-pink-600 hover:bg-pink-50 transition-colors"
+                            title="Logout"
                         >
-                            Week
-                        </button>
-                        <button
-                            onClick={() => setSelectedPeriod("month")}
-                            className={`rounded-full px-3 py-1 ${selectedPeriod === "month" ? "bg-white shadow text-pink-600" : "text-gray-600"
-                                }`}
-                        >
-                            Month
-                        </button>
-                        <button
-                            onClick={() => setSelectedPeriod("year")}
-                            className={`rounded-full px-3 py-1 ${selectedPeriod === "year" ? "bg-white shadow text-pink-600" : "text-gray-600"
-                                }`}
-                        >
-                            Year
+                            <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
                         </button>
                     </div>
                 </div>

@@ -102,7 +102,7 @@ export default function WelcomePage() {
       <div className="relative z-10 w-full max-w-4xl">
         <div className="rounded-3xl border border-rose-100 bg-white/90 backdrop-blur-sm p-6 shadow-xl">
           {/* Header with Profile Link */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-center mb-6">
             <div className="flex items-center gap-3">
               <Image
                 src="/taralogo.jpg"
@@ -113,13 +113,13 @@ export default function WelcomePage() {
               />
               <span className="text-2xl font-bold text-rose-600">Tara</span>
             </div>
-            <Link
+            {/* <Link
               href="/profile"
               className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors"
             >
               <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
               Profile
-            </Link>
+            </Link> */}
           </div>
 
           {/* Welcome Header */}

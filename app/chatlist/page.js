@@ -15,6 +15,7 @@ import {
   faPlay,
   faPause,
   faTimes,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
@@ -176,16 +177,34 @@ export default function ChatListPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
-      {/* Optional minimal header */}
+      {/* Header */}
       <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
         <div className="mx-auto flex max-w-9xl items-center justify-between px-4 py-3">
-          <div className="text-lg font-semibold text-rose-600">Tara</div>
+          <div className="flex items-center gap-3">
+            <img
+              src="/taralogo.jpg"
+              alt="Tara Logo"
+              className="h-8 w-8 rounded-full object-cover"
+            />
+            <span className="text-lg font-semibold text-rose-600">Tara</span>
+          </div>
+          <button
+            onClick={() => {
+              localStorage.removeItem('userProfile');
+              localStorage.removeItem('isNewUser');
+              window.location.href = '/login';
+            }}
+            className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
+            title="Logout"
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
+          </button>
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-9xl flex-1 grid-cols-1  px-4  sm:grid-cols-12">
+      < div className="mx-auto grid w-full max-w-9xl flex-1 grid-cols-1  px-4  sm:grid-cols-12" >
         {/* Sidebar */}
-        <aside className="sm:col-span-4 lg:col-span-3">
+        < aside className="sm:col-span-4 lg:col-span-3" >
           <div className=" border border-rose-100 bg-white p-3 shadow-sm">
             <div className="mb-3 flex items-center justify-between">
               <div className="text-sm font-semibold text-gray-700">Chats</div>
@@ -486,27 +505,29 @@ export default function ChatListPage() {
         </div>
       </nav>
 
-      {showAdd && (
-        <AddUserModal
-          onClose={() => setShowAdd(false)}
-          onCreate={(payload) => {
-            const id = `c${Date.now()}`;
-            const newChat = {
-              id,
-              name: payload.name,
-              last: `${payload.role} • Ready to chat`,
-              unread: 0,
-              avatar: payload.avatar,
-              gender: payload.gender,
-              role: payload.role,
-            };
-            setChats((prev) => [newChat, ...prev]);
-            setActiveId(id);
-            setShowAdd(false);
-          }}
-        />
-      )}
-    </div>
+      {
+        showAdd && (
+          <AddUserModal
+            onClose={() => setShowAdd(false)}
+            onCreate={(payload) => {
+              const id = `c${Date.now()}`;
+              const newChat = {
+                id,
+                name: payload.name,
+                last: `${payload.role} • Ready to chat`,
+                unread: 0,
+                avatar: payload.avatar,
+                gender: payload.gender,
+                role: payload.role,
+              };
+              setChats((prev) => [newChat, ...prev]);
+              setActiveId(id);
+              setShowAdd(false);
+            }}
+          />
+        )
+      }
+    </div >
   );
 }
 

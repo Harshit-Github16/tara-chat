@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function JournalPage() {
   const [entries, setEntries] = useState([]);
@@ -43,7 +43,25 @@ export default function JournalPage() {
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100">
       <header className="sticky top-0 z-10 border-b border-pink-100 bg-white/60 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <div className="text-lg font-semibold text-pink-600">Tara</div>
+          <div className="flex items-center gap-3">
+            <img
+              src="/taralogo.jpg"
+              alt="Tara Logo"
+              className="h-8 w-8 rounded-full object-cover"
+            />
+            <span className="text-lg font-semibold text-pink-600">Tara</span>
+          </div>
+          <button
+            onClick={() => {
+              localStorage.removeItem('userProfile');
+              localStorage.removeItem('isNewUser');
+              window.location.href = '/login';
+            }}
+            className="rounded-full p-2 text-pink-600 hover:bg-pink-50 transition-colors"
+            title="Logout"
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
+          </button>
         </div>
       </header>
 
