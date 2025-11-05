@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
@@ -15,7 +16,7 @@ import {
   faPlay,
   faPause,
   faTimes,
-
+  faBars,
   faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -80,6 +81,7 @@ export default function ChatListPage() {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showAllCelebrities, setShowAllCelebrities] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   // Store messages per chat ID
@@ -238,11 +240,19 @@ export default function ChatListPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
+    <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 pb-16">
       {/* Header */}
       <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
         <div className="mx-auto flex max-w-9xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setShowMobileSidebar(true)}
+              className="sm:hidden rounded-lg p-2 text-rose-600 hover:bg-rose-100 transition-colors"
+            >
+              <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
+            </button>
+
             <img
               src="/taralogo.jpg"
               alt="Tara Logo"
@@ -254,10 +264,33 @@ export default function ChatListPage() {
         </div>
       </header>
 
-      < div className="mx-auto grid w-full max-w-9xl flex-1 grid-cols-1  px-4  sm:grid-cols-12" >
-        {/* Sidebar */}
-        < aside className="sm:col-span-4 lg:col-span-3" >
-          <div className=" border border-rose-100 bg-white p-3 shadow-sm">
+      <div className="mx-auto flex w-full max-w-9xl flex-1 relative">
+        {/* Mobile Sidebar Overlay */}
+        {showMobileSidebar && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 sm:hidden"
+            onClick={() => setShowMobileSidebar(false)}
+          />
+        )}
+
+
+        <aside className={`
+          fixed sm:relative top-0 left-0 h-screen sm:h-auto w-80 sm:w-auto
+          transform transition-transform duration-300 ease-in-out z-50
+          sm:transform-none sm:flex-none sm:w-1/3 lg:w-1/4
+          ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
+        `}>
+          <div className="h-full border-r border-rose-100 bg-white/95 backdrop-blur-sm p-3 shadow-lg overflow-y-auto sm:border sm:bg-white sm:backdrop-blur-none sm:shadow-sm">
+            {/* Mobile Close Button */}
+            <div className="sm:hidden flex justify-end mb-3">
+              <button
+                onClick={() => setShowMobileSidebar(false)}
+                className="rounded-full p-2 text-gray-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"
+              >
+                <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+              </button>
+            </div>
+
             <div className="mb-3 flex items-center justify-between">
               <div className="text-sm font-semibold text-gray-700">Chats</div>
               <button
@@ -271,7 +304,10 @@ export default function ChatListPage() {
               {chats.map((c) => (
                 <button
                   key={c.id}
-                  onClick={() => setActiveId(c.id)}
+                  onClick={() => {
+                    setActiveId(c.id);
+                    setShowMobileSidebar(false); // Close mobile sidebar when chat is selected
+                  }}
                   className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${c.id === activeId
                     ? "border-rose-200 bg-rose-100 text-rose-700"
                     : "border-rose-100 bg-white text-gray-700 hover:bg-rose-100"
@@ -363,7 +399,7 @@ export default function ChatListPage() {
         </aside>
 
         {/* Chat view */}
-        <section className="sm:col-span-8 lg:col-span-9">
+        <section className="flex-1 sm:ml-4">
           <div className="flex h-[calc(100vh-130px)] flex-col  border border-rose-100 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
               <div className="flex items-center gap-3">
@@ -567,7 +603,7 @@ export default function ChatListPage() {
       </div>
 
       {/* Bottom Navbar */}
-      <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-rose-100 bg-white/90 backdrop-blur">
         <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
           <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
           <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />

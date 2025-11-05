@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Main pages
+Allow: /
+Allow: /blogs
+Allow: /chatlist
+Allow: /insights
+Allow: /journal
+Allow: /profile
+Allow: /welcome
+
+# Disallow private/auth pages
+Disallow: /login
+Disallow: /onboarding
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1

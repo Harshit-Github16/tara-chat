@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,12 +24,70 @@ import {
   faPaperPlane,
   faChevronLeft,
   faChevronRight,
+  faChevronDown,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons";
-
+import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
+import Head from "next/head";
 export default function Home() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
+      <Head>
+
+        <title>Tara - AI Mental Health & Wellness Companion | Emotional Support Chat</title>
+
+        <meta name="description" content="Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Chat with 100+ AI characters, track moods, and build healthy habits." />
+
+        <meta name="keywords" content="mental health app, AI companion, emotional wellness, mindfulness, therapy chat, mood tracking, journal app, personal growth, mental wellness, AI therapy, celebrity chat, emotional support" />
+
+        <link rel="canonical" href="https://yourdomain.com" />
+
+        <meta property="og:title" content="Tara - AI Mental Health & Wellness Companion" />
+
+        <meta property="og:description" content="Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth." />
+
+        <meta property="og:type" content="website" />
+
+        <meta property="og:url" content="https://yourdomain.com" />
+
+        <meta property="og:image" content="https://yourdomain.com/taralogo.jpg" />
+
+        <script
+
+          type="application/ld+json"
+
+          dangerouslySetInnerHTML={{
+
+            __html: JSON.stringify({
+
+              "@context": "https://schema.org",
+
+              "@type": "WebSite",
+
+              "name": "Tara",
+
+              "url": "https://yourdomain.com",
+
+              "description": "AI-powered mental health and wellness companion",
+
+              "potentialAction": {
+
+                "@type": "SearchAction",
+
+                "target": "https://yourdomain.com/search?q={search_term_string}",
+
+                "query-input": "required name=search_term_string"
+
+              }
+
+            })
+
+          }}
+
+        />
+
+      </Head>
       {/* Navigation */}
       <header className="sticky top-0 z-50 border-b border-rose-100 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -685,6 +744,100 @@ export default function Home() {
           </div>
         </section>
 
+        {/* FAQ Accordion Section */}
+        <section className="py-20 bg-gradient-to-br from-rose-50/20 to-white">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+                Frequently Asked Questions
+              </h2>
+              <p className="mt-4 text-lg text-gray-600">
+                Everything you need to know about Tara and emotional wellness
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+              {/* Left Side - FAQ Image */}
+              <div className="relative">
+                <div className="sticky top-8">
+                  <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                    <Image
+                      src="/faqimg.jpg"
+                      alt="FAQ - Mental Health Support"
+                      width={600}
+                      height={700}
+                      className="w-full h-auto object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-rose-900/20 to-transparent"></div>
+
+                    {/* Overlay Content */}
+                    <div className="absolute bottom-8 left-8 right-8">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                          Need More Help?
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-4">
+                          Can't find what you're looking for? Our support team is here to help you 24/7.
+                        </p>
+                        <Link
+                          href="#contact"
+                          className="inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
+                        >
+                          Contact Support
+                          <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Decorative Elements */}
+                  <div className="absolute -top-4 -right-4 w-24 h-24 bg-rose-200 rounded-full opacity-20"></div>
+                  <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-rose-300 rounded-full opacity-30"></div>
+                </div>
+              </div>
+
+              {/* Right Side - FAQ Accordion */}
+              <div>
+                <FAQAccordion faqs={COMMON_FAQS} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-r from-rose-50 to-white">
+          <div className="mx-auto max-w-4xl px-6 text-center">
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              Ready to start your emotional wellness journey?
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Join thousands of users who are already improving their emotional health with Tara.
+            </p>
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
+              >
+                <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
+                Continue with Google
+              </Link>
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
+              >
+                <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
+                Continue with Apple
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-500">
+              Free to start • No credit card required • Cancel anytime
+            </p>
+          </div>
+        </section>
+
+
         {/* Contact Form */}
         <section className="py-20 bg-white">
           <div className="mx-auto max-w-7xl px-6">
@@ -792,37 +945,6 @@ export default function Home() {
                 </form>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-rose-50 to-white">
-          <div className="mx-auto max-w-4xl px-6 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Ready to start your emotional wellness journey?
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Join thousands of users who are already improving their emotional health with Tara.
-            </p>
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
-              >
-                <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
-                Continue with Google
-              </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
-              >
-                <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
-                Continue with Apple
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-gray-500">
-              Free to start • No credit card required • Cancel anytime
-            </p>
           </div>
         </section>
       </main>
@@ -1174,5 +1296,52 @@ function LightFooterLink({ href, text }) {
         {text}
       </a>
     </li>
+  );
+}
+// FAQ Accordion Component
+function FAQAccordion({ faqs }) {
+  const [openIndex, setOpenIndex] = useState(0); // First FAQ open by default
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="space-y-3">
+      {faqs.map((faq, index) => (
+        <div
+          key={index}
+          className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+        >
+          <button
+            onClick={() => toggleFAQ(index)}
+            className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-rose-50 transition-colors"
+          >
+            <h3 className="text-lg font-semibold text-gray-900 pr-4">
+              {faq.question}
+            </h3>
+            <div className="flex-shrink-0">
+              <FontAwesomeIcon
+                icon={openIndex === index ? faChevronUp : faChevronDown}
+                className="h-5 w-5 text-rose-600 transition-transform duration-200"
+              />
+            </div>
+          </button>
+
+          <div
+            className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+              }`}
+          >
+            <div className="px-6 pb-5 pt-2">
+              <div className="border-t border-rose-100 pt-4">
+                <p className="text-gray-600 leading-relaxed">
+                  {faq.answer}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
