@@ -15,7 +15,7 @@ import {
   faPlay,
   faPause,
   faTimes,
-  faSignOutAlt,
+
   faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
@@ -189,17 +189,7 @@ export default function ChatListPage() {
             />
             <span className="text-lg font-semibold text-rose-600">Tara</span>
           </div>
-          <button
-            onClick={() => {
-              localStorage.removeItem('userProfile');
-              localStorage.removeItem('isNewUser');
-              window.location.href = '/login';
-            }}
-            className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
-            title="Logout"
-          >
-            <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
-          </button>
+
         </div>
       </header>
 

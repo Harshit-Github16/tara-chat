@@ -224,6 +224,13 @@ const SAMPLE_COMMENTS = [
     }
 ];
 
+// Function to generate random masked names
+const generateMaskedName = () => {
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    const randomLetter = letters[Math.floor(Math.random() * letters.length)];
+    return `${randomLetter}***`;
+};
+
 export default function BlogPostPage() {
     const params = useParams();
     const [post, setPost] = useState(null);
@@ -242,6 +249,20 @@ export default function BlogPostPage() {
             setLikeCount(foundPost.likes);
         }
     }, [params.id]);
+
+    // Close share menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showShareMenu && !event.target.closest('.share-menu-container')) {
+                setShowShareMenu(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showShareMenu]);
 
     const handleLike = () => {
         setIsLiked(!isLiked);
@@ -284,7 +305,7 @@ export default function BlogPostPage() {
         if (newComment.trim()) {
             const comment = {
                 id: Date.now(),
-                author: "Anonymous User",
+                author: generateMaskedName(),
                 avatar: "/avatars/default.jpg",
                 content: newComment,
                 timestamp: "Just now",
@@ -465,7 +486,7 @@ export default function BlogPostPage() {
                                     <span className="font-medium">{likeCount}</span>
                                 </button>
 
-                                <div className="relative">
+                                <div className="relative share-menu-container">
                                     <button
                                         onClick={() => setShowShareMenu(!showShareMenu)}
                                         className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600 transition-colors"
@@ -475,7 +496,7 @@ export default function BlogPostPage() {
                                     </button>
 
                                     {showShareMenu && (
-                                        <div className="absolute top-full left-0 mt-2 bg-white border border-rose-100 rounded-xl shadow-lg p-2 z-10">
+                                        <div className="absolute top-full left-0 mt-2 bg-white border border-rose-100 rounded-xl shadow-lg p-2 z-50 min-w-[150px]">
                                             <button
                                                 onClick={() => handleShare('copy')}
                                                 className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
@@ -487,21 +508,21 @@ export default function BlogPostPage() {
                                                 onClick={() => handleShare('facebook')}
                                                 className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
                                             >
-                                                <FontAwesomeIcon icon={faFacebook} className="h-4 w-4" />
+                                                <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
                                                 Facebook
                                             </button>
                                             <button
                                                 onClick={() => handleShare('twitter')}
                                                 className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
                                             >
-                                                <FontAwesomeIcon icon={faTwitter} className="h-4 w-4" />
+                                                <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
                                                 Twitter
                                             </button>
                                             <button
                                                 onClick={() => handleShare('linkedin')}
                                                 className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
                                             >
-                                                <FontAwesomeIcon icon={faLinkedin} className="h-4 w-4" />
+                                                <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
                                                 LinkedIn
                                             </button>
                                         </div>

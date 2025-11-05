@@ -7,7 +7,7 @@ import {
     faBookOpen,
     faComments,
     faUser,
-    faSignOutAlt,
+
     faHeart,
     faComment,
     faShare,
@@ -183,11 +183,7 @@ export default function BlogsPage() {
     const featuredPosts = BLOG_POSTS.filter(post => post.featured);
     const trendingPosts = BLOG_POSTS.filter(post => post.trending).slice(0, 3);
 
-    const handleLogout = () => {
-        localStorage.removeItem('userProfile');
-        localStorage.removeItem('isNewUser');
-        window.location.href = '/login';
-    };
+
 
     return (
         <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
@@ -202,13 +198,7 @@ export default function BlogsPage() {
                         />
                         <span className="text-lg font-semibold text-rose-600">Tara</span>
                     </div>
-                    <button
-                        onClick={handleLogout}
-                        className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
-                        title="Logout"
-                    >
-                        <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
-                    </button>
+
                 </div>
             </header>
 

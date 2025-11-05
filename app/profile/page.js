@@ -160,13 +160,8 @@ export default function ProfilePage() {
                                 </button>
                             </div>
                         )}
-                        <button
-                            onClick={handleLogout}
-                            className="rounded-full p-2 text-rose-500 hover:bg-rose-50 transition-colors"
-                            title="Logout"
-                        >
-                            <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
-                        </button>
+
+
                     </div>
                 </div>
             </header>
@@ -409,6 +404,17 @@ export default function ProfilePage() {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+
+                            {/* Logout Button */}
+                            <div className="mt-4 pt-4 border-t border-rose-100">
+                                <button
+                                    onClick={handleLogout}
+                                    className="w-full flex items-center justify-center gap-2 p-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
+                                >
+                                    <FontAwesomeIcon icon={faSignOutAlt} className="h-4 w-4" />
+                                    Logout
+                                </button>
                             </div>
                         </div>
 

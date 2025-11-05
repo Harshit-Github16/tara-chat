@@ -13,7 +13,7 @@ import {
     faBullseye,
     faCalendar,
     faClock,
-    faSignOutAlt,
+
     faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -57,17 +57,7 @@ export default function InsightsPage() {
                                 Year
                             </button>
                         </div>
-                        <button
-                            onClick={() => {
-                                localStorage.removeItem('userProfile');
-                                localStorage.removeItem('isNewUser');
-                                window.location.href = '/login';
-                            }}
-                            className="rounded-full p-2 text-pink-600 hover:bg-pink-50 transition-colors"
-                            title="Logout"
-                        >
-                            <FontAwesomeIcon icon={faSignOutAlt} className="h-5 w-5" />
-                        </button>
+
                     </div>
                 </div>
             </header>

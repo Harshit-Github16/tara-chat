@@ -674,7 +674,7 @@ export default function Home() {
 
               <div className="flex justify-center mt-8">
                 <Link
-                  href="/blog"
+                  href="/blogs"
                   className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-6 py-3 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
                 >
                   View All Articles
