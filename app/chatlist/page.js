@@ -29,6 +29,15 @@ const INITIAL_CHATS = [
 
 const POPULAR_EMOJIS = ["😀", "😂", "😍", "😊", "😎", "🤔", "👍", "❤️", "🔥", "💯"]
 
+const SUGGESTED_MESSAGES = [
+  "How are you feeling today?",
+  "What's on your mind?",
+  "Tell me something good that happened today",
+  "I need some motivation",
+  "Can you help me with something?",
+  "What should I do next?"
+]
+
 const EMOJIS = [
   "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇", "🙂", "🙃", "😉", "😌", "😍", "😘",
   "😗", "😙", "😚", "😋", "😛", "😝", "😜", "🤪", "🤨", "🤓", "😎", "🤩", "😏", "😒", "😞", "😔",
@@ -154,6 +163,17 @@ export default function ChatListPage() {
     setMessage("");
   };
 
+  const sendSuggestedMessage = (suggestedText) => {
+    const newMessage = {
+      id: Date.now(),
+      type: 'text',
+      content: suggestedText,
+      sender: 'me',
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, newMessage]);
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
       {/* Optional minimal header */}
@@ -186,15 +206,33 @@ export default function ChatListPage() {
                     : "border-rose-100 bg-white text-gray-700 hover:bg-rose-100"
                     }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{c.name}</span>
-                    {c.unread > 0 && (
-                      <span className="ml-2 inline-flex items-center rounded-full bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700">
-                        {c.unread}
-                      </span>
-                    )}
+                  <div className="flex items-center gap-3">
+                    {/* Avatar */}
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center flex-shrink-0">
+                      {c.avatar ? (
+                        <img
+                          src={c.avatar}
+                          alt={c.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
+                      )}
+                    </div>
+
+                    {/* Chat Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium truncate">{c.name}</span>
+                        {c.unread > 0 && (
+                          <span className="ml-2 inline-flex items-center rounded-full bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700 flex-shrink-0">
+                            {c.unread}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 truncate text-xs text-gray-500">{c.last}</div>
+                    </div>
                   </div>
-                  <div className="mt-1 truncate text-xs text-gray-500">{c.last}</div>
                 </button>
               ))}
             </div>
@@ -257,11 +295,27 @@ export default function ChatListPage() {
         <section className="sm:col-span-8 lg:col-span-9">
           <div className="flex h-[calc(100vh-120px)] flex-col  border border-rose-100 bg-white shadow-sm">
             <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
-              <div>
-                <div className="text-sm font-semibold text-gray-900">
-                  {activeChat?.name}
+              <div className="flex items-center gap-3">
+                {/* Active Chat Avatar */}
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+                  {activeChat?.avatar ? (
+                    <img
+                      src={activeChat.avatar}
+                      alt={activeChat.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
+                  )}
                 </div>
-                <div className="text-xs text-gray-500">Today</div>
+
+                {/* Chat Info */}
+                <div>
+                  <div className="text-sm font-semibold text-gray-900">
+                    {activeChat?.name}
+                  </div>
+                  <div className="text-xs text-gray-500">Today</div>
+                </div>
               </div>
             </div>
 
@@ -302,6 +356,24 @@ export default function ChatListPage() {
                   >
                     <FontAwesomeIcon icon={faTimes} />
                   </button>
+                </div>
+              </div>
+            )}
+
+            {/* Suggested Messages */}
+            {messages.length <= 3 && (
+              <div className="border-t border-rose-100 p-3 bg-rose-50/30">
+                <div className="mb-2 text-xs font-medium text-gray-600">Suggested messages:</div>
+                <div className="flex flex-wrap gap-2">
+                  {SUGGESTED_MESSAGES.slice(0, 3).map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => sendSuggestedMessage(suggestion)}
+                      className="inline-flex items-center rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs text-gray-700 hover:bg-rose-100 hover:border-rose-300 transition-colors"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
@@ -627,7 +699,7 @@ function AddUserModal({ onClose, onCreate }) {
                       onCreate({
                         name: person.name,
                         gender: "other",
-                        avatar: `/${person.image_url}`,
+                        avatar: `/celebrities/${person.image_url}`,
                         role: "Celebrity",
                       })
                     }
