@@ -18,6 +18,7 @@ import {
   faTimes,
   faBars,
   faNewspaper,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
@@ -605,10 +606,10 @@ export default function ChatListPage() {
       {/* Bottom Navbar */}
       <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-rose-100 bg-white/90 backdrop-blur">
         <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-          <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
+          <MobileNavLink href="/mood" icon={faHeart} label="Mood" />
           <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
           <MobileNavLink href="/chatlist" icon={faComments} label="Chats" active />
-          <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
+          <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
           <MobileNavLink href="/profile" icon={faUser} label="Profile" />
         </div>
       </nav>

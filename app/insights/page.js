@@ -160,10 +160,10 @@ export default function InsightsPage() {
             {/* Bottom Navigation */}
             <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
                 <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-                    <MobileNavLink href="/insights" icon={faChartLine} label="Insights" active />
+                    <MobileNavLink href="/mood" icon={faHeart} label="Mood" />
                     <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
                     <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
-                    <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
+                    <MobileNavLink href="/insights" icon={faChartLine} label="Insights" active />
                     <MobileNavLink href="/profile" icon={faUser} label="Profile" />
                 </div>
             </nav>

@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { api } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faUser,
@@ -30,19 +32,24 @@ import {
 import Link from "next/link";
 
 export default function ProfilePage() {
+    const { user, loading, updateUser } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [userProfile, setUserProfile] = useState({
-        name: "John Doe",
-        email: "john.doe@example.com",
-        phone: "+1 234 567 8900",
-        location: "New York, USA",
-        profession: "Software Developer",
-        bio: "Passionate about technology and mental wellness. Love to explore new ideas and connect with people.",
-        interests: ["Technology", "Reading", "Travel", "Music"],
-        personalityTraits: ["Creative", "Empathetic", "Optimistic"],
-        joinedDate: "2024-01-15"
+        name: "",
+        nickname: "",
+        email: "",
+        phone: "",
+        location: "",
+        profession: "",
+        bio: "",
+        interests: [],
+        personalityTraits: [],
+        gender: "",
+        ageRange: "",
+        joinedDate: ""
     });
     const [editData, setEditData] = useState({});
+    const [saving, setSaving] = useState(false);
 
     // Mock data for recent activity and stats
     const recentActivity = [
@@ -71,16 +78,27 @@ export default function ProfilePage() {
         "Ambitious", "Caring"
     ];
 
+    // Load user data from database
     useEffect(() => {
-        const savedProfile = localStorage.getItem('userProfile');
-        if (savedProfile) {
-            const profile = JSON.parse(savedProfile);
+        if (user && !loading) {
+            const profile = {
+                name: user.name || "",
+                nickname: user.nickname || "",
+                email: user.email || "",
+                phone: user.phone || "",
+                location: user.location || "",
+                profession: user.profession || "",
+                bio: user.bio || "",
+                interests: user.interests || [],
+                personalityTraits: user.personalityTraits || [],
+                gender: user.gender || "",
+                ageRange: user.ageRange || "",
+                joinedDate: user.createdAt || ""
+            };
             setUserProfile(profile);
             setEditData(profile);
-        } else {
-            setEditData(userProfile);
         }
-    }, []);
+    }, [user, loading]);
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -92,10 +110,28 @@ export default function ProfilePage() {
         setEditData({ ...userProfile });
     };
 
-    const handleSave = () => {
-        setUserProfile(editData);
-        localStorage.setItem('userProfile', JSON.stringify(editData));
-        setIsEditing(false);
+    const handleSave = async () => {
+        setSaving(true);
+        try {
+            // Update profile in database
+            const response = await api.put('/api/onboarding', editData);
+
+            if (response.ok) {
+                const data = await response.json();
+                setUserProfile(editData);
+                setIsEditing(false);
+                console.log('Profile updated successfully:', data);
+            } else {
+                const errorData = await response.json();
+                console.error('Failed to update profile:', errorData);
+                alert('Failed to update profile. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Error updating profile. Please try again.');
+        } finally {
+            setSaving(false);
+        }
     };
 
     const handleInputChange = (field, value) => {
@@ -114,11 +150,38 @@ export default function ProfilePage() {
         }));
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('userProfile');
-        localStorage.removeItem('isNewUser');
-        window.location.href = '/login';
+    const handleLogout = async () => {
+        try {
+            // Import Firebase signOut function
+            const { signOutUser } = await import('../../lib/firebase');
+            await signOutUser();
+
+            // Also clear our JWT cookie
+            await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+
+            // Redirect to login
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Fallback - still redirect
+            window.location.href = '/login';
+        }
     };
+
+    // Show loading while user data is being fetched
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-rose-200 border-t-rose-500 rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading your profile...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
@@ -153,10 +216,23 @@ export default function ProfilePage() {
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-colors"
+                                    disabled={saving}
+                                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${saving
+                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                        : 'bg-rose-100 text-rose-600 hover:bg-rose-200'
+                                        }`}
                                 >
-                                    <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
-                                    Save
+                                    {saving ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
+                                            Save
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         )}
@@ -227,6 +303,23 @@ export default function ProfilePage() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
+                                    <label className="block text-sm font-medium text-gray-600 mb-2">Nickname</label>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            value={editData.nickname}
+                                            onChange={(e) => handleInputChange('nickname', e.target.value)}
+                                            className="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm outline-none focus:border-rose-300"
+                                            placeholder="What should we call you?"
+                                        />
+                                    ) : (
+                                        <div className="flex items-center gap-2 text-gray-700 bg-rose-50 rounded-lg px-3 py-2">
+                                            <FontAwesomeIcon icon={faUser} className="h-3 w-3 text-rose-400" />
+                                            {userProfile.nickname || 'Not set'}
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
                                     <label className="block text-sm font-medium text-gray-600 mb-2">Email</label>
                                     {isEditing ? (
                                         <input
@@ -235,6 +328,7 @@ export default function ProfilePage() {
                                             onChange={(e) => handleInputChange('email', e.target.value)}
                                             className="w-full rounded-lg border border-rose-200 px-3 py-2 text-sm outline-none focus:border-rose-300"
                                             placeholder="your.email@example.com"
+                                            disabled
                                         />
                                     ) : (
                                         <div className="flex items-center gap-2 text-gray-700 bg-rose-50 rounded-lg px-3 py-2">
@@ -426,10 +520,10 @@ export default function ProfilePage() {
             {/* Bottom Navbar */}
             <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
                 <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-                    <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
+                    <MobileNavLink href="/mood" icon={faHeart} label="Mood" />
                     <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
                     <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
-                    <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
+                    <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
                     <MobileNavLink href="/profile" icon={faUser} label="Profile" active />
                 </div>
             </nav>

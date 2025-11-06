@@ -1,34 +1,82 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import { User } from '../../../../lib/models/User';
+import { signToken } from '../../../../lib/jwt';
 
-export async function POST(req) {
-  const body = await req.json().catch(() => ({}));
-  const provider = body?.provider || "credentials";
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { email, password, provider } = body;
 
-  // Temporary: allow demo credentials until DB is wired
-  if (provider === "credentials") {
-    const { email, password } = body || {};
-    if (email === "harshit@gmail.com" && password === "Harshit123") {
-      const res = NextResponse.json({ ok: true, provider });
-      res.cookies.set("session", "mock-session", {
-        httpOnly: true,
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24 * 7,
-        path: "/",
+    if (provider === 'google') {
+      // Redirect to Google OAuth
+      return NextResponse.json({
+        redirectUrl: '/api/auth/google'
       });
-      return res;
     }
-    return NextResponse.json({ ok: false, error: "Invalid credentials" }, { status: 401 });
+
+    // Handle email/password login
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Email and password are required' },
+        { status: 400 }
+      );
+    }
+
+    // Find user by email
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
+
+    // Verify password
+    const isValidPassword = await User.verifyPassword(password, user.password);
+    if (!isValidPassword) {
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
+
+    // Update last login
+    await User.updateLastLogin(user._id);
+
+    // Create JWT token
+    const token = signToken({
+      userId: user._id.toString(),
+      email: user.email,
+      name: user.name
+    });
+
+    // Create response
+    const response = NextResponse.json({
+      success: true,
+      user: {
+        id: user._id.toString(),
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        isOnboardingComplete: user.isOnboardingComplete
+      }
+    });
+
+    // Set JWT token in HTTP-only cookie
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 // 7 days
+    });
+
+    return response;
+
+  } catch (error) {
+    console.error('Login error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
-
-  // For Google button in demo, just set session
-  const res = NextResponse.json({ ok: true, provider });
-  res.cookies.set("session", "mock-session", {
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7,
-    path: "/",
-  });
-  return res;
 }
-
-

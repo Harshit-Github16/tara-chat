@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ProtectedRoute from "../components/ProtectedRoute";
+import { useAuth } from "../contexts/AuthContext";
+import { api } from "../../lib/api";
 import {
   faFaceSmile,
   faHeart,
@@ -13,7 +16,6 @@ import {
   faStar,
   faBrain,
   faArrowRight,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 const MOODS = [
@@ -34,11 +36,12 @@ const FACE_EMOJIS = [
   "😘", "🤩", "😚", "😙", "🤔", "😏", "😴", "😀", "😇", "🥳"
 ];
 
-export default function WelcomePage() {
+function WelcomePageContent() {
   const [selected, setSelected] = useState(null);
   const [saving, setSaving] = useState(false);
   const [showCrackers, setShowCrackers] = useState(false);
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     setShowCrackers(true);
@@ -51,12 +54,34 @@ export default function WelcomePage() {
   async function saveMood() {
     if (!selected) return;
     setSaving(true);
+
+    // Debug: Check if token exists
+    const token = localStorage.getItem('authToken');
+    console.log('Welcome: Token exists:', token ? 'Yes' : 'No');
+    console.log('Welcome: Selected mood:', selected);
+
     try {
-      await fetch("/api/mood", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mood: selected }),
+      const response = await api.post("/api/mood", {
+        mood: selected,
+        intensity: 5, // Default intensity
+        note: ""
       });
+
+      console.log('Welcome: Response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Welcome: Success response:', data);
+        router.replace("/chatlist");
+      } else {
+        const errorData = await response.json();
+        console.error('Welcome: Failed to save mood:', errorData);
+        // Still redirect for now, but you can add error handling
+        router.replace("/chatlist");
+      }
+    } catch (error) {
+      console.error('Welcome: Error saving mood:', error);
+      // Still redirect for now, but you can add error handling
       router.replace("/chatlist");
     } finally {
       setSaving(false);
@@ -142,7 +167,7 @@ export default function WelcomePage() {
 
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome back! How are you feeling today?
+              Welcome back{user?.name ? `, ${user.nickname || user.name.split(' ')[0]}` : ''}! How are you feeling today?
             </h1>
             <p className="text-sm text-gray-600">
               Your mood helps us personalize your experience
@@ -180,14 +205,19 @@ export default function WelcomePage() {
             <button
               onClick={saveMood}
               disabled={!selected || saving}
-              className="group inline-flex items-center gap-2 rounded-full bg-rose-200 px-6 py-3 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              className="group inline-flex items-center gap-2 rounded-full bg-rose-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-rose-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
-
-              <>
-
-                <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-              </>
-
+              {saving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  Continue to Chats
+                  <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                </>
+              )}
             </button>
           </div>
 
@@ -227,5 +257,12 @@ export default function WelcomePage() {
         .animate-emoji-fall-6 { animation: emoji-fall 3.2s linear; }
       `}</style>
     </div>
+  );
+}
+export default function WelcomePage() {
+  return (
+    <ProtectedRoute requireOnboarding={true}>
+      <WelcomePageContent />
+    </ProtectedRoute>
   );
 }

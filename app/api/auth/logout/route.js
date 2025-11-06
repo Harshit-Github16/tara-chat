@@ -1,9 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 export async function POST() {
-  const res = NextResponse.json({ ok: true });
-  res.cookies.set("session", "", { path: "/", maxAge: 0 });
-  return res;
+  try {
+    const response = NextResponse.json({ success: true });
+
+    // Clear the authentication cookie
+    response.cookies.set('token', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 0 // Expire immediately
+    });
+
+    return response;
+  } catch (error) {
+    console.error('Logout error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
 }
-
-

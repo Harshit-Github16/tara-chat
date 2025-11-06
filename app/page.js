@@ -293,11 +293,11 @@ export default function Home() {
                 </svg>
               </div>
 
-              <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-8">
+              <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-8 items-stretch">
                 <EnhancedStepCard
                   step="1"
                   title="Check In Daily"
-                  description="Start your day with a personalized mood check-in. Our AI analyzes your emotional patterns and provides gentle guidance."
+                  description="Start your day with a personalized mood check-in. Our AI analyzes your emotional patterns and provides gentle guidance for better mental wellness."
                   icon={faHeart}
                   features={["Quick 2-minute check-ins", "Mood pattern recognition", "Personalized insights"]}
                   color="indigo"
@@ -305,7 +305,7 @@ export default function Home() {
                 <EnhancedStepCard
                   step="2"
                   title="Chat & Journal"
-                  description="Connect with AI companions or express yourself through guided journaling. Process emotions in a safe, supportive environment."
+                  description="Connect with AI companions or express yourself through guided journaling. Process emotions in a safe, supportive environment designed for growth."
                   icon={faComments}
                   features={["100+ AI characters", "Guided prompts", "Private & secure"]}
                   color="indigo"
@@ -313,7 +313,7 @@ export default function Home() {
                 <EnhancedStepCard
                   step="3"
                   title="Track & Grow"
-                  description="Visualize your emotional journey with beautiful analytics. Celebrate progress and identify areas for growth."
+                  description="Visualize your emotional journey with beautiful analytics. Celebrate progress and identify areas for growth with detailed insights and recommendations."
                   icon={faChartLine}
                   features={["Progress visualization", "Growth insights", "Achievement tracking"]}
                   color="indigo"
@@ -401,10 +401,10 @@ export default function Home() {
                 badge="GDPR Compliant"
               />
               <TrustIndicator
-                icon={faHeart}
-                title="Clinically Informed"
-                description="Built with input from mental health professionals"
-                badge="Evidence-Based"
+                icon={faUserAstronaut}
+                title="AI-Powered Support"
+                description="Advanced AI technology provides personalized emotional guidance 24/7"
+                badge="Always Available"
               />
               <TrustIndicator
                 icon={faChartLine}
@@ -1075,7 +1075,7 @@ function EnhancedStepCard({ step, title, description, icon, features, color }) {
 
   return (
     <div className="relative group">
-      <div className="rounded-3xl border border-rose-100 bg-white p-8 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2">
+      <div className="rounded-3xl border border-rose-100 bg-white p-8 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-2 h-full min-h-[400px] flex flex-col">
         {/* Step number */}
         <div className="absolute -top-4 left-8">
           <div className={`h-12 w-12 rounded-full bg-gradient-to-br ${colorClasses[color]} border-4 border-white shadow-lg flex items-center justify-center text-xl font-bold`}>
@@ -1091,12 +1091,12 @@ function EnhancedStepCard({ step, title, description, icon, features, color }) {
         </div>
 
         {/* Content */}
-        <div className="text-center">
+        <div className="text-center flex-grow flex flex-col">
           <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-          <p className="text-gray-600 leading-relaxed mb-6">{description}</p>
+          <p className="text-gray-600 leading-relaxed mb-6 flex-grow">{description}</p>
 
           {/* Features */}
-          <div className="space-y-2">
+          <div className="space-y-2 mt-auto">
             {features.map((feature, index) => (
               <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
                 <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-rose-500 flex-shrink-0" />
