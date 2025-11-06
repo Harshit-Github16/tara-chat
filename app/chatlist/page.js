@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import Head from "next/head";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
@@ -17,15 +17,12 @@ import {
   faPause,
   faTimes,
   faBars,
+  faNewspaper,
+  faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 
-const INITIAL_CHATS = [
-  { id: "c1", name: "Calm Coach", last: "How was your day?", unread: 2 },
-  { id: "c2", name: "Gratitude Guru", last: "One win today?", unread: 0 },
-  { id: "c3", name: "Motivation Buddy", last: "Small step next?", unread: 1 },
-  { id: "c4", name: "Compassionate Listener", last: "I'm here.", unread: 0 },
-];
+
 
 
 
@@ -73,8 +70,9 @@ const EMOJIS = [
 ];
 
 export default function ChatListPage() {
-  const [chats, setChats] = useState(INITIAL_CHATS);
-  const [activeId, setActiveId] = useState(INITIAL_CHATS[0].id);
+  const defaultTaraChat = { id: "tara-ai", name: "TARA AI", last: "", unread: 0, avatar: "/taralogo.jpg" };
+  const [chats, setChats] = useState([defaultTaraChat]);
+  const [activeId, setActiveId] = useState("tara-ai");
   const [message, setMessage] = useState("");
   const [showAdd, setShowAdd] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -84,13 +82,8 @@ export default function ChatListPage() {
   const [audioBlob, setAudioBlob] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   // Store messages per chat ID
-  const [chatMessages, setChatMessages] = useState({
-    [INITIAL_CHATS[0].id]: [
-      { id: 1, type: 'text', content: "Hey! How are you feeling after your check-in?", sender: 'them', timestamp: new Date() },
-      { id: 2, type: 'text', content: "Better. I chose 'Inspired'.", sender: 'me', timestamp: new Date() },
-      { id: 3, type: 'text', content: "Great! What's one small step you can take today?", sender: 'them', timestamp: new Date() },
-    ]
-  });
+  const [chatMessages, setChatMessages] = useState({});
+
 
   // Get messages for current active chat
   const messages = chatMessages[activeId] || [];
@@ -260,6 +253,11 @@ export default function ChatListPage() {
             <span className="text-lg font-semibold text-rose-600">Tara</span>
           </div>
 
+          {/* Profile Icon */}
+          <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
+            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+          </Link>
+
         </div>
       </header>
 
@@ -399,215 +397,248 @@ export default function ChatListPage() {
 
         {/* Chat view */}
         <section className="flex-1">
-          <div className="flex h-[calc(100vh-140px)] flex-col border border-rose-100 bg-white shadow-sm">
-            <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
-              <div className="flex items-center gap-3">
-                {/* Active Chat Avatar */}
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
-                  {activeChat?.avatar ? (
-                    <img
-                      src={activeChat.avatar}
-                      alt={activeChat.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
-                  )}
-                </div>
-
-                {/* Chat Info */}
-                <div>
-                  <div className="text-sm font-semibold text-gray-900">
-                    {activeChat?.name}
-                  </div>
-                  <div className="text-xs text-gray-500">Today</div>
-                </div>
+          {chats.length === 0 ? (
+            <div className="flex h-[calc(100vh-140px)] flex-col items-center justify-center border border-rose-100 bg-white shadow-sm">
+              <div className="text-center">
+                <FontAwesomeIcon icon={faComments} className="h-16 w-16 text-gray-300 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-600 mb-2">No chats yet</h3>
+                <p className="text-gray-500 mb-4">Start a conversation with one of our AI coaches</p>
+                <button
+                  onClick={() => setShowAdd(true)}
+                  className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                  Start Chat
+                </button>
               </div>
             </div>
+          ) : (
+            <div className="flex h-[calc(100vh-140px)] flex-col border border-rose-100 bg-white shadow-sm">
+              <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
+                <div className="flex items-center gap-3">
+                  {/* Active Chat Avatar */}
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+                    {activeChat?.avatar ? (
+                      <img
+                        src={activeChat.avatar}
+                        alt={activeChat.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
+                    )}
+                  </div>
 
-            <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-              {messages.map((msg) => (
-                <ChatBubble
-                  key={msg.id}
-                  who={msg.sender}
-                  type={msg.type}
-                  content={msg.content}
-                  duration={msg.duration}
-                />
-              ))}
+                  {/* Chat Info */}
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">
+                      {activeChat?.name}
+                    </div>
+                    <div className="text-xs text-gray-500">Today</div>
+                  </div>
+                </div>
+              </div>
 
-              {/* Recording Indicator in Chat - WhatsApp Style */}
-              {isRecording && (
-                <div className="flex justify-end">
-                  <div className="bg-red-500 text-white rounded-2xl px-4 py-3 max-w-xs shadow-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                      <FontAwesomeIcon icon={faMicrophone} className="h-4 w-4" />
-                      <span className="text-sm">Recording...</span>
+              <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                {messages.length === 0 && activeChat?.id === "tara-ai" ? (
+                  <div className="flex flex-col items-center justify-center h-full text-center py-8">
+                    <img
+                      src="/taralogo.jpg"
+                      alt="TARA AI"
+                      className="w-16 h-16 rounded-full object-cover mb-4"
+                    />
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">Welcome to TARA AI</h3>
+                    <p className="text-gray-600 text-sm max-w-sm">
+                      Hi! I'm TARA, your AI companion. I'm here to support your mental wellness journey.
+                      Start a conversation by typing a message below.
+                    </p>
+                  </div>
+                ) : (
+                  messages.map((msg) => (
+                    <ChatBubble
+                      key={msg.id}
+                      who={msg.sender}
+                      type={msg.type}
+                      content={msg.content}
+                      duration={msg.duration}
+                    />
+                  ))
+                )}
+
+                {/* Recording Indicator in Chat - WhatsApp Style */}
+                {isRecording && (
+                  <div className="flex justify-end">
+                    <div className="bg-red-500 text-white rounded-2xl px-4 py-3 max-w-xs shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                        <FontAwesomeIcon icon={faMicrophone} className="h-4 w-4" />
+                        <span className="text-sm">Recording...</span>
+                        <button
+                          onClick={stopRecording}
+                          className="ml-2 bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors"
+                        >
+                          <FontAwesomeIcon icon={faStop} className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Audio Recording Preview */}
+              {audioBlob && (
+                <div className="border-t border-rose-100 p-3 bg-rose-50">
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <FontAwesomeIcon icon={faMicrophone} className="text-rose-500" />
+                        <span>Audio message recorded</span>
+                        <audio controls className="flex-1">
+                          <source src={URL.createObjectURL(audioBlob)} type="audio/wav" />
+                        </audio>
+                      </div>
+                    </div>
+                    <button
+                      onClick={sendAudioMessage}
+                      className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                    >
+                      Send
+                    </button>
+                    <button
+                      onClick={cancelAudio}
+                      className="rounded-full border border-rose-200 px-3 py-2 text-rose-600 hover:bg-rose-50"
+                    >
+                      <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Suggested Messages */}
+              {messages.length <= 3 && (
+                <div className=" p-3 ">
+
+                  <div className="flex flex-wrap gap-2">
+                    {SUGGESTED_MESSAGES.slice(0, 3).map((suggestion, index) => (
                       <button
-                        onClick={stopRecording}
-                        className="ml-2 bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors"
+                        key={index}
+                        onClick={() => sendSuggestedMessage(suggestion)}
+                        className="inline-flex items-center rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs text-gray-700 hover:bg-rose-100 hover:border-rose-300 transition-colors"
                       >
-                        <FontAwesomeIcon icon={faStop} className="h-3 w-3" />
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <form
+                onSubmit={sendMessage}
+                className="relative border-t border-rose-100 p-3"
+              >
+                {/* Emoji Picker */}
+                {showEmojiPicker && (
+                  <div className="absolute bottom-full left-3 right-3 mb-2 rounded-2xl border border-rose-100 bg-white shadow-xl z-50">
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-3 border-b border-rose-100">
+                      <span className="text-sm font-medium text-gray-700">Choose Emoji</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowEmojiPicker(false)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
                       </button>
                     </div>
-                  </div>
-                </div>
-              )}
-            </div>
 
-            {/* Audio Recording Preview */}
-            {audioBlob && (
-              <div className="border-t border-rose-100 p-3 bg-rose-50">
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 text-sm text-gray-700">
-                      <FontAwesomeIcon icon={faMicrophone} className="text-rose-500" />
-                      <span>Audio message recorded</span>
-                      <audio controls className="flex-1">
-                        <source src={URL.createObjectURL(audioBlob)} type="audio/wav" />
-                      </audio>
+                    {/* Emoji Grid with Scroll */}
+                    <div className="h-48 overflow-y-auto p-3">
+                      <div className="grid grid-cols-30 max-md:grid-cols-10 gap-1">
+                        {EMOJIS.map((emoji, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => addEmoji(emoji)}
+                            className="aspect-square flex items-center justify-center text-lg rounded-lg hover:bg-rose-50 transition-colors"
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Popular Emojis Quick Access */}
+                    <div className="border-t border-rose-100 p-2">
+                      <div className="flex gap-1 justify-center">
+                        {POPULAR_EMOJIS.map((emoji, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => addEmoji(emoji)}
+                            className="w-8 h-8 flex items-center justify-center text-lg rounded-lg hover:bg-rose-50 transition-colors"
+                          >
+                            {emoji}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                )}
+
+                <div className="flex items-center gap-2">
+                  {/* Emoji Button */}
                   <button
-                    onClick={sendAudioMessage}
-                    className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                    type="button"
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                    className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
                   >
+                    <FontAwesomeIcon icon={faSmile} className="h-5 w-5" />
+                  </button>
+
+                  {/* Message Input */}
+                  <input
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="flex-1 rounded-full border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring"
+                    placeholder="Write a message..."
+                  />
+
+                  {/* Audio Recording Button */}
+                  <button
+                    type="button"
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={`rounded-full p-3 transition-colors ${isRecording
+                      ? 'bg-red-500 text-white animate-pulse'
+                      : 'text-rose-600 hover:bg-rose-50'
+                      }`}
+                  >
+                    <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} className="h-5 w-5" />
+                  </button>
+
+                  {/* Send Button */}
+                  <button
+                    type="submit"
+                    disabled={!message.trim()}
+                    className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FontAwesomeIcon icon={faPaperPlane} />
                     Send
                   </button>
-                  <button
-                    onClick={cancelAudio}
-                    className="rounded-full border border-rose-200 px-3 py-2 text-rose-600 hover:bg-rose-50"
-                  >
-                    <FontAwesomeIcon icon={faTimes} />
-                  </button>
                 </div>
-              </div>
-            )}
-
-            {/* Suggested Messages */}
-            {messages.length <= 3 && (
-              <div className=" p-3 ">
-
-                <div className="flex flex-wrap gap-2">
-                  {SUGGESTED_MESSAGES.slice(0, 3).map((suggestion, index) => (
-                    <button
-                      key={index}
-                      onClick={() => sendSuggestedMessage(suggestion)}
-                      className="inline-flex items-center rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs text-gray-700 hover:bg-rose-100 hover:border-rose-300 transition-colors"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <form
-              onSubmit={sendMessage}
-              className="relative border-t border-rose-100 p-3"
-            >
-              {/* Emoji Picker */}
-              {showEmojiPicker && (
-                <div className="absolute bottom-full left-3 right-3 mb-2 rounded-2xl border border-rose-100 bg-white shadow-xl z-50">
-                  {/* Header */}
-                  <div className="flex items-center justify-between p-3 border-b border-rose-100">
-                    <span className="text-sm font-medium text-gray-700">Choose Emoji</span>
-                    <button
-                      type="button"
-                      onClick={() => setShowEmojiPicker(false)}
-                      className="text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                      <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
-                    </button>
-                  </div>
-
-                  {/* Emoji Grid with Scroll */}
-                  <div className="h-48 overflow-y-auto p-3">
-                    <div className="grid grid-cols-30 max-md:grid-cols-10 gap-1">
-                      {EMOJIS.map((emoji, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          onClick={() => addEmoji(emoji)}
-                          className="aspect-square flex items-center justify-center text-lg rounded-lg hover:bg-rose-50 transition-colors"
-                        >
-                          {emoji}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Popular Emojis Quick Access */}
-                  <div className="border-t border-rose-100 p-2">
-                    <div className="flex gap-1 justify-center">
-                      {POPULAR_EMOJIS.map((emoji, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          onClick={() => addEmoji(emoji)}
-                          className="w-8 h-8 flex items-center justify-center text-lg rounded-lg hover:bg-rose-50 transition-colors"
-                        >
-                          {emoji}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center gap-2">
-                {/* Emoji Button */}
-                <button
-                  type="button"
-                  onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                  className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faSmile} className="h-5 w-5" />
-                </button>
-
-                {/* Message Input */}
-                <input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="flex-1 rounded-full border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring"
-                  placeholder="Write a message..."
-                />
-
-                {/* Audio Recording Button */}
-                <button
-                  type="button"
-                  onClick={isRecording ? stopRecording : startRecording}
-                  className={`rounded-full p-3 transition-colors ${isRecording
-                    ? 'bg-red-500 text-white animate-pulse'
-                    : 'text-rose-600 hover:bg-rose-50'
-                    }`}
-                >
-                  <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} className="h-5 w-5" />
-                </button>
-
-                {/* Send Button */}
-                <button
-                  type="submit"
-                  disabled={!message.trim()}
-                  className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                  Send
-                </button>
-              </div>
-            </form>
-          </div>
+              </form>
+            </div>
+          )}
         </section>
       </div>
 
       {/* Bottom Navbar */}
       <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-rose-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl grid-cols-4 px-2 py-2 text-xs text-gray-600 sm:text-sm">
+        <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
           <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
           <MobileNavLink href="/chatlist" icon={faComments} label="Chats" active />
+          <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
           <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
-          <MobileNavLink href="/profile" icon={faUser} label="Profile" />
+          <MobileNavLink href="#" icon={faBullseye} label="Goals" disabled />
         </div>
       </nav>
 
@@ -706,7 +737,16 @@ export default function ChatListPage() {
   );
 }
 
-function MobileNavLink({ href, icon, label, active }) {
+function MobileNavLink({ href, icon, label, active, disabled }) {
+  if (disabled) {
+    return (
+      <div className="flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-gray-400 opacity-50 cursor-not-allowed">
+        <FontAwesomeIcon icon={icon} className="h-5 w-5" />
+        {label}
+      </div>
+    );
+  }
+
   return (
     <Link
       href={href}
@@ -985,7 +1025,7 @@ const ROLES = [
 ];
 
 const CELEBRITIES = [
-  { id: "shahrukh", name: "Shahrukh Khan", image_url: "shahrukh.jpeg" },
+  { id: "shahrukh", name: "Shahrukh Khan", image_url: "shahrukh.jpeg", role: 'you are famous superstar shahrukh khan talk like shahrukh khan' },
   { id: "elonmusk", name: "Elon Musk", image_url: "elonmusk.jpeg" },
   { id: "amitabh", name: "Amitabh Bachchan", image_url: "amitabh.jpeg" },
   { id: "premanandji", name: "Premanand Ji Maharaj", image_url: "premanandji.jpeg" },

@@ -58,6 +58,11 @@ export default function InsightsPage() {
                             </button>
                         </div>
 
+                        {/* Profile Icon */}
+                        <Link href="/profile" className="rounded-full p-2 text-pink-600 hover:bg-pink-100 transition-colors">
+                            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+                        </Link>
+
                     </div>
                 </div>
             </header>
@@ -159,11 +164,12 @@ export default function InsightsPage() {
 
             {/* Bottom Navigation */}
             <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
-                <div className="mx-auto grid max-w-7xl grid-cols-4 px-2 py-2 text-xs text-gray-600 sm:text-sm">
+                <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
                     <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
                     <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
+                    <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
                     <MobileNavLink href="/insights" icon={faChartLine} label="Insights" active />
-                    <MobileNavLink href="/profile" icon={faUser} label="Profile" />
+                    <MobileNavLink href="#" icon={faBullseye} label="Goals" disabled />
                 </div>
             </nav>
         </div>
@@ -407,7 +413,16 @@ function SupportRadar() {
     );
 }
 
-function MobileNavLink({ href, icon, label, active }) {
+function MobileNavLink({ href, icon, label, active, disabled }) {
+    if (disabled) {
+        return (
+            <div className="flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-gray-400 opacity-50 cursor-not-allowed">
+                <FontAwesomeIcon icon={icon} className="h-5 w-5" />
+                {label}
+            </div>
+        );
+    }
+
     return (
         <Link
             href={href}

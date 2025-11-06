@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper, faBullseye } from "@fortawesome/free-solid-svg-icons";
 
 export default function JournalPage() {
   const [entries, setEntries] = useState([]);
@@ -51,6 +51,11 @@ export default function JournalPage() {
             />
             <span className="text-lg font-semibold text-pink-600">Tara</span>
           </div>
+
+          {/* Profile Icon */}
+          <Link href="/profile" className="rounded-full p-2 text-pink-600 hover:bg-pink-100 transition-colors">
+            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+          </Link>
 
         </div>
       </header>
@@ -123,11 +128,12 @@ export default function JournalPage() {
 
       {/* Bottom Navbar (links) */}
       <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl grid-cols-4 px-2 py-2 text-xs text-gray-600 sm:text-sm">
+        <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
           <BottomNavLink href="/journal" icon={faBookOpen} label="Journal" active />
           <BottomNavLink href="/chatlist" icon={faComments} label="Chats" />
+          <BottomNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
           <BottomNavLink href="/insights" icon={faChartLine} label="Insights" />
-          <BottomNavLink href="/profile" icon={faUser} label="Profile" />
+          <BottomNavLink href="#" icon={faBullseye} label="Goals" disabled />
         </div>
       </nav>
 
@@ -168,7 +174,16 @@ function EmptyState({ onNew }) {
   );
 }
 
-function BottomNavLink({ href, icon, label, active }) {
+function BottomNavLink({ href, icon, label, active, disabled }) {
+  if (disabled) {
+    return (
+      <div className="flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-gray-400 opacity-50 cursor-not-allowed">
+        <FontAwesomeIcon icon={icon} className="h-5 w-5" />
+        {label}
+      </div>
+    );
+  }
+
   return (
     <Link
       href={href}
