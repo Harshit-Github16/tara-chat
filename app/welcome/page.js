@@ -61,7 +61,7 @@ function WelcomePageContent() {
     console.log('Welcome: Selected mood:', selected);
 
     try {
-      const response = await api.post("/api/mood", {
+      const response = await api.post("/api/mood-mongo", {
         mood: selected,
         intensity: 5, // Default intensity
         note: ""
