@@ -16,11 +16,12 @@ export default function TaraChat({ userId, onMessagesUpdate }) {
 
     const loadChatHistory = async () => {
         try {
-            const response = await api.get(`/api/tara-chat?userId=${userId}`);
+            // Load from unified users API
+            const response = await api.get(`/api/users/conversations?userId=${userId}&chatUserId=tara-ai`);
             if (response.ok) {
                 const data = await response.json();
-                if (data.success && data.messages) {
-                    onMessagesUpdate(data.messages);
+                if (data.success && data.conversations) {
+                    onMessagesUpdate(data.conversations);
                 }
             }
         } catch (error) {
@@ -28,16 +29,19 @@ export default function TaraChat({ userId, onMessagesUpdate }) {
         }
     };
 
-    const sendMessage = async (message) => {
+    const sendMessage = async (message, userDetails = {}) => {
         if (!message.trim() || !userId) return null;
 
         setIsLoading(true);
         setError(null);
 
         try {
-            const response = await api.post('/api/tara-chat', {
+            // Use unified chat API
+            const response = await api.post('/api/chat', {
                 userId: userId,
-                message: message.trim()
+                chatUserId: 'tara-ai',
+                message: message.trim(),
+                userDetails: userDetails
             });
 
             if (response.ok) {
@@ -47,18 +51,19 @@ export default function TaraChat({ userId, onMessagesUpdate }) {
                     onMessagesUpdate(data.chatHistory);
                     return {
                         userMessage: data.userMessage,
-                        taraMessage: data.taraMessage
+                        aiMessage: data.aiMessage
                     };
                 } else {
                     throw new Error(data.error || 'Failed to send message');
                 }
             } else {
-                throw new Error('Failed to send message');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to send message');
             }
         } catch (error) {
             console.error('Send message error:', error);
             setError(error.message);
-            return null;
+            throw error; // Re-throw to handle in parent
         } finally {
             setIsLoading(false);
         }

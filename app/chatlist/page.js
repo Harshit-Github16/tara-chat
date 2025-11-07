@@ -305,49 +305,66 @@ export default function ChatListPage() {
     if (activeId === "tara-ai" && user?.uid) {
       setIsSendingMessage(true);
       try {
-        await taraChat.sendMessage(messageText);
+        await taraChat.sendMessage(messageText, {
+          name: user.name,
+          gender: user.gender,
+          ageRange: user.ageRange,
+          profession: user.profession,
+          interests: user.interests,
+          personalityTraits: user.personalityTraits
+        });
       } catch (error) {
         console.error('Failed to send message to TARA:', error);
-        // Fallback: add message locally if API fails
-        const newMessage = {
-          id: Date.now(),
-          type: 'text',
-          content: messageText,
-          sender: 'user',
-          timestamp: new Date()
-        };
-        setChatMessages(prev => ({
-          ...prev,
-          [activeId]: [...(prev[activeId] || []), newMessage]
-        }));
+        alert('Failed to send message. Please try again.');
       } finally {
         setIsSendingMessage(false);
       }
     } else {
-      // For all other chat users (custom + celebrities), save to database
-      const newMessage = {
-        id: Date.now(),
-        type: 'text',
-        content: messageText,
-        sender: 'user',
-        timestamp: new Date()
-      };
+      // For all other chat users (custom + celebrities), use unified chat API
+      setIsSendingMessage(true);
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.firebaseUid || user.uid,
+            chatUserId: activeId,
+            message: messageText,
+            userDetails: {
+              name: user.name,
+              gender: user.gender,
+              ageRange: user.ageRange,
+              profession: user.profession,
+              interests: user.interests,
+              personalityTraits: user.personalityTraits
+            }
+          })
+        });
 
-      // Add to local state immediately
-      setChatMessages(prev => ({
-        ...prev,
-        [activeId]: [...(prev[activeId] || []), newMessage]
-      }));
+        const data = await response.json();
 
-      // Save to database
-      await saveMessageToDB(activeId, messageText, 'user', 'text');
+        if (data.success) {
+          // Update local state with both user message and AI response
+          setChatMessages(prev => ({
+            ...prev,
+            [activeId]: [...(prev[activeId] || []), data.userMessage, data.aiMessage]
+          }));
 
-      // Update last message in chat list
-      setChats(prev => prev.map(chat =>
-        chat.id === activeId
-          ? { ...chat, last: messageText.substring(0, 50) + "..." }
-          : chat
-      ));
+          // Update last message in chat list
+          setChats(prev => prev.map(chat =>
+            chat.id === activeId
+              ? { ...chat, last: data.aiMessage.content.substring(0, 50) + "..." }
+              : chat
+          ));
+        } else {
+          throw new Error(data.error || 'Failed to send message');
+        }
+      } catch (error) {
+        console.error('Failed to send message:', error);
+        alert('Failed to send message. Please try again.');
+      } finally {
+        setIsSendingMessage(false);
+      }
     }
   };
 
@@ -358,34 +375,60 @@ export default function ChatListPage() {
     if (activeId === "tara-ai" && user?.uid) {
       setIsSendingMessage(true);
       try {
-        await taraChat.sendMessage(suggestedText);
+        await taraChat.sendMessage(suggestedText, {
+          name: user.name,
+          gender: user.gender,
+          ageRange: user.ageRange,
+          profession: user.profession,
+          interests: user.interests,
+          personalityTraits: user.personalityTraits
+        });
       } catch (error) {
         console.error('Failed to send suggested message to TARA:', error);
       } finally {
         setIsSendingMessage(false);
       }
     } else {
-      // For all other chat users, save to database
-      const newMessage = {
-        id: Date.now(),
-        type: 'text',
-        content: suggestedText,
-        sender: 'user',
-        timestamp: new Date()
-      };
+      // For all other chat users, use unified chat API
+      setIsSendingMessage(true);
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.firebaseUid || user.uid,
+            chatUserId: activeId,
+            message: suggestedText,
+            userDetails: {
+              name: user.name,
+              gender: user.gender,
+              ageRange: user.ageRange,
+              profession: user.profession,
+              interests: user.interests,
+              personalityTraits: user.personalityTraits
+            }
+          })
+        });
 
-      setChatMessages(prev => ({
-        ...prev,
-        [activeId]: [...(prev[activeId] || []), newMessage]
-      }));
+        const data = await response.json();
 
-      await saveMessageToDB(activeId, suggestedText, 'user', 'text');
+        if (data.success) {
+          setChatMessages(prev => ({
+            ...prev,
+            [activeId]: [...(prev[activeId] || []), data.userMessage, data.aiMessage]
+          }));
 
-      setChats(prev => prev.map(chat =>
-        chat.id === activeId
-          ? { ...chat, last: suggestedText.substring(0, 50) + "..." }
-          : chat
-      ));
+          setChats(prev => prev.map(chat =>
+            chat.id === activeId
+              ? { ...chat, last: data.aiMessage.content.substring(0, 50) + "..." }
+              : chat
+          ));
+        }
+      } catch (error) {
+        console.error('Failed to send suggested message:', error);
+      } finally {
+        setIsSendingMessage(false);
+      }
     }
   };
 
