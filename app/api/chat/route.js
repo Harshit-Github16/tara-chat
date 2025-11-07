@@ -257,6 +257,8 @@ This is about mental wellness and emotional support - make every word count.`
         ];
 
         console.log('Calling Groq API for chat:', chatUserId, 'Role:', role);
+        console.log('Message:', message);
+        console.log('Recent history length:', recentHistory.length);
 
         // Call Groq API with better model
         const groqResponse = await fetch(GROQ_API_URL, {
@@ -284,6 +286,8 @@ This is about mental wellness and emotional support - make every word count.`
 
         const groqData = await groqResponse.json();
         const aiReply = groqData.choices[0]?.message?.content || "I'm here for you. Could you tell me more about what's on your mind?";
+
+        console.log('Groq API response received, length:', aiReply.length);
 
         // Create user message
         const userMessage = {
@@ -323,6 +327,7 @@ This is about mental wellness and emotional support - make every word count.`
         );
 
         console.log('Chat response generated successfully');
+        console.log('Returning response with', chatHistory.length + 2, 'total messages');
 
         return NextResponse.json({
             success: true,

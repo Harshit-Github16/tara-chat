@@ -991,7 +991,7 @@ export default function Home() {
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Legal</h3>
               <ul className="space-y-2 text-sm">
                 <LightFooterLink href="/privacy-policy" text="Privacy Policy" />
-                <LightFooterLink href="/privacy-policy" text="Terms of Service" />
+                <LightFooterLink href="/terms-of-service" text="Terms of Service" />
                 <LightFooterLink href="mailto:support@tara.app" text="Contact Us" />
               </ul>
             </div>

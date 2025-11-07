@@ -8,6 +8,7 @@ export function middleware(request) {
     '/',
     '/login',
     '/privacy-policy',
+    '/terms-of-service',
     '/api/auth/login',
     '/api/auth/register',
     '/api/auth/google',

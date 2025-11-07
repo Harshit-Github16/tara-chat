@@ -281,7 +281,7 @@ export default function LoginPage() {
           {/* Terms */}
           <p className="text-xs text-gray-500 text-center mt-6 animate-fade-in-final">
             By continuing, you agree to our{" "}
-            <Link href="/privacy-policy" className="text-rose-600 hover:underline font-medium">
+            <Link href="/terms-of-service" className="text-rose-600 hover:underline font-medium">
               Terms
             </Link>
             {" "}and{" "}

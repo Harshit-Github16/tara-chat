@@ -37,6 +37,8 @@ export default function GoalsPage() {
         category: "mental",
         targetDays: 30,
         description: "",
+        why: "",
+        howToAchieve: "",
     });
 
     // Load goals from localStorage
@@ -57,21 +59,36 @@ export default function GoalsPage() {
         }
     };
 
-    const addGoal = () => {
-        if (!newGoal.title.trim()) return;
+    const addGoal = async () => {
+        if (!newGoal.title.trim() || !newGoal.why.trim() || !newGoal.howToAchieve.trim()) {
+            alert('Please fill in all required fields');
+            return;
+        }
 
-        const goal = {
-            id: Date.now().toString(),
-            ...newGoal,
-            createdAt: new Date().toISOString(),
-            progress: 0,
-            completed: false,
-            checkIns: [],
-        };
+        try {
+            const userId = user?.firebaseUid || user?.uid;
+            const response = await fetch('/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId,
+                    ...newGoal
+                })
+            });
 
-        saveGoals([...goals, goal]);
-        setNewGoal({ title: "", category: "mental", targetDays: 30, description: "" });
-        setShowModal(false);
+            const data = await response.json();
+
+            if (data.success) {
+                setGoals([...goals, data.goal]);
+                setNewGoal({ title: "", category: "mental", targetDays: 30, description: "", why: "", howToAchieve: "" });
+                setShowModal(false);
+            } else {
+                alert('Failed to create goal');
+            }
+        } catch (error) {
+            console.error('Failed to create goal:', error);
+            alert('Failed to create goal');
+        }
     };
 
     const toggleGoalComplete = (goalId) => {
@@ -277,13 +294,41 @@ export default function GoalsPage() {
 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Description (Optional)
+                                        Why is this goal important? *
+                                    </label>
+                                    <textarea
+                                        value={newGoal.why}
+                                        onChange={(e) => setNewGoal({ ...newGoal, why: e.target.value })}
+                                        placeholder="e.g., To reduce stress and improve my mental health"
+                                        rows="2"
+                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        How will you achieve this? *
+                                    </label>
+                                    <textarea
+                                        value={newGoal.howToAchieve}
+                                        onChange={(e) => setNewGoal({ ...newGoal, howToAchieve: e.target.value })}
+                                        placeholder="e.g., Meditate for 10 minutes every morning before work"
+                                        rows="2"
+                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Additional Notes (Optional)
                                     </label>
                                     <textarea
                                         value={newGoal.description}
                                         onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
-                                        placeholder="Why is this goal important to you?"
-                                        rows="3"
+                                        placeholder="Any other details..."
+                                        rows="2"
                                         className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
                                     />
                                 </div>
@@ -321,8 +366,8 @@ function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColo
     return (
         <div
             className={`rounded-2xl border p-4 ${goal.completed
-                    ? "border-green-200 bg-green-50"
-                    : `border-${color}-200 bg-${color}-50`
+                ? "border-green-200 bg-green-50"
+                : `border-${color}-200 bg-${color}-50`
                 }`}
         >
             <div className="flex items-start justify-between mb-2">
@@ -372,8 +417,8 @@ function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColo
                         onClick={() => onCheckIn(goal.id)}
                         disabled={!canCheckInToday}
                         className={`flex-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${canCheckInToday
-                                ? `bg-${color}-200 text-${color}-700 hover:bg-${color}-300`
-                                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                            ? `bg-${color}-200 text-${color}-700 hover:bg-${color}-300`
+                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
                             }`}
                     >
                         {canCheckInToday ? "Check In Today" : "Already Checked In"}
@@ -382,8 +427,8 @@ function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColo
                 <button
                     onClick={() => onToggleComplete(goal.id)}
                     className={`rounded-full px-4 py-2 text-sm font-medium ${goal.completed
-                            ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                            : "bg-green-200 text-green-700 hover:bg-green-300"
+                        ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                        : "bg-green-200 text-green-700 hover:bg-green-300"
                         }`}
                 >
                     <FontAwesomeIcon icon={faCheck} className="mr-1" />
