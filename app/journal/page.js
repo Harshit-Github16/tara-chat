@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper, faBullseye } from "@fortawesome/free-solid-svg-icons";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export default function JournalPage() {
   const [entries, setEntries] = useState([]);
@@ -40,125 +41,127 @@ export default function JournalPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100">
-      <header className="sticky top-0 z-10 border-b border-pink-100 bg-white/60 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <img
-              src="/taralogo.jpg"
-              alt="Tara Logo"
-              className="h-8 w-8 rounded-full object-cover"
-            />
-            <span className="text-lg font-semibold text-pink-600">Tara</span>
+    <ProtectedRoute>
+      <div className="flex min-h-screen flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100">
+        <header className="sticky top-0 z-10 border-b border-pink-100 bg-white/60 backdrop-blur">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+            <div className="flex items-center gap-3">
+              <img
+                src="/taralogo.jpg"
+                alt="Tara Logo"
+                className="h-8 w-8 rounded-full object-cover"
+              />
+              <span className="text-lg font-semibold text-pink-600">Tara</span>
+            </div>
+
+            {/* Profile Icon */}
+            <Link href="/profile" className="rounded-full p-2 text-pink-600 hover:bg-pink-100 transition-colors">
+              <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+            </Link>
+
           </div>
+        </header>
 
-          {/* Profile Icon */}
-          <Link href="/profile" className="rounded-full p-2 text-pink-600 hover:bg-pink-100 transition-colors">
-            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
-          </Link>
-
-        </div>
-      </header>
-
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-          <div className="text-base font-semibold text-gray-800">Your Journal</div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={autoGenerateToday}
-              className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-200"
-            >
-              Auto Generate Today
-            </button>
-            <button
-              onClick={() => { setEditing(null); setShowModal(true); }}
-              className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
-            >
-              <FontAwesomeIcon icon={faPlus} /> Create Journal
-            </button>
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <div className="text-base font-semibold text-gray-800">Your Journal</div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={autoGenerateToday}
+                className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-200"
+              >
+                Auto Generate Today
+              </button>
+              <button
+                onClick={() => { setEditing(null); setShowModal(true); }}
+                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+              >
+                <FontAwesomeIcon icon={faPlus} /> Create Journal
+              </button>
+            </div>
           </div>
-        </div>
-        {groups.length === 0 ? (
-          <EmptyState onNew={() => { setEditing(null); setShowModal(true); }} />
-        ) : (
-          <div className="space-y-8">
-            {groups.map(([date, items]) => (
-              <section key={date}>
-                <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-pink-600">{date}</h2>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {items.map((e) => (
-                    <article key={e.id} className="rounded-2xl border border-pink-100 bg-white p-4 shadow-sm">
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm font-semibold text-gray-900">{e.title || "Untitled"}</div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => { setEditing(e); setShowModal(true); }}
-                            className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-200"
-                          >
-                            <FontAwesomeIcon icon={faPen} /> Edit
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (confirm("Delete this journal?")) {
-                                setEntries((prev) => prev.filter((x) => x.id !== e.id));
-                              }
-                            }}
-                            className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
-                          >
-                            Delete
-                          </button>
+          {groups.length === 0 ? (
+            <EmptyState onNew={() => { setEditing(null); setShowModal(true); }} />
+          ) : (
+            <div className="space-y-8">
+              {groups.map(([date, items]) => (
+                <section key={date}>
+                  <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-pink-600">{date}</h2>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {items.map((e) => (
+                      <article key={e.id} className="rounded-2xl border border-pink-100 bg-white p-4 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm font-semibold text-gray-900">{e.title || "Untitled"}</div>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => { setEditing(e); setShowModal(true); }}
+                              className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-200"
+                            >
+                              <FontAwesomeIcon icon={faPen} /> Edit
+                            </button>
+                            <button
+                              onClick={() => {
+                                if (confirm("Delete this journal?")) {
+                                  setEntries((prev) => prev.filter((x) => x.id !== e.id));
+                                }
+                              }}
+                              className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                      <p className="mt-2 whitespace-pre-wrap text-sm text-gray-700">{e.content}</p>
-                      {e.tags?.length ? (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {e.tags.map((t) => (
-                            <span key={t} className="rounded-full bg-rose-200 px-2 py-1 text-[10px] font-bold text-rose-600">#{t}</span>
-                          ))}
-                        </div>
-                      ) : null}
-                    </article>
-                  ))}
-                </div>
-              </section>
-            ))}
+                        <p className="mt-2 whitespace-pre-wrap text-sm text-gray-700">{e.content}</p>
+                        {e.tags?.length ? (
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {e.tags.map((t) => (
+                              <span key={t} className="rounded-full bg-rose-200 px-2 py-1 text-[10px] font-bold text-rose-600">#{t}</span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          )}
+        </main>
+
+        {/* Bottom Navbar (links) */}
+        <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
+          <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
+            <BottomNavLink href="/journal" icon={faBookOpen} label="Journal" active />
+            <BottomNavLink href="/chatlist" icon={faComments} label="Chats" />
+            <BottomNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
+            <BottomNavLink href="/insights" icon={faChartLine} label="Insights" />
+            <BottomNavLink href="#" icon={faBullseye} label="Goals" disabled />
           </div>
+        </nav>
+
+        {showModal && (
+          <JournalModal
+            initial={editing}
+            onClose={() => setShowModal(false)}
+            onSave={(payload) => {
+              if (editing) {
+                setEntries((prev) => prev.map((e) => (e.id === editing.id ? { ...e, ...payload } : e)));
+              } else {
+                setEntries((prev) => [
+                  {
+                    id: `j${Date.now()}`,
+                    createdAt: new Date().toISOString(),
+                    ...payload,
+                  },
+                  ...prev,
+                ]);
+              }
+              setShowModal(false);
+            }}
+          />
         )}
-      </main>
-
-      {/* Bottom Navbar (links) */}
-      <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-          <BottomNavLink href="/journal" icon={faBookOpen} label="Journal" active />
-          <BottomNavLink href="/chatlist" icon={faComments} label="Chats" />
-          <BottomNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
-          <BottomNavLink href="/insights" icon={faChartLine} label="Insights" />
-          <BottomNavLink href="#" icon={faBullseye} label="Goals" disabled />
-        </div>
-      </nav>
-
-      {showModal && (
-        <JournalModal
-          initial={editing}
-          onClose={() => setShowModal(false)}
-          onSave={(payload) => {
-            if (editing) {
-              setEntries((prev) => prev.map((e) => (e.id === editing.id ? { ...e, ...payload } : e)));
-            } else {
-              setEntries((prev) => [
-                {
-                  id: `j${Date.now()}`,
-                  createdAt: new Date().toISOString(),
-                  ...payload,
-                },
-                ...prev,
-              ]);
-            }
-            setShowModal(false);
-          }}
-        />
-      )}
-    </div>
+      </div>
+    </ProtectedRoute>
   );
 }
 

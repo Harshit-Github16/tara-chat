@@ -36,6 +36,8 @@ export async function GET(request) {
         return NextResponse.json({
             user: {
                 id: user._id.toString(),
+                firebaseUid: user.firebaseUid, // Add firebaseUid
+                uid: user.firebaseUid, // Also add as uid for compatibility
                 email: user.email,
                 name: user.name,
                 nickname: user.nickname,
@@ -116,6 +118,8 @@ export async function PUT(request) {
             success: true,
             user: {
                 id: updatedUser._id.toString(),
+                firebaseUid: updatedUser.firebaseUid, // Add firebaseUid
+                uid: updatedUser.firebaseUid, // Also add as uid for compatibility
                 email: updatedUser.email,
                 name: updatedUser.name,
                 nickname: updatedUser.nickname,

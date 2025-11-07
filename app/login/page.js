@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
@@ -39,7 +40,15 @@ export default function LoginPage() {
   useEffect(() => {
     if (!authLoading && user) {
       console.log('User already authenticated:', user);
-      if (user.isOnboardingComplete) {
+
+      // Check for redirect parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get('redirect');
+
+      if (redirectTo && user.isOnboardingComplete) {
+        console.log('Redirecting to:', redirectTo);
+        router.replace(redirectTo);
+      } else if (user.isOnboardingComplete) {
         console.log('Redirecting to welcome - onboarding complete');
         router.replace('/welcome');
       } else {
@@ -69,9 +78,16 @@ export default function LoginPage() {
 
       // Small delay then redirect
       setTimeout(() => {
+        // Check for redirect parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTo = urlParams.get('redirect');
+
         if (isNewUser || !user.isOnboardingComplete) {
           console.log('Redirecting to onboarding');
           router.push('/onboarding');
+        } else if (redirectTo) {
+          console.log('Redirecting to:', redirectTo);
+          router.push(redirectTo);
         } else {
           console.log('Redirecting to welcome');
           router.push('/welcome');
@@ -148,7 +164,7 @@ export default function LoginPage() {
       </div>
 
       {/* Main Login Card */}
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-xl">
         {/* Logo and Title */}
         <div className="text-center mb-8">
           <div className="mb-6">
@@ -187,19 +203,19 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Features */}
-          <div className="space-y-4 mb-8">
-            <div className="flex items-center gap-3 p-3 bg-rose-50 rounded-xl animate-slide-in-1">
-              <FontAwesomeIcon icon={faHeart} className="h-5 w-5 text-rose-500" />
-              <span className="text-sm font-medium text-gray-700">24/7 Emotional Support</span>
+          {/* Features - 3 cards in one row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-1 text-center hover:bg-rose-100 transition-colors">
+              <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">24/7 Emotional Support</span>
             </div>
-            <div className="flex items-center gap-3 p-3 bg-rose-50 rounded-xl animate-slide-in-2">
-              <FontAwesomeIcon icon={faUserFriends} className="h-5 w-5 text-rose-500" />
-              <span className="text-sm font-medium text-gray-700">Chat with AI Characters</span>
+            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-2 text-center hover:bg-rose-100 transition-colors">
+              <FontAwesomeIcon icon={faUserFriends} className="h-6 w-6 text-rose-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Chat with AI Characters</span>
             </div>
-            <div className="flex items-center gap-3 p-3 bg-rose-50 rounded-xl animate-slide-in-3">
-              <FontAwesomeIcon icon={faShield} className="h-5 w-5 text-rose-500" />
-              <span className="text-sm font-medium text-gray-700">Complete Privacy & Security</span>
+            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-3 text-center hover:bg-rose-100 transition-colors">
+              <FontAwesomeIcon icon={faShield} className="h-6 w-6 text-rose-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Complete Privacy & Security</span>
             </div>
           </div>
 
@@ -239,34 +255,39 @@ export default function LoginPage() {
             </div>
           </button>
 
-          {/* Authentication Info */}
-          <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200 animate-fade-in-final">
-            <div className="flex items-center gap-2 text-green-700">
-              <FontAwesomeIcon icon={faShield} className="h-4 w-4" />
-              <span className="text-sm font-medium">Secure Authentication</span>
+          {/* Security Cards - 2 cards in one row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 animate-fade-in-final hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 text-green-700 mb-2">
+                <FontAwesomeIcon icon={faShield} className="h-4 w-4" />
+                <span className="text-sm font-semibold">Secure Authentication</span>
+              </div>
+              <p className="text-xs text-green-600 leading-relaxed">
+                Powered by Firebase with enterprise-grade security and privacy protection.
+              </p>
             </div>
-            <p className="text-xs text-green-600 mt-1">
-              Powered by Firebase with enterprise-grade security and privacy protection.
-            </p>
-          </div>
 
-          {/* Security Note */}
-          <div className="mt-4 p-4 bg-green-50 rounded-xl border border-green-200 animate-fade-in-final">
-            <div className="flex items-center gap-2 text-green-700">
-              <FontAwesomeIcon icon={faShield} className="h-4 w-4" />
-              <span className="text-sm font-medium">Secure & Private</span>
+            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 animate-fade-in-final hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 text-green-700 mb-2">
+                <FontAwesomeIcon icon={faShield} className="h-4 w-4" />
+                <span className="text-sm font-semibold">Secure & Private</span>
+              </div>
+              <p className="text-xs text-green-600 leading-relaxed">
+                Your data is encrypted and never shared with third parties.
+              </p>
             </div>
-            <p className="text-xs text-green-600 mt-1">
-              Your data is encrypted and never shared with third parties.
-            </p>
           </div>
 
           {/* Terms */}
           <p className="text-xs text-gray-500 text-center mt-6 animate-fade-in-final">
             By continuing, you agree to our{" "}
-            <a href="#" className="text-rose-600 hover:underline">Terms</a>
+            <Link href="/privacy-policy" className="text-rose-600 hover:underline font-medium">
+              Terms
+            </Link>
             {" "}and{" "}
-            <a href="#" className="text-rose-600 hover:underline">Privacy Policy</a>
+            <Link href="/privacy-policy" className="text-rose-600 hover:underline font-medium">
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>
