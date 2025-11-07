@@ -933,7 +933,7 @@ export default function ChatListPage() {
             <MobileNavLink href="/chatlist" icon={faComments} label="Chats" active />
             <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
             <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
-            <MobileNavLink href="#" icon={faBullseye} label="Goals" disabled />
+            <MobileNavLink href="/goals" icon={faBullseye} label="Goals" />
           </div>
         </nav>
 
