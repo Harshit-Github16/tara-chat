@@ -1,8 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProtectedRoute from "../components/ProtectedRoute";
+import { useAuth } from "../contexts/AuthContext";
+import { api } from "../../lib/api";
 import {
     faChartLine,
     faBookOpen,
@@ -14,12 +16,97 @@ import {
     faBullseye,
     faCalendar,
     faClock,
-
     faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function InsightsPage() {
+    const { user } = useAuth();
     const [selectedPeriod, setSelectedPeriod] = useState("week");
+    const [moodData, setMoodData] = useState([]);
+    const [checkInDates, setCheckInDates] = useState([]);
+    const [avgMood, setAvgMood] = useState(0);
+    const [streak, setStreak] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    // Fetch mood data and calculate insights
+    useEffect(() => {
+        if (user?.uid) {
+            fetchMoodData();
+        }
+    }, [user]);
+
+    const fetchMoodData = async () => {
+        try {
+            setLoading(true);
+            // Fetch mood data from MongoDB
+            const response = await api.get('/api/mood-mongo?limit=30');
+
+            if (response.ok) {
+                const data = await response.json();
+                const moods = data.data?.entries || [];
+
+                setMoodData(moods);
+
+                // Calculate average mood
+                if (moods.length > 0) {
+                    const total = moods.reduce((sum, m) => sum + (m.intensity || 5), 0);
+                    setAvgMood((total / moods.length).toFixed(1));
+                }
+
+                // Extract unique check-in dates
+                const dates = moods.map(m => m.date).filter((v, i, a) => a.indexOf(v) === i);
+                setCheckInDates(dates);
+
+                // Calculate streak
+                calculateStreak(dates);
+            }
+        } catch (error) {
+            console.error('Error fetching mood data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const calculateStreak = (dates) => {
+        if (dates.length === 0) {
+            setStreak(0);
+            return;
+        }
+
+        // Sort dates in descending order
+        const sortedDates = dates.sort((a, b) => new Date(b) - new Date(a));
+        const today = new Date().toISOString().split('T')[0];
+
+        // Check if today or yesterday has entry
+        const latestDate = sortedDates[0];
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (latestDate !== today && latestDate !== yesterdayStr) {
+            setStreak(0);
+            return;
+        }
+
+        // Count consecutive days
+        let currentStreak = 1;
+        let currentDate = new Date(latestDate);
+
+        for (let i = 1; i < sortedDates.length; i++) {
+            const prevDate = new Date(currentDate);
+            prevDate.setDate(prevDate.getDate() - 1);
+            const prevDateStr = prevDate.toISOString().split('T')[0];
+
+            if (sortedDates[i] === prevDateStr) {
+                currentStreak++;
+                currentDate = new Date(sortedDates[i]);
+            } else {
+                break;
+            }
+        }
+
+        setStreak(currentStreak);
+    };
 
     return (
         <ProtectedRoute>
@@ -75,13 +162,13 @@ export default function InsightsPage() {
                         <StatCard
                             icon={faFire}
                             title="Check-in Streak"
-                            value="12 days"
+                            value={loading ? "..." : `${streak} ${streak === 1 ? 'day' : 'days'}`}
                             color="bg-orange-50 text-orange-600"
                         />
                         <StatCard
                             icon={faHeart}
                             title="Avg Mood"
-                            value="7.2/10"
+                            value={loading ? "..." : moodData.length > 0 ? `${avgMood}/10` : "No data"}
                             color="bg-rose-50 text-rose-600"
                         />
                         <StatCard
@@ -104,7 +191,7 @@ export default function InsightsPage() {
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Mood Meter - ACTIVE */}
                         <ChartCard title="Mood Meter" icon={faChartLine}>
-                            <MoodMeter />
+                            <MoodMeter moodData={moodData} loading={loading} />
                         </ChartCard>
 
                         {/* Emotional Wheel - DISABLED */}
@@ -114,7 +201,7 @@ export default function InsightsPage() {
 
                         {/* Check-in Streak - ACTIVE */}
                         <ChartCard title="Check-in Calendar" icon={faCalendar}>
-                            <CheckInStreak />
+                            <CheckInStreak checkInDates={checkInDates} loading={loading} />
                         </ChartCard>
 
                         {/* Support Reflection Radar - DISABLED */}
@@ -242,35 +329,61 @@ function ChartCard({ title, icon, children, disabled }) {
     );
 }
 
-function MoodMeter() {
-    const moodData = [
-        { day: "Mon", mood: 7 },
-        { day: "Tue", mood: 8 },
-        { day: "Wed", mood: 6 },
-        { day: "Thu", mood: 9 },
-        { day: "Fri", mood: 7 },
-        { day: "Sat", mood: 8 },
-        { day: "Sun", mood: 9 },
-    ];
+function MoodMeter({ moodData = [], loading }) {
+    // Get last 7 days of mood data
+    const last7Days = moodData.slice(0, 7).reverse();
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Create chart data for last 7 days
+    const chartData = [];
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const dayName = dayNames[date.getDay()];
+
+        const moodEntry = last7Days.find(m => m.date === dateStr);
+        chartData.push({
+            day: dayName,
+            mood: moodEntry ? moodEntry.intensity : 0,
+            hasData: !!moodEntry
+        });
+    }
+
+    const avgMood = last7Days.length > 0
+        ? (last7Days.reduce((sum, m) => sum + m.intensity, 0) / last7Days.length).toFixed(1)
+        : 0;
+
+    if (loading) {
+        return <div className="text-center text-gray-500 py-8">Loading...</div>;
+    }
+
+    if (moodData.length === 0) {
+        return <div className="text-center text-gray-500 py-8">No mood data yet. Start checking in!</div>;
+    }
 
     return (
         <div className="space-y-4">
             <div className="flex items-end justify-between gap-2">
-                {moodData.map((item, i) => (
+                {chartData.map((item, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
                         <div className="relative h-24 w-8 rounded-full bg-rose-100">
-                            <div
-                                className="absolute bottom-0 w-full rounded-full bg-rose-200"
-                                style={{ height: `${(item.mood / 10) * 100}%` }}
-                            />
+                            {item.hasData && (
+                                <div
+                                    className="absolute bottom-0 w-full rounded-full bg-rose-500"
+                                    style={{ height: `${(item.mood / 10) * 100}%` }}
+                                />
+                            )}
                         </div>
                         <span className="text-xs text-gray-600">{item.day}</span>
-                        <span className="text-xs font-semibold text-rose-600">{item.mood}</span>
+                        <span className="text-xs font-semibold text-rose-600">
+                            {item.hasData ? item.mood : '-'}
+                        </span>
                     </div>
                 ))}
             </div>
             <div className="text-center text-sm text-gray-600">
-                Average mood this week: <span className="font-semibold text-rose-600">7.7/10</span>
+                Average mood this week: <span className="font-semibold text-rose-600">{avgMood}/10</span>
             </div>
         </div>
     );
@@ -322,43 +435,59 @@ function EmotionalWheel() {
     );
 }
 
-function CheckInStreak() {
+function CheckInStreak({ checkInDates = [], loading }) {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    // Last 7 days check-in data (1 = checked in, 0 = missed)
-    const last7Days = [1, 1, 0, 1, 1, 1, 1]; // Example: missed Wednesday
+
+    // Create last 7 days array with check-in status
+    const last7Days = [];
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const hasCheckedIn = checkInDates.includes(dateStr);
+        last7Days.push({
+            date: dateStr,
+            day: dayNames[date.getDay()],
+            checked: hasCheckedIn
+        });
+    }
 
     // Calculate current streak
     let currentStreak = 0;
     for (let i = last7Days.length - 1; i >= 0; i--) {
-        if (last7Days[i] === 1) {
+        if (last7Days[i].checked) {
             currentStreak++;
         } else {
             break;
         }
     }
 
+    if (loading) {
+        return <div className="text-center text-gray-500 py-8">Loading...</div>;
+    }
+
     return (
         <div className="space-y-4">
             {/* Days header */}
             <div className="grid grid-cols-7 gap-2 mb-2">
-                {days.map((day, i) => (
+                {last7Days.map((item, i) => (
                     <div key={i} className="text-center text-xs font-medium text-gray-500 py-1">
-                        {day}
+                        {item.day}
                     </div>
                 ))}
             </div>
 
             {/* Last 7 days grid */}
             <div className="grid grid-cols-7 gap-2">
-                {last7Days.map((checked, dayIndex) => (
+                {last7Days.map((item, dayIndex) => (
                     <div
                         key={dayIndex}
-                        className={`aspect-square rounded-lg flex items-center justify-center text-2xl transition-all ${checked
+                        className={`aspect-square rounded-lg flex items-center justify-center text-2xl transition-all ${item.checked
                             ? 'bg-rose-200 hover:bg-rose-300'
                             : 'bg-gray-100 hover:bg-gray-200'
                             }`}
                     >
-                        {checked ? (
+                        {item.checked ? (
                             <span className="text-yellow-500">🏆</span>
                         ) : (
                             <span className="text-gray-300">🏆</span>

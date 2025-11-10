@@ -22,8 +22,7 @@ import {
   faCalendarAlt,
   faUser,
   faPaperPlane,
-  faChevronLeft,
-  faChevronRight,
+
   faChevronDown,
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
@@ -128,14 +127,19 @@ export default function Home() {
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-32">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
               <div className="text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
+                {/* <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
                   <span className="font-bold">TARA</span> = Talk, Align, Reflect, Act
-                </div>
+                </div> */}
                 <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                  Your Personal
-                  <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Emotional </span>
-                  Wellness Companion
+                  Talk
+                  <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Heel </span>
+                  Grow
                 </h1>
+                <h2 className="text-2xl font-semibold ">
+                  Your Personal Emotional Wellness Companion
+
+
+                </h2>
                 <p className="mt-6 text-lg text-gray-600 sm:text-xl">
                   Connect with 100+ AI characters, track your moods, journal your thoughts,
                   and get personalized insights for better emotional health.
@@ -168,13 +172,7 @@ export default function Home() {
                   </div>
                   <div className="mt-6 rounded-2xl bg-rose-200 p-4">
                     <div className="flex items-center gap-3">
-                      <Image
-                        src="/taralogo.jpg"
-                        alt="Life Coach Avatar"
-                        width={40}
-                        height={40}
-                        className="h-10 w-10 rounded-full object-cover"
-                      />
+
                       <div>
                         <div className="text-sm font-semibold text-gray-900">Life Coach</div>
                         <div className="text-xs text-gray-600">Ready to unlock your potential? Let's grow together! 🚀</div>
