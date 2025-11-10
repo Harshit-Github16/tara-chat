@@ -45,6 +45,8 @@ export default function InsightsPage() {
                 const data = await response.json();
                 const moods = data.data?.entries || [];
 
+                console.log('Fetched mood data:', moods);
+                console.log('Sample mood entry:', moods[0]);
                 setMoodData(moods);
 
                 // Calculate average mood
@@ -330,28 +332,66 @@ function ChartCard({ title, icon, children, disabled }) {
 }
 
 function MoodMeter({ moodData = [], loading }) {
-    // Get last 7 days of mood data
-    const last7Days = moodData.slice(0, 7).reverse();
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    // Fixed mood intensity values
+    const moodIntensityMap = {
+        'happy': 10,
+        'excited': 9,
+        'grateful': 8,
+        'calm': 7,
+        'tired': 5,
+        'confused': 4,
+        'stressed': 3,
+        'anxious': 2,
+        'sad': 1,
+        'angry': 1
+    };
 
     // Create chart data for last 7 days
     const chartData = [];
+    const moodsWithData = [];
+
     for (let i = 6; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
         const dateStr = date.toISOString().split('T')[0];
         const dayName = dayNames[date.getDay()];
 
-        const moodEntry = last7Days.find(m => m.date === dateStr);
+        // Find ALL mood entries for this specific date
+        const dayMoods = moodData.filter(m => m.date === dateStr);
+
+        // Calculate average mood for this day using fixed intensity values
+        let avgDayMood = 0;
+        let hasData = false;
+
+        if (dayMoods.length > 0) {
+            const total = dayMoods.reduce((sum, m) => {
+                const intensity = moodIntensityMap[m.mood.toLowerCase()] || 5;
+                return sum + intensity;
+            }, 0);
+            avgDayMood = Math.round(total / dayMoods.length);
+            hasData = true;
+
+            // Store moods with calculated intensity for overall average
+            dayMoods.forEach(m => {
+                moodsWithData.push({
+                    ...m,
+                    calculatedIntensity: moodIntensityMap[m.mood.toLowerCase()] || 5
+                });
+            });
+        }
+
         chartData.push({
             day: dayName,
-            mood: moodEntry ? moodEntry.intensity : 0,
-            hasData: !!moodEntry
+            mood: avgDayMood,
+            hasData: hasData,
+            count: dayMoods.length
         });
     }
 
-    const avgMood = last7Days.length > 0
-        ? (last7Days.reduce((sum, m) => sum + m.intensity, 0) / last7Days.length).toFixed(1)
+    const avgMood = moodsWithData.length > 0
+        ? (moodsWithData.reduce((sum, m) => sum + m.calculatedIntensity, 0) / moodsWithData.length).toFixed(1)
         : 0;
 
     if (loading) {

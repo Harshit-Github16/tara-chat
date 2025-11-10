@@ -53,9 +53,12 @@ export default function OnboardingPage() {
     }, [user, loading]);
 
     const professions = [
-        "Student", "Software Developer", "Teacher", "Doctor", "Engineer",
-        "Designer", "Marketing Manager", "Sales Representative", "Entrepreneur",
-        "Consultant", "Writer", "Artist", "Nurse", "Lawyer", "Accountant",
+        "Student",
+        "Working Professional",
+        "Entrepreneur",
+        "Freelancer",
+        "Homemaker",
+        "Retired",
         "Other"
     ];
 
