@@ -42,8 +42,8 @@ export default function JournalPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen flex-col bg-gradient-to-br from-pink-50 via-white to-pink-100">
-        <header className="sticky top-0 z-10 border-b border-pink-100 bg-white/60 backdrop-blur">
+      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
+        <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
             <div className="flex items-center gap-3">
               <img
@@ -51,11 +51,11 @@ export default function JournalPage() {
                 alt="Tara Logo"
                 className="h-8 w-8 rounded-full object-cover"
               />
-              <span className="text-lg font-semibold text-pink-600">Tara</span>
+              <span className="text-lg font-semibold text-rose-600">Tara</span>
             </div>
 
             {/* Profile Icon */}
-            <Link href="/profile" className="rounded-full p-2 text-pink-600 hover:bg-pink-100 transition-colors">
+            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
               <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
             </Link>
 
@@ -86,10 +86,10 @@ export default function JournalPage() {
             <div className="space-y-8">
               {groups.map(([date, items]) => (
                 <section key={date}>
-                  <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-pink-600">{date}</h2>
+                  <h2 className="mb-3 text-xs font-bold uppercase tracking-wide text-rose-600">{date}</h2>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {items.map((e) => (
-                      <article key={e.id} className="rounded-2xl border border-pink-100 bg-white p-4 shadow-sm">
+                      <article key={e.id} className="rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
                         <div className="flex items-center justify-between">
                           <div className="text-sm font-semibold text-gray-900">{e.title || "Untitled"}</div>
                           <div className="flex items-center gap-2">
@@ -129,7 +129,7 @@ export default function JournalPage() {
         </main>
 
         {/* Bottom Navbar (links) */}
-        <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
+        <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
           <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
             <BottomNavLink href="/journal" icon={faBookOpen} label="Journal" active />
             <BottomNavLink href="/chatlist" icon={faComments} label="Chats" />
@@ -190,7 +190,7 @@ function BottomNavLink({ href, icon, label, active, disabled }) {
   return (
     <Link
       href={href}
-      className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 ${active ? "text-pink-600" : "text-gray-600"}`}
+      className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 ${active ? "text-rose-600" : "text-gray-600"}`}
     >
       <FontAwesomeIcon icon={icon} className="h-5 w-5" />
       {label}
@@ -218,7 +218,7 @@ function JournalModal({ initial, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-xl rounded-3xl border border-pink-100 bg-white p-6 shadow-xl">
+      <div className="w-full max-w-xl rounded-3xl border border-rose-100 bg-white p-6 shadow-xl">
         <div className="mb-4 text-lg font-bold text-gray-900">{initial ? "Edit Journal" : "New Journal"}</div>
         <form onSubmit={submit} className="space-y-4">
           <div>
@@ -226,7 +226,7 @@ function JournalModal({ initial, onClose, onSave }) {
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-pink-200 px-4 py-2 text-sm outline-none ring-pink-100 focus:ring"
+              className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
               placeholder="Optional title"
             />
           </div>
@@ -236,7 +236,7 @@ function JournalModal({ initial, onClose, onSave }) {
               value={content}
               onChange={(e) => setContent(e.target.value)}
               rows={6}
-              className="mt-1 w-full rounded-xl border border-pink-200 px-4 py-2 text-sm outline-none ring-pink-100 focus:ring"
+              className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
               placeholder="Write your thoughts..."
               required
             />
@@ -246,7 +246,7 @@ function JournalModal({ initial, onClose, onSave }) {
             <input
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-pink-200 px-4 py-2 text-sm outline-none ring-pink-100 focus:ring"
+              className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
               placeholder="growth, gratitude, reflection"
             />
           </div>

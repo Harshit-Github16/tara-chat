@@ -436,7 +436,7 @@ function EmotionalWheel() {
 }
 
 function CheckInStreak({ checkInDates = [], loading }) {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     // Create last 7 days array with check-in status
     const last7Days = [];
@@ -488,9 +488,9 @@ function CheckInStreak({ checkInDates = [], loading }) {
                             }`}
                     >
                         {item.checked ? (
-                            <span className="text-yellow-500">🏆</span>
+                            <span className="text-green-600">✓</span>
                         ) : (
-                            <span className="text-gray-300">🏆</span>
+                            <span className="text-gray-300">○</span>
                         )}
                     </div>
                 ))}
