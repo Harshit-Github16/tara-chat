@@ -21,11 +21,11 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../contexts/AuthContext";
 
 const GOAL_CATEGORIES = [
-    { id: "mental", name: "Mental Health", icon: faBrain, color: "purple" },
-    { id: "emotional", name: "Emotional Well-being", icon: faHeart, color: "rose" },
-    { id: "mindfulness", name: "Mindfulness", icon: faStar, color: "yellow" },
-    { id: "habits", name: "Healthy Habits", icon: faFire, color: "orange" },
-    { id: "personal", name: "Personal Growth", icon: faBullseye, color: "blue" },
+    { id: "mental", name: "Mental Health", icon: faBrain, emoji: "🧠", color: "purple" },
+    { id: "emotional", name: "Emotional Well-being", icon: faHeart, emoji: "💖", color: "rose" },
+    { id: "mindfulness", name: "Mindfulness", icon: faStar, emoji: "⭐", color: "yellow" },
+    { id: "habits", name: "Healthy Habits", icon: faFire, emoji: "🔥", color: "orange" },
+    { id: "personal", name: "Personal Growth", icon: faBullseye, emoji: "🎯", color: "blue" },
 ];
 
 export default function GoalsPage() {
@@ -241,100 +241,121 @@ export default function GoalsPage() {
                     </div>
                 </nav>
 
-                {/* Add Goal Modal */}
+                {/* Add Goal Modal - Simple & Responsive */}
                 {showModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-                        <div className="w-full max-w-md rounded-3xl border border-rose-100 bg-white p-6 shadow-xl">
-                            <h2 className="mb-4 text-xl font-bold text-gray-900">Set New Goal</h2>
+                        <div className="w-full max-w-md rounded-2xl border border-rose-100 bg-white shadow-xl max-h-[85vh] overflow-hidden flex flex-col">
+                            {/* Header */}
+                            <div className="px-6 py-4 border-b border-rose-100 flex items-center justify-between flex-shrink-0">
+                                <h2 className="text-xl font-bold text-gray-900">Set New Goal</h2>
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
 
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Goal Title</label>
-                                    <input
-                                        type="text"
-                                        value={newGoal.title}
-                                        onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
-                                        placeholder="e.g., Meditate daily"
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                                    <select
-                                        value={newGoal.category}
-                                        onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
-                                    >
-                                        {GOAL_CATEGORIES.map((cat) => (
-                                            <option key={cat.id} value={cat.id}>
-                                                {cat.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Target Days: {newGoal.targetDays}
-                                    </label>
-                                    <input
-                                        type="range"
-                                        min="7"
-                                        max="90"
-                                        value={newGoal.targetDays}
-                                        onChange={(e) => setNewGoal({ ...newGoal, targetDays: parseInt(e.target.value) })}
-                                        className="w-full"
-                                    />
-                                    <div className="flex justify-between text-xs text-gray-500">
-                                        <span>7 days</span>
-                                        <span>90 days</span>
+                            {/* Content - Scrollable */}
+                            <div className="p-6 overflow-y-auto flex-1">
+                                <div className="space-y-4">
+                                    {/* Goal Title */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Goal Title</label>
+                                        <input
+                                            type="text"
+                                            value={newGoal.title}
+                                            onChange={(e) => setNewGoal({ ...newGoal, title: e.target.value })}
+                                            placeholder="e.g., Meditate daily"
+                                            className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                        />
                                     </div>
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Why is this goal important? *
-                                    </label>
-                                    <textarea
-                                        value={newGoal.why}
-                                        onChange={(e) => setNewGoal({ ...newGoal, why: e.target.value })}
-                                        placeholder="e.g., To reduce stress and improve my mental health"
-                                        rows="2"
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
-                                        required
-                                    />
-                                </div>
+                                    {/* Category */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                                        <select
+                                            value={newGoal.category}
+                                            onChange={(e) => setNewGoal({ ...newGoal, category: e.target.value })}
+                                            className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                        >
+                                            {GOAL_CATEGORIES.map((cat) => (
+                                                <option key={cat.id} value={cat.id}>
+                                                    {cat.emoji} {cat.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        How will you achieve this? *
-                                    </label>
-                                    <textarea
-                                        value={newGoal.howToAchieve}
-                                        onChange={(e) => setNewGoal({ ...newGoal, howToAchieve: e.target.value })}
-                                        placeholder="e.g., Meditate for 10 minutes every morning before work"
-                                        rows="2"
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
-                                        required
-                                    />
-                                </div>
+                                    {/* Target Days */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Target Days: {newGoal.targetDays}
+                                        </label>
+                                        <input
+                                            type="range"
+                                            min="7"
+                                            max="90"
+                                            value={newGoal.targetDays}
+                                            onChange={(e) => setNewGoal({ ...newGoal, targetDays: parseInt(e.target.value) })}
+                                            className="w-full"
+                                        />
+                                        <div className="flex justify-between text-xs text-gray-500">
+                                            <span>7 days</span>
+                                            <span>90 days</span>
+                                        </div>
+                                    </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Additional Notes (Optional)
-                                    </label>
-                                    <textarea
-                                        value={newGoal.description}
-                                        onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
-                                        placeholder="Any other details..."
-                                        rows="2"
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
-                                    />
+                                    {/* Why Important */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Why is this important? *
+                                        </label>
+                                        <textarea
+                                            value={newGoal.why}
+                                            onChange={(e) => setNewGoal({ ...newGoal, why: e.target.value })}
+                                            placeholder="e.g., To reduce stress and improve my mental health"
+                                            rows="2"
+                                            className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* How to Achieve */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            How will you achieve this? *
+                                        </label>
+                                        <textarea
+                                            value={newGoal.howToAchieve}
+                                            onChange={(e) => setNewGoal({ ...newGoal, howToAchieve: e.target.value })}
+                                            placeholder="e.g., Meditate for 10 minutes every morning before work"
+                                            rows="2"
+                                            className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Additional Notes */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            Additional Notes (Optional)
+                                        </label>
+                                        <textarea
+                                            value={newGoal.description}
+                                            onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
+                                            placeholder="Any other details..."
+                                            rows="2"
+                                            className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="mt-6 flex gap-3">
+                            {/* Footer */}
+                            <div className="px-6 py-4 border-t border-rose-100 flex gap-3 flex-shrink-0">
                                 <button
                                     onClick={() => setShowModal(false)}
                                     className="flex-1 rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50"

@@ -23,9 +23,9 @@ export default function InsightsPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-100">
+            <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
                 {/* Header */}
-                <header className="sticky top-0 z-10 border-b border-pink-100 bg-white/80 backdrop-blur">
+                <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                         <div className="flex items-center gap-3">
                             <img
@@ -33,27 +33,27 @@ export default function InsightsPage() {
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-pink-600">Tara</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <div className="flex gap-2 rounded-full bg-pink-50 p-1 text-xs font-medium">
+                            <div className="flex gap-2 rounded-full bg-rose-50 p-1 text-xs font-medium">
                                 <button
                                     onClick={() => setSelectedPeriod("week")}
-                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "week" ? "bg-white shadow text-pink-600" : "text-gray-600"
+                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "week" ? "bg-white shadow text-rose-600" : "text-gray-600"
                                         }`}
                                 >
                                     Week
                                 </button>
                                 <button
                                     onClick={() => setSelectedPeriod("month")}
-                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "month" ? "bg-white shadow text-pink-600" : "text-gray-600"
+                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "month" ? "bg-white shadow text-rose-600" : "text-gray-600"
                                         }`}
                                 >
                                     Month
                                 </button>
                                 <button
                                     onClick={() => setSelectedPeriod("year")}
-                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "year" ? "bg-white shadow text-pink-600" : "text-gray-600"
+                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "year" ? "bg-white shadow text-rose-600" : "text-gray-600"
                                         }`}
                                 >
                                     Year
@@ -61,7 +61,7 @@ export default function InsightsPage() {
                             </div>
 
                             {/* Profile Icon */}
-                            <Link href="/profile" className="rounded-full p-2 text-pink-600 hover:bg-pink-100 transition-colors">
+                            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
                                 <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
                             </Link>
 
@@ -82,58 +82,67 @@ export default function InsightsPage() {
                             icon={faHeart}
                             title="Avg Mood"
                             value="7.2/10"
-                            color="bg-pink-50 text-pink-600"
+                            color="bg-rose-50 text-rose-600"
                         />
                         <StatCard
                             icon={faClock}
                             title="Recovery Time"
-                            value="2.3 hrs"
+                            value="--"
                             color="bg-blue-50 text-blue-600"
+                            disabled
                         />
                         <StatCard
                             icon={faBullseye}
                             title="Goals Met"
-                            value="8/10"
+                            value="--"
                             color="bg-green-50 text-green-600"
+                            disabled
                         />
                     </div>
 
                     {/* Main Charts Grid */}
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        {/* Mood Meter */}
+                        {/* Mood Meter - ACTIVE */}
                         <ChartCard title="Mood Meter" icon={faChartLine}>
                             <MoodMeter />
                         </ChartCard>
 
-                        {/* Emotional Wheel */}
-                        <ChartCard title="Emotional Wheel" icon={faBrain}>
-                            <EmotionalWheel />
+                        {/* Emotional Wheel - DISABLED */}
+                        <ChartCard title="Emotional Wheel" icon={faBrain} disabled>
+                            <DisabledChart />
                         </ChartCard>
 
-                        {/* Check-in Streak */}
+                        {/* Check-in Streak - ACTIVE */}
                         <ChartCard title="Check-in Calendar" icon={faCalendar}>
                             <CheckInStreak />
                         </ChartCard>
 
-                        {/* Support Reflection Radar */}
-                        <ChartCard title="Support Reflection Radar" icon={faBullseye}>
-                            <SupportRadar />
+                        {/* Support Reflection Radar - DISABLED */}
+                        <ChartCard title="Support Reflection Radar" icon={faBullseye} disabled>
+                            <DisabledChart />
                         </ChartCard>
                     </div>
 
-                    {/* Suggestions & Triggers */}
+                    {/* Suggestions & Triggers - DISABLED */}
                     <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        {/* Mood Triggers */}
-                        <div className="rounded-2xl border border-pink-100 bg-white p-6 shadow-sm">
+                        {/* Mood Triggers - DISABLED */}
+                        <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gray-50/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                                <div className="text-center px-4">
+                                    <div className="text-3xl mb-2">🔒</div>
+                                    <div className="text-sm font-semibold text-gray-700 mb-1">Chat atleast 7 days to get insights</div>
+                                    <div className="text-xs text-gray-500">Keep chatting to unlock this feature</div>
+                                </div>
+                            </div>
                             <h3 className="mb-4 text-lg font-semibold text-gray-900">Mood Triggers</h3>
-                            <div className="space-y-3">
+                            <div className="space-y-3 opacity-30">
                                 {MOOD_TRIGGERS.map((trigger, i) => (
                                     <div key={i} className="flex items-center justify-between">
                                         <span className="text-sm text-gray-700">{trigger.name}</span>
                                         <div className="flex items-center gap-2">
                                             <div className="h-2 w-16 rounded-full bg-gray-200">
                                                 <div
-                                                    className="h-2 rounded-full bg-pink-500"
+                                                    className="h-2 rounded-full bg-rose-500"
                                                     style={{ width: `${trigger.impact}%` }}
                                                 />
                                             </div>
@@ -144,13 +153,20 @@ export default function InsightsPage() {
                             </div>
                         </div>
 
-                        {/* Suggestions */}
-                        <div className="rounded-2xl border border-pink-100 bg-white p-6 shadow-sm">
+                        {/* Suggestions - DISABLED */}
+                        <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gray-50/80 backdrop-blur-sm z-10 flex items-center justify-center">
+                                <div className="text-center px-4">
+                                    <div className="text-3xl mb-2">🔒</div>
+                                    <div className="text-sm font-semibold text-gray-700 mb-1">Chat atleast 7 days to get insights</div>
+                                    <div className="text-xs text-gray-500">Keep chatting to unlock this feature</div>
+                                </div>
+                            </div>
                             <h3 className="mb-4 text-lg font-semibold text-gray-900">Personalized Suggestions</h3>
-                            <div className="space-y-3">
+                            <div className="space-y-3 opacity-30">
                                 {SUGGESTIONS.map((suggestion, i) => (
-                                    <div key={i} className="flex items-start gap-3 rounded-xl bg-pink-50 p-3">
-                                        <span className="text-pink-500">
+                                    <div key={i} className="flex items-start gap-3 rounded-xl bg-rose-50 p-3">
+                                        <span className="text-rose-500">
                                             <FontAwesomeIcon icon={suggestion.icon} className="h-4 w-4" />
                                         </span>
                                         <div>
@@ -165,7 +181,7 @@ export default function InsightsPage() {
                 </div>
 
                 {/* Bottom Navigation */}
-                <nav className="sticky bottom-0 z-10 border-t border-pink-100 bg-white/90 backdrop-blur">
+                <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
                     <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
                         <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
                         <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
@@ -179,9 +195,14 @@ export default function InsightsPage() {
     );
 }
 
-function StatCard({ icon, title, value, color }) {
+function StatCard({ icon, title, value, color, disabled }) {
     return (
-        <div className="rounded-2xl border border-pink-100 bg-white p-4 shadow-sm">
+        <div className={`rounded-2xl border border-rose-100 bg-white p-4 shadow-sm relative ${disabled ? 'opacity-50' : ''}`}>
+            {disabled && (
+                <div className="absolute inset-0 bg-gray-50/60 backdrop-blur-[2px] rounded-2xl flex items-center justify-center">
+                    <div className="text-xl">🔒</div>
+                </div>
+            )}
             <div className="flex items-center gap-3">
                 <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${color}`}>
                     <FontAwesomeIcon icon={icon} />
@@ -195,11 +216,23 @@ function StatCard({ icon, title, value, color }) {
     );
 }
 
-function ChartCard({ title, icon, children }) {
+function DisabledChart() {
     return (
-        <div className="rounded-2xl border border-pink-100 bg-white p-6 shadow-sm">
+        <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl relative">
+            <div className="text-center px-4">
+                <div className="text-4xl mb-3">🔒</div>
+                <div className="text-base font-semibold text-gray-700 mb-2">Chat atleast 7 days to get insights</div>
+                <div className="text-sm text-gray-500">Keep chatting with TARA to unlock detailed insights</div>
+            </div>
+        </div>
+    );
+}
+
+function ChartCard({ title, icon, children, disabled }) {
+    return (
+        <div className={`rounded-2xl border border-rose-100 bg-white p-6 shadow-sm ${disabled ? 'relative' : ''}`}>
             <div className="mb-4 flex items-center gap-2">
-                <span className="text-pink-500">
+                <span className="text-rose-500">
                     <FontAwesomeIcon icon={icon} className="h-5 w-5" />
                 </span>
                 <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
@@ -225,19 +258,19 @@ function MoodMeter() {
             <div className="flex items-end justify-between gap-2">
                 {moodData.map((item, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
-                        <div className="relative h-24 w-8 rounded-full bg-pink-100">
+                        <div className="relative h-24 w-8 rounded-full bg-rose-100">
                             <div
                                 className="absolute bottom-0 w-full rounded-full bg-rose-200"
                                 style={{ height: `${(item.mood / 10) * 100}%` }}
                             />
                         </div>
                         <span className="text-xs text-gray-600">{item.day}</span>
-                        <span className="text-xs font-semibold text-pink-600">{item.mood}</span>
+                        <span className="text-xs font-semibold text-rose-600">{item.mood}</span>
                     </div>
                 ))}
             </div>
             <div className="text-center text-sm text-gray-600">
-                Average mood this week: <span className="font-semibold text-pink-600">7.7/10</span>
+                Average mood this week: <span className="font-semibold text-rose-600">7.7/10</span>
             </div>
         </div>
     );
@@ -247,7 +280,7 @@ function EmotionalWheel() {
     const emotions = [
         { name: "Joy", value: 85, color: "bg-yellow-400" },
         { name: "Calm", value: 70, color: "bg-blue-400" },
-        { name: "Love", value: 90, color: "bg-pink-400" },
+        { name: "Love", value: 90, color: "bg-rose-400" },
         { name: "Anger", value: 20, color: "bg-red-400" },
         { name: "Sad", value: 15, color: "bg-gray-400" },
         { name: "Fear", value: 25, color: "bg-purple-400" },
@@ -255,7 +288,7 @@ function EmotionalWheel() {
 
     return (
         <div className="relative mx-auto h-48 w-48">
-            <div className="absolute inset-0 rounded-full border-4 border-pink-100">
+            <div className="absolute inset-0 rounded-full border-4 border-rose-100">
                 {emotions.map((emotion, i) => {
                     const angle = (i * 60) - 90;
                     const x = 50 + 35 * Math.cos((angle * Math.PI) / 180);
@@ -281,7 +314,7 @@ function EmotionalWheel() {
             </div>
             <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="text-2xl font-bold text-pink-600">7.2</div>
+                    <div className="text-2xl font-bold text-rose-600">7.2</div>
                     <div className="text-xs text-gray-500">Overall</div>
                 </div>
             </div>
@@ -381,7 +414,7 @@ function SupportRadar() {
                 return (
                     <div key={category.name}>
                         <div
-                            className="absolute bg-pink-300"
+                            className="absolute bg-rose-300"
                             style={{
                                 left: '50%',
                                 top: '50%',
@@ -392,7 +425,7 @@ function SupportRadar() {
                             }}
                         />
                         <div
-                            className="absolute h-3 w-3 rounded-full bg-pink-500"
+                            className="absolute h-3 w-3 rounded-full bg-rose-500"
                             style={{
                                 left: `${x}%`,
                                 top: `${y}%`,
@@ -429,7 +462,7 @@ function MobileNavLink({ href, icon, label, active, disabled }) {
     return (
         <Link
             href={href}
-            className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 ${active ? "text-pink-600" : "text-gray-600"
+            className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 ${active ? "text-rose-600" : "text-gray-600"
                 }`}
         >
             <FontAwesomeIcon icon={icon} className="h-5 w-5" />

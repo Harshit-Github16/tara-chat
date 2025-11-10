@@ -30,7 +30,7 @@ import {
 import Link from "next/link";
 
 export default function ProfilePage() {
-    const { user, loading, updateUser } = useAuth();
+    const { user, loading, updateUser, logout } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [userProfile, setUserProfile] = useState({
         name: "",
@@ -150,21 +150,19 @@ export default function ProfilePage() {
 
     const handleLogout = async () => {
         try {
-            // Import Firebase signOut function
-            const { signOutUser } = await import('../../lib/firebase');
-            await signOutUser();
+            console.log('Logging out...');
 
-            // Also clear our JWT cookie
-            await fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'include',
-            });
+            // Use AuthContext logout function
+            await logout();
+            console.log('Logout successful');
 
-            // Redirect to login
+            // Redirect to login page
             window.location.href = '/login';
         } catch (error) {
             console.error('Logout error:', error);
-            // Fallback - still redirect
+            // Fallback - still clear localStorage and redirect
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
             window.location.href = '/login';
         }
     };

@@ -28,7 +28,9 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
 
-        console.log('Mood MongoDB API: User ID from token:', decoded.userId);
+        console.log('Mood MongoDB API: Decoded token:', JSON.stringify(decoded, null, 2));
+        console.log('Mood MongoDB API: Token has firebaseUid:', !!decoded.firebaseUid);
+        console.log('Mood MongoDB API: Token has userId:', !!decoded.userId);
 
         const { mood, intensity, note } = await req.json();
         console.log('Mood MongoDB API: Request body:', { mood, intensity, note });
@@ -38,7 +40,9 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Mood is required' }, { status: 400 });
         }
 
-        const userId = decoded.userId;
+        // Use firebaseUid if available, otherwise userId
+        const userId = decoded.firebaseUid || decoded.userId;
+        console.log('Mood MongoDB API: Using userId:', userId);
 
         // Get current date in YYYY-MM-DD format
         const today = new Date().toISOString().split('T')[0];
@@ -46,9 +50,11 @@ export async function POST(req) {
 
         // Create mood entry
         const moodEntry = {
+            id: new ObjectId().toString(),
             mood,
             intensity: intensity || 5,
             note: note || '',
+            date: today,
             timestamp: new Date(),
             createdAt: new Date()
         };
@@ -57,41 +63,44 @@ export async function POST(req) {
         // Connect to MongoDB
         const client = await clientPromise;
         const db = client.db('tara');
-        const moods = db.collection('moods');
+        const users = db.collection('users');
 
-        // Document ID format: userId_date
-        const docId = `${userId}_${today}`;
-        console.log('Mood MongoDB API: Document ID:', docId);
+        // Store mood in user object
+        console.log('Mood MongoDB API: Storing mood in user object for userId:', userId);
 
-        // Check if document exists for today
-        console.log('Mood MongoDB API: Checking if document exists...');
-        const existingDoc = await moods.findOne({ _id: docId });
-        console.log('Mood MongoDB API: Document exists:', !!existingDoc);
+        // Try to find user first to debug
+        const existingUser = await users.findOne({ firebaseUid: userId });
+        console.log('Mood MongoDB API: User found:', existingUser ? 'Yes' : 'No');
 
-        if (existingDoc) {
-            // Add to existing array
-            console.log('Mood MongoDB API: Updating existing document...');
-            await moods.updateOne(
-                { _id: docId },
-                {
-                    $push: { entries: moodEntry },
-                    $set: { updatedAt: new Date() }
-                }
-            );
-            console.log('Mood MongoDB API: Document updated successfully');
-        } else {
-            // Create new document for today
-            console.log('Mood MongoDB API: Creating new document...');
-            await moods.insertOne({
-                _id: docId,
-                userId: new ObjectId(userId),
-                date: today,
-                entries: [moodEntry],
-                createdAt: new Date(),
-                updatedAt: new Date()
-            });
-            console.log('Mood MongoDB API: New document created successfully');
+        if (!existingUser) {
+            // Try with _id if userId is ObjectId format
+            const userById = await users.findOne({ _id: new ObjectId(userId) });
+            console.log('Mood MongoDB API: User found by _id:', userById ? 'Yes' : 'No');
+
+            if (!userById) {
+                console.log('Mood MongoDB API: User not found with firebaseUid or _id');
+                return NextResponse.json({
+                    error: 'User not found',
+                    debug: { userId, searchedBy: 'firebaseUid and _id' }
+                }, { status: 404 });
+            }
         }
+
+        // Update user document - add mood to moods array
+        const result = await users.updateOne(
+            { firebaseUid: userId },
+            {
+                $push: {
+                    moods: {
+                        $each: [moodEntry],
+                        $position: 0 // Add to beginning of array
+                    }
+                },
+                $set: { lastUpdated: new Date() }
+            }
+        );
+
+        console.log('Mood MongoDB API: Update result - matched:', result.matchedCount, 'modified:', result.modifiedCount);
 
         return NextResponse.json({
             success: true,
@@ -121,33 +130,45 @@ export async function GET(req) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
 
-        const userId = decoded.userId;
+        // Use firebaseUid if available, otherwise userId
+        const userId = decoded.firebaseUid || decoded.userId;
         const { searchParams } = new URL(req.url);
         const date = searchParams.get('date'); // Optional: get specific date
+        const limit = parseInt(searchParams.get('limit')) || 30; // Default 30 days
 
         // Connect to MongoDB
         const client = await clientPromise;
         const db = client.db('tara');
-        const moods = db.collection('moods');
+        const users = db.collection('users');
+
+        // Get user with moods
+        const user = await users.findOne(
+            { firebaseUid: userId },
+            { projection: { moods: 1 } }
+        );
+
+        if (!user) {
+            return NextResponse.json({
+                success: true,
+                data: { entries: [] }
+            });
+        }
+
+        const allMoods = user.moods || [];
 
         if (date) {
             // Get moods for specific date
-            const docId = `${userId}_${date}`;
-            const moodDoc = await moods.findOne({ _id: docId });
-
+            const dateMoods = allMoods.filter(m => m.date === date);
             return NextResponse.json({
                 success: true,
-                data: moodDoc || { entries: [] }
+                data: { entries: dateMoods }
             });
         } else {
-            // Get today's moods by default
-            const today = new Date().toISOString().split('T')[0];
-            const docId = `${userId}_${today}`;
-            const moodDoc = await moods.findOne({ _id: docId });
-
+            // Get recent moods (limited)
+            const recentMoods = allMoods.slice(0, limit);
             return NextResponse.json({
                 success: true,
-                data: moodDoc || { entries: [] }
+                data: { entries: recentMoods }
             });
         }
 

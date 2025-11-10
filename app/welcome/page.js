@@ -19,16 +19,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const MOODS = [
-  { key: "joyful", label: "Joyful", icon: faFaceSmile, color: "bg-rose-50 text-rose-700 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "happy", label: "Happy", icon: faFaceSmile, color: "bg-rose-50 text-rose-700 border-rose-200", gradient: "from-rose-100 to-rose-50" },
   { key: "grateful", label: "Grateful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
   { key: "calm", label: "Calm", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "energized", label: "Energized", icon: faBolt, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "peaceful", label: "Peaceful", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "down", label: "Reflective", icon: faFaceFrown, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "bright", label: "Bright", icon: faSun, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "inspired", label: "Inspired", icon: faStar, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "focused", label: "Focused", icon: faBrain, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "hopeful", label: "Hopeful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "excited", label: "Excited", icon: faBolt, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "calm", label: "Peaceful", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "sad", label: "Sad", icon: faFaceFrown, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "anxious", label: "Anxious", icon: faBrain, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "stressed", label: "Stressed", icon: faStar, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "tired", label: "Tired", icon: faBrain, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
+  { key: "confused", label: "Confused", icon: faBrain, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
 ];
 
 const FACE_EMOJIS = [
@@ -61,20 +61,50 @@ function WelcomePageContent() {
     console.log('Welcome: Selected mood:', selected);
 
     try {
-      const response = await api.post("/api/mood-mongo", {
+      // Step 1: Save mood
+      const moodResponse = await api.post("/api/mood-mongo", {
         mood: selected,
         intensity: 5, // Default intensity
         note: ""
       });
 
-      console.log('Welcome: Response status:', response.status);
+      console.log('Welcome: Mood response status:', moodResponse.status);
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Welcome: Success response:', data);
+      if (moodResponse.ok) {
+        const moodData = await moodResponse.json();
+        console.log('Welcome: Mood saved successfully:', moodData);
+
+        // Step 2: Send automatic first message to TARA to trigger mood-based greeting
+        try {
+          console.log('Welcome: Sending first message to TARA...');
+          const chatResponse = await api.post('/api/chat', {
+            userId: user.firebaseUid || user.uid,
+            chatUserId: 'tara-ai',
+            message: 'Hi',
+            userDetails: {
+              name: user.name,
+              gender: user.gender,
+              ageRange: user.ageRange,
+              profession: user.profession,
+              interests: user.interests,
+              personalityTraits: user.personalityTraits
+            }
+          });
+
+          if (chatResponse.ok) {
+            const chatData = await chatResponse.json();
+            console.log('Welcome: TARA first message sent successfully:', chatData);
+          } else {
+            console.error('Welcome: Failed to send TARA first message');
+          }
+        } catch (chatError) {
+          console.error('Welcome: Error sending TARA first message:', chatError);
+        }
+
+        // Redirect to chatlist
         router.replace("/chatlist");
       } else {
-        const errorData = await response.json();
+        const errorData = await moodResponse.json();
         console.error('Welcome: Failed to save mood:', errorData);
         // Still redirect for now, but you can add error handling
         router.replace("/chatlist");

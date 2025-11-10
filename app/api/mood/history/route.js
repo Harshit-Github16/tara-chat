@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { db } from "../../../../lib/firebase";
-import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import { verifyToken } from "../../../../lib/jwt";
+import clientPromise from "../../../../lib/mongodb";
 
-// GET - Retrieve mood history for a user
+// GET - Retrieve mood history for a user from MongoDB
 export async function GET(req) {
     try {
         // Get authorization header
@@ -19,43 +18,46 @@ export async function GET(req) {
             return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
         }
 
-        // Use Firebase UID instead of MongoDB ObjectId for Firestore
+        // Use firebaseUid if available, otherwise userId
         const userId = decoded.firebaseUid || decoded.userId;
         const { searchParams } = new URL(req.url);
         const days = parseInt(searchParams.get('days')) || 30; // Default last 30 days
         const limitCount = parseInt(searchParams.get('limit')) || 100; // Default limit
 
-        // Query moods collection for user's entries
-        const moodsRef = collection(db, 'moods');
-        const q = query(
-            moodsRef,
-            where('userId', '==', userId),
-            orderBy('date', 'desc'),
-            limit(limitCount)
+        // Connect to MongoDB
+        const client = await clientPromise;
+        const db = client.db('tara');
+        const users = db.collection('users');
+
+        // Get user with moods
+        const user = await users.findOne(
+            { firebaseUid: userId },
+            { projection: { moods: 1 } }
         );
 
-        const querySnapshot = await getDocs(q);
-        const moodHistory = [];
+        if (!user || !user.moods) {
+            return NextResponse.json({
+                success: true,
+                data: [],
+                count: 0
+            });
+        }
 
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            // Filter by days if specified
-            const entryDate = new Date(data.date);
-            const daysAgo = new Date();
-            daysAgo.setDate(daysAgo.getDate() - days);
+        // Filter moods by days
+        const daysAgo = new Date();
+        daysAgo.setDate(daysAgo.getDate() - days);
 
-            if (entryDate >= daysAgo) {
-                moodHistory.push({
-                    id: doc.id,
-                    ...data
-                });
-            }
-        });
+        const filteredMoods = user.moods
+            .filter(mood => {
+                const moodDate = new Date(mood.timestamp || mood.createdAt);
+                return moodDate >= daysAgo;
+            })
+            .slice(0, limitCount);
 
         return NextResponse.json({
             success: true,
-            data: moodHistory,
-            count: moodHistory.length
+            data: filteredMoods,
+            count: filteredMoods.length
         });
 
     } catch (error) {

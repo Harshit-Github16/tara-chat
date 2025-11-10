@@ -128,6 +128,9 @@ export default function Home() {
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-32">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
               <div className="text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
+                  <span className="font-bold">TARA</span> = Talk, Align, Reflect, Act
+                </div>
                 <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
                   Your Personal
                   <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Emotional </span>
@@ -152,20 +155,7 @@ export default function Home() {
                     Watch Demo
                   </Link>
                 </div>
-                <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500 lg:justify-start">
-                  <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                    Free to start
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                    No credit card required
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                    Privacy focused
-                  </div>
-                </div>
+
               </div>
 
               <div className="relative">
@@ -191,12 +181,30 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+                  <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500 lg:justify-start">
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                      Free to start
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                      No credit card required
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                      Privacy focused
+                    </div>
+                  </div>
                 </div>
+
                 <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-rose-200 opacity-20"></div>
+
                 <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-rose-200 opacity-30"></div>
               </div>
+
             </div>
           </div>
+
         </section>
 
         {/* Features Section */}
@@ -460,68 +468,68 @@ export default function Home() {
             <div className="relative overflow-hidden w-full">
               <div className="flex gap-6 animate-infinite-scroll-left">
                 <ReviewCard
-                  name="Sarah Johnson"
+                  name="Priya Sharma"
                   role="Marketing Manager"
                   rating={5}
-                  review="Tara has completely changed how I handle stress. The AI characters feel so real and supportive. I especially love the mood tracking feature!"
-                  avatar="SJ"
+                  review="Tara ne meri stress handle karne ki tarika hi badal diya. AI characters bahut real aur supportive lagte hain. Mood tracking feature toh kamaal ka hai!"
+                  avatar="PS"
                 />
                 <ReviewCard
-                  name="Michael Chen"
+                  name="Rahul Verma"
                   role="Software Developer"
                   rating={5}
-                  review="As someone who struggles with anxiety, Tara's journaling prompts have been a game-changer. The insights help me understand my patterns better."
-                  avatar="MC"
+                  review="Anxiety ke saath struggle karte hue, Tara ke journaling prompts ne meri life change kar di. Insights se mujhe apne patterns samajhne mein madad milti hai."
+                  avatar="RV"
                 />
                 <ReviewCard
-                  name="Emily Rodriguez"
+                  name="Anjali Patel"
                   role="Teacher"
                   rating={5}
-                  review="The variety of AI characters means I always find someone who understands what I'm going through. It's like having a therapist available 24/7."
-                  avatar="ER"
+                  review="AI characters ki variety se mujhe hamesha koi na koi mil jata hai jo mujhe samajhta hai. Yeh 24/7 available therapist jaisa hai!"
+                  avatar="AP"
                 />
                 {/* Multiple duplicates for seamless infinite loop */}
                 <ReviewCard
-                  name="Sarah Johnson"
+                  name="Priya Sharma"
                   role="Marketing Manager"
                   rating={5}
-                  review="Tara has completely changed how I handle stress. The AI characters feel so real and supportive. I especially love the mood tracking feature!"
-                  avatar="SJ"
+                  review="Tara ne meri stress handle karne ki tarika hi badal diya. AI characters bahut real aur supportive lagte hain. Mood tracking feature toh kamaal ka hai!"
+                  avatar="PS"
                 />
                 <ReviewCard
-                  name="Michael Chen"
+                  name="Rahul Verma"
                   role="Software Developer"
                   rating={5}
-                  review="As someone who struggles with anxiety, Tara's journaling prompts have been a game-changer. The insights help me understand my patterns better."
-                  avatar="MC"
+                  review="Anxiety ke saath struggle karte hue, Tara ke journaling prompts ne meri life change kar di. Insights se mujhe apne patterns samajhne mein madad milti hai."
+                  avatar="RV"
                 />
                 <ReviewCard
-                  name="Emily Rodriguez"
+                  name="Anjali Patel"
                   role="Teacher"
                   rating={5}
-                  review="The variety of AI characters means I always find someone who understands what I'm going through. It's like having a therapist available 24/7."
-                  avatar="ER"
+                  review="AI characters ki variety se mujhe hamesha koi na koi mil jata hai jo mujhe samajhta hai. Yeh 24/7 available therapist jaisa hai!"
+                  avatar="AP"
                 />
                 <ReviewCard
-                  name="Sarah Johnson"
+                  name="Priya Sharma"
                   role="Marketing Manager"
                   rating={5}
-                  review="Tara has completely changed how I handle stress. The AI characters feel so real and supportive. I especially love the mood tracking feature!"
-                  avatar="SJ"
+                  review="Tara ne meri stress handle karne ki tarika hi badal diya. AI characters bahut real aur supportive lagte hain. Mood tracking feature toh kamaal ka hai!"
+                  avatar="PS"
                 />
                 <ReviewCard
-                  name="Michael Chen"
+                  name="Rahul Verma"
                   role="Software Developer"
                   rating={5}
-                  review="As someone who struggles with anxiety, Tara's journaling prompts have been a game-changer. The insights help me understand my patterns better."
-                  avatar="MC"
+                  review="Anxiety ke saath struggle karte hue, Tara ke journaling prompts ne meri life change kar di. Insights se mujhe apne patterns samajhne mein madad milti hai."
+                  avatar="RV"
                 />
                 <ReviewCard
-                  name="Emily Rodriguez"
+                  name="Anjali Patel"
                   role="Teacher"
                   rating={5}
-                  review="The variety of AI characters means I always find someone who understands what I'm going through. It's like having a therapist available 24/7."
-                  avatar="ER"
+                  review="AI characters ki variety se mujhe hamesha koi na koi mil jata hai jo mujhe samajhta hai. Yeh 24/7 available therapist jaisa hai!"
+                  avatar="AP"
                 />
               </div>
             </div>
@@ -530,67 +538,67 @@ export default function Home() {
             <div className="relative overflow-hidden w-full">
               <div className="flex gap-6 animate-infinite-scroll-right">
                 <ReviewCard
-                  name="David Kim"
+                  name="Vikram Singh"
                   role="Entrepreneur"
                   rating={5}
-                  review="The analytics dashboard is incredible. Seeing my emotional patterns visualized has helped me make better decisions about my mental health."
-                  avatar="DK"
+                  review="Analytics dashboard toh kamaal ka hai! Apne emotional patterns ko visualize karke mental health ke better decisions le pata hoon."
+                  avatar="VS"
                 />
                 <ReviewCard
-                  name="Lisa Thompson"
+                  name="Sneha Reddy"
                   role="Nurse"
                   rating={5}
-                  review="Working in healthcare is emotionally demanding. Tara helps me decompress and process difficult days. The privacy features give me peace of mind."
-                  avatar="LT"
+                  review="Healthcare mein kaam karna emotionally demanding hai. Tara mujhe difficult days process karne mein help karta hai. Privacy features se peace of mind milta hai."
+                  avatar="SR"
                 />
                 <ReviewCard
-                  name="Alex Martinez"
+                  name="Arjun Mehta"
                   role="Student"
                   rating={5}
-                  review="College can be overwhelming, but Tara's daily check-ins and mood tracking help me stay balanced. The AI characters are like having supportive friends."
+                  review="College overwhelming ho sakta hai, lekin Tara ke daily check-ins aur mood tracking se balanced rehta hoon. AI characters supportive friends jaise hain!"
                   avatar="AM"
                 />
                 {/* Multiple duplicates for seamless infinite loop */}
                 <ReviewCard
-                  name="David Kim"
+                  name="Vikram Singh"
                   role="Entrepreneur"
                   rating={5}
-                  review="The analytics dashboard is incredible. Seeing my emotional patterns visualized has helped me make better decisions about my mental health."
-                  avatar="DK"
+                  review="Analytics dashboard toh kamaal ka hai! Apne emotional patterns ko visualize karke mental health ke better decisions le pata hoon."
+                  avatar="VS"
                 />
                 <ReviewCard
-                  name="Lisa Thompson"
+                  name="Sneha Reddy"
                   role="Nurse"
                   rating={5}
-                  review="Working in healthcare is emotionally demanding. Tara helps me decompress and process difficult days. The privacy features give me peace of mind."
-                  avatar="LT"
+                  review="Healthcare mein kaam karna emotionally demanding hai. Tara mujhe difficult days process karne mein help karta hai. Privacy features se peace of mind milta hai."
+                  avatar="SR"
                 />
                 <ReviewCard
-                  name="Alex Martinez"
+                  name="Arjun Mehta"
                   role="Student"
                   rating={5}
-                  review="College can be overwhelming, but Tara's daily check-ins and mood tracking help me stay balanced. The AI characters are like having supportive friends."
+                  review="College overwhelming ho sakta hai, lekin Tara ke daily check-ins aur mood tracking se balanced rehta hoon. AI characters supportive friends jaise hain!"
                   avatar="AM"
                 />
                 <ReviewCard
-                  name="David Kim"
+                  name="Vikram Singh"
                   role="Entrepreneur"
                   rating={5}
-                  review="The analytics dashboard is incredible. Seeing my emotional patterns visualized has helped me make better decisions about my mental health."
-                  avatar="DK"
+                  review="Analytics dashboard toh kamaal ka hai! Apne emotional patterns ko visualize karke mental health ke better decisions le pata hoon."
+                  avatar="VS"
                 />
                 <ReviewCard
-                  name="Lisa Thompson"
+                  name="Sneha Reddy"
                   role="Nurse"
                   rating={5}
-                  review="Working in healthcare is emotionally demanding. Tara helps me decompress and process difficult days. The privacy features give me peace of mind."
-                  avatar="LT"
+                  review="Healthcare mein kaam karna emotionally demanding hai. Tara mujhe difficult days process karne mein help karta hai. Privacy features se peace of mind milta hai."
+                  avatar="SR"
                 />
                 <ReviewCard
-                  name="Alex Martinez"
+                  name="Arjun Mehta"
                   role="Student"
                   rating={5}
-                  review="College can be overwhelming, but Tara's daily check-ins and mood tracking help me stay balanced. The AI characters are like having supportive friends."
+                  review="College overwhelming ho sakta hai, lekin Tara ke daily check-ins aur mood tracking se balanced rehta hoon. AI characters supportive friends jaise hain!"
                   avatar="AM"
                 />
               </div>
@@ -694,9 +702,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Blog Section */}
-        <section className="py-20 bg-gradient-to-br from-rose-50/30 to-white">
-          <div className="mx-auto max-w-7xl px-6">
+        {/* Blog Section with Auto Slider */}
+        <section className="py-20 bg-gradient-to-br from-rose-100/30 to-rose-50/30 overflow-hidden">
+          <div className="mx-auto max-w-full px-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
                 Latest from our blog
@@ -706,29 +714,67 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-16 relative">
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                <BlogCard
-                  title="5 Daily Habits for Better Emotional Health"
-                  excerpt="Discover simple yet powerful daily practices that can significantly improve your emotional well-being and resilience."
-                  date="Nov 1, 2024"
-                  readTime="5 min read"
-                  category="Wellness Tips"
-                />
-                <BlogCard
-                  title="Understanding Your Emotional Patterns"
-                  excerpt="Learn how to identify and break negative emotional cycles using data-driven insights and mindful awareness."
-                  date="Oct 28, 2024"
-                  readTime="7 min read"
-                  category="Psychology"
-                />
-                <BlogCard
-                  title="The Science Behind AI Emotional Support"
-                  excerpt="Explore how artificial intelligence is revolutionizing mental health support and what makes it so effective."
-                  date="Oct 25, 2024"
-                  readTime="6 min read"
-                  category="Technology"
-                />
+            <div className="mt-16 relative ">
+              <div className="overflow-hidden">
+                <div className="flex gap-6 animate-blog-slider">
+                  <BlogCard
+                    title="5 Daily Habits for Better Emotional Health"
+                    excerpt="Discover simple yet powerful daily practices that can significantly improve your emotional well-being and resilience."
+                    date="Nov 1, 2024"
+                    readTime="5 min read"
+                    category="Wellness Tips"
+                  />
+                  <BlogCard
+                    title="Understanding Your Emotional Patterns"
+                    excerpt="Learn how to identify and break negative emotional cycles using data-driven insights and mindful awareness."
+                    date="Oct 28, 2024"
+                    readTime="7 min read"
+                    category="Psychology"
+                  />
+                  <BlogCard
+                    title="The Science Behind AI Emotional Support"
+                    excerpt="Explore how artificial intelligence is revolutionizing mental health support and what makes it so effective."
+                    date="Oct 25, 2024"
+                    readTime="6 min read"
+                    category="Technology"
+                  />
+                  <BlogCard
+                    title="Mindfulness Techniques for Daily Life"
+                    excerpt="Simple mindfulness practices you can incorporate into your daily routine to reduce stress and improve mental clarity."
+                    date="Oct 20, 2024"
+                    readTime="4 min read"
+                    category="Mindfulness"
+                  />
+                  {/* Duplicate for seamless loop */}
+                  <BlogCard
+                    title="5 Daily Habits for Better Emotional Health"
+                    excerpt="Discover simple yet powerful daily practices that can significantly improve your emotional well-being and resilience."
+                    date="Nov 1, 2024"
+                    readTime="5 min read"
+                    category="Wellness Tips"
+                  />
+                  <BlogCard
+                    title="Understanding Your Emotional Patterns"
+                    excerpt="Learn how to identify and break negative emotional cycles using data-driven insights and mindful awareness."
+                    date="Oct 28, 2024"
+                    readTime="7 min read"
+                    category="Psychology"
+                  />
+                  <BlogCard
+                    title="The Science Behind AI Emotional Support"
+                    excerpt="Explore how artificial intelligence is revolutionizing mental health support and what makes it so effective."
+                    date="Oct 25, 2024"
+                    readTime="6 min read"
+                    category="Technology"
+                  />
+                  <BlogCard
+                    title="Mindfulness Techniques for Daily Life"
+                    excerpt="Simple mindfulness practices you can incorporate into your daily routine to reduce stress and improve mental clarity."
+                    date="Oct 20, 2024"
+                    readTime="4 min read"
+                    category="Mindfulness"
+                  />
+                </div>
               </div>
 
               <div className="flex justify-center mt-8">
@@ -742,6 +788,29 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Blog Slider Animation CSS */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              @keyframes blog-slider {
+                0% {
+                  transform: translateX(0);
+                }
+                100% {
+                  transform: translateX(-50%);
+                }
+              }
+
+              .animate-blog-slider {
+                animation: blog-slider 40s linear infinite;
+                width: max-content;
+              }
+
+              .animate-blog-slider:hover {
+                animation-play-state: paused;
+              }
+            `
+          }} />
         </section>
 
         {/* FAQ Accordion Section */}
@@ -768,7 +837,7 @@ export default function Home() {
                       height={700}
                       className="w-full h-auto object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-rose-900/20 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-rose-300/20 to-transparent"></div>
 
                     {/* Overlay Content */}
                     <div className="absolute bottom-8 left-8 right-8">
@@ -807,33 +876,82 @@ export default function Home() {
 
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-rose-50 to-white">
-          <div className="mx-auto max-w-4xl px-6 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-              Ready to start your emotional wellness journey?
-            </h2>
-            <p className="mt-4 text-lg text-gray-600">
-              Join thousands of users who are already improving their emotional health with Tara.
-            </p>
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
-              >
-                <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
-                Continue with Google
-              </Link>
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
-              >
-                <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
-                Continue with Apple
-              </Link>
+        <section className="relative py-20 bg-gradient-to-br from-rose-100 via-rose-50 to-white overflow-hidden">
+          {/* Background decorations */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.15),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.1),transparent_50%)]"></div>
+
+          <div className="relative mx-auto max-w-5xl px-6">
+            <div className="rounded-3xl border border-rose-200 bg-white/80 backdrop-blur-sm p-12 shadow-2xl">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-6">
+                  <FontAwesomeIcon icon={faHeart} className="h-4 w-4" />
+                  Start Your Journey Today
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+                  Ready to start your emotional wellness journey?
+                </h2>
+                <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
+                  Join thousands of users who are already improving their emotional health with Tara.
+                  Begin your transformation today - it's free to start!
+                </p>
+
+                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
+                  <Link
+                    href="/login"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-10 py-5 text-lg font-semibold text-rose-700 shadow-lg hover:bg-rose-300 hover:shadow-xl transition-all transform hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
+                    Continue with Google
+                    <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
+                  >
+                    <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
+                    Continue with Apple
+                  </Link>
+                </div>
+
+                <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-500" />
+                    Free to start
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-500" />
+                    No credit card required
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-500" />
+                    Cancel anytime
+                  </div>
+                </div>
+
+                {/* Trust indicators */}
+                <div className="mt-10 pt-8 border-t border-rose-100">
+                  <div className="flex items-center justify-center gap-8 flex-wrap">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-rose-600">10K+</div>
+                      <div className="text-xs text-gray-600">Active Users</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-rose-600">4.9★</div>
+                      <div className="text-xs text-gray-600">User Rating</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-rose-600">100+</div>
+                      <div className="text-xs text-gray-600">AI Characters</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-rose-600">24/7</div>
+                      <div className="text-xs text-gray-600">Support</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <p className="mt-4 text-sm text-gray-500">
-              Free to start • No credit card required • Cancel anytime
-            </p>
           </div>
         </section>
 
@@ -854,26 +972,31 @@ export default function Home() {
                   <ContactInfo
                     icon={faEnvelope}
                     title="Email us"
-                    info="support@tara.com"
+                    info="support@tara4u.com"
                     description="We'll get back to you within 24 hours"
                   />
                   <ContactInfo
                     icon={faPhone}
                     title="Call us"
-                    info="+1 (555) 123-4567"
-                    description="Mon-Fri from 8am to 6pm PST"
+                    info="+91-9876543210"
+                    description="Mon-Fri from 9am to 6pm IST"
                   />
                   <ContactInfo
                     icon={faMapMarkerAlt}
                     title="Visit us"
-                    info="123 Wellness Street, San Francisco, CA 94102"
+                    info="Near Kalyan Jewellers, Sardarpur B Road, Jodhpur, Rajasthan 342001"
                     description="Our headquarters"
                   />
                 </div>
               </div>
 
               <div className="rounded-2xl border border-rose-100 bg-white p-8 shadow-lg">
-                <form className="space-y-6">
+                <form
+                  action="mailto:harshit.geekologix@gmail.com"
+                  method="POST"
+                  encType="text/plain"
+                  className="space-y-6"
+                >
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div>
                       <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
@@ -882,8 +1005,10 @@ export default function Home() {
                       <input
                         type="text"
                         id="firstName"
+                        name="firstName"
                         className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                         placeholder="John"
+                        required
                       />
                     </div>
                     <div>
@@ -893,8 +1018,10 @@ export default function Home() {
                       <input
                         type="text"
                         id="lastName"
+                        name="lastName"
                         className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                         placeholder="Doe"
+                        required
                       />
                     </div>
                   </div>
@@ -906,8 +1033,10 @@ export default function Home() {
                     <input
                       type="email"
                       id="email"
+                      name="email"
                       className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                       placeholder="john@example.com"
+                      required
                     />
                   </div>
 
@@ -918,8 +1047,10 @@ export default function Home() {
                     <input
                       type="text"
                       id="subject"
+                      name="subject"
                       className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                       placeholder="How can we help?"
+                      required
                     />
                   </div>
 
@@ -929,9 +1060,11 @@ export default function Home() {
                     </label>
                     <textarea
                       id="message"
+                      name="message"
                       rows={4}
                       className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                       placeholder="Tell us more about your question or feedback..."
+                      required
                     />
                   </div>
 
@@ -1214,7 +1347,7 @@ function BenefitItem({ icon, title, description }) {
 
 function BlogCard({ title, excerpt, date, readTime, category }) {
   return (
-    <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+    <div className="flex-shrink-0 w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
       <div className="flex items-center gap-2 mb-4">
         <span className="inline-flex items-center rounded-full bg-rose-200 px-3 py-1 text-xs font-medium text-rose-700">
           {category}

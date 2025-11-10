@@ -20,10 +20,17 @@ export async function POST(request) {
         const client = await clientPromise;
         const db = client.db('Cluster0');
         const collection = db.collection('tara_chats');
+        const usersCollection = db.collection('users');
 
         // Get user's chat history with TARA
         const userChat = await collection.findOne({ userId: userId });
         const chatHistory = userChat?.messages || [];
+
+        // Get user's latest mood from users collection
+        const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
+        const latestMood = user?.moods && user.moods.length > 0
+            ? user.moods[user.moods.length - 1]
+            : null;
 
         // Add user's new message to history
         const userMessage = {
@@ -33,11 +40,33 @@ export async function POST(request) {
             timestamp: new Date()
         };
 
+        // Create mood-aware system prompt
+        let systemPrompt = `You are TARA (Talk, Align, Reflect, Act), a compassionate AI mental wellness companion. You provide emotional support, mindfulness guidance, and mental health resources. Keep responses warm, empathetic, and helpful. Remember the conversation context and provide personalized responses based on the user's previous messages.`;
+
+        // Add mood context if available and this is the first message
+        if (latestMood && chatHistory.length === 0) {
+            const moodContext = {
+                'happy': `The user is feeling happy and positive. Start with an uplifting greeting that acknowledges their good mood and encourages them to share what's making them feel great.`,
+                'sad': `The user is feeling sad. Start with a gentle, empathetic greeting that shows you understand they're going through a difficult time and you're here to listen without judgment.`,
+                'anxious': `The user is feeling anxious. Start with a calming, reassuring greeting that acknowledges their anxiety and offers support. Let them know it's okay to feel this way.`,
+                'angry': `The user is feeling angry. Start with a validating greeting that acknowledges their feelings are valid and you're here to help them process these emotions constructively.`,
+                'stressed': `The user is feeling stressed. Start with a supportive greeting that recognizes their stress and offers to help them find ways to manage it.`,
+                'calm': `The user is feeling calm. Start with a peaceful greeting that honors their state of tranquility and encourages them to share what's on their mind.`,
+                'excited': `The user is feeling excited. Start with an enthusiastic greeting that matches their energy and invites them to share what's exciting them.`,
+                'tired': `The user is feeling tired. Start with a gentle, understanding greeting that acknowledges their fatigue and offers support.`,
+                'confused': `The user is feeling confused. Start with a clear, supportive greeting that offers to help them work through their confusion.`,
+                'grateful': `The user is feeling grateful. Start with a warm greeting that celebrates their gratitude and invites them to share what they're thankful for.`
+            };
+
+            const moodPrompt = moodContext[latestMood.mood] || moodContext['calm'];
+            systemPrompt += ` IMPORTANT: This is the user's first message. ${moodPrompt} Keep your greeting brief, warm, and inviting (2-3 sentences max).`;
+        }
+
         // Prepare messages for Grok API (include chat history for context)
         const groqMessages = [
             {
                 role: 'system',
-                content: `You are TARA, a compassionate AI mental wellness companion. You provide emotional support, mindfulness guidance, and mental health resources. Keep responses warm, empathetic, and helpful. Remember the conversation context and provide personalized responses based on the user's previous messages.`
+                content: systemPrompt
             },
             // Include recent chat history for context (last 10 messages)
             ...chatHistory.slice(-10).map(msg => ({

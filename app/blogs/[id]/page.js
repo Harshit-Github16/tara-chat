@@ -381,8 +381,12 @@ export default function BlogPostPage() {
                 {/* Article */}
                 <article className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden mb-8">
                     {/* Hero Image */}
-                    <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative">
-                        <FontAwesomeIcon icon={faNewspaper} className="h-20 w-20 text-rose-400" />
+                    <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
+                        <img
+                            src="/blog1.png"
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                        />
                         {post.trending && (
                             <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1">
                                 🔥 Trending

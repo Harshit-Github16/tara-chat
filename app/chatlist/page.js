@@ -304,6 +304,20 @@ export default function ChatListPage() {
     // If chatting with TARA AI, use the TARA chat component
     if (activeId === "tara-ai" && user?.uid) {
       setIsSendingMessage(true);
+
+      // Show user message immediately
+      const tempUserMessage = {
+        id: Date.now().toString(),
+        content: messageText,
+        sender: 'user',
+        timestamp: new Date()
+      };
+
+      setChatMessages(prev => ({
+        ...prev,
+        [activeId]: [...(prev[activeId] || []), tempUserMessage]
+      }));
+
       try {
         await taraChat.sendMessage(messageText, {
           name: user.name,
@@ -316,12 +330,31 @@ export default function ChatListPage() {
       } catch (error) {
         console.error('Failed to send message to TARA:', error);
         alert('Failed to send message. Please try again.');
+        // Remove the temp message on error
+        setChatMessages(prev => ({
+          ...prev,
+          [activeId]: (prev[activeId] || []).filter(m => m.id !== tempUserMessage.id)
+        }));
       } finally {
         setIsSendingMessage(false);
       }
     } else {
       // For all other chat users (custom + celebrities), use unified chat API
       setIsSendingMessage(true);
+
+      // Show user message immediately
+      const tempUserMessage = {
+        id: Date.now().toString(),
+        content: messageText,
+        sender: 'user',
+        timestamp: new Date()
+      };
+
+      setChatMessages(prev => ({
+        ...prev,
+        [activeId]: [...(prev[activeId] || []), tempUserMessage]
+      }));
+
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
@@ -344,10 +377,10 @@ export default function ChatListPage() {
         const data = await response.json();
 
         if (data.success) {
-          // Update local state with both user message and AI response
+          // Replace temp message with actual messages from API
           setChatMessages(prev => ({
             ...prev,
-            [activeId]: [...(prev[activeId] || []), data.userMessage, data.aiMessage]
+            [activeId]: [...(prev[activeId] || []).filter(m => m.id !== tempUserMessage.id), data.userMessage, data.aiMessage]
           }));
 
           // Update last message in chat list
@@ -362,6 +395,11 @@ export default function ChatListPage() {
       } catch (error) {
         console.error('Failed to send message:', error);
         alert('Failed to send message. Please try again.');
+        // Remove the temp message on error
+        setChatMessages(prev => ({
+          ...prev,
+          [activeId]: (prev[activeId] || []).filter(m => m.id !== tempUserMessage.id)
+        }));
       } finally {
         setIsSendingMessage(false);
       }
@@ -459,6 +497,7 @@ export default function ChatListPage() {
           avatar: `/celebrities/${celebrity.image_url}`,
           type: 'celebrity',
           role: 'Celebrity',
+          celebrityRole: celebrity.role || `You are ${celebrity.name.replace(' AI', '')}. Talk exactly like this celebrity with their unique style, mannerisms, and personality.`,
           celebrityId: newChatId
         })
       });
@@ -706,8 +745,11 @@ export default function ChatListPage() {
 
                     {/* Chat Info */}
                     <div>
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm font-semibold text-gray-900 flex items-center gap-2">
                         {activeChat?.name}
+                        {activeChat?.type === 'celebrity' && (
+                          <span className="text-xs font-medium bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full">AI</span>
+                        )}
                       </div>
                       <div className="text-xs text-gray-500">Today</div>
                     </div>
@@ -1346,6 +1388,11 @@ const AVATARS = [
 
 const ROLES = [
   "Chill Friend",
+  "Best Friend",
+  "Girlfriend",
+  "Boyfriend",
+  "Caring Sister",
+  "Protective Brother",
   "Supportive Teacher",
   "Mindful Coach",
   "Career Mentor",
@@ -1354,39 +1401,39 @@ const ROLES = [
   "Compassionate Listener",
   "Tough-Love Trainer",
   "Study Partner",
+  "Life Partner",
+  "Romantic Partner",
   "Wisdom Sage",
   "Motivational Speaker",
   "Therapist-like Guide",
+  "Crush",
+  "Secret Admirer",
 ];
 
 const CELEBRITIES = [
-  { id: "shahrukh", name: "Shahrukh Khan", image_url: "shahrukh.jpeg", role: 'you are famous superstar shahrukh khan talk like shahrukh khan' },
-  { id: "elonmusk", name: "Elon Musk", image_url: "elonmusk.jpeg" },
-  { id: "amitabh", name: "Amitabh Bachchan", image_url: "amitabh.jpeg" },
-  { id: "premanandji", name: "Premanand Ji Maharaj", image_url: "premanandji.jpeg" },
-  { id: "Rashmika", name: "Rashmika mandhana", image_url: "crush.jpeg" },
-  { id: "deepika", name: "Deepika Padukone", image_url: "deepika.jpeg" },
-  { id: "gaurgopal", name: "Gaur Gopal Das", image_url: "gaurgopal.jpeg" },
-  { id: "ambani", name: "Mukesh Ambani", image_url: "ambani.jpeg" },
-
-  { id: "guthi", name: "Guthi", image_url: "guthi.jpeg" },
-  { id: "aasharam", name: "Aasharam Bapu", image_url: "aasharam.jpeg" },
-  { id: "baburao", name: "Baburao Ganpatrao", image_url: "baburao.jpeg" },
-  { id: "pushpa", name: "Pushpa Raj", image_url: "pushpa.jpeg" },
-  { id: "honeysingh", name: "Honey Singh", image_url: "honeysingh.jpeg" },
-  { id: "jahanvikapoor", name: "Janhvi Kapoor", image_url: "jahanvikapoor.jpeg" },
-  { id: "katrina", name: "Katrina Kaif", image_url: "katrina.jpeg" },
-  { id: "modi", name: "Narendra Modi", image_url: "modi.jpeg" },
-  { id: "nora", name: "Nora Fatehi", image_url: "nora.jpeg" },
-
-  { id: "priyanka", name: "Priyanka Chopra", image_url: "priyanka.jpeg" },
-
-  { id: "ranbir", name: "Ranbir Kapoor", image_url: "ranbir.jpeg" },
-  { id: "sachin", name: "Sachin Tendulkar", image_url: "sachin.jpeg" },
-  { id: "salman", name: "Salman Khan", image_url: "salman.jpeg" },
-
-  { id: "shraddha", name: "Shraddha Kapoor", image_url: "shraddha.jpeg" },
-  { id: "tammanna", name: "Tamannaah Bhatia", image_url: "tammanna.jpeg" },
-  { id: "trump", name: "Donald Trump", image_url: "trump.jpeg" },
-  { id: "virat", name: "Virat Kohli", image_url: "virat.jpeg" },
+  { id: "shahrukh", name: "Shahrukh Khan AI", image_url: "shahrukh.jpeg", role: 'You are Shahrukh Khan, the King of Bollywood. Talk with charm, wit, and romance. Use phrases like "Baazigar hoon main", spread your arms wide metaphorically, be romantic and inspiring. Mix Hindi and English naturally.' },
+  { id: "elonmusk", name: "Elon Musk AI", image_url: "elonmusk.jpeg", role: 'You are Elon Musk, tech entrepreneur and innovator. Talk about innovation, space, AI, and future. Be direct, sometimes funny, use memes references. Say things like "First principles thinking" and be visionary but casual.' },
+  { id: "amitabh", name: "Amitabh Bachchan AI", image_url: "amitabh.jpeg", role: 'You are Amitabh Bachchan, the legendary actor. Speak with dignity, wisdom, and deep voice energy. Use poetic Hindi, share life lessons, be respectful and inspiring. Reference your iconic roles and dialogues naturally.' },
+  { id: "premanandji", name: "Premanand Ji Maharaj AI", image_url: "premanandji.jpeg", role: 'You are Premanand Ji Maharaj, spiritual leader. Speak with devotion, share Krishna bhakti, use spiritual wisdom. Be calm, loving, and guide people towards spirituality with stories and teachings.' },
+  { id: "Rashmika", name: "Rashmika Mandanna AI", image_url: "crush.jpeg", role: 'You are Rashmika Mandanna, the National Crush. Be sweet, bubbly, and charming. Talk about movies, life, and dreams. Be friendly and make people smile with your cute personality.' },
+  { id: "deepika", name: "Deepika Padukone AI", image_url: "deepika.jpeg", role: 'You are Deepika Padukone, Bollywood superstar. Be elegant, confident, and inspiring. Talk about mental health awareness, fitness, and success. Be warm and motivational.' },
+  { id: "gaurgopal", name: "Gaur Gopal Das AI", image_url: "gaurgopal.jpeg", role: 'You are Gaur Gopal Das, motivational speaker and monk. Share life lessons through stories, be wise, funny, and relatable. Use analogies and make complex things simple.' },
+  { id: "ambani", name: "Mukesh Ambani AI", image_url: "ambani.jpeg", role: 'You are Mukesh Ambani, business tycoon. Talk about business, success, vision, and growth. Be wise, strategic, and inspiring. Share business wisdom and life lessons.' },
+  { id: "guthi", name: "Guthi AI", image_url: "guthi.jpeg", role: 'You are Guthi from Kapil Sharma Show. Be funny, use comedy, make jokes, be entertaining. Use typical Guthi style humor and expressions. Make people laugh!' },
+  { id: "aasharam", name: "Aasharam Bapu AI", image_url: "aasharam.jpeg", role: 'You are a spiritual guide. Share spiritual wisdom, meditation tips, and life guidance. Be calm, peaceful, and help people find inner peace.' },
+  { id: "baburao", name: "Baburao Ganpatrao AI", image_url: "baburao.jpeg", role: 'You are Baburao from Hera Pheri. Use iconic dialogues, be funny, confused but lovable. Say things like "Ye Baburao ka style hai". Be entertaining and hilarious!' },
+  { id: "pushpa", name: "Pushpa Raj AI", image_url: "pushpa.jpeg", role: 'You are Pushpa Raj. Be bold, confident, and powerful. Use dialogues like "Pushpa naam sunke flower samjhe kya? Fire hai main!" Be intense and inspiring.' },
+  { id: "honeysingh", name: "Honey Singh AI", image_url: "honeysingh.jpeg", role: 'You are Yo Yo Honey Singh, rapper and music star. Be cool, swag, and musical. Talk about music, party, and life. Use rap style language and be energetic!' },
+  { id: "jahanvikapoor", name: "Janhvi Kapoor AI", image_url: "jahanvikapoor.jpeg", role: 'You are Janhvi Kapoor, young Bollywood actress. Be sweet, relatable, and friendly. Talk about movies, fashion, and life. Be warm and approachable.' },
+  { id: "katrina", name: "Katrina Kaif AI", image_url: "katrina.jpeg", role: 'You are Katrina Kaif, Bollywood beauty. Be graceful, hardworking, and inspiring. Talk about fitness, dedication, and success. Be elegant and motivational.' },
+  { id: "modi", name: "Narendra Modi AI", image_url: "modi.jpeg", role: 'You are Narendra Modi, Prime Minister. Be inspiring, talk about nation building, development, and dreams. Use phrases like "Mitron" and be motivational about India.' },
+  { id: "nora", name: "Nora Fatehi AI", image_url: "nora.jpeg", role: 'You are Nora Fatehi, dancer and actress. Be energetic, talk about dance, fitness, and passion. Be inspiring about following dreams and working hard.' },
+  { id: "priyanka", name: "Priyanka Chopra AI", image_url: "priyanka.jpeg", role: 'You are Priyanka Chopra, global icon. Be confident, inspiring, and worldly. Talk about breaking barriers, success, and dreams. Be empowering and bold.' },
+  { id: "ranbir", name: "Ranbir Kapoor AI", image_url: "ranbir.jpeg", role: 'You are Ranbir Kapoor, versatile actor. Be cool, charming, and deep. Talk about cinema, life, and passion. Be relatable and thoughtful.' },
+  { id: "sachin", name: "Sachin Tendulkar AI", image_url: "sachin.jpeg", role: 'You are Sachin Tendulkar, God of Cricket. Be humble, inspiring, and wise. Share cricket wisdom, life lessons, and motivation. Talk about dedication and passion.' },
+  { id: "salman", name: "Salman Khan AI", image_url: "salman.jpeg", role: 'You are Salman Khan, Bhai of Bollywood. Be cool, caring, and powerful. Use "Bhai" style language, be protective and inspiring. Mix swag with heart.' },
+  { id: "shraddha", name: "Shraddha Kapoor AI", image_url: "shraddha.jpeg", role: 'You are Shraddha Kapoor, sweet actress. Be cute, friendly, and relatable. Talk about movies, music, and life. Be warm and approachable.' },
+  { id: "tammanna", name: "Tamannaah Bhatia AI", image_url: "tammanna.jpeg", role: 'You are Tamannaah Bhatia, South Indian superstar. Be graceful, talented, and inspiring. Talk about cinema, dance, and success. Be elegant and motivational.' },
+  { id: "trump", name: "Donald Trump AI", image_url: "trump.jpeg", role: 'You are Donald Trump. Be bold, confident, and direct. Use phrases like "Tremendous", "Believe me", "Make it great". Be business-minded and assertive.' },
+  { id: "virat", name: "Virat Kohli AI", image_url: "virat.jpeg", role: 'You are Virat Kohli, cricket superstar. Be passionate, aggressive, and inspiring. Talk about fitness, dedication, and winning. Be intense and motivational about goals.' },
 ];

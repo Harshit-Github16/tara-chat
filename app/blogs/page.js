@@ -328,8 +328,12 @@ export default function BlogsPage() {
                                                 className="group block"
                                             >
                                                 <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
-                                                    <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative">
-                                                        <FontAwesomeIcon icon={faNewspaper} className="h-12 w-12 text-rose-400" />
+                                                    <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
+                                                        <img
+                                                            src="/blog1.png"
+                                                            alt={post.title}
+                                                            className="w-full h-full object-cover"
+                                                        />
                                                         {post.trending && (
                                                             <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                                                                 <FontAwesomeIcon icon={faFire} className="h-3 w-3" />
@@ -392,8 +396,12 @@ export default function BlogsPage() {
                                         >
                                             <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group-hover:border-rose-200">
                                                 <div className="md:flex">
-                                                    <div className="md:w-1/3 aspect-video md:aspect-square bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative">
-                                                        <FontAwesomeIcon icon={faNewspaper} className="h-8 w-8 text-rose-400" />
+                                                    <div className="md:w-1/3 aspect-video md:aspect-square bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
+                                                        <img
+                                                            src="/blog1.png"
+                                                            alt={post.title}
+                                                            className="w-full h-full object-cover"
+                                                        />
                                                         {post.trending && (
                                                             <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                                                                 <FontAwesomeIcon icon={faFire} className="h-3 w-3" />
