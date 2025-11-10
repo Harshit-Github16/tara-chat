@@ -520,7 +520,7 @@ export default function ProfilePage() {
                     <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
                     <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
                     <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
-                    <MobileNavLink href="#" icon={faBullseye} label="Goals" disabled />
+                    <MobileNavLink href="/goals" icon={faBullseye} label="Goals" />
                 </div>
             </nav>
         </div>

@@ -135,7 +135,7 @@ export default function JournalPage() {
             <BottomNavLink href="/chatlist" icon={faComments} label="Chats" />
             <BottomNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
             <BottomNavLink href="/insights" icon={faChartLine} label="Insights" />
-            <BottomNavLink href="#" icon={faBullseye} label="Goals" disabled />
+            <BottomNavLink href="/goals" icon={faBullseye} label="Goals" />
           </div>
         </nav>
 
