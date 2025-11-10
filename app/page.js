@@ -132,7 +132,7 @@ export default function Home() {
                 </div> */}
                 <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
                   Talk
-                  <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Heel </span>
+                  <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Heal </span>
                   Grow
                 </h1>
                 <h2 className="text-2xl font-semibold ">
