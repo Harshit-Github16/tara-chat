@@ -8,27 +8,28 @@ import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import {
   faFaceSmile,
-  faHeart,
-  faLeaf,
-  faBolt,
-  faFaceFrown,
-  faSun,
-  faStar,
-  faBrain,
+  faFaceGrinStars,
+  faFaceGrinHearts,
+  faFaceMeh,
+  faFaceTired,
+  faFaceDizzy,
+  faFaceFrownOpen,
+  faFaceSadTear,
+  faFaceAngry,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
 const MOODS = [
-  { key: "happy", label: "Happy", icon: faFaceSmile, color: "bg-rose-50 text-rose-700 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "grateful", label: "Grateful", icon: faHeart, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "calm", label: "Calm", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "excited", label: "Excited", icon: faBolt, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "calm", label: "Peaceful", icon: faLeaf, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "sad", label: "Sad", icon: faFaceFrown, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "anxious", label: "Anxious", icon: faBrain, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "stressed", label: "Stressed", icon: faStar, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
-  { key: "tired", label: "Tired", icon: faBrain, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
-  { key: "confused", label: "Confused", icon: faBrain, color: "bg-rose-100 text-rose-700 border-rose-200", gradient: "from-rose-200 to-rose-100" },
+  { key: "happy", label: "Happy", icon: faFaceSmile, color: "bg-yellow-50 text-yellow-600 border-yellow-200", gradient: "from-yellow-100 to-yellow-50" },
+  { key: "excited", label: "Excited", icon: faFaceGrinStars, color: "bg-orange-50 text-orange-600 border-orange-200", gradient: "from-orange-100 to-orange-50" },
+  { key: "grateful", label: "Grateful", icon: faFaceGrinHearts, color: "bg-pink-50 text-pink-600 border-pink-200", gradient: "from-pink-100 to-pink-50" },
+  { key: "calm", label: "Calm", icon: faFaceMeh, color: "bg-green-50 text-green-600 border-green-200", gradient: "from-green-100 to-green-50" },
+  { key: "tired", label: "Tired", icon: faFaceTired, color: "bg-gray-50 text-gray-600 border-gray-200", gradient: "from-gray-100 to-gray-50" },
+  { key: "confused", label: "Confused", icon: faFaceDizzy, color: "bg-purple-50 text-purple-600 border-purple-200", gradient: "from-purple-100 to-purple-50" },
+  { key: "stressed", label: "Stressed", icon: faFaceFrownOpen, color: "bg-red-50 text-red-600 border-red-200", gradient: "from-red-100 to-red-50" },
+  { key: "anxious", label: "Anxious", icon: faFaceFrownOpen, color: "bg-indigo-50 text-indigo-600 border-indigo-200", gradient: "from-indigo-100 to-indigo-50" },
+  { key: "sad", label: "Sad", icon: faFaceSadTear, color: "bg-blue-50 text-blue-600 border-blue-200", gradient: "from-blue-100 to-blue-50" },
+  { key: "angry", label: "Angry", icon: faFaceAngry, color: "bg-rose-50 text-rose-600 border-rose-200", gradient: "from-rose-100 to-rose-50" },
 ];
 
 const FACE_EMOJIS = [
@@ -197,7 +198,7 @@ function WelcomePageContent() {
 
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome back{user?.name ? `, ${user.nickname || user.name.split(' ')[0]}` : ''}! How are you feeling today?
+              Welcome{user?.name ? `, ${user.nickname || user.name.split(' ')[0]}` : ''}! How are you feeling today?
             </h1>
             <p className="text-sm text-gray-600">
               Your mood helps us personalize your experience
@@ -215,13 +216,13 @@ function WelcomePageContent() {
                   }`}
               >
                 <div className="flex flex-col items-center gap-2">
-                  <div className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all ${selected === m.key
-                    ? 'bg-white/90 text-rose-600'
-                    : 'bg-rose-50 text-rose-500 group-hover:bg-rose-100'
+                  <div className={`h-12 w-12 rounded-full flex items-center justify-center transition-all ${selected === m.key
+                    ? `${m.color} scale-110 shadow-lg`
+                    : `${m.color} group-hover:scale-105`
                     }`}>
-                    <FontAwesomeIcon icon={m.icon} className="h-3 w-3" />
+                    <FontAwesomeIcon icon={m.icon} className="h-6 w-6" />
                   </div>
-                  <span className={selected === m.key ? 'text-rose-700' : 'text-gray-700'}>
+                  <span className={`text-xs font-medium ${selected === m.key ? 'text-gray-900 font-semibold' : 'text-gray-600'}`}>
                     {m.label}
                   </span>
                 </div>

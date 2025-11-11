@@ -188,7 +188,7 @@ export default function LoginPage() {
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-rose-100 p-8 shadow-2xl animate-slide-up">
 
           {/* Stats Section */}
-          <div className="grid grid-cols-3 gap-4 mb-8 p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl">
+          <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl">
             <div className="text-center animate-count-up-1">
               <div className="text-2xl font-bold text-rose-600">10K+</div>
               <div className="text-xs text-gray-600">Users</div>
@@ -204,20 +204,7 @@ export default function LoginPage() {
           </div>
 
           {/* Features - 3 cards in one row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-1 text-center hover:bg-rose-100 transition-colors">
-              <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-500" />
-              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">24/7 Emotional Support</span>
-            </div>
-            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-2 text-center hover:bg-rose-100 transition-colors">
-              <FontAwesomeIcon icon={faUserFriends} className="h-6 w-6 text-rose-500" />
-              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Chat with AI Characters</span>
-            </div>
-            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-3 text-center hover:bg-rose-100 transition-colors">
-              <FontAwesomeIcon icon={faShield} className="h-6 w-6 text-rose-500" />
-              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Complete Privacy & Security</span>
-            </div>
-          </div>
+
 
           {/* Error Message */}
           <ClientOnly>
@@ -234,10 +221,10 @@ export default function LoginPage() {
           <button
             onClick={handleGoogle}
             disabled={loading}
-            className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 border-2 border-rose-500 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:from-rose-600 hover:to-pink-700 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed animate-button-appear"
+            className="btn-shine w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 border-2 border-rose-500 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:from-rose-600 hover:to-pink-700 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed animate-button-appear"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="relative flex items-center justify-center gap-3">
+            <div className="relative flex items-center justify-center gap-3 ">
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -254,6 +241,21 @@ export default function LoginPage() {
               )}
             </div>
           </button>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-1 text-center hover:bg-rose-100 transition-colors">
+              <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">24/7 Emotional Support</span>
+            </div>
+            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-2 text-center hover:bg-rose-100 transition-colors">
+              <FontAwesomeIcon icon={faUserFriends} className="h-6 w-6 text-rose-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Chat with AI Characters</span>
+            </div>
+            <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl animate-slide-in-3 text-center hover:bg-rose-100 transition-colors">
+              <FontAwesomeIcon icon={faShield} className="h-6 w-6 text-rose-500" />
+              <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Complete Privacy & Security</span>
+            </div>
+          </div>
 
           {/* Security Cards - 2 cards in one row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">

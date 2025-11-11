@@ -727,7 +727,7 @@ export default function ChatListPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex h-[calc(100vh-140px)] flex-col border border-rose-100 bg-white shadow-sm">
+              <div className="flex h-[calc(100vh-70px)] flex-col border border-rose-100 bg-white shadow-sm">
                 <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
                   <div className="flex items-center gap-3">
                     {/* Active Chat Avatar */}
@@ -854,7 +854,7 @@ export default function ChatListPage() {
                 {/* Suggested Messages */}
                 {messages.length <= 3 && (
                   <div className=" p-3 ">
-
+                    {/* 
                     <div className="flex flex-wrap gap-2">
                       {SUGGESTED_MESSAGES.slice(0, 3).map((suggestion, index) => (
                         <button
@@ -865,7 +865,7 @@ export default function ChatListPage() {
                           {suggestion}
                         </button>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                 )}
 

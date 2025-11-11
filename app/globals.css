@@ -213,3 +213,34 @@ imation delays for crackers */
 .animate-cracker-fall {
   animation: cracker-fall 3s ease-out forwards;
 }
+
+/* Shine animation for buttons */
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
+  animation: shine 3s infinite;
+  pointer-events: none;
+}

@@ -169,9 +169,10 @@ export default function InsightsPage() {
                         />
                         <StatCard
                             icon={faHeart}
-                            title="Avg Mood"
-                            value={loading ? "..." : moodData.length > 0 ? `${avgMood}/10` : "No data"}
+                            title="Emotional Insights"
+                            value="--"
                             color="bg-rose-50 text-rose-600"
+                            disabled
                         />
                         <StatCard
                             icon={faClock}

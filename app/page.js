@@ -110,7 +110,7 @@ export default function Home() {
             </Link> */}
             <Link
               href="/login"
-              className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
+              className="btn-shine rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
             >
               Get Started
             </Link>
@@ -147,23 +147,23 @@ export default function Home() {
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
                   <Link
                     href="/login"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
+                    className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
                   >Get Started
                     <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
-                  <Link
+                  {/* <Link
                     href="#demo"
                     className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
                   >
                     <FontAwesomeIcon icon={faPlay} className="h-4 w-4" />
                     Watch Demo
-                  </Link>
+                  </Link> */}
                 </div>
 
               </div>
 
               <div className="relative">
-                <div className="relative rounded-3xl border border-rose-100 bg-white p-8 shadow-2xl">
+                <div className="relative rounded-3xl border border-rose-100 bg-white p-6 sm:p-8 shadow-2xl w-full max-w-full lg:min-w-[500px]">
                   <div className="grid grid-cols-2 gap-4">
                     <FeaturePreview icon={faComments} title="Emotional Chat" desc="Express & reflect" />
                     <FeaturePreview icon={faBookOpen} title="Smart Journaling" desc="Guided insights" />
@@ -179,18 +179,18 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500 lg:justify-start">
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                      Free to start
+                  <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500 lg:justify-start">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
+                      <span className="whitespace-nowrap">Free to start</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                      No credit card required
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
+                      <span className="whitespace-nowrap">End-to-End Encryption</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                      Privacy focused
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
+                      <span className="whitespace-nowrap">Non-Judgmental Support</span>
                     </div>
                   </div>
                 </div>
@@ -848,7 +848,7 @@ export default function Home() {
                         </p>
                         <Link
                           href="#contact"
-                          className="inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
+                          className=" btn-shine inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
                         >
                           Contact Support
                           <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3" />
@@ -897,7 +897,7 @@ export default function Home() {
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
                   <Link
                     href="/login"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-10 py-5 text-lg font-semibold text-rose-700 shadow-lg hover:bg-rose-300 hover:shadow-xl transition-all transform hover:scale-105"
+                    className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-10 py-5 text-lg font-semibold text-rose-700 shadow-lg hover:bg-rose-300 hover:shadow-xl transition-all transform hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
                     Continue with Google
@@ -905,7 +905,7 @@ export default function Home() {
                   </Link>
                   <Link
                     href="/login"
-                    className="group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
+                    className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
                     Continue with Apple
@@ -919,7 +919,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-500" />
-                    No credit card required
+                    End-to-End Encryption
                   </div>
                   <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-green-500" />
@@ -976,7 +976,7 @@ export default function Home() {
                   <ContactInfo
                     icon={faPhone}
                     title="Call us"
-                    info="+91-9876543210"
+                    info="+91-7220007999"
                     description="Mon-Fri from 9am to 6pm IST"
                   />
                   <ContactInfo
@@ -1068,7 +1068,7 @@ export default function Home() {
 
                   <button
                     type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-rose-200 px-6 py-3 text-base font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
+                    className=" btn-shine w-full inline-flex items-center justify-center gap-2 rounded-lg bg-rose-200 px-6 py-3 text-base font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
                   >
                     <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4" />
                     Send Message
