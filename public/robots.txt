@@ -1,22 +1,29 @@
+# robots.txt for tara4u.com
+
 User-agent: *
 Allow: /
-
-# Main pages
-Allow: /
-Allow: /blogs
-Allow: /chatlist
-Allow: /insights
-Allow: /journal
-Allow: /profile
-Allow: /welcome
-
-# Disallow private/auth pages
-Disallow: /login
-Disallow: /onboarding
 Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /profile
+Disallow: /onboarding
 
 # Sitemap
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://tara4u.com/sitemap.xml
 
-# Crawl delay
+# Crawl-delay for specific bots
+User-agent: Googlebot
+Crawl-delay: 0
+
+User-agent: Bingbot
 Crawl-delay: 1
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

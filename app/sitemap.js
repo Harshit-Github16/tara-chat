@@ -1,76 +1,40 @@
-import { SEO_CONFIG } from './lib/seo-config';
+import clientPromise from '../lib/mongodb';
 
-export default function sitemap() {
-    const baseUrl = SEO_CONFIG.site.url;
-    const currentDate = new Date().toISOString();
+export default async function sitemap() {
+    const baseUrl = 'https://tara4u.com';
 
     // Static pages
-    const staticPages = [
-        {
-            url: baseUrl,
-            lastModified: currentDate,
-            changeFrequency: 'daily',
-            priority: 1.0,
-        },
-        {
-            url: `${baseUrl}/chatlist`,
-            lastModified: currentDate,
-            changeFrequency: 'weekly',
-            priority: 0.9,
-        },
-        {
-            url: `${baseUrl}/blogs`,
-            lastModified: currentDate,
-            changeFrequency: 'daily',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/insights`,
-            lastModified: currentDate,
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/journal`,
-            lastModified: currentDate,
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/profile`,
-            lastModified: currentDate,
-            changeFrequency: 'monthly',
-            priority: 0.6,
-        },
-        {
-            url: `${baseUrl}/welcome`,
-            lastModified: currentDate,
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-    ];
+    const routes = [
+        '',
+        '/blogs',
+        '/login',
+        '/signup',
+    ].map((route) => ({
+        url: `${baseUrl}${route}`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: route === '/blogs' ? 'daily' : 'weekly',
+        priority: route === '' ? 1.0 : 0.8,
+    }));
 
-    // Blog posts (you can dynamically generate these from your blog data)
-    const blogPosts = [
-        {
-            url: `${baseUrl}/blogs/5-daily-habits-emotional-health`,
-            lastModified: '2024-11-01',
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/blogs/understanding-emotional-patterns`,
-            lastModified: '2024-10-28',
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-        {
-            url: `${baseUrl}/blogs/ai-emotional-support-science`,
-            lastModified: '2024-10-25',
-            changeFrequency: 'monthly',
-            priority: 0.7,
-        },
-    ];
+    // Dynamic blog pages
+    try {
+        const client = await clientPromise;
+        const db = client.db('tara');
+        const blogs = await db.collection('blogs')
+            .find({})
+            .project({ slug: 1, createdAt: 1 })
+            .toArray();
 
-    return [...staticPages, ...blogPosts];
+        const blogRoutes = blogs.map((blog) => ({
+            url: `${baseUrl}/blogs/${blog.slug}`,
+            lastModified: blog.createdAt || new Date().toISOString(),
+            changeFrequency: 'weekly',
+            priority: 0.7,
+        }));
+
+        return [...routes, ...blogRoutes];
+    } catch (error) {
+        console.error('Sitemap generation error:', error);
+        return routes;
+    }
 }

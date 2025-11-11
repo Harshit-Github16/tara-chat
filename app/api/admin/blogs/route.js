@@ -1,0 +1,166 @@
+import { NextResponse } from 'next/server';
+import clientPromise from '../../../../lib/mongodb';
+
+// GET - Fetch all blogs
+export async function GET(request) {
+    try {
+        const client = await clientPromise;
+        const db = client.db('tara');
+
+        const blogs = await db.collection('blogs')
+            .find({})
+            .sort({ publishDate: -1 })
+            .toArray();
+
+        return NextResponse.json({
+            success: true,
+            data: blogs
+        });
+    } catch (error) {
+        console.error('Fetch blogs error:', error);
+        return NextResponse.json(
+            { success: false, message: 'Failed to fetch blogs' },
+            { status: 500 }
+        );
+    }
+}
+
+// POST - Create new blog
+export async function POST(request) {
+    try {
+        const body = await request.json();
+        const {
+            title,
+            slug: userSlug,
+            excerpt,
+            content,
+            author,
+            authorBio,
+            category,
+            tags,
+            featured,
+            trending
+        } = body;
+
+        if (!title || !excerpt || !content || !author) {
+            return NextResponse.json(
+                { success: false, message: 'Missing required fields' },
+                { status: 400 }
+            );
+        }
+
+        const client = await clientPromise;
+        const db = client.db('tara');
+
+        // Use user-provided slug or generate from title
+        let baseSlug = userSlug ? userSlug.toLowerCase().replace(/[^a-z0-9-]/g, '').substring(0, 30) : generateSlug(title);
+        let slug = baseSlug;
+        let counter = 1;
+
+        // Check if slug already exists
+        while (await db.collection('blogs').findOne({ slug })) {
+            slug = `${baseSlug}-${counter}`;
+            counter++;
+        }
+
+        const newBlog = {
+            title,
+            slug,
+            excerpt,
+            content,
+            author,
+            authorBio: authorBio || '',
+            publishDate: new Date().toISOString().split('T')[0],
+            readTime: calculateReadTime(content),
+            category: category || 'General',
+            tags: tags || [],
+            likes: 0,
+            comments: [],
+            commentCount: 0,
+            views: 0,
+            featured: featured || false,
+            trending: trending || false,
+            createdAt: new Date().toISOString()
+        };
+
+        console.log('Creating blog with slug:', slug);
+
+        const result = await db.collection('blogs').insertOne(newBlog);
+        newBlog._id = result.insertedId;
+
+        console.log('Blog created successfully with _id:', result.insertedId, 'and slug:', slug);
+
+        return NextResponse.json({
+            success: true,
+            data: newBlog,
+            message: 'Blog created successfully'
+        });
+    } catch (error) {
+        console.error('Create blog error:', error);
+        return NextResponse.json(
+            { success: false, message: 'Failed to create blog' },
+            { status: 500 }
+        );
+    }
+}
+
+// DELETE - Delete a blog
+export async function DELETE(request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const blogId = searchParams.get('id');
+
+        if (!blogId) {
+            return NextResponse.json(
+                { success: false, message: 'Blog ID required' },
+                { status: 400 }
+            );
+        }
+
+        const client = await clientPromise;
+        const db = client.db('tara');
+        const { ObjectId } = require('mongodb');
+
+        const result = await db.collection('blogs').deleteOne({
+            _id: new ObjectId(blogId)
+        });
+
+        if (result.deletedCount === 0) {
+            return NextResponse.json(
+                { success: false, message: 'Blog not found' },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json({
+            success: true,
+            message: 'Blog deleted successfully'
+        });
+    } catch (error) {
+        console.error('Delete blog error:', error);
+        return NextResponse.json(
+            { success: false, message: 'Failed to delete blog' },
+            { status: 500 }
+        );
+    }
+}
+
+// Helper function to generate slug from title
+function generateSlug(title) {
+    return title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+        .trim()
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/-+/g, '-') // Replace multiple hyphens with single
+        .substring(0, 30) // Max 30 characters
+        .replace(/-$/, ''); // Remove trailing hyphen
+}
+
+// Helper function to calculate read time
+function calculateReadTime(content) {
+    const wordsPerMinute = 200;
+    const words = content.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+    return `${minutes} min read`;
+}
