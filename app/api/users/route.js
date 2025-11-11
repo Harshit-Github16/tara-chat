@@ -71,9 +71,9 @@ export async function GET(request) {
 // POST - Add a new chat user (custom or celebrity)
 export async function POST(request) {
     try {
-        const { userId, name, avatar, gender, role, type, celebrityId } = await request.json();
+        const { userId, name, avatar, gender, role, type, celebrityId, celebrityRole } = await request.json();
 
-        console.log('POST /api/users - Request:', { userId, name, avatar, gender, role, type, celebrityId });
+        console.log('POST /api/users - Request:', { userId, name, avatar, gender, role, type, celebrityId, celebrityRole });
 
         if (!userId || !name) {
             return NextResponse.json({ error: 'User ID and name are required' }, { status: 400 });
@@ -95,6 +95,11 @@ export async function POST(request) {
             createdAt: new Date(),
             lastMessageAt: new Date()
         };
+
+        // Add celebrityRole if provided (for celebrities)
+        if (celebrityRole) {
+            newChatUser.celebrityRole = celebrityRole;
+        }
 
         // First, check if user document exists
         const userDoc = await collection.findOne({ firebaseUid: userId });
