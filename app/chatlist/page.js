@@ -546,10 +546,10 @@ export default function ChatListPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 pb-20">
+      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ">
         {/* Header */}
-        <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
-          <div className="mx-auto flex max-w-9xl items-center justify-between px-4 py-3">
+        <header className=" top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
+          <div className="mx-auto flex lg:max-w-9xl items-center justify-between px-4 py-3">
             <div className="flex items-center gap-3">
               {/* Mobile Menu Button */}
               <button
@@ -575,7 +575,7 @@ export default function ChatListPage() {
           </div>
         </header>
 
-        <div className="mx-auto flex w-full max-w-9xl flex-1 relative px-1 sm:px-3 gap-0 sm:gap-2">
+        <div className="mx-auto flex w-full lg:max-w-9xl flex-1 relative px-1 sm:px-3 gap-0 sm:gap-2">
           {/* Mobile Sidebar Overlay */}
           {showMobileSidebar && (
             <div
@@ -586,8 +586,8 @@ export default function ChatListPage() {
 
 
           <aside className={`
-          fixed sm:relative top-0 left-0 h-[calc(100vh-4rem)] sm:h-auto w-80 sm:w-auto
-          transform transition-transform duration-300 ease-in-out z-50
+          fixed sm:relative top-0 left-0 min-lg:h-[calc(100vh-134px)] h-[calc(100vh-50px)]  w-80 
+          transform transition-transform duration-300 ease-in-out z-9
           sm:transform-none sm:flex-none sm:w-80 lg:w-96
           ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
         `}>
@@ -727,7 +727,7 @@ export default function ChatListPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex h-[calc(100vh-70px)] flex-col border border-rose-100 bg-white shadow-sm">
+              <div className="flex h-[calc(100vh-134px)] flex-col border border-rose-100 bg-white shadow-sm">
                 <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
                   <div className="flex items-center gap-3">
                     {/* Active Chat Avatar */}
