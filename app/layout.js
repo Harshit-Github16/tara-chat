@@ -75,6 +75,18 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <StructuredData />
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-R6HNEYQSP3"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-R6HNEYQSP3');
+            `,
+          }}
+        />
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <ErrorBoundary>
