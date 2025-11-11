@@ -221,7 +221,7 @@ function AddBlogModal({ onClose, onSuccess }) {
             .trim()
             .replace(/\s+/g, '-')
             .replace(/-+/g, '-')
-            .substring(0, 30)
+            .substring(0, 60)
             .replace(/-$/, '');
     };
 
@@ -270,16 +270,16 @@ function AddBlogModal({ onClose, onSuccess }) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 overflow-y-auto">
-            <div className="w-full max-w-3xl rounded-3xl border border-rose-100 bg-white p-6 shadow-xl my-8">
-                <div className="flex items-center justify-between mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+            <div className="w-full max-w-4xl max-h-[90vh] rounded-3xl border border-rose-100 bg-white shadow-xl flex flex-col">
+                <div className="flex items-center justify-between p-6 border-b border-rose-100 flex-shrink-0">
                     <h2 className="text-xl font-bold text-gray-900">Add New Blog</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
                         <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                         <input
@@ -295,7 +295,7 @@ function AddBlogModal({ onClose, onSuccess }) {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             URL Slug *
-                            <span className="text-xs text-gray-500 ml-2">(Auto-generated from title, max 30 chars)</span>
+                            <span className="text-xs text-gray-500 ml-2">(Auto-generated from title, max 60 chars)</span>
                         </label>
                         <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-500">/blogs/</span>
@@ -306,7 +306,7 @@ function AddBlogModal({ onClose, onSuccess }) {
                                 className="flex-1 rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
                                 placeholder="blog-url-slug"
                                 required
-                                maxLength={30}
+                                maxLength={60}
                             />
                         </div>
                         <p className="text-xs text-gray-500 mt-1">
@@ -328,14 +328,98 @@ function AddBlogModal({ onClose, onSuccess }) {
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Content *</label>
-                        <textarea
-                            value={formData.content}
-                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                            rows={8}
-                            className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
-                            placeholder="Full blog content"
-                            required
-                        />
+                        <div className="border border-rose-200 rounded-xl overflow-hidden">
+                            {/* Simple Formatting Toolbar */}
+                            <div className="bg-rose-50 border-b border-rose-200 p-2 flex gap-1 flex-wrap">
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('bold')}
+                                    className="px-3 py-1 text-xs font-bold bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Bold"
+                                >
+                                    B
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('italic')}
+                                    className="px-3 py-1 text-xs italic bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Italic"
+                                >
+                                    I
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('underline')}
+                                    className="px-3 py-1 text-xs underline bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Underline"
+                                >
+                                    U
+                                </button>
+                                <div className="w-px bg-rose-200 mx-1"></div>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('formatBlock', false, 'h2')}
+                                    className="px-3 py-1 text-xs font-semibold bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Heading"
+                                >
+                                    H2
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('formatBlock', false, 'h3')}
+                                    className="px-3 py-1 text-xs font-semibold bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Subheading"
+                                >
+                                    H3
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('formatBlock', false, 'p')}
+                                    className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Paragraph"
+                                >
+                                    P
+                                </button>
+                                <div className="w-px bg-rose-200 mx-1"></div>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('insertUnorderedList')}
+                                    className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Bullet List"
+                                >
+                                    • List
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => document.execCommand('insertOrderedList')}
+                                    className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Numbered List"
+                                >
+                                    1. List
+                                </button>
+                                <div className="w-px bg-rose-200 mx-1"></div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const url = prompt('Enter URL:');
+                                        if (url) document.execCommand('createLink', false, url);
+                                    }}
+                                    className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
+                                    title="Insert Link"
+                                >
+                                    🔗 Link
+                                </button>
+                            </div>
+                            {/* Rich Text Editor */}
+                            <div
+                                contentEditable
+                                onInput={(e) => setFormData({ ...formData, content: e.currentTarget.innerHTML })}
+                                className="min-h-[300px] max-h-[400px] overflow-y-auto px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-200"
+                                style={{ whiteSpace: 'pre-wrap' }}
+                                dangerouslySetInnerHTML={{ __html: formData.content }}
+                            />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Use the toolbar to format your content. Supports headings, lists, bold, italic, and links.</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -414,23 +498,25 @@ function AddBlogModal({ onClose, onSuccess }) {
                         </label>
                     </div>
 
-                    <div className="flex justify-end gap-2 pt-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="rounded-full border border-rose-200 px-5 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={submitting}
-                            className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm disabled:opacity-50"
-                        >
-                            {submitting ? 'Creating...' : 'Create Blog'}
-                        </button>
-                    </div>
                 </form>
+
+                <div className="flex justify-end gap-2 p-6 border-t border-rose-100 flex-shrink-0">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-full border border-rose-200 px-5 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={submitting}
+                        className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm disabled:opacity-50"
+                    >
+                        {submitting ? 'Creating...' : 'Create Blog'}
+                    </button>
+                </div>
             </div>
         </div>
     );
