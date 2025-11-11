@@ -127,7 +127,7 @@ export default function GoalsPage() {
 
     return (
         <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-50 pb-20">
+            <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-50">
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
@@ -146,7 +146,7 @@ export default function GoalsPage() {
                 </header>
 
                 {/* Main Content */}
-                <main className="mx-auto max-w-7xl px-4 py-6">
+                <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 pb-20">
                     {/* Stats */}
                     <div className="mb-6 grid grid-cols-3 gap-3">
                         <div className="rounded-2xl border border-rose-100 bg-white p-4 text-center">

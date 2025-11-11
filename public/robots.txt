@@ -1,29 +1,10 @@
-# robots.txt for tara4u.com
-
+# Allow all crawlers
 User-agent: *
 Allow: /
+
+# Disallow admin and API routes
 Disallow: /api/
 Disallow: /admin/
-Disallow: /_next/
-Disallow: /profile
-Disallow: /onboarding
 
-# Sitemap
+# Sitemap location
 Sitemap: https://tara4u.com/sitemap.xml
-
-# Crawl-delay for specific bots
-User-agent: Googlebot
-Crawl-delay: 0
-
-User-agent: Bingbot
-Crawl-delay: 1
-
-# Block bad bots
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
