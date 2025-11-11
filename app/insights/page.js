@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
+import BottomNav from "../components/BottomNav";
 import {
     faChartLine,
     faBookOpen,
@@ -270,16 +271,7 @@ export default function InsightsPage() {
                     </div>
                 </div>
 
-                {/* Bottom Navigation */}
-                <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
-                    <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-                        <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
-                        <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
-                        <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
-                        <MobileNavLink href="/insights" icon={faChartLine} label="Insights" active />
-                        <MobileNavLink href="/goals" icon={faBullseye} label="Goals" />
-                    </div>
-                </nav>
+                <BottomNav activePage="insights" />
             </div>
         </ProtectedRoute>
     );

@@ -970,7 +970,7 @@ export default function Home() {
                   <ContactInfo
                     icon={faEnvelope}
                     title="Email us"
-                    info="support@tara4u.com"
+                    info="hello@tara4u.com"
                     description="We'll get back to you within 24 hours"
                   />
                   <ContactInfo

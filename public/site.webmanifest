@@ -1,0 +1,37 @@
+{
+    "name": "Tara - AI Mental Health & Wellness Companion",
+    "short_name": "Tara",
+    "description": "Your AI-powered companion for mental wellness, mindfulness, and personal growth",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#f43f5e",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "health",
+        "lifestyle",
+        "wellness",
+        "productivity"
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshot-1.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpeg"
+        }
+    ]
+}

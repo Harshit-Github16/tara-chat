@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import BottomNav from "../components/BottomNav";
 import {
     faUser,
     faEdit,
@@ -18,14 +19,13 @@ import {
     faBriefcase,
     faHeart,
     faPalette,
-    faNewspaper,
-    faBullseye,
     faCalendarAlt,
     faClock,
     faFire,
-
     faJournalWhills,
     faLightbulb,
+    faShieldAlt,
+    faFileContract,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
@@ -496,6 +496,24 @@ export default function ProfilePage() {
                                 ))}
                             </div>
 
+                            {/* Legal Links */}
+                            <div className="mt-4 pt-4 border-t border-rose-100 space-y-2">
+                                <Link
+                                    href="/privacy-policy"
+                                    className="w-full flex items-center justify-center gap-2 p-3 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-colors font-medium"
+                                >
+                                    <FontAwesomeIcon icon={faShieldAlt} className="h-4 w-4" />
+                                    Privacy Policy
+                                </Link>
+                                <Link
+                                    href="/terms-of-service"
+                                    className="w-full flex items-center justify-center gap-2 p-3 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 transition-colors font-medium"
+                                >
+                                    <FontAwesomeIcon icon={faFileContract} className="h-4 w-4" />
+                                    Terms of Service
+                                </Link>
+                            </div>
+
                             {/* Logout Button */}
                             <div className="mt-4 pt-4 border-t border-rose-100">
                                 <button
@@ -513,16 +531,7 @@ export default function ProfilePage() {
                 </div>
             </main>
 
-            {/* Bottom Navbar */}
-            <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
-                <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-                    <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
-                    <MobileNavLink href="/chatlist" icon={faComments} label="Chats" />
-                    <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
-                    <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
-                    <MobileNavLink href="/goals" icon={faBullseye} label="Goals" />
-                </div>
-            </nav>
+            <BottomNav activePage="profile" />
         </div>
     );
 }

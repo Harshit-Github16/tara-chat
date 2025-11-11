@@ -1,234 +1,96 @@
 "use client";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faFileContract } from "@fortawesome/free-solid-svg-icons";
+import BottomNav from "../components/BottomNav";
 
 export default function TermsOfServicePage() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
-            {/* Header */}
+        <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
             <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
-                <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
-                    <Link
-                        href="/"
-                        className="flex items-center gap-2 text-rose-600 hover:text-rose-700 transition-colors"
-                    >
-                        <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
-                        <span className="font-medium">Back to Home</span>
+                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+                    <div className="flex items-center gap-3">
+                        <img src="/taralogo.jpg" alt="Tara Logo" className="h-8 w-8 rounded-full object-cover" />
+                        <span className="text-lg font-semibold text-rose-600">Tara</span>
+                    </div>
+                    <Link href="/profile" className="text-rose-600 hover:text-rose-700">
+                        <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5" />
                     </Link>
-                    <img
-                        src="/taralogo.jpg"
-                        alt="Tara Logo"
-                        className="h-8 w-8 rounded-full object-cover"
-                    />
                 </div>
             </header>
 
-            {/* Content */}
-            <main className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
-                <div className="rounded-3xl border border-rose-100 bg-white p-6 sm:p-10 shadow-sm">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                        Terms of Service
-                    </h1>
-                    <p className="text-sm text-gray-500 mb-8">
-                        Last updated: November 7, 2025
-                    </p>
+            <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
+                <div className="mb-6 flex items-center gap-3">
+                    <FontAwesomeIcon icon={faFileContract} className="h-8 w-8 text-rose-600" />
+                    <h1 className="text-3xl font-bold text-gray-800">Terms of Service</h1>
+                </div>
 
-                    <div className="space-y-8 text-gray-700">
-                        {/* Introduction */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Agreement to Terms
-                            </h2>
-                            <p className="leading-relaxed">
-                                By accessing and using Tara, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
-                            </p>
-                        </section>
+                <div className="rounded-2xl border border-rose-100 bg-white p-8 shadow-sm">
+                    <p className="text-sm text-gray-500 mb-6">Last updated: November 11, 2024</p>
 
-                        {/* Service Description */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Service Description
-                            </h2>
-                            <p className="leading-relaxed mb-3">
-                                Tara is a mental wellness application that provides:
-                            </p>
-                            <ul className="list-disc list-inside space-y-2 ml-4">
-                                <li>AI-powered emotional support and companionship</li>
-                                <li>Mood tracking and journaling features</li>
-                                <li>Personalized wellness insights and recommendations</li>
-                                <li>Goal setting and progress tracking tools</li>
-                                <li>Mental health resources and educational content</li>
-                            </ul>
-                        </section>
+                    <div className="prose prose-rose max-w-none">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">1. Acceptance of Terms</h2>
+                        <p className="text-gray-700 mb-6">
+                            By accessing and using Tara (tara4u.com), you accept and agree to be bound by these Terms of Service.
+                            If you do not agree to these terms, please do not use our services.
+                        </p>
 
-                        {/* User Responsibilities */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                User Responsibilities
-                            </h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-800 mb-2">
-                                        Account Security
-                                    </h3>
-                                    <p className="leading-relaxed">
-                                        You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.
-                                    </p>
-                                </div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">2. Description of Service</h2>
+                        <p className="text-gray-700 mb-6">
+                            Tara is an AI-powered mental health and wellness companion that provides:
+                        </p>
+                        <ul className="list-disc pl-6 mb-6 text-gray-700">
+                            <li>AI chat conversations for emotional support</li>
+                            <li>Mood tracking and insights</li>
+                            <li>Journal and goal management</li>
+                            <li>Wellness content and resources</li>
+                        </ul>
 
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-800 mb-2">
-                                        Appropriate Use
-                                    </h3>
-                                    <p className="leading-relaxed mb-2">
-                                        You agree to use Tara only for lawful purposes and in accordance with these Terms. You agree NOT to:
-                                    </p>
-                                    <ul className="list-disc list-inside space-y-1 ml-4">
-                                        <li>Use the service for any illegal or unauthorized purpose</li>
-                                        <li>Attempt to gain unauthorized access to our systems</li>
-                                        <li>Share harmful, offensive, or inappropriate content</li>
-                                        <li>Impersonate others or provide false information</li>
-                                        <li>Interfere with or disrupt the service</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </section>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">3. User Responsibilities</h2>
+                        <p className="text-gray-700 mb-4">You agree to:</p>
+                        <ul className="list-disc pl-6 mb-6 text-gray-700">
+                            <li>Provide accurate and complete information</li>
+                            <li>Maintain the security of your account</li>
+                            <li>Use the service in compliance with applicable laws</li>
+                            <li>Not misuse or abuse the platform</li>
+                            <li>Not share harmful or inappropriate content</li>
+                        </ul>
 
-                        {/* Medical Disclaimer */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Medical Disclaimer
-                            </h2>
-                            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
-                                <p className="font-medium text-yellow-800 mb-2">Important Notice:</p>
-                                <p className="text-yellow-700 leading-relaxed">
-                                    Tara is NOT a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified health providers with any questions you may have regarding a medical condition.
-                                </p>
-                            </div>
-                            <p className="leading-relaxed">
-                                Our AI companions and wellness tools are designed to provide emotional support and general wellness guidance only. In case of mental health emergencies, please contact emergency services or a mental health crisis hotline immediately.
-                            </p>
-                        </section>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">4. Medical Disclaimer</h2>
+                        <p className="text-gray-700 mb-6">
+                            <strong>Important:</strong> Tara is not a substitute for professional medical advice, diagnosis, or treatment.
+                            Always seek the advice of qualified health providers with questions regarding medical conditions.
+                            In case of emergency, contact emergency services immediately.
+                        </p>
 
-                        {/* Intellectual Property */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Intellectual Property Rights
-                            </h2>
-                            <p className="leading-relaxed mb-3">
-                                The service and its original content, features, and functionality are and will remain the exclusive property of Tara and its licensors. The service is protected by copyright, trademark, and other laws.
-                            </p>
-                            <p className="leading-relaxed">
-                                You retain ownership of any content you create or share through the service, but you grant us a license to use, store, and process this content to provide our services.
-                            </p>
-                        </section>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">5. Intellectual Property</h2>
+                        <p className="text-gray-700 mb-6">
+                            All content, features, and functionality of Tara are owned by us and protected by copyright,
+                            trademark, and other intellectual property laws.
+                        </p>
 
-                        {/* Privacy and Data */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Privacy and Data Protection
-                            </h2>
-                            <p className="leading-relaxed mb-3">
-                                Your privacy is important to us. Our collection and use of personal information is governed by our Privacy Policy, which is incorporated into these Terms by reference.
-                            </p>
-                            <div className="bg-rose-50 border border-rose-200 rounded-xl p-4">
-                                <p className="text-rose-700">
-                                    <Link href="/privacy-policy" className="font-medium underline hover:no-underline">
-                                        Read our Privacy Policy
-                                    </Link> to understand how we collect, use, and protect your information.
-                                </p>
-                            </div>
-                        </section>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">6. Limitation of Liability</h2>
+                        <p className="text-gray-700 mb-6">
+                            Tara is provided "as is" without warranties of any kind. We are not liable for any damages
+                            arising from your use of the service.
+                        </p>
 
-                        {/* Service Availability */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Service Availability
-                            </h2>
-                            <p className="leading-relaxed">
-                                We strive to provide reliable service, but we cannot guarantee that Tara will be available at all times. We may experience hardware, software, or other problems or need to perform maintenance related to the service, resulting in interruptions, delays, or errors.
-                            </p>
-                        </section>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">7. Changes to Terms</h2>
+                        <p className="text-gray-700 mb-6">
+                            We reserve the right to modify these terms at any time. Continued use of the service
+                            constitutes acceptance of modified terms.
+                        </p>
 
-                        {/* Limitation of Liability */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Limitation of Liability
-                            </h2>
-                            <p className="leading-relaxed">
-                                To the maximum extent permitted by applicable law, Tara shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses.
-                            </p>
-                        </section>
-
-                        {/* Termination */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Termination
-                            </h2>
-                            <p className="leading-relaxed mb-3">
-                                We may terminate or suspend your account and bar access to the service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever, including but not limited to a breach of the Terms.
-                            </p>
-                            <p className="leading-relaxed">
-                                You may terminate your account at any time by contacting us or deleting your account through the app settings.
-                            </p>
-                        </section>
-
-                        {/* Changes to Terms */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Changes to Terms
-                            </h2>
-                            <p className="leading-relaxed">
-                                We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.
-                            </p>
-                        </section>
-
-                        {/* Governing Law */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Governing Law
-                            </h2>
-                            <p className="leading-relaxed">
-                                These Terms shall be interpreted and governed by the laws of the jurisdiction in which our company is established, without regard to its conflict of law provisions.
-                            </p>
-                        </section>
-
-                        {/* Contact Information */}
-                        <section>
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                                Contact Us
-                            </h2>
-                            <p className="leading-relaxed mb-4">
-                                If you have any questions about these Terms of Service, please contact us:
-                            </p>
-                            <div className="rounded-xl bg-rose-50 p-4 border border-rose-100">
-                                <p className="font-medium text-gray-900">Email: legal@tara.app</p>
-                                <p className="text-gray-700 mt-1">Support: support@tara.app</p>
-                                <p className="text-gray-700 mt-1">General: hello@tara.app</p>
-                            </div>
-                        </section>
-                    </div>
-
-                    {/* Back Button */}
-                    <div className="mt-10 pt-8 border-t border-rose-100">
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-6 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 transition-colors"
-                        >
-                            <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
-                            Back to Home
-                        </Link>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">8. Contact</h2>
+                        <p className="text-gray-700">
+                            For questions about these Terms, contact us at:
+                            <a href="mailto:support@tara4u.com" className="text-rose-600 hover:underline ml-1">support@tara4u.com</a>
+                        </p>
                     </div>
                 </div>
             </main>
 
-            {/* Footer */}
-            <footer className="border-t border-rose-100 bg-white/60 backdrop-blur py-6 mt-12">
-                <div className="mx-auto max-w-4xl px-4 text-center text-sm text-gray-600">
-                    <p>© 2025 Tara. All rights reserved.</p>
-                </div>
-            </footer>
+            <BottomNav />
         </div>
     );
 }

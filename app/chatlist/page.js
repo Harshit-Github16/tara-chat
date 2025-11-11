@@ -24,6 +24,7 @@ import {
   faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
+import BottomNav from "../components/BottomNav";
 
 
 
@@ -968,16 +969,7 @@ export default function ChatListPage() {
           </section>
         </div>
 
-        {/* Bottom Navbar */}
-        <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-rose-100 bg-white/90 backdrop-blur">
-          <div className="mx-auto grid max-w-7xl grid-cols-5 px-2 py-2 text-xs text-gray-600 sm:text-sm">
-            <MobileNavLink href="/journal" icon={faBookOpen} label="Journal" />
-            <MobileNavLink href="/chatlist" icon={faComments} label="Chats" active />
-            <MobileNavLink href="/blogs" icon={faNewspaper} label="Blogs" />
-            <MobileNavLink href="/insights" icon={faChartLine} label="Insights" />
-            <MobileNavLink href="/goals" icon={faBullseye} label="Goals" />
-          </div>
-        </nav>
+        <BottomNav activePage="chatlist" />
 
         {
           showAdd && (
