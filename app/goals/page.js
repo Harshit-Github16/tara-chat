@@ -131,14 +131,14 @@ export default function GoalsPage() {
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-                        <div className="flex items-center gap-3">
+                        <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                             <img
                                 src="/taralogo.jpg"
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Goals</span>
-                        </div>
+                            <span className="text-lg font-semibold text-rose-600">Tara</span>
+                        </Link>
                         <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100">
                             <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
                         </Link>

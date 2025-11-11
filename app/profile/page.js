@@ -184,14 +184,14 @@ export default function ProfilePage() {
             {/* Header */}
             <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
                 <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-                    <div className="flex items-center gap-3">
+                    <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                         <img
                             src="/taralogo.jpg"
                             alt="Tara Logo"
                             className="h-8 w-8 rounded-full object-cover"
                         />
                         <span className="text-lg font-semibold text-rose-600">Tara</span>
-                    </div>
+                    </Link>
                     <div className="flex items-center gap-3">
                         {!isEditing ? (
                             <button

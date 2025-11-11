@@ -33,6 +33,10 @@ export default function OnboardingPage() {
         interests: [],
         personalityTraits: []
     });
+    const [showAddInterest, setShowAddInterest] = useState(false);
+    const [showAddTrait, setShowAddTrait] = useState(false);
+    const [newInterest, setNewInterest] = useState("");
+    const [newTrait, setNewTrait] = useState("");
 
     // Auto-fill user data from database
     useEffect(() => {
@@ -88,6 +92,28 @@ export default function OnboardingPage() {
                 ? prev[field].filter(item => item !== value)
                 : [...prev[field], value]
         }));
+    };
+
+    const handleAddCustomInterest = () => {
+        if (newInterest.trim() && !formData.interests.includes(newInterest.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                interests: [...prev.interests, newInterest.trim()]
+            }));
+            setNewInterest("");
+            setShowAddInterest(false);
+        }
+    };
+
+    const handleAddCustomTrait = () => {
+        if (newTrait.trim() && !formData.personalityTraits.includes(newTrait.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                personalityTraits: [...prev.personalityTraits, newTrait.trim()]
+            }));
+            setNewTrait("");
+            setShowAddTrait(false);
+        }
     };
 
     const handleNext = async () => {
@@ -347,6 +373,58 @@ export default function OnboardingPage() {
                                                 {interest}
                                             </button>
                                         ))}
+
+                                        {/* Custom interests added by user */}
+                                        {formData.interests.filter(i => !interestOptions.includes(i)).map((interest) => (
+                                            <button
+                                                key={interest}
+                                                type="button"
+                                                onClick={() => handleArrayToggle('interests', interest)}
+                                                className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-700 border-rose-200"
+                                            >
+                                                {interest}
+                                            </button>
+                                        ))}
+
+                                        {/* Add More Button */}
+                                        {!showAddInterest ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddInterest(true)}
+                                                className="px-4 py-2 rounded-lg border-2 border-dashed border-rose-300 text-rose-600 text-sm font-medium hover:bg-rose-50 transition-all"
+                                            >
+                                                + Add More
+                                            </button>
+                                        ) : (
+                                            <div className="col-span-2 md:col-span-4 flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={newInterest}
+                                                    onChange={(e) => setNewInterest(e.target.value)}
+                                                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustomInterest()}
+                                                    placeholder="Type your interest..."
+                                                    className="flex-1 px-4 py-2 border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-200"
+                                                    autoFocus
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddCustomInterest}
+                                                    className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                                                >
+                                                    Add
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setShowAddInterest(false);
+                                                        setNewInterest("");
+                                                    }}
+                                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -370,6 +448,58 @@ export default function OnboardingPage() {
                                                 {trait}
                                             </button>
                                         ))}
+
+                                        {/* Custom traits added by user */}
+                                        {formData.personalityTraits.filter(t => !personalityOptions.includes(t)).map((trait) => (
+                                            <button
+                                                key={trait}
+                                                type="button"
+                                                onClick={() => handleArrayToggle('personalityTraits', trait)}
+                                                className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-700 border-rose-200"
+                                            >
+                                                {trait}
+                                            </button>
+                                        ))}
+
+                                        {/* Add More Button */}
+                                        {!showAddTrait ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddTrait(true)}
+                                                className="px-4 py-2 rounded-lg border-2 border-dashed border-rose-300 text-rose-600 text-sm font-medium hover:bg-rose-50 transition-all"
+                                            >
+                                                + Add More
+                                            </button>
+                                        ) : (
+                                            <div className="col-span-2 md:col-span-4 flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={newTrait}
+                                                    onChange={(e) => setNewTrait(e.target.value)}
+                                                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustomTrait()}
+                                                    placeholder="Type your personality trait..."
+                                                    className="flex-1 px-4 py-2 border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-200"
+                                                    autoFocus
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddCustomTrait}
+                                                    className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                                                >
+                                                    Add
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setShowAddTrait(false);
+                                                        setNewTrait("");
+                                                    }}
+                                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
