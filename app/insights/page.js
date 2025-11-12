@@ -333,6 +333,7 @@ function MoodMeter({ moodData = [], loading }) {
         'excited': 9,
         'grateful': 8,
         'calm': 7,
+        'active': 7, // For daily login tracking
         'tired': 5,
         'confused': 4,
         'stressed': 3,

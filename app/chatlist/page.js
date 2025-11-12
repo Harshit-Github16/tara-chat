@@ -117,12 +117,58 @@ export default function ChatListPage() {
     }
   });
 
-  // Load custom users from DB when user is available
+  // Track daily activity and load custom users
   useEffect(() => {
     if (user?.uid) {
+      // Track daily login/activity
+      trackDailyActivity();
       loadCustomUsers();
     }
   }, [user?.uid]);
+
+  // Track daily activity (check-in)
+  const trackDailyActivity = async () => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+
+      // Check if already tracked today
+      const checkResponse = await fetch(`/api/mood-mongo?date=${today}`, {
+        credentials: 'include',
+      });
+
+      if (checkResponse.ok) {
+        const data = await checkResponse.json();
+        const todayEntries = data.data?.entries || [];
+
+        // If already has entry for today, don't create another
+        if (todayEntries.length > 0) {
+          console.log('Already checked in today');
+          return;
+        }
+      }
+
+      // Create daily activity entry
+      const response = await fetch('/api/mood-mongo', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mood: 'active',
+          intensity: 5,
+          note: 'Daily login',
+          isActivityTracker: true
+        })
+      });
+
+      if (response.ok) {
+        console.log('Daily activity tracked successfully');
+      }
+    } catch (error) {
+      console.error('Failed to track daily activity:', error);
+    }
+  };
 
   // Load chat history when user is available
   useEffect(() => {
