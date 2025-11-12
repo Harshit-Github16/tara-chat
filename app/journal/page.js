@@ -26,7 +26,8 @@ export default function JournalPage() {
   const loadJournals = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/api/user-data');
+      const userId = user.firebaseUid || user.uid;
+      const response = await api.get(`/api/user-data?userId=${userId}`);
       if (response.ok) {
         const data = await response.json();
         const journals = data.data?.journals || [];
@@ -54,8 +55,9 @@ export default function JournalPage() {
 
     try {
       setGenerating(true);
+      const userId = user.firebaseUid || user.uid;
       const response = await api.post('/api/journal-generate', {
-        userId: user.uid,
+        userId: userId,
         date: today
       });
 
@@ -150,9 +152,14 @@ export default function JournalPage() {
                               onClick={async () => {
                                 if (confirm("Delete this journal?")) {
                                   try {
-                                    const response = await api.delete('/api/journal', {
-                                      userId: user.uid,
-                                      journalId: e.id
+                                    const userId = user.firebaseUid || user.uid;
+                                    const response = await fetch('/api/journal', {
+                                      method: 'DELETE',
+                                      headers: { 'Content-Type': 'application/json' },
+                                      body: JSON.stringify({
+                                        userId: userId,
+                                        journalId: e.id
+                                      })
                                     });
                                     if (response.ok) {
                                       setEntries((prev) => prev.filter((x) => x.id !== e.id));
@@ -194,10 +201,11 @@ export default function JournalPage() {
             onClose={() => setShowModal(false)}
             onSave={async (payload) => {
               try {
+                const userId = user.firebaseUid || user.uid;
                 if (editing) {
                   // Update existing journal
                   const response = await api.put('/api/journal', {
-                    userId: user.uid,
+                    userId: userId,
                     journalId: editing.id,
                     ...payload
                   });
@@ -215,7 +223,7 @@ export default function JournalPage() {
                   };
 
                   const response = await api.post('/api/journal', {
-                    userId: user.uid,
+                    userId: userId,
                     journal: newJournal
                   });
 

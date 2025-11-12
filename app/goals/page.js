@@ -45,21 +45,48 @@ export default function GoalsPage() {
         howToAchieve: "",
     });
 
-    // Load goals from localStorage
+    // Load goals from database
     useEffect(() => {
-        if (user?.uid) {
-            const savedGoals = localStorage.getItem(`goals_${user.uid}`);
-            if (savedGoals) {
-                setGoals(JSON.parse(savedGoals));
+        const fetchGoals = async () => {
+            if (user?.uid) {
+                try {
+                    const userId = user.firebaseUid || user.uid;
+                    const response = await fetch(`/api/goals?userId=${userId}`);
+                    const data = await response.json();
+
+                    if (data.success && data.goals) {
+                        setGoals(data.goals);
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch goals:', error);
+                }
             }
-        }
+        };
+
+        fetchGoals();
     }, [user]);
 
-    // Save goals to localStorage
-    const saveGoals = (updatedGoals) => {
+    // Save goals to database
+    const saveGoals = async (updatedGoals) => {
         if (user?.uid) {
-            localStorage.setItem(`goals_${user.uid}`, JSON.stringify(updatedGoals));
-            setGoals(updatedGoals);
+            try {
+                const userId = user.firebaseUid || user.uid;
+                const response = await fetch('/api/goals', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId,
+                        goals: updatedGoals
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    setGoals(updatedGoals);
+                }
+            } catch (error) {
+                console.error('Failed to save goals:', error);
+            }
         }
     };
 
@@ -143,7 +170,8 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                         interests: user.interests,
                         personalityTraits: user.personalityTraits
                     },
-                    isGoalSuggestion: true // Flag to indicate this needs longer response
+                    isGoalSuggestion: true, // Flag to indicate this needs longer response
+                    skipChatHistory: true // Don't save this in chat history
                 })
             });
 

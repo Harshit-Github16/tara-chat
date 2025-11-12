@@ -1,46 +1,14 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
-import { ObjectId } from 'mongodb';
 
-// GET - Fetch all goals for a user
-export async function GET(request) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
-
-        if (!userId) {
-            return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
-        }
-
-        const client = await clientPromise;
-        const db = client.db('tara');
-        const collection = db.collection('users');
-
-        // Get user's goals
-        const userData = await collection.findOne({ firebaseUid: userId });
-        const goals = userData?.goals || [];
-
-        return NextResponse.json({
-            success: true,
-            goals
-        });
-
-    } catch (error) {
-        console.error('Get Goals Error:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch goals' },
-            { status: 500 }
-        );
-    }
-}
-
-// POST - Create a new goal
 export async function POST(request) {
     try {
         const { userId, title, category, targetDays, description, why, howToAchieve } = await request.json();
 
-        if (!userId || !title) {
-            return NextResponse.json({ error: 'User ID and title are required' }, { status: 400 });
+        if (!userId || !title || !why || !howToAchieve) {
+            return NextResponse.json({
+                error: 'Missing required fields'
+            }, { status: 400 });
         }
 
         const client = await clientPromise;
@@ -49,28 +17,34 @@ export async function POST(request) {
 
         // Create new goal
         const newGoal = {
-            id: new ObjectId().toString(),
+            id: `goal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             title,
             category: category || 'mental',
             targetDays: targetDays || 30,
             description: description || '',
-            why: why || '', // Why this goal is important
-            howToAchieve: howToAchieve || '', // How to achieve it
-            createdAt: new Date(),
+            why,
+            howToAchieve,
             progress: 0,
+            checkIns: [],
             completed: false,
-            checkIns: []
+            createdAt: new Date(),
+            updatedAt: new Date()
         };
 
         // Add goal to user's goals array
-        await collection.updateOne(
+        const result = await collection.updateOne(
             { firebaseUid: userId },
             {
                 $push: { goals: newGoal },
                 $set: { lastUpdated: new Date() }
-            },
-            { upsert: true }
+            }
         );
+
+        if (result.modifiedCount === 0) {
+            return NextResponse.json({
+                error: 'User not found'
+            }, { status: 404 });
+        }
 
         return NextResponse.json({
             success: true,
@@ -78,22 +52,22 @@ export async function POST(request) {
         });
 
     } catch (error) {
-        console.error('Create Goal Error:', error);
+        console.error('Goals API Error:', error);
         return NextResponse.json(
-            { error: 'Failed to create goal' },
+            { error: 'Failed to create goal', details: error.message },
             { status: 500 }
         );
     }
 }
 
-// PUT - Update a goal (check-in, complete, etc.)
-export async function PUT(request) {
+export async function GET(request) {
     try {
-        const { userId, goalId, action, data } = await request.json();
+        const { searchParams } = new URL(request.url);
+        const userId = searchParams.get('userId');
 
-        if (!userId || !goalId || !action) {
+        if (!userId) {
             return NextResponse.json({
-                error: 'User ID, Goal ID, and action are required'
+                error: 'User ID is required'
             }, { status: 400 });
         }
 
@@ -101,64 +75,44 @@ export async function PUT(request) {
         const db = client.db('tara');
         const collection = db.collection('users');
 
-        // Get user data
         const userData = await collection.findOne({ firebaseUid: userId });
+
         if (!userData) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+            return NextResponse.json({
+                error: 'User not found'
+            }, { status: 404 });
         }
 
-        // Find and update the goal
-        const goals = userData.goals || [];
-        const goalIndex = goals.findIndex(g => g.id === goalId);
+        return NextResponse.json({
+            success: true,
+            goals: userData.goals || []
+        });
 
-        if (goalIndex === -1) {
-            return NextResponse.json({ error: 'Goal not found' }, { status: 404 });
+    } catch (error) {
+        console.error('Goals API Error:', error);
+        return NextResponse.json(
+            { error: 'Failed to fetch goals', details: error.message },
+            { status: 500 }
+        );
+    }
+}
+
+export async function PUT(request) {
+    try {
+        const { userId, goals } = await request.json();
+
+        if (!userId || !goals) {
+            return NextResponse.json({
+                error: 'User ID and goals are required'
+            }, { status: 400 });
         }
 
-        let updatedGoal = { ...goals[goalIndex] };
+        const client = await clientPromise;
+        const db = client.db('tara');
+        const collection = db.collection('users');
 
-        // Handle different actions
-        switch (action) {
-            case 'checkIn':
-                // Add today's check-in
-                const today = new Date().toISOString().split('T')[0];
-                const checkIns = updatedGoal.checkIns || [];
-
-                // Check if already checked in today
-                const alreadyCheckedIn = checkIns.some(date =>
-                    new Date(date).toISOString().split('T')[0] === today
-                );
-
-                if (!alreadyCheckedIn) {
-                    checkIns.push(new Date().toISOString());
-                    updatedGoal.checkIns = checkIns;
-                    updatedGoal.progress = Math.min(100, (checkIns.length / updatedGoal.targetDays) * 100);
-                }
-                break;
-
-            case 'toggleComplete':
-                updatedGoal.completed = !updatedGoal.completed;
-                if (updatedGoal.completed) {
-                    updatedGoal.completedAt = new Date();
-                }
-                break;
-
-            case 'update':
-                // Update goal details
-                if (data) {
-                    updatedGoal = { ...updatedGoal, ...data };
-                }
-                break;
-
-            default:
-                return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
-        }
-
-        // Update the goal in the array
-        goals[goalIndex] = updatedGoal;
-
-        // Save to database
-        await collection.updateOne(
+        // Update all goals
+        const result = await collection.updateOne(
             { firebaseUid: userId },
             {
                 $set: {
@@ -168,21 +122,26 @@ export async function PUT(request) {
             }
         );
 
+        if (result.modifiedCount === 0) {
+            return NextResponse.json({
+                error: 'User not found or no changes made'
+            }, { status: 404 });
+        }
+
         return NextResponse.json({
             success: true,
-            goal: updatedGoal
+            goals: goals
         });
 
     } catch (error) {
-        console.error('Update Goal Error:', error);
+        console.error('Goals API Error:', error);
         return NextResponse.json(
-            { error: 'Failed to update goal' },
+            { error: 'Failed to update goals', details: error.message },
             { status: 500 }
         );
     }
 }
 
-// DELETE - Delete a goal
 export async function DELETE(request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -200,7 +159,7 @@ export async function DELETE(request) {
         const collection = db.collection('users');
 
         // Remove goal from user's goals array
-        await collection.updateOne(
+        const result = await collection.updateOne(
             { firebaseUid: userId },
             {
                 $pull: { goals: { id: goalId } },
@@ -208,15 +167,20 @@ export async function DELETE(request) {
             }
         );
 
+        if (result.modifiedCount === 0) {
+            return NextResponse.json({
+                error: 'User or goal not found'
+            }, { status: 404 });
+        }
+
         return NextResponse.json({
-            success: true,
-            message: 'Goal deleted successfully'
+            success: true
         });
 
     } catch (error) {
-        console.error('Delete Goal Error:', error);
+        console.error('Goals API Error:', error);
         return NextResponse.json(
-            { error: 'Failed to delete goal' },
+            { error: 'Failed to delete goal', details: error.message },
             { status: 500 }
         );
     }

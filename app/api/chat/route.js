@@ -335,7 +335,7 @@ Your approach:
 
 export async function POST(request) {
     try {
-        const { userId, chatUserId, message, userDetails, isGoalSuggestion } = await request.json();
+        const { userId, chatUserId, message, userDetails, isGoalSuggestion, skipChatHistory } = await request.json();
 
         if (!userId || !chatUserId || !message) {
             return NextResponse.json({
@@ -558,33 +558,38 @@ ${responseLabel}:`;
             timestamp: new Date()
         };
 
-        // Update chat history in database
-        await collection.updateOne(
-            {
-                firebaseUid: userId,
-                'chatUsers.id': chatUserId
-            },
-            {
-                $push: {
-                    'chatUsers.$.conversations': {
-                        $each: [userMessage, aiMessage]
-                    }
+        // Only update chat history if skipChatHistory is not true
+        if (!skipChatHistory) {
+            await collection.updateOne(
+                {
+                    firebaseUid: userId,
+                    'chatUsers.id': chatUserId
                 },
-                $set: {
-                    'chatUsers.$.lastMessageAt': new Date(),
-                    lastUpdated: new Date()
+                {
+                    $push: {
+                        'chatUsers.$.conversations': {
+                            $each: [userMessage, aiMessage]
+                        }
+                    },
+                    $set: {
+                        'chatUsers.$.lastMessageAt': new Date(),
+                        lastUpdated: new Date()
+                    }
                 }
-            }
-        );
+            );
+            console.log('Chat response saved to history');
+        } else {
+            console.log('Skipping chat history save (goal suggestion)');
+        }
 
         console.log('Chat response generated successfully');
-        console.log('Returning response with', chatHistory.length + 2, 'total messages');
+        console.log('Returning response with', skipChatHistory ? chatHistory.length : chatHistory.length + 2, 'total messages');
 
         return NextResponse.json({
             success: true,
             userMessage,
             aiMessage,
-            chatHistory: [...chatHistory, userMessage, aiMessage]
+            chatHistory: skipChatHistory ? chatHistory : [...chatHistory, userMessage, aiMessage]
         });
 
     } catch (error) {
