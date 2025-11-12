@@ -27,7 +27,9 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-
+  alternates: {
+    canonical: 'https://tara4u.com',
+  },
   manifest: '/site.webmanifest',
   openGraph: {
     type: "website",

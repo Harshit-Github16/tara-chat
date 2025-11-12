@@ -4,7 +4,7 @@ export const SEO_CONFIG = {
     site: {
         name: "Tara",
         description: "AI-powered mental health and wellness companion",
-        url: "https://yourdomain.com",
+        url: "https://tara4u.com",
         logo: "/taralogo.jpg",
         author: "Tara Team",
         language: "en",
@@ -78,10 +78,10 @@ export const SEO_CONFIG = {
         "@type": "Organization",
         "name": "Tara",
         "description": "AI-powered mental health and wellness companion",
-        "url": "https://yourdomain.com",
+        "url": "https://tara4u.com",
         "logo": {
             "@type": "ImageObject",
-            "url": "https://yourdomain.com/taralogo.jpg",
+            "url": "https://tara4u.com/taralogo.jpg",
             "width": 200,
             "height": 200
         },
@@ -104,11 +104,11 @@ export const SEO_CONFIG = {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Tara",
-        "url": "https://yourdomain.com",
+        "url": "https://tara4u.com",
         "description": "AI-powered mental health and wellness companion",
         "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://yourdomain.com/search?q={search_term_string}",
+            "target": "https://tara4u.com/search?q={search_term_string}",
             "query-input": "required name=search_term_string"
         }
     },
