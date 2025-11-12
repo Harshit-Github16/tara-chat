@@ -66,6 +66,13 @@ export default function BlogPostPage() {
                     setPost({ ...foundPost, id: blogId });
                     setLikeCount(foundPost.likes || 0);
 
+                    // Check if user has already liked this blog
+                    if (user?.uid) {
+                        const userId = user.firebaseUid || user.uid;
+                        const likedBy = foundPost.likedBy || [];
+                        setIsLiked(likedBy.includes(userId));
+                    }
+
                     // Increment view count
                     incrementView(blogId);
                     // Load comments
@@ -99,7 +106,7 @@ export default function BlogPostPage() {
 
     const loadComments = async (blogId) => {
         try {
-            const response = await fetch(`/api/blogs/${blogId}/comment`);
+            const response = await fetch(`/api/blog/${blogId}/comment`);
             const data = await response.json();
             if (data.success && data.comments.length > 0) {
                 setComments(data.comments);
@@ -124,16 +131,19 @@ export default function BlogPostPage() {
     }, [showShareMenu]);
 
     const handleLike = async () => {
-        if (!post?.id) return;
+        if (!post?.id || !user?.uid) return;
 
         try {
-            const response = await fetch(`/api/blogs/${post.id}/like`, {
-                method: 'POST'
+            const userId = user.firebaseUid || user.uid;
+            const response = await fetch(`/api/blog/${post.id}/like`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId })
             });
             const data = await response.json();
             if (data.success) {
                 setLikeCount(data.likes);
-                setIsLiked(true);
+                setIsLiked(data.isLiked);
             }
         } catch (error) {
             console.error('Error liking blog:', error);
@@ -145,7 +155,7 @@ export default function BlogPostPage() {
         if (!newComment.trim() || !post?.id) return;
 
         try {
-            const response = await fetch(`/api/blogs/${post.id}/comment`, {
+            const response = await fetch(`/api/blog/${post.id}/comment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -220,7 +230,7 @@ export default function BlogPostPage() {
                     <FontAwesomeIcon icon={faNewspaper} className="h-16 w-16 text-gray-300 mb-4" />
                     <h2 className="text-xl font-semibold text-gray-600 mb-2">Blog post not found</h2>
                     <p className="text-gray-500 mb-4">The article you're looking for doesn't exist or has been moved.</p>
-                    <Link href="/blogs" className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
+                    <Link href="/blog" className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
                         <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                         Back to Blogs
                     </Link>
@@ -252,7 +262,7 @@ export default function BlogPostPage() {
             <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6">
                 {/* Back Button */}
                 <Link
-                    href="/blogs"
+                    href="/blog"
                     className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 mb-6 transition-colors font-medium"
                 >
                     <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
@@ -312,35 +322,108 @@ export default function BlogPostPage() {
                         </div>
 
                         {/* Article Content */}
-                        <div className="prose prose-rose prose-lg max-w-none mb-8">
-                            {post.content.split('\n\n').map((paragraph, index) => {
-                                if (paragraph.startsWith('## ')) {
-                                    return (
-                                        <h2 key={index} className="text-2xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-rose-400 pl-4">
-                                            {paragraph.replace('## ', '')}
-                                        </h2>
-                                    );
-                                } else if (paragraph.startsWith('### ')) {
-                                    return (
-                                        <h3 key={index} className="text-xl font-bold text-gray-800 mt-6 mb-3">
-                                            {paragraph.replace('### ', '')}
-                                        </h3>
-                                    );
-                                } else if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                                    return (
-                                        <div key={index} className="bg-rose-50 border-l-4 border-rose-300 p-4 my-4 rounded-r-lg">
-                                            <p className="font-medium text-gray-800 mb-2">{paragraph.replace(/\*\*/g, '')}</p>
-                                        </div>
-                                    );
-                                } else {
-                                    return (
-                                        <p key={index} className="text-gray-700 leading-relaxed mb-4 text-lg">
-                                            {paragraph}
-                                        </p>
-                                    );
-                                }
-                            })}
-                        </div>
+                        <div
+                            className="prose prose-rose prose-lg max-w-none mb-8 blog-content"
+                            dangerouslySetInnerHTML={{ __html: post.content }}
+                        />
+
+                        <style jsx global>{`
+                            .blog-content {
+                                line-height: 1.8;
+                            }
+                            .blog-content h1 {
+                                font-size: 2rem;
+                                font-weight: 700;
+                                color: #1f2937;
+                                margin-top: 2rem;
+                                margin-bottom: 1rem;
+                                border-left: 4px solid #fb7185;
+                                padding-left: 1rem;
+                            }
+                            .blog-content h2 {
+                                font-size: 1.75rem;
+                                font-weight: 700;
+                                color: #1f2937;
+                                margin-top: 2rem;
+                                margin-bottom: 1rem;
+                                border-left: 4px solid #fb7185;
+                                padding-left: 1rem;
+                            }
+                            .blog-content h3 {
+                                font-size: 1.5rem;
+                                font-weight: 600;
+                                color: #374151;
+                                margin-top: 1.5rem;
+                                margin-bottom: 0.75rem;
+                            }
+                            .blog-content p {
+                                color: #4b5563;
+                                margin-bottom: 1rem;
+                                font-size: 1.125rem;
+                                line-height: 1.75;
+                            }
+                            .blog-content ul, .blog-content ol {
+                                margin-left: 1.5rem;
+                                margin-bottom: 1rem;
+                                color: #4b5563;
+                            }
+                            .blog-content li {
+                                margin-bottom: 0.5rem;
+                                line-height: 1.75;
+                            }
+                            .blog-content strong, .blog-content b {
+                                font-weight: 600;
+                                color: #1f2937;
+                            }
+                            .blog-content em, .blog-content i {
+                                font-style: italic;
+                            }
+                            .blog-content a {
+                                color: #fb7185;
+                                text-decoration: underline;
+                            }
+                            .blog-content a:hover {
+                                color: #f43f5e;
+                            }
+                            .blog-content blockquote {
+                                border-left: 4px solid #fda4af;
+                                background-color: #fff1f2;
+                                padding: 1rem;
+                                margin: 1.5rem 0;
+                                border-radius: 0 0.5rem 0.5rem 0;
+                            }
+                            .blog-content code {
+                                background-color: #f3f4f6;
+                                padding: 0.125rem 0.25rem;
+                                border-radius: 0.25rem;
+                                font-size: 0.875rem;
+                                font-family: monospace;
+                            }
+                            .blog-content pre {
+                                background-color: #1f2937;
+                                color: #f3f4f6;
+                                padding: 1rem;
+                                border-radius: 0.5rem;
+                                overflow-x: auto;
+                                margin: 1rem 0;
+                            }
+                            .blog-content pre code {
+                                background-color: transparent;
+                                padding: 0;
+                                color: inherit;
+                            }
+                            .blog-content img {
+                                max-width: 100%;
+                                height: auto;
+                                border-radius: 0.5rem;
+                                margin: 1.5rem 0;
+                            }
+                            .blog-content hr {
+                                border: none;
+                                border-top: 2px solid #fecdd3;
+                                margin: 2rem 0;
+                            }
+                        `}</style>
 
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-8">

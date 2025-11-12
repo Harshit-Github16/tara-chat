@@ -5,10 +5,19 @@ import { ObjectId } from 'mongodb';
 export async function POST(request, context) {
     try {
         const { id } = await context.params;
+        const body = await request.json();
+        const userId = body.userId;
 
         if (!id) {
             return NextResponse.json(
                 { success: false, message: 'Blog ID is required' },
+                { status: 400 }
+            );
+        }
+
+        if (!userId) {
+            return NextResponse.json(
+                { success: false, message: 'User ID is required' },
                 { status: 400 }
             );
         }
@@ -41,52 +50,53 @@ export async function POST(request, context) {
         }
 
         if (!existingBlog) {
-            // Debug: Check what blogs exist
-            const allBlogs = await db.collection('blogs').find({}).project({ slug: 1, _id: 1, title: 1 }).toArray();
-            console.log('Like API - Available blogs:', JSON.stringify(allBlogs));
-
-            // Try direct slug match
-            const directMatch = await db.collection('blogs').findOne({ slug: id });
-            console.log('Like API - Direct slug match:', directMatch ? 'Found' : 'Not found');
-            if (directMatch) {
-                console.log('Like API - Direct match details:', { _id: directMatch._id, slug: directMatch.slug });
-            }
-
             return NextResponse.json(
+                { success: false, message: 'Blog not found' },
+                { status: 404 }
+            );
+        }
+
+        // Check if user has already liked this blog
+        const likedBy = existingBlog.likedBy || [];
+        const hasLiked = likedBy.includes(userId);
+
+        if (hasLiked) {
+            // User already liked - unlike it
+            const result = await db.collection('blogs').updateOne(
+                query,
                 {
-                    success: false,
-                    message: 'Blog not found',
-                    debug: {
-                        searchedFor: id,
-                        queryUsed: query,
-                        availableSlugs: allBlogs.map(b => b.slug),
-                        directMatchFound: !!directMatch
-                    }
-                },
-                { status: 404 }
+                    $inc: { likes: -1 },
+                    $pull: { likedBy: userId }
+                }
             );
-        }
 
-        // Increment likes count
-        const result = await db.collection('blogs').updateOne(
-            query,
-            { $inc: { likes: 1 } }
-        );
+            const blog = await db.collection('blogs').findOne(query);
 
-        if (result.matchedCount === 0) {
-            return NextResponse.json(
-                { success: false, message: 'Blog not found after update' },
-                { status: 404 }
+            return NextResponse.json({
+                success: true,
+                likes: blog.likes,
+                isLiked: false,
+                message: 'Blog unliked'
+            });
+        } else {
+            // User hasn't liked - add like
+            const result = await db.collection('blogs').updateOne(
+                query,
+                {
+                    $inc: { likes: 1 },
+                    $addToSet: { likedBy: userId }
+                }
             );
+
+            const blog = await db.collection('blogs').findOne(query);
+
+            return NextResponse.json({
+                success: true,
+                likes: blog.likes,
+                isLiked: true,
+                message: 'Blog liked'
+            });
         }
-
-        // Get updated blog
-        const blog = await db.collection('blogs').findOne(query);
-
-        return NextResponse.json({
-            success: true,
-            likes: blog.likes
-        });
     } catch (error) {
         console.error('Like blog error:', error);
         return NextResponse.json(

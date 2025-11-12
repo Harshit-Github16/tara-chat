@@ -40,7 +40,7 @@ export const SEO_CONFIG = {
             title: "Mental Health & Wellness Blog | Expert Tips & Insights - Tara",
             description: "Discover expert insights, tips, and stories to support your mental wellness journey. Read articles from leading professionals in psychology, neuroscience, and wellness.",
             keywords: "mental health blog, wellness articles, psychology tips, mindfulness guides, emotional wellness, mental health resources, therapy insights, self-care tips",
-            path: "/blogs",
+            path: "/blog",
         },
 
         insights: {

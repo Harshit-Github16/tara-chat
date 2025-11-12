@@ -104,11 +104,11 @@ export default function BlogsPage() {
                 <title>Mental Health & Wellness Blog | Expert Tips & Insights - Tara</title>
                 <meta name="description" content="Discover expert insights, tips, and stories to support your mental wellness journey. Read articles from leading professionals in psychology, neuroscience, and wellness." />
                 <meta name="keywords" content="mental health blog, wellness articles, psychology tips, mindfulness guides, emotional wellness, mental health resources, therapy insights, self-care tips, tara4u" />
-                <link rel="canonical" href="https://tara4u.com/blogs" />
+                <link rel="canonical" href="https://tara4u.com/blog" />
                 <meta property="og:title" content="Mental Health & Wellness Blog - Tara" />
                 <meta property="og:description" content="Expert insights and tips for better emotional wellness. Read articles from leading professionals in psychology and mental health." />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://tara4u.com/blogs" />
+                <meta property="og:url" content="https://tara4u.com/blog" />
                 <meta property="og:image" content="https://tara4u.com/og-image.jpg" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Mental Health & Wellness Blog - Tara" />
@@ -122,7 +122,7 @@ export default function BlogsPage() {
                             "@type": "Blog",
                             "name": "Tara Wellness Blog",
                             "description": "Expert insights and tips for mental health and emotional wellness",
-                            "url": "https://tara4u.com/blogs",
+                            "url": "https://tara4u.com/blog",
                             "publisher": {
                                 "@type": "Organization",
                                 "name": "Tara",
@@ -137,7 +137,7 @@ export default function BlogsPage() {
                                     "name": post.author
                                 },
                                 "datePublished": post.publishDate,
-                                "url": `https://tara4u.com/blogs/${post.id}`
+                                "url": `https://tara4u.com/blog/${post.id}`
                             }))
                         })
                     }}
@@ -239,7 +239,7 @@ export default function BlogsPage() {
                                         {featuredPosts.slice(0, 2).map((post) => (
                                             <Link
                                                 key={post.id}
-                                                href={`/blogs/${post.id}`}
+                                                href={`/blog/${post.id}`}
                                                 className="group block"
                                             >
                                                 <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
@@ -473,7 +473,7 @@ export default function BlogsPage() {
                     </div>
                 </main>
 
-                <BottomNav activePage="blogs" />
+                <BottomNav activePage="blog" />
             </div>
         </>
     );

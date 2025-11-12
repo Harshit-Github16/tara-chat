@@ -22,7 +22,7 @@ Created a complete admin system with:
    - Shows real-time stats (Users, Blogs, Chats) from database
    - Link to manage blogs
 
-3. **`app/admin/blogs/page.js`** - Blog management page
+3. **`app/admin/blog/page.js`** - Blog management page
    - Table view of all blogs with stats
    - Add new blog button with modal form
    - Delete blog functionality
@@ -32,7 +32,7 @@ Created a complete admin system with:
 4. **`app/api/admin/stats/route.js`** - Admin statistics API
    - GET: Returns total users, blogs, and chats count from MongoDB
 
-5. **`app/api/admin/blogs/route.js`** - Blog management API
+5. **`app/api/admin/blog/route.js`** - Blog management API
    - GET: Fetch all blogs from database
    - POST: Create new blog with auto-calculated read time
    - DELETE: Delete blog by ID
@@ -43,8 +43,8 @@ Created a complete admin system with:
 All pages now use the new `BottomNav` component:
 - ✅ `app/journal/page.js`
 - ✅ `app/chatlist/page.js`
-- ✅ `app/blogs/page.js` - Now fetches blogs from database
-- ✅ `app/blogs/[id]/page.js` - Handles both DB and hardcoded blogs
+- ✅ `app/blog/page.js` - Now fetches blogs from database
+- ✅ `app/blog/[id]/page.js` - Handles both DB and hardcoded blogs
 - ✅ `app/insights/page.js`
 - ✅ `app/goals/page.js`
 - ✅ `app/profile/page.js`
@@ -90,7 +90,7 @@ All pages now use the new `BottomNav` component:
 4. Dashboard shows real stats from MongoDB
 5. Click "Manage Blogs" to see table of all blogs
 6. Click "Add Blog" to create new blog posts
-7. New blogs appear immediately on `/blogs` page
+7. New blogs appear immediately on `/blog` page
 8. Non-admin users see only 5 icons (Journal, Chats, Blogs, Insights, Goals)
 
 ## Database Structure
@@ -129,8 +129,8 @@ The following emails have admin access:
 Edit the ADMIN_EMAILS array in these files:
 - `app/components/BottomNav.js`
 - `app/admin/page.js`
-- `app/admin/blogs/page.js`
-- `app/blogs/page.js`
+- `app/admin/blog/page.js`
+- `app/blog/page.js`
 
 ```javascript
 const ADMIN_EMAILS = [
@@ -150,5 +150,5 @@ const ADMIN_EMAILS = [
 5. Click "Manage Blogs" → See table of all blogs
 6. Click "Add Blog" → Form opens
 7. Fill form and submit → New blog created in database
-8. Go to `/blogs` page → New blog appears in list
+8. Go to `/blog` page → New blog appears in list
 9. Click on blog → View full blog post

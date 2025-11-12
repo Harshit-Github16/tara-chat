@@ -75,6 +75,7 @@ export async function POST(request) {
             category: category || 'General',
             tags: tags || [],
             likes: 0,
+            likedBy: [],
             comments: [],
             commentCount: 0,
             views: 0,

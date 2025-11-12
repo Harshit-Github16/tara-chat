@@ -26,7 +26,7 @@ export default function BottomNav({ activePage }) {
             <div className={`mx-auto grid max-w-7xl ${isAdmin ? 'grid-cols-6' : 'grid-cols-5'} px-2 py-2 text-xs text-gray-600 sm:text-sm`}>
                 <NavLink href="/journal" icon={faBookOpen} label="Journal" active={activePage === "journal"} />
                 <NavLink href="/chatlist" icon={faComments} label="Chats" active={activePage === "chatlist"} />
-                <NavLink href="/blogs" icon={faNewspaper} label="Blogs" active={activePage === "blogs"} />
+                <NavLink href="/blog" icon={faNewspaper} label="Blog" active={activePage === "blog"} />
                 <NavLink href="/insights" icon={faChartLine} label="Insights" active={activePage === "insights"} />
                 <NavLink href="/goals" icon={faBullseye} label="Goals" active={activePage === "goals"} />
                 {isAdmin && (

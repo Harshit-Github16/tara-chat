@@ -13,7 +13,7 @@ Created layout files for all major pages with optimized metadata:
 #### Pages with SEO Metadata:
 - ✅ **Home** (`/`) - Main landing page
 - ✅ **Chatlist** (`/chatlist`) - AI chat and celebrity conversations
-- ✅ **Blogs** (`/blogs`) - Mental health blog
+- ✅ **Blogs** (`/blog`) - Mental health blog
 - ✅ **Insights** (`/insights`) - Mood analytics and insights
 - ✅ **Journal** (`/journal`) - Smart journaling
 - ✅ **Profile** (`/profile`) - User profile
@@ -135,7 +135,7 @@ app/
 ### Important URLs to Submit:
 1. `https://tara4u.com/sitemap.xml`
 2. `https://tara4u.com/`
-3. `https://tara4u.com/blogs`
+3. `https://tara4u.com/blog`
 4. `https://tara4u.com/chatlist`
 
 ## 🔍 Keywords Strategy

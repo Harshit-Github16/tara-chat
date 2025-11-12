@@ -1,10 +1,25 @@
-# Allow all crawlers
+# Tara - AI Mental Health Companion
 User-agent: *
-Allow: /
 
-# Disallow admin and API routes
+# Allow public pages
+Allow: /
+Allow: /blog
+Allow: /blog/*
+
+# Disallow protected pages (require authentication)
 Disallow: /api/
 Disallow: /admin/
+Disallow: /login
+Disallow: /chatlist
+Disallow: /chat
+Disallow: /journal
+Disallow: /goals
+Disallow: /insights
+Disallow: /profile
+Disallow: /onboarding
+Disallow: /welcome
+Disallow: /test-*
+Disallow: /debug/
 
 # Sitemap location
 Sitemap: https://tara4u.com/sitemap.xml

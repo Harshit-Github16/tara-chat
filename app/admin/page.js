@@ -140,7 +140,7 @@ export default function AdminPage() {
                         <h2 className="text-lg font-bold text-gray-800 mb-4">Admin Actions</h2>
                         <div className="space-y-3">
                             <Link
-                                href="/admin/blogs"
+                                href="/admin/blog"
                                 className="flex items-center justify-between p-4 rounded-xl border border-rose-100 hover:bg-rose-50 transition-colors"
                             >
                                 <div className="flex items-center gap-3">

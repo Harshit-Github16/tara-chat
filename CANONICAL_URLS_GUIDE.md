@@ -13,8 +13,8 @@ Your Tara app now has proper canonical tags on every page:
 ```
 https://tara4u.com/                    → Home page
 https://tara4u.com/chatlist            → AI Chat page
-https://tara4u.com/blogs               → Blog listing
-https://tara4u.com/blogs/[slug]        → Individual blog posts
+https://tara4u.com/blog               → Blog listing
+https://tara4u.com/blog/[slug]        → Individual blog posts
 https://tara4u.com/insights            → Mood analytics
 https://tara4u.com/journal             → Journaling
 https://tara4u.com/profile             → User profile

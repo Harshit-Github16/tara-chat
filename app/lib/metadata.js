@@ -64,7 +64,7 @@ export const createMetadata = ({
 export const pageMetadata = {
     home: createMetadata({
         title: 'Tara - Your AI Mental Health & Wellness Companion | Emotional Support 24/7',
-        description: 'Tara is your personal AI-powered mental health companion. Get 24/7 emotional support, chat with 100+ AI characters, track your mood, journal your thoughts, and receive personalized wellness insights. Start your mental wellness journey today - free to begin.',
+        description: 'Your AI mental health companion. Get 24/7 emotional support, chat with AI characters, track mood, journal thoughts & receive personalized wellness insights.',
         path: '/',
         keywords: [
             'mental health app',
@@ -90,7 +90,7 @@ export const pageMetadata = {
 
     chatlist: createMetadata({
         title: 'AI Chat & Celebrity Conversations | Mental Health Support',
-        description: 'Connect with 100+ AI characters and celebrities for emotional support, motivation, and guidance. Start meaningful conversations that support your mental wellness journey.',
+        description: 'Chat with 100+ AI characters & celebrities for emotional support, motivation & guidance. Start meaningful conversations for your mental wellness.',
         path: '/chatlist',
         keywords: [
             'AI chat',
@@ -108,8 +108,8 @@ export const pageMetadata = {
 
     blogs: createMetadata({
         title: 'Mental Health & Wellness Blog | Expert Tips & Insights',
-        description: 'Discover expert insights, tips, and stories to support your mental wellness journey. Read articles from leading professionals in psychology, neuroscience, and wellness.',
-        path: '/blogs',
+        description: 'Expert mental health insights, tips & stories. Read articles from leading psychology & wellness professionals to support your wellness journey.',
+        path: '/blog',
         keywords: [
             'mental health blog',
             'wellness articles',
@@ -126,7 +126,7 @@ export const pageMetadata = {
 
     insights: createMetadata({
         title: 'Mood Analytics & Emotional Insights | Track Your Wellness',
-        description: 'Visualize your emotional patterns with beautiful analytics and personalized insights. Track your mood, identify triggers, and monitor your mental wellness progress.',
+        description: 'Visualize emotional patterns with beautiful analytics. Track mood, identify triggers & monitor mental wellness progress with personalized insights.',
         path: '/insights',
         keywords: [
             'mood tracking',
@@ -143,7 +143,7 @@ export const pageMetadata = {
 
     journal: createMetadata({
         title: 'Smart Journaling & Mood Tracking | Guided Reflection',
-        description: 'Express your thoughts with AI-guided journaling prompts. Track your emotions, reflect on your day, and build healthy mental wellness habits.',
+        description: 'AI-guided journaling with smart prompts. Track emotions, reflect on your day & build healthy mental wellness habits through guided journaling.',
         path: '/journal',
         keywords: [
             'digital journal',

@@ -60,7 +60,7 @@ export default function BlogSchema({
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Blogs",
-                "item": "https://yourdomain.com/blogs"
+                "item": "https://yourdomain.com/blog"
             },
             {
                 "@type": "ListItem",

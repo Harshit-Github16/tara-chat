@@ -447,7 +447,7 @@ export default function Home() {
         </section>
 
         {/* Customer Reviews */}
-        <section className="py-20 bg-gradient-to-br from-rose-50/30 to-white overflow-hidden relative">
+        <section className="py-20 bg-gradient-to-br from-rose-50/30 to-white overflow-hidden relative" id="testimonials">
           {/* Header with container */}
           <div className="mx-auto max-w-7xl px-6 mb-16">
             <div className="text-center">
@@ -777,7 +777,7 @@ export default function Home() {
 
               <div className="flex justify-center mt-8">
                 <Link
-                  href="/blogs"
+                  href="/blog"
                   className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-6 py-3 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
                 >
                   View All Articles
@@ -903,13 +903,28 @@ export default function Home() {
                     Continue with Google
                     <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/login"
                     className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
                   >
                     <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
                     Continue with Apple
-                  </Link>
+                  </Link> */}
+
+                  <div className="relative inline-block">
+                    {/* Coming Soon Tag */}
+                    <span className="absolute -top-2 -right-2 rounded-full bg-rose-600 text-white text-xs font-semibold px-2 py-0.5 shadow-md z-10">
+                      Coming Soon
+                    </span>
+
+                    <Link
+                      href="/login"
+                      className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
+                    >
+                      <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
+                      Continue with Apple
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-600">
@@ -982,15 +997,15 @@ export default function Home() {
                   <ContactInfo
                     icon={faMapMarkerAlt}
                     title="Visit us"
-                    info="Near Kalyan Jewellers, Sardarpur B Road, Jodhpur, Rajasthan 342001"
-                    description="Our headquarters"
+                    info="Near Kalyan Jewellers, Sardarpur B Road, Jodhpur,Rajasthan, India,342001"
+                    description="Our Office"
                   />
                 </div>
               </div>
 
               <div className="rounded-2xl border border-rose-100 bg-white p-8 shadow-lg">
                 <form
-                  action="mailto:harshit.geekologix@gmail.com"
+                  action="mailto:hello@tara4u.com"
                   method="POST"
                   encType="text/plain"
                   className="space-y-6"
@@ -1097,7 +1112,7 @@ export default function Home() {
                 <span className="text-xl font-bold text-rose-600">Tara</span>
               </div>
               <p className="text-gray-600 mb-4 text-sm">
-                Your personal emotional wellness companion.
+                Your personal emotional Well being companion.
               </p>
               <div className="flex space-x-3">
                 <LightSocialLink icon={faTwitter} href="#" />
@@ -1113,17 +1128,17 @@ export default function Home() {
               <ul className="space-y-2 text-sm">
                 <LightFooterLink href="#features" text="Features" />
                 <LightFooterLink href="#how-it-works" text="How it Works" />
-                <LightFooterLink href="/login" text="Get Started" />
+                <LightFooterLink href="/blog" text="Blogs" />
               </ul>
             </div>
 
             {/* Legal */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">Legal</h3>
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Others</h3>
               <ul className="space-y-2 text-sm">
                 <LightFooterLink href="/privacy-policy" text="Privacy Policy" />
                 <LightFooterLink href="/terms-of-service" text="Terms of Service" />
-                <LightFooterLink href="mailto:support@tara.app" text="Contact Us" />
+                <LightFooterLink href="#testimonials" text="Testimonials" />
               </ul>
             </div>
           </div>
@@ -1131,10 +1146,10 @@ export default function Home() {
           {/* Bottom Bar */}
           <div className="mt-6 border-t border-rose-100 pt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>© 2024 Tara. All rights reserved.</span>
+              <span>© 2025 Tara. All rights reserved.</span>
             </div>
             <div className="text-sm text-gray-500">
-              <span>Made with ❤️ for better mental wellness</span>
+              <span>Made with ❤️ for better mental Well being</span>
             </div>
           </div>
         </div>

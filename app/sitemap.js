@@ -7,7 +7,7 @@ export default async function sitemap() {
     const routes = [
         { path: '', changeFreq: 'daily', priority: 1.0 },
         { path: '/chatlist', changeFreq: 'daily', priority: 0.9 },
-        { path: '/blogs', changeFreq: 'daily', priority: 0.8 },
+        { path: '/blog', changeFreq: 'daily', priority: 0.8 },
         { path: '/insights', changeFreq: 'weekly', priority: 0.7 },
         { path: '/journal', changeFreq: 'weekly', priority: 0.7 },
         { path: '/profile', changeFreq: 'monthly', priority: 0.6 },
@@ -34,7 +34,7 @@ export default async function sitemap() {
             .toArray();
 
         const blogRoutes = blogs.map((blog) => ({
-            url: `${baseUrl}/blogs/${blog.slug}`,
+            url: `${baseUrl}/blog/${blog.slug}`,
             lastModified: blog.createdAt || new Date().toISOString(),
             changeFrequency: 'weekly',
             priority: 0.7,

@@ -31,7 +31,7 @@ All other routes require authentication:
 - `/chatlist` - Chat list page
 - `/journal` - Journal page
 - `/insights` - Insights page
-- `/blogs` - Blogs page
+- `/blog` - Blogs page
 - `/profile` - Profile page
 - All other pages not listed as public
 

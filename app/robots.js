@@ -3,12 +3,25 @@ export default function robots() {
         rules: [
             {
                 userAgent: '*',
-                allow: '/',
+                allow: [
+                    '/',
+                    '/blog',
+                    '/blog/*',
+                ],
                 disallow: [
                     '/api/',
                     '/admin/',
                     '/test-*',
                     '/debug/',
+                    '/login',
+                    '/chatlist',
+                    '/chat',
+                    '/journal',
+                    '/goals',
+                    '/insights',
+                    '/profile',
+                    '/onboarding',
+                    '/welcome',
                 ],
             },
         ],
