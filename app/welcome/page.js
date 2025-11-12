@@ -205,24 +205,24 @@ function WelcomePageContent() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-5 grid-cols-4 gap-2 mb-6">
+          <div className="grid lg:grid-cols-5 grid-cols-2 gap-4 mb-6">
             {MOODS.map((m) => (
               <button
                 key={m.key}
                 onClick={() => setSelected(m.key)}
-                className={`group rounded-xl border p-3 text-xs font-medium transition-all duration-200 ${selected === m.key
-                  ? `ring-2 ring-rose-500 bg-gradient-to-br ${m.gradient} border-rose-300 shadow-md`
-                  : `bg-white hover:bg-rose-50 border-rose-100 hover:border-rose-200 hover:shadow-sm`
+                className={`group rounded-2xl border-2 p-4 text-sm font-medium transition-all duration-300 transform hover:scale-105 ${selected === m.key
+                  ? `ring-4 ring-rose-300 bg-gradient-to-br ${m.gradient} border-rose-400 shadow-2xl scale-105`
+                  : `bg-white hover:bg-gradient-to-br hover:${m.gradient} border-gray-200 hover:border-rose-300 hover:shadow-xl`
                   }`}
               >
-                <div className="flex flex-col items-center gap-2">
-                  <div className={`h-12 w-12 rounded-full flex items-center justify-center transition-all ${selected === m.key
-                    ? `${m.color} scale-110 shadow-lg`
-                    : `${m.color} group-hover:scale-105`
+                <div className="flex flex-col items-center gap-3">
+                  <div className={`h-16 w-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${selected === m.key
+                    ? `${m.color} scale-110 shadow-2xl rotate-6`
+                    : `${m.color} group-hover:scale-110 group-hover:rotate-3`
                     }`}>
-                    <FontAwesomeIcon icon={m.icon} className="h-6 w-6" />
+                    <FontAwesomeIcon icon={m.icon} className="h-8 w-8" />
                   </div>
-                  <span className={`text-xs font-medium ${selected === m.key ? 'text-gray-900 font-semibold' : 'text-gray-600'}`}>
+                  <span className={`text-sm font-semibold transition-colors ${selected === m.key ? 'text-gray-900' : 'text-gray-700 group-hover:text-gray-900'}`}>
                     {m.label}
                   </span>
                 </div>

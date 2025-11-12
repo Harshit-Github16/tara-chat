@@ -39,6 +39,7 @@ export default function BlogPostPage() {
     const params = useParams();
     const { user } = useAuth();
     const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [newComment, setNewComment] = useState("");
@@ -52,6 +53,7 @@ export default function BlogPostPage() {
 
     const fetchBlog = async () => {
         try {
+            setLoading(true);
             const response = await fetch('/api/admin/blogs');
             const data = await response.json();
             if (data.success) {
@@ -95,6 +97,8 @@ export default function BlogPostPage() {
         } catch (error) {
             console.error('Error fetching blog:', error);
             setPost(null);
+        } finally {
+            setLoading(false);
         }
     };
 

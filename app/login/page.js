@@ -103,7 +103,7 @@ export default function LoginPage() {
 
 
 
-  // Show loading while checking authentication
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 flex items-center justify-center">
@@ -118,23 +118,22 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 relative overflow-hidden flex items-center justify-center p-6">
 
-      {/* Animated SVG Background Elements */}
+
       <div className="absolute inset-0 pointer-events-none">
-        {/* Floating Heart SVG */}
+
         <div className="absolute top-20 left-10 animate-float-slow">
           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" className="text-rose-300 opacity-30">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor" />
           </svg>
         </div>
 
-        {/* Floating Brain/Mind SVG */}
+
         <div className="absolute top-32 right-20 animate-float-medium">
           <svg width="80" height="80" viewBox="0 0 24 24" fill="none" className="text-rose-400 opacity-25">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor" />
           </svg>
         </div>
 
-        {/* Floating Chat Bubble SVG */}
         <div className="absolute bottom-32 left-16 animate-float-fast">
           <svg width="70" height="70" viewBox="0 0 24 24" fill="none" className="text-rose-200 opacity-40">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="currentColor" />
@@ -144,14 +143,14 @@ export default function LoginPage() {
           </svg>
         </div>
 
-        {/* Floating Star SVG */}
+
         <div className="absolute bottom-20 right-12 animate-float-slow">
           <svg width="50" height="50" viewBox="0 0 24 24" fill="none" className="text-yellow-300 opacity-35">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor" />
           </svg>
         </div>
 
-        {/* Additional floating elements */}
+
         <div className="absolute top-1/2 left-8 animate-pulse">
           <div className="w-4 h-4 bg-rose-300 rounded-full opacity-20"></div>
         </div>
@@ -163,9 +162,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Main Login Card */}
       <div className="relative z-10 w-full max-w-xl">
-        {/* Logo and Title */}
+
         <div className="text-center mb-8">
           <div className="mb-6">
             <Image
@@ -184,10 +182,9 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Login Card */}
+
         <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-rose-100 p-8 shadow-2xl animate-slide-up">
 
-          {/* Stats Section */}
           <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl">
             <div className="text-center animate-count-up-1">
               <div className="text-2xl font-bold text-rose-600">10K+</div>
@@ -203,25 +200,21 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Features - 3 cards in one row */}
-
-
-          {/* Error Message */}
           <ClientOnly>
             {error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                <p className="text-sm text-red-600 text-center">{error}</p>
+                <p className="text-sm text-red-600 text-center">Something went wrong</p>
               </div>
             )}
           </ClientOnly>
 
 
 
-          {/* Google Login Button */}
+
           <button
             onClick={handleGoogle}
             disabled={loading}
-            className="btn-shine w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-500 to-pink-600 border-2 border-rose-500 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:from-rose-600 hover:to-pink-700 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed animate-button-appear"
+            className="btn-shine w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-400 to-rose-600 border-2 border-rose-300 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300  hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed animate-button-appear"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="relative flex items-center justify-center gap-3 ">
@@ -294,7 +287,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Custom CSS for animations */}
+
       <style jsx>{`
         @keyframes float-slow {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
