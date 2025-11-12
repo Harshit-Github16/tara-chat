@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BottomNav from "../../components/BottomNav";
+import { useAuth } from "../../contexts/AuthContext";
 import {
     faChartLine,
     faBookOpen,
@@ -36,6 +37,7 @@ const generateMaskedName = () => {
 
 export default function BlogPostPage() {
     const params = useParams();
+    const { user } = useAuth();
     const [post, setPost] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
