@@ -26,8 +26,9 @@ import {
   faChevronDown,
   faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
+// import Footer from "./components/Footer";
 import Head from "next/head";
 export default function Home() {
   return (
@@ -894,7 +895,7 @@ export default function Home() {
                   Begin your transformation today - it's free to start!
                 </p>
 
-                <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
+                {/* <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
                   <Link
                     href="/login"
                     className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-10 py-5 text-lg font-semibold text-rose-700 shadow-lg hover:bg-rose-300 hover:shadow-xl transition-all transform hover:scale-105"
@@ -903,16 +904,10 @@ export default function Home() {
                     Continue with Google
                     <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </Link>
-                  {/* <Link
-                    href="/login"
-                    className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
-                  >
-                    <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
-                    Continue with Apple
-                  </Link> */}
+
 
                   <div className="relative inline-block">
-                    {/* Coming Soon Tag */}
+              
                     <span className="absolute -top-2 -right-2 rounded-full bg-rose-600 text-white text-xs font-semibold px-2 py-0.5 shadow-md z-10">
                       Coming Soon
                     </span>
@@ -920,6 +915,36 @@ export default function Home() {
                     <Link
                       href="/login"
                       className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-10 py-5 text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105"
+                    >
+                      <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
+                      Continue with Apple
+                    </Link>
+                  </div>
+                </div> */}
+                <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                  {/* Google Button */}
+                  <Link
+                    href="/login"
+                    className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 md:px-6 py-3 sm:px-10 sm:py-5 text-base sm:text-lg font-semibold text-rose-700 shadow-lg hover:bg-rose-300 hover:shadow-xl transition-all transform hover:scale-105 w-full sm:w-auto"
+                  >
+                    <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
+                    Continue with Google
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                    />
+                  </Link>
+
+                  {/* Apple Button with Coming Soon Tag */}
+                  <div className="relative inline-block w-full sm:w-auto">
+                    {/* Coming Soon Tag */}
+                    <span className="absolute -top-2 -right-2 rounded-full bg-rose-600 text-white text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 shadow-md z-10">
+                      Coming Soon
+                    </span>
+
+                    <Link
+                      href="/login"
+                      className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-6 py-3 sm:px-10 sm:py-5 text-base sm:text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105 w-full sm:w-auto"
                     >
                       <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
                       Continue with Apple
@@ -942,7 +967,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Trust indicators */}
+
                 <div className="mt-10 pt-8 border-t border-rose-100">
                   <div className="flex items-center justify-center gap-8 flex-wrap">
                     <div className="text-center">
@@ -1119,6 +1144,7 @@ export default function Home() {
                 <LightSocialLink icon={faLinkedin} href="#" />
                 <LightSocialLink icon={faInstagram} href="#" />
                 <LightSocialLink icon={faFacebook} href="#" />
+                <LightSocialLink icon={faWhatsapp} href="#" />
               </div>
             </div>
 
@@ -1128,7 +1154,10 @@ export default function Home() {
               <ul className="space-y-2 text-sm">
                 <LightFooterLink href="#features" text="Features" />
                 <LightFooterLink href="#how-it-works" text="How it Works" />
-                <LightFooterLink href="/blog" text="Blogs" />
+                <LightFooterLink href="/blog" text="Blog" />
+                <LightFooterLink href="/about" text="About Us" />
+
+
               </ul>
             </div>
 
@@ -1136,9 +1165,10 @@ export default function Home() {
             <div>
               <h3 className="text-sm font-semibold text-gray-900 mb-3">Others</h3>
               <ul className="space-y-2 text-sm">
+                <LightFooterLink href="/contact" text="Contact Us" />
+
                 <LightFooterLink href="/privacy-policy" text="Privacy Policy" />
                 <LightFooterLink href="/terms-of-service" text="Terms of Service" />
-                <LightFooterLink href="#testimonials" text="Testimonials" />
               </ul>
             </div>
           </div>
