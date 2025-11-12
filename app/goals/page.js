@@ -33,6 +33,9 @@ export default function GoalsPage() {
     const { user } = useAuth();
     const [goals, setGoals] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [selectedGoalForSuggestions, setSelectedGoalForSuggestions] = useState(null);
+    const [aiSuggestions, setAiSuggestions] = useState({});
+    const [loadingSuggestions, setLoadingSuggestions] = useState({});
     const [newGoal, setNewGoal] = useState({
         title: "",
         category: "mental",
@@ -103,6 +106,114 @@ export default function GoalsPage() {
         if (confirm("Are you sure you want to delete this goal?")) {
             saveGoals(goals.filter((goal) => goal.id !== goalId));
         }
+    };
+
+    // Generate AI suggestions for a goal
+    const generateAISuggestions = async (goal) => {
+        setLoadingSuggestions(prev => ({ ...prev, [goal.id]: true }));
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.firebaseUid || user.uid,
+                    chatUserId: 'tara-ai',
+                    message: `I have a goal: "${goal.title}"
+
+Category: ${goal.category}
+Why: ${goal.why}
+How: ${goal.howToAchieve}
+Target: ${goal.targetDays} days
+
+Give me exactly 5 specific, actionable suggestions to achieve this goal. Format your response EXACTLY like this:
+
+1. [First suggestion - be specific and practical]
+2. [Second suggestion - be specific and practical]
+3. [Third suggestion - be specific and practical]
+4. [Fourth suggestion - be specific and practical]
+5. [Fifth suggestion - be specific and practical]
+
+Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
+                    userDetails: {
+                        name: user.name,
+                        gender: user.gender,
+                        ageRange: user.ageRange,
+                        profession: user.profession,
+                        interests: user.interests,
+                        personalityTraits: user.personalityTraits
+                    },
+                    isGoalSuggestion: true // Flag to indicate this needs longer response
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Parse AI response into suggestions array
+                const suggestionsText = data.aiMessage.content;
+                console.log('AI Response:', suggestionsText); // Debug log
+                const suggestions = parseSuggestions(suggestionsText);
+                console.log('Parsed suggestions:', suggestions); // Debug log
+
+                if (suggestions.length === 0) {
+                    alert('Could not parse suggestions. Please try again.');
+                    return;
+                }
+
+                setAiSuggestions(prev => ({
+                    ...prev,
+                    [goal.id]: suggestions
+                }));
+            }
+        } catch (error) {
+            console.error('Failed to generate suggestions:', error);
+            alert('Failed to generate suggestions. Please try again.');
+        } finally {
+            setLoadingSuggestions(prev => ({ ...prev, [goal.id]: false }));
+        }
+    };
+
+    // Parse AI response into suggestions array
+    const parseSuggestions = (text) => {
+        const suggestions = [];
+
+        // Try multiple parsing strategies
+
+        // Strategy 1: Split by numbered points (1., 2., 3. or 1) 2) 3))
+        const numberedPattern = /(?:^|\n)\s*(\d+)[\.\)]\s*([^\n]+)/g;
+        let match;
+        while ((match = numberedPattern.exec(text)) !== null) {
+            const suggestion = match[2].trim();
+            if (suggestion.length > 10) {
+                suggestions.push(suggestion);
+            }
+        }
+
+        // Strategy 2: If no numbered points, try bullet points
+        if (suggestions.length === 0) {
+            const bulletPattern = /(?:^|\n)\s*[-•*]\s*([^\n]+)/g;
+            while ((match = bulletPattern.exec(text)) !== null) {
+                const suggestion = match[1].trim();
+                if (suggestion.length > 10) {
+                    suggestions.push(suggestion);
+                }
+            }
+        }
+
+        // Strategy 3: If still no suggestions, split by double newlines or periods
+        if (suggestions.length === 0) {
+            const parts = text.split(/\n\n+|\. (?=[A-Z])/);
+            parts.forEach(part => {
+                const cleaned = part.trim().replace(/^\d+[\.\)]\s*/, '').replace(/^[-•*]\s*/, '');
+                if (cleaned.length > 20 && cleaned.length < 300) {
+                    suggestions.push(cleaned);
+                }
+            });
+        }
+
+        // Return 4-5 suggestions
+        return suggestions.slice(0, 5);
     };
 
     const checkInGoal = (goalId) => {
@@ -190,6 +301,9 @@ export default function GoalsPage() {
                                         onToggleComplete={toggleGoalComplete}
                                         onDelete={deleteGoal}
                                         getCategoryColor={getCategoryColor}
+                                        onGenerateSuggestions={generateAISuggestions}
+                                        suggestions={aiSuggestions[goal.id]}
+                                        loadingSuggestions={loadingSuggestions[goal.id]}
                                     />
                                 ))}
                             </div>
@@ -369,12 +483,20 @@ export default function GoalsPage() {
     );
 }
 
-function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColor }) {
+function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColor, onGenerateSuggestions, suggestions, loadingSuggestions }) {
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const color = getCategoryColor(goal.category);
     const category = GOAL_CATEGORIES.find((c) => c.id === goal.category);
     const canCheckInToday = !goal.checkIns?.some(
         (date) => new Date(date).toDateString() === new Date().toDateString()
     );
+
+    const handleGetSuggestions = () => {
+        if (!suggestions) {
+            onGenerateSuggestions(goal);
+        }
+        setShowSuggestions(!showSuggestions);
+    };
 
     return (
         <div
@@ -407,6 +529,24 @@ function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColo
                 </button>
             </div>
 
+            {/* Why & How */}
+            {(goal.why || goal.howToAchieve) && (
+                <div className="mb-3 space-y-2">
+                    {goal.why && (
+                        <div className="text-xs">
+                            <span className="font-medium text-gray-700">Why: </span>
+                            <span className="text-gray-600">{goal.why}</span>
+                        </div>
+                    )}
+                    {goal.howToAchieve && (
+                        <div className="text-xs">
+                            <span className="font-medium text-gray-700">How: </span>
+                            <span className="text-gray-600">{goal.howToAchieve}</span>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {/* Progress Bar */}
             {!goal.completed && (
                 <div className="mb-3">
@@ -419,6 +559,47 @@ function GoalCard({ goal, onCheckIn, onToggleComplete, onDelete, getCategoryColo
                             className={`h-full rounded-full bg-${color}-500 transition-all`}
                             style={{ width: `${goal.progress}%` }}
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* AI Suggestions Button */}
+            {!goal.completed && (
+                <button
+                    onClick={handleGetSuggestions}
+                    disabled={loadingSuggestions}
+                    className="w-full mb-3 rounded-xl bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 px-4 py-2 text-sm font-medium text-purple-700 hover:from-purple-200 hover:to-pink-200 transition-all flex items-center justify-center gap-2"
+                >
+                    {loadingSuggestions ? (
+                        <>
+                            <div className="w-4 h-4 border-2 border-purple-300 border-t-purple-600 rounded-full animate-spin"></div>
+                            Generating Suggestions...
+                        </>
+                    ) : (
+                        <>
+                            <FontAwesomeIcon icon={faBrain} className="h-4 w-4" />
+                            {showSuggestions ? 'Hide' : 'Get'} Suggestions
+                        </>
+                    )}
+                </button>
+            )}
+
+            {/* AI Suggestions Display */}
+            {showSuggestions && suggestions && !loadingSuggestions && (
+                <div className="mb-3 rounded-xl bg-white border border-purple-200 p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                        <FontAwesomeIcon icon={faBrain} className="h-4 w-4 text-purple-600" />
+                        <h4 className="font-semibold text-sm text-purple-900">AI Suggestions to Achieve Your Goal</h4>
+                    </div>
+                    <div className="space-y-2">
+                        {suggestions.map((suggestion, index) => (
+                            <div key={index} className="flex items-start gap-2">
+                                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center text-xs font-bold text-purple-600">
+                                    {index + 1}
+                                </div>
+                                <p className="text-xs text-gray-700 flex-1">{suggestion}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}

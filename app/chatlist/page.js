@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import TaraChat from "../components/TaraChat";
@@ -96,6 +96,10 @@ export default function ChatListPage() {
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   // Store messages per chat ID
   const [chatMessages, setChatMessages] = useState({});
+
+  // Ref for messages container to enable auto-scroll
+  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   // Initialize TaraChat component
   const taraChat = TaraChat({
@@ -274,18 +278,65 @@ export default function ChatListPage() {
   const messages = chatMessages[activeId] || [];
   const activeChat = useMemo(() => chats.find((c) => c.id === activeId), [chats, activeId]);
 
-  // Audio recording functions
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Scroll to bottom when messages change or active chat changes
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, activeId]);
+
+  // Also scroll when component mounts
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  // Audio recording functions with live speech recognition
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
       const chunks = [];
 
+      // Start speech recognition simultaneously
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US'; // Change to 'hi-IN' for Hindi
+      recognition.interimResults = true;
+      recognition.continuous = true;
+
+      let finalTranscript = '';
+
+      recognition.onresult = (event) => {
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' ';
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+        console.log('Recognizing:', interimTranscript || finalTranscript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+
+      recognition.start();
+
       recorder.ondataavailable = (e) => chunks.push(e.data);
       recorder.onstop = () => {
         const blob = new Blob(chunks, { type: 'audio/wav' });
+        // Store both audio blob and transcript
+        blob.transcript = finalTranscript.trim();
         setAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
+        recognition.stop();
       };
 
       recorder.start();
@@ -304,25 +355,217 @@ export default function ChatListPage() {
     }
   };
 
-  const sendAudioMessage = () => {
-    if (audioBlob) {
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const newMessage = {
-        id: Date.now(),
+  const sendAudioMessage = async () => {
+    if (!audioBlob || isSendingMessage) return;
+
+    setIsSendingMessage(true);
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    try {
+      // Step 1: Get transcribed text from audio blob (recorded during recording)
+      const transcribedText = audioBlob.transcript || '';
+
+      if (!transcribedText) {
+        alert('Could not understand audio. Please speak clearly and try again.');
+        setIsSendingMessage(false);
+        setAudioBlob(null);
+        return;
+      }
+
+      console.log('Using transcript:', transcribedText);
+
+      // Step 2: Show user's audio message
+      const userAudioMessage = {
+        id: Date.now().toString(),
         type: 'audio',
         content: audioUrl,
-        sender: 'me',
+        transcription: transcribedText,
+        sender: 'user',
         timestamp: new Date(),
         duration: '0:05'
       };
 
-      // Add audio message to the specific chat
       setChatMessages(prev => ({
         ...prev,
-        [activeId]: [...(prev[activeId] || []), newMessage]
+        [activeId]: [...(prev[activeId] || []), userAudioMessage]
       }));
+
+      // Step 3: Send transcribed text to AI
+      let aiResponse;
+      if (activeId === "tara-ai" && user?.uid) {
+        await taraChat.sendMessage(transcribedText, {
+          name: user.name,
+          gender: user.gender,
+          ageRange: user.ageRange,
+          profession: user.profession,
+          interests: user.interests,
+          personalityTraits: user.personalityTraits
+        });
+      } else {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.firebaseUid || user.uid,
+            chatUserId: activeId,
+            message: transcribedText,
+            userDetails: {
+              name: user.name,
+              gender: user.gender,
+              ageRange: user.ageRange,
+              profession: user.profession,
+              interests: user.interests,
+              personalityTraits: user.personalityTraits
+            }
+          })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          aiResponse = data.aiMessage.content;
+
+          // Step 4: Convert AI response to speech
+          const aiAudioUrl = await textToSpeech(aiResponse);
+
+          // Step 5: Add AI audio response
+          const aiAudioMessage = {
+            id: Date.now().toString() + '-ai',
+            type: 'audio',
+            content: aiAudioUrl,
+            transcription: aiResponse,
+            sender: 'them',
+            timestamp: new Date()
+          };
+
+          setChatMessages(prev => ({
+            ...prev,
+            [activeId]: [...(prev[activeId] || []), aiAudioMessage]
+          }));
+
+          // Auto-play AI response
+          const audio = new Audio(aiAudioUrl);
+          audio.play();
+        }
+      }
+
       setAudioBlob(null);
+    } catch (error) {
+      console.error('Error sending audio message:', error);
+      alert('Failed to send audio message. Please try again.');
+    } finally {
+      setIsSendingMessage(false);
     }
+  };
+
+  // Speech-to-Text function - Convert recorded audio to text
+  const transcribeAudio = async (audioBlob) => {
+    // For now, we'll use a simple approach: play the audio and use live recognition
+    // In production, you'd want to use a proper STT API like Google Cloud Speech-to-Text
+
+    return new Promise((resolve) => {
+      try {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US'; // Change to 'hi-IN' for Hindi
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        recognition.continuous = false;
+
+        let transcriptReceived = false;
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          console.log('Transcribed:', transcript);
+          transcriptReceived = true;
+          resolve(transcript);
+        };
+
+        recognition.onerror = (event) => {
+          console.error('Speech recognition error:', event.error);
+          if (!transcriptReceived) {
+            resolve(''); // Return empty string on error
+          }
+        };
+
+        recognition.onend = () => {
+          if (!transcriptReceived) {
+            resolve(''); // Return empty if no transcript received
+          }
+        };
+
+        // Play the recorded audio and start recognition simultaneously
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+
+        audio.onplay = () => {
+          recognition.start();
+        };
+
+        audio.onerror = () => {
+          resolve('');
+        };
+
+        audio.play();
+      } catch (error) {
+        console.error('Transcription error:', error);
+        resolve('');
+      }
+    });
+  };
+
+  // Text-to-Speech function
+  const textToSpeech = async (text) => {
+    return new Promise((resolve) => {
+      try {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-US'; // Change to 'hi-IN' for Hindi
+        utterance.rate = 0.9; // Slightly slower for clarity
+        utterance.pitch = 1.1; // Slightly higher for female voice
+        utterance.volume = 1.0;
+
+        // Wait for voices to load and set female voice
+        const setVoice = () => {
+          const voices = window.speechSynthesis.getVoices();
+          const femaleVoice = voices.find(voice =>
+            voice.name.includes('Female') ||
+            voice.name.includes('Samantha') ||
+            voice.name.includes('Google UK English Female') ||
+            voice.name.includes('Microsoft Zira')
+          );
+
+          if (femaleVoice) {
+            utterance.voice = femaleVoice;
+          }
+        };
+
+        if (window.speechSynthesis.getVoices().length > 0) {
+          setVoice();
+        } else {
+          window.speechSynthesis.onvoiceschanged = setVoice;
+        }
+
+        utterance.onend = () => {
+          console.log('Speech finished');
+          resolve('speech-completed');
+        };
+
+        utterance.onerror = (event) => {
+          console.error('Speech synthesis error:', event.error);
+          resolve('speech-error');
+        };
+
+        // Speak the text
+        window.speechSynthesis.speak(utterance);
+
+        // Return a placeholder URL (actual speech happens via browser TTS)
+        resolve('tts-audio-playing');
+      } catch (error) {
+        console.error('Text-to-speech error:', error);
+        resolve('tts-error');
+      }
+    });
   };
 
   const cancelAudio = () => {
@@ -803,7 +1046,7 @@ export default function ChatListPage() {
                   </div>
                 </div>
 
-                <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                <div ref={messagesContainerRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
                   {messages.length === 0 && activeChat?.id === "tara-ai" ? (
                     <div className="flex flex-col items-center justify-center h-full text-center py-8">
                       <img
@@ -818,15 +1061,20 @@ export default function ChatListPage() {
                       </p>
                     </div>
                   ) : (
-                    messages.map((msg) => (
-                      <ChatBubble
-                        key={msg.id}
-                        who={msg.sender}
-                        type={msg.type}
-                        content={msg.content}
-                        duration={msg.duration}
-                      />
-                    ))
+                    <>
+                      {messages.map((msg) => (
+                        <ChatBubble
+                          key={msg.id}
+                          who={msg.sender}
+                          type={msg.type}
+                          content={msg.content}
+                          duration={msg.duration}
+                        />
+                      ))}
+
+                      {/* Invisible element at the end for auto-scroll */}
+                      <div ref={messagesEndRef} />
+                    </>
                   )}
 
                   {/* TARA Typing Indicator */}

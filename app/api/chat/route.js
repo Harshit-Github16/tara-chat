@@ -335,7 +335,7 @@ Your approach:
 
 export async function POST(request) {
     try {
-        const { userId, chatUserId, message, userDetails } = await request.json();
+        const { userId, chatUserId, message, userDetails, isGoalSuggestion } = await request.json();
 
         if (!userId || !chatUserId || !message) {
             return NextResponse.json({
@@ -490,8 +490,8 @@ ${responseLabel}:`;
         const groqPayload = {
             model: 'llama-3.3-70b-versatile', // Updated model (llama-3.1-70b-versatile is decommissioned)
             messages: groqMessages,
-            temperature: 0.8, // More creative responses
-            max_tokens: 60, // Very short responses (1-2 sentences max)
+            temperature: isGoalSuggestion ? 0.7 : 0.8, // Slightly more focused for goal suggestions
+            max_tokens: isGoalSuggestion ? 500 : 60, // Longer responses for goal suggestions
             top_p: 0.9,
         };
 
