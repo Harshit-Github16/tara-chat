@@ -869,21 +869,21 @@ export default function ChatListPage() {
           {/* Mobile Sidebar Overlay */}
           {showMobileSidebar && (
             <div
-              className="fixed inset-0 bg-black/50 z-40 sm:hidden"
+              className="fixed inset-0 bg-black/50 z-40 md:hidden"
               onClick={() => setShowMobileSidebar(false)}
             />
           )}
 
 
           <aside className={`
-          fixed sm:relative top-0 left-0 min-lg:h-[calc(100vh-134px)] h-[calc(100vh-50px)]  w-80 
+          fixed md:relative top-0 left-0 min-lg:h-[calc(100vh-134px)] h-[calc(100vh-50px)]  w-80 
           transform transition-transform duration-300 ease-in-out z-9
-          sm:transform-none sm:flex-none sm:w-80 lg:w-96
+          md:transform-none md:flex-none sm:w-80 lg:w-96
           ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
         `}>
             <div className="h-full border-r border-rose-100 bg-white/95 backdrop-blur-sm p-2 sm:p-3 shadow-lg overflow-y-auto sm:border sm:bg-white sm:backdrop-blur-none sm:shadow-sm">
               {/* Mobile Close Button */}
-              <div className="sm:hidden flex justify-end mb-3">
+              <div className="md:hidden flex justify-end mb-3">
                 <button
                   onClick={() => setShowMobileSidebar(false)}
                   className="rounded-full p-2 text-gray-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"
@@ -1236,7 +1236,7 @@ export default function ChatListPage() {
                     />
 
                     {/* Audio Recording Button */}
-                    <button
+                    {/* <button
                       type="button"
                       onClick={isRecording ? stopRecording : startRecording}
                       className={`rounded-full p-3 transition-colors ${isRecording
@@ -1245,7 +1245,7 @@ export default function ChatListPage() {
                         }`}
                     >
                       <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} className="h-5 w-5" />
-                    </button>
+                    </button> */}
 
                     {/* Send Button */}
                     <button
