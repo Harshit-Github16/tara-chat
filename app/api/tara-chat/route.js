@@ -41,7 +41,21 @@ export async function POST(request) {
         };
 
         // Create mood-aware system prompt
-        let systemPrompt = `You are TARA (Talk, Align, Reflect, Act), a compassionate AI mental wellness companion. You provide emotional support, mindfulness guidance, and mental health resources. Keep responses warm, empathetic, and helpful. Remember the conversation context and provide personalized responses based on the user's previous messages.`;
+        let systemPrompt = `You are TARA (Talk, Align, Reflect, Act), a compassionate AI mental wellness companion. You provide emotional support, mindfulness guidance, and mental health resources. 
+
+CRITICAL: Keep responses VERY SHORT - maximum 1 sentence or 10-15 words. Be conversational, not explanatory.
+
+Examples:
+User: "hii"
+You: "Hey! How's it going? 😊"
+
+User: "I'm stressed"
+You: "I hear you. What's up? 🥺"
+
+User: "I'm happy"
+You: "That's great! What happened? 💛"
+
+Remember the conversation context and provide personalized responses based on the user's previous messages.`;
 
         // Add mood context if available and this is the first message
         if (latestMood && chatHistory.length === 0) {
@@ -87,11 +101,12 @@ export async function POST(request) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: 'llama3-8b-8192',
+                model: 'llama-3.3-70b-versatile',
                 messages: groqMessages,
-                max_tokens: 100, // Reduced for shorter responses
-                temperature: 0.7,
-                stop: ['\n\n', 'User:', 'TARA:'], // Stop at natural breakpoints
+                max_tokens: 50, // Very short responses
+                temperature: 0.9,
+                top_p: 0.95,
+                stop: ['\n\n', '\n', 'User:', 'TARA:', '।।'], // Stop at line breaks
             }),
         });
 
