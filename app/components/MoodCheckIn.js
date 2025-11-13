@@ -69,30 +69,30 @@ export default function MoodCheckIn({ onMoodSaved }) {
     const selectedMoodData = MOOD_OPTIONS.find(m => m.value === selectedMood);
 
     return (
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-2xl mx-auto border border-rose-100">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+        <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-8 max-w-2xl mx-auto border border-rose-100">
+            <h2 className="text-xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">
                 How are you feeling?
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 {/* Mood Selection */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-4">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3 sm:mb-4">
                         Select your mood:
                     </label>
-                    <div className="grid grid-cols-5 gap-3">
+                    <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-3">
                         {MOOD_OPTIONS.map((mood) => (
                             <button
                                 key={mood.value}
                                 type="button"
                                 onClick={() => setSelectedMood(mood.value)}
-                                className={`p-4 rounded-2xl border-2 transition-all duration-200 ${selectedMood === mood.value
+                                className={`p-2 sm:p-4 rounded-xl sm:rounded-2xl border-2 transition-all duration-200 ${selectedMood === mood.value
                                     ? 'border-rose-500 bg-rose-50 scale-105 shadow-lg'
                                     : 'border-gray-200 hover:border-rose-300 hover:bg-rose-50'
                                     }`}
                             >
-                                <div className="text-3xl mb-2">{mood.emoji}</div>
-                                <div className="text-xs font-medium text-gray-700">{mood.label}</div>
+                                <div className="text-xl sm:text-3xl mb-1 sm:mb-2">{mood.emoji}</div>
+                                <div className="text-[9px] sm:text-xs font-medium text-gray-700 leading-tight break-words">{mood.label}</div>
                             </button>
                         ))}
                     </div>
@@ -100,7 +100,7 @@ export default function MoodCheckIn({ onMoodSaved }) {
 
                 {/* Intensity Slider */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 sm:mb-3">
                         Intensity: {intensity}/10
                     </label>
                     <div className="relative">
@@ -137,7 +137,7 @@ export default function MoodCheckIn({ onMoodSaved }) {
                 <button
                     type="submit"
                     disabled={isSubmitting || !selectedMood}
-                    className="w-full bg-gradient-to-r from-rose-400 to-rose-600 text-white py-4 px-6 rounded-full font-semibold hover:from-rose-500 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="w-full bg-gradient-to-r from-rose-400 to-rose-600 text-white py-3 sm:py-4 px-6 rounded-full text-sm sm:text-base font-semibold hover:from-rose-500 hover:to-rose-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
                     {isSubmitting ? 'Saving...' : 'Save Mood'}
                 </button>

@@ -81,19 +81,21 @@ export default function WelcomePage() {
 
   // Welcome page content
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 p-6">
-      <div className="max-w-4xl mx-auto py-8">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto py-4 sm:py-8">
         {/* Welcome Header */}
-        <div className="text-center mb-8">
-          <img
-            src="/taralogo.jpg"
-            alt="Tara Logo"
-            className="mx-auto h-20 w-20 rounded-full object-cover mb-4 shadow-lg border-4 border-white"
-          />
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Welcome  {user?.name || 'Friend'}! 👋
-          </h1>
-          <p className="text-lg text-gray-600">
+        <div className="text-center mb-4 sm:mb-6">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <img
+              src="/taralogo.jpg"
+              alt="Tara Logo"
+              className="h-12 w-12 sm:h-16 sm:w-16 rounded-full object-cover shadow-lg border-2 sm:border-4 border-white"
+            />
+            <h1 className="text-xl sm:text-3xl font-bold text-gray-900">
+              Welcome {user?.name || 'Friend'}! 👋
+            </h1>
+          </div>
+          <p className="text-xs sm:text-base text-gray-600 px-4">
             Let's start your day with a quick mood check-in
           </p>
         </div>
