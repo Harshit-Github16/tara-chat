@@ -2,7 +2,7 @@
     "name": "Tara - Mental Wellness Companion",
     "short_name": "Tara",
     "description": "Your AI-powered mental health companion. Get 24/7 emotional support, chat with AI characters, track your mood, and receive personalized wellness insights.",
-    "start_url": "/",
+    "start_url": "/welcome",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#8B5CF6",

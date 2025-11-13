@@ -836,15 +836,15 @@ export default function ChatListPage() {
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ">
+      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
         {/* Header */}
-        <header className=" top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
-          <div className="mx-auto flex lg:max-w-9xl items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/80 backdrop-blur-md">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-3 sm:px-4 py-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setShowMobileSidebar(true)}
-                className="sm:hidden rounded-lg p-2 text-rose-600 hover:bg-rose-100 transition-colors"
+                className="md:hidden rounded-lg p-2 text-rose-600 hover:bg-rose-100 transition-colors"
               >
                 <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
               </button>
@@ -852,20 +852,19 @@ export default function ChatListPage() {
               <img
                 src="/taralogo.jpg"
                 alt="Tara Logo"
-                className="h-8 w-8 rounded-full object-cover"
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full object-cover"
               />
-              <span className="text-lg font-semibold text-rose-600">Tara</span>
+              <span className="text-base sm:text-lg font-semibold text-rose-600">Tara</span>
             </div>
 
             {/* Profile Icon */}
             <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
               <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
             </Link>
-
           </div>
         </header>
 
-        <div className="mx-auto flex w-full lg:max-w-9xl flex-1 relative px-1 sm:px-3 gap-0 sm:gap-2">
+        <div className="mx-auto flex w-full max-w-7xl flex-1 relative gap-0 md:gap-3 md:px-3">
           {/* Mobile Sidebar Overlay */}
           {showMobileSidebar && (
             <div
@@ -874,25 +873,26 @@ export default function ChatListPage() {
             />
           )}
 
-
+          {/* Sidebar */}
           <aside className={`
-          fixed md:relative top-0 left-0 min-lg:h-[calc(100vh-134px)] h-[calc(100vh-50px)]  w-80 
-          transform transition-transform duration-300 ease-in-out z-9
-          md:transform-none md:flex-none sm:w-80 lg:w-96
-          ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}
-        `}>
-            <div className="h-full border-r border-rose-100 bg-white/95 backdrop-blur-sm p-2 sm:p-3 shadow-lg overflow-y-auto sm:border sm:bg-white sm:backdrop-blur-none sm:shadow-sm">
+            fixed md:relative top-0 left-0 h-screen md:h-[calc(100vh-64px-56px)] w-72 sm:w-80 md:w-80 lg:w-96
+            transform transition-transform duration-300 ease-in-out z-50 md:z-auto
+            md:transform-none
+            ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+          `}>
+            <div className="h-full border-r border-rose-100 bg-white p-3 shadow-xl md:shadow-sm overflow-y-auto">
               {/* Mobile Close Button */}
-              <div className="md:hidden flex justify-end mb-3">
+              <div className="md:hidden flex justify-between items-center mb-4">
+                <span className="text-sm font-semibold text-gray-700">Chats</span>
                 <button
                   onClick={() => setShowMobileSidebar(false)}
                   className="rounded-full p-2 text-gray-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"
                 >
-                  <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-3 hidden md:flex items-center justify-between">
                 <div className="text-sm font-semibold text-gray-700">Chats</div>
                 <button
                   onClick={() => setShowAdd(true)}
@@ -1000,9 +1000,9 @@ export default function ChatListPage() {
           </aside>
 
           {/* Chat view */}
-          <section className="flex-1">
+          <section className="flex-1 w-full md:w-auto">
             {chats.length === 0 ? (
-              <div className="flex h-[calc(100vh-140px)] flex-col items-center justify-center border border-rose-100 bg-white shadow-sm">
+              <div className="flex h-[calc(100vh-64px-56px)] flex-col items-center justify-center md:border md:border-rose-100 bg-white md:shadow-sm md:rounded-lg">
                 <div className="text-center">
                   <FontAwesomeIcon icon={faComments} className="h-16 w-16 text-gray-300 mb-4" />
                   <h3 className="text-lg font-semibold text-gray-600 mb-2">No chats yet</h3>
@@ -1017,11 +1017,11 @@ export default function ChatListPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex h-[calc(100vh-134px)] flex-col border border-rose-100 bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3">
-                  <div className="flex items-center gap-3">
+              <div className="flex h-[calc(100vh-64px-56px)] flex-col md:border md:border-rose-100 bg-white md:shadow-sm md:rounded-lg overflow-hidden">
+                <div className="flex items-center justify-between border-b border-rose-100 px-3 sm:px-4 py-3 bg-white">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     {/* Active Chat Avatar */}
-                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center flex-shrink-0">
                       {activeChat?.avatar ? (
                         <img
                           src={activeChat.avatar}
@@ -1034,11 +1034,11 @@ export default function ChatListPage() {
                     </div>
 
                     {/* Chat Info */}
-                    <div>
-                      <div className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                        {activeChat?.name}
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-semibold text-gray-900 flex items-center gap-2 truncate">
+                        <span className="truncate">{activeChat?.name}</span>
                         {activeChat?.type === 'celebrity' && (
-                          <span className="text-xs font-medium bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full">AI</span>
+                          <span className="text-xs font-medium bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full flex-shrink-0">AI</span>
                         )}
                       </div>
                       <div className="text-xs text-gray-500">Today</div>
@@ -1046,7 +1046,7 @@ export default function ChatListPage() {
                   </div>
                 </div>
 
-                <div ref={messagesContainerRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+                <div ref={messagesContainerRef} className="flex-1 space-y-2 sm:space-y-3 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4">
                   {messages.length === 0 && activeChat?.id === "tara-ai" ? (
                     <div className="flex flex-col items-center justify-center h-full text-center py-8">
                       <img
@@ -1148,44 +1148,33 @@ export default function ChatListPage() {
 
                 {/* Suggested Messages */}
                 {messages.length <= 3 && (
-                  <div className=" p-3 ">
-                    {/* 
-                    <div className="flex flex-wrap gap-2">
-                      {SUGGESTED_MESSAGES.slice(0, 3).map((suggestion, index) => (
-                        <button
-                          key={index}
-                          onClick={() => sendSuggestedMessage(suggestion)}
-                          className="inline-flex items-center rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs text-gray-700 hover:bg-rose-100 hover:border-rose-300 transition-colors"
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div> */}
+                  <div className="hidden">
+                    {/* Commented out for now */}
                   </div>
                 )}
 
                 <form
                   onSubmit={sendMessage}
-                  className="relative border-t border-rose-100 p-3"
+                  className="relative border-t border-rose-100 p-2 sm:p-3 bg-white"
                 >
                   {/* Emoji Picker */}
                   {showEmojiPicker && (
-                    <div className="absolute bottom-full left-3 right-3 mb-2 rounded-2xl border border-rose-100 bg-white shadow-xl z-50">
+                    <div className="absolute bottom-full left-2 right-2 sm:left-3 sm:right-3 mb-2 rounded-2xl border border-rose-100 bg-white shadow-xl z-50 max-h-[60vh]">
                       {/* Header */}
-                      <div className="flex items-center justify-between p-3 border-b border-rose-100">
-                        <span className="text-sm font-medium text-gray-700">Choose Emoji</span>
+                      <div className="flex items-center justify-between p-2 sm:p-3 border-b border-rose-100">
+                        <span className="text-xs sm:text-sm font-medium text-gray-700">Choose Emoji</span>
                         <button
                           type="button"
                           onClick={() => setShowEmojiPicker(false)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors"
+                          className="text-gray-400 hover:text-gray-600 transition-colors p-1"
                         >
                           <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
                         </button>
                       </div>
 
                       {/* Emoji Grid with Scroll */}
-                      <div className="h-48 overflow-y-auto p-3">
-                        <div className="grid grid-cols-30 max-md:grid-cols-10 gap-1">
+                      <div className="h-40 sm:h-48 overflow-y-auto p-2 sm:p-3">
+                        <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-1">
                           {EMOJIS.map((emoji, index) => (
                             <button
                               key={index}
@@ -1217,44 +1206,32 @@ export default function ChatListPage() {
                     </div>
                   )}
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 sm:gap-2">
                     {/* Emoji Button */}
                     <button
                       type="button"
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors"
+                      className="rounded-full p-2 text-rose-600 hover:bg-rose-50 transition-colors flex-shrink-0"
                     >
-                      <FontAwesomeIcon icon={faSmile} className="h-5 w-5" />
+                      <FontAwesomeIcon icon={faSmile} className="h-4 w-4 sm:h-5 sm:w-5" />
                     </button>
 
                     {/* Message Input */}
                     <input
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      className="flex-1 rounded-full border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring"
+                      className="flex-1 rounded-full border border-rose-200 px-3 sm:px-4 py-2 sm:py-3 text-sm outline-none ring-rose-100 focus:ring min-w-0"
                       placeholder="Write a message..."
                     />
-
-                    {/* Audio Recording Button */}
-                    {/* <button
-                      type="button"
-                      onClick={isRecording ? stopRecording : startRecording}
-                      className={`rounded-full p-3 transition-colors ${isRecording
-                        ? 'bg-red-500 text-white animate-pulse'
-                        : 'text-rose-600 hover:bg-rose-50'
-                        }`}
-                    >
-                      <FontAwesomeIcon icon={isRecording ? faStop : faMicrophone} className="h-5 w-5" />
-                    </button> */}
 
                     {/* Send Button */}
                     <button
                       type="submit"
                       disabled={!message.trim() || isSendingMessage}
-                      className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-1 sm:gap-2 rounded-full bg-rose-200 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-rose-700 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                     >
-                      <FontAwesomeIcon icon={faPaperPlane} />
-                      {isSendingMessage ? 'Sending...' : 'Send'}
+                      <FontAwesomeIcon icon={faPaperPlane} className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">{isSendingMessage ? 'Sending...' : 'Send'}</span>
                     </button>
                   </div>
                 </form>
@@ -1440,9 +1417,9 @@ function ChatBubble({ who, type = 'text', content, duration }) {
   return (
     <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[70%] rounded-2xl px-4 py-3 text-sm shadow ${isMe
+        className={`max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-2xl px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm shadow-sm ${isMe
           ? "rounded-br-sm bg-rose-100 text-rose-700"
-          : "rounded-bl-sm bg-rose-100 text-gray-800"
+          : "rounded-bl-sm bg-gray-100 text-gray-800"
           }`}
       >
         {type === 'text' ? (
@@ -1493,21 +1470,21 @@ function AddUserModal({ onClose, onCreate }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className={`w-full rounded-3xl border border-rose-100 bg-white p-4 sm:p-6 shadow-xl
-         h-auto ${tab === "celebs" ? "max-w-5xl " : "max-w-5xl sm:max-w-md  max-md:overflow-auto"}`}>
-        <div className="mb-4 flex items-center justify-between">
-          <div className="text-lg font-bold text-gray-900">{tab === "user" ? "Add New User" : "Talk with Celebrities"}</div>
-          <div className="flex gap-2 rounded-full bg-rose-200 p-1 text-xs font-semibold text-rose-600">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4">
+      <div className={`w-full rounded-2xl sm:rounded-3xl border border-rose-100 bg-white p-4 sm:p-6 shadow-xl max-h-[90vh] overflow-y-auto
+         ${tab === "celebs" ? "max-w-5xl" : "max-w-md"}`}>
+        <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="text-base sm:text-lg font-bold text-gray-900">{tab === "user" ? "Add New User" : "Talk with Celebrities"}</div>
+          <div className="flex gap-1 sm:gap-2 rounded-full bg-rose-200 p-1 text-xs font-semibold text-rose-600 w-full sm:w-auto">
             <button
-              className={`rounded-full px-3 py-1 ${tab === "user" ? "bg-white shadow" : ""}`}
+              className={`rounded-full px-2 sm:px-3 py-1 flex-1 sm:flex-none ${tab === "user" ? "bg-white shadow" : ""}`}
               onClick={() => setTab("user")}
               type="button"
             >
               Create User
             </button>
             <button
-              className={`rounded-full px-3 py-1 ${tab === "celebs" ? "bg-white shadow" : ""}`}
+              className={`rounded-full px-2 sm:px-3 py-1 flex-1 sm:flex-none ${tab === "celebs" ? "bg-white shadow" : ""}`}
               onClick={() => setTab("celebs")}
               type="button"
             >
@@ -1542,13 +1519,13 @@ function AddUserModal({ onClose, onCreate }) {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Choose Avatar</label>
-              <div className="mt-2 grid grid-cols-4 sm:grid-cols-5 gap-2">
+              <div className="mt-2 grid grid-cols-5 gap-2">
                 {AVATARS.map((a) => (
                   <button
                     type="button"
                     key={a}
                     onClick={() => setAvatar(a)}
-                    className={`aspect-square w-full h-20 sm:h-16 overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
+                    className={`aspect-square w-full overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
                       }`}
                   >
                     <img src={a} alt="avatar" className="h-full w-full object-cover" />
@@ -1585,10 +1562,10 @@ function AddUserModal({ onClose, onCreate }) {
             </div>
           </form>
         ) : (
-          <div className="space-y-4">
-            <p className="text-sm text-gray-600">Pick a celebrity character to start chatting instantly.</p>
+          <div className="space-y-3 sm:space-y-4">
+            <p className="text-xs sm:text-sm text-gray-600">Pick a celebrity character to start chatting instantly.</p>
             {/* Fixed height container with scroll */}
-            <div className="h-96 overflow-y-auto border border-rose-100 rounded-2xl p-3">
+            <div className="h-64 sm:h-80 md:h-96 overflow-y-auto border border-rose-100 rounded-2xl p-2 sm:p-3">
               <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {CELEBRITIES.map((person) => (
                   <button
