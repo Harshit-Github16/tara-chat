@@ -89,8 +89,9 @@ export async function POST(request) {
             body: JSON.stringify({
                 model: 'llama3-8b-8192',
                 messages: groqMessages,
-                max_tokens: 500,
+                max_tokens: 100, // Reduced for shorter responses
                 temperature: 0.7,
+                stop: ['\n\n', 'User:', 'TARA:'], // Stop at natural breakpoints
             }),
         });
 
@@ -99,7 +100,28 @@ export async function POST(request) {
         }
 
         const groqData = await groqResponse.json();
-        const taraReply = groqData.choices[0]?.message?.content || "I'm here to help. Could you tell me more about how you're feeling?";
+        let taraReply = groqData.choices[0]?.message?.content || "I'm here to help. Could you tell me more about how you're feeling?";
+
+        // Ensure response ends at a complete sentence
+        taraReply = taraReply.trim();
+        const lastChar = taraReply[taraReply.length - 1];
+        const sentenceEnders = ['.', '!', '?', '।', '॥']; // Including Hindi sentence enders
+
+        if (!sentenceEnders.includes(lastChar)) {
+            // Find the last complete sentence
+            let lastSentenceEnd = -1;
+            for (let i = taraReply.length - 1; i >= 0; i--) {
+                if (sentenceEnders.includes(taraReply[i])) {
+                    lastSentenceEnd = i;
+                    break;
+                }
+            }
+
+            // If we found a sentence ending, cut there
+            if (lastSentenceEnd > 0) {
+                taraReply = taraReply.substring(0, lastSentenceEnd + 1).trim();
+            }
+        }
 
         // Create TARA's response message
         const taraMessage = {

@@ -244,3 +244,37 @@ imation delays for crackers */
   animation: shine 3s infinite;
   pointer-events: none;
 }
+
+/* Disable shine animation on mobile for better performance */
+@media (max-width: 768px) {
+  .btn-shine::before {
+    animation: none;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .btn-shine::before {
+    animation: none;
+  }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+
+  /* Reduce animation complexity on mobile */
+  * {
+    animation-duration: 0.5s !important;
+  }
+
+  /* Optimize transforms */
+  .transform {
+    will-change: transform;
+  }
+
+  /* Disable expensive effects on mobile */
+  .backdrop-blur-sm {
+    backdrop-filter: none;
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+}
