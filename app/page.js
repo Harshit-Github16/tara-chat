@@ -98,6 +98,7 @@ export default function Home() {
               width={32}
               height={32}
               className="h-8 w-8 rounded-full object-cover"
+              priority
             />
             <span className="text-xl font-bold text-rose-600">Tara</span>
           </div>
@@ -628,16 +629,37 @@ export default function Home() {
               .animate-infinite-scroll-left {
                 animation: infinite-scroll-left 30s linear infinite;
                 width: max-content;
+                will-change: transform;
               }
 
               .animate-infinite-scroll-right {
                 animation: infinite-scroll-right 30s linear infinite;
                 width: max-content;
+                will-change: transform;
+              }
+
+              /* Disable animations on mobile for better performance */
+              @media (max-width: 768px) {
+                .animate-infinite-scroll-left,
+                .animate-infinite-scroll-right {
+                  animation: none;
+                  overflow-x: auto;
+                  scroll-snap-type: x mandatory;
+                  -webkit-overflow-scrolling: touch;
+                }
               }
 
               .animate-infinite-scroll-left:hover,
               .animate-infinite-scroll-right:hover {
                 animation-play-state: paused;
+              }
+
+              @media (prefers-reduced-motion: reduce) {
+                .animate-infinite-scroll-left,
+                .animate-infinite-scroll-right {
+                  animation: none;
+                }
+              }y-state: paused;
               }
             `
           }} />
@@ -803,10 +825,27 @@ export default function Home() {
               .animate-blog-slider {
                 animation: blog-slider 40s linear infinite;
                 width: max-content;
+                will-change: transform;
+              }
+
+              /* Disable blog slider animation on mobile */
+              @media (max-width: 768px) {
+                .animate-blog-slider {
+                  animation: none;
+                  overflow-x: auto;
+                  scroll-snap-type: x mandatory;
+                  -webkit-overflow-scrolling: touch;
+                }
               }
 
               .animate-blog-slider:hover {
                 animation-play-state: paused;
+              }
+
+              @media (prefers-reduced-motion: reduce) {
+                .animate-blog-slider {
+                  animation: none;
+                }
               }
             `
           }} />
@@ -835,6 +874,7 @@ export default function Home() {
                       width={600}
                       height={700}
                       className="w-full h-auto object-cover"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rose-300/20 to-transparent"></div>
 
@@ -1133,6 +1173,7 @@ export default function Home() {
                   width={32}
                   height={32}
                   className="h-8 w-8 rounded-full object-cover"
+                  loading="lazy"
                 />
                 <span className="text-xl font-bold text-rose-600">Tara</span>
               </div>

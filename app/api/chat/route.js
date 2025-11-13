@@ -491,8 +491,9 @@ ${responseLabel}:`;
             model: 'llama-3.3-70b-versatile', // Updated model (llama-3.1-70b-versatile is decommissioned)
             messages: groqMessages,
             temperature: isGoalSuggestion ? 0.7 : 0.8, // Slightly more focused for goal suggestions
-            max_tokens: isGoalSuggestion ? 500 : 60, // Longer responses for goal suggestions
+            max_tokens: isGoalSuggestion ? 500 : 80, // Short responses to save tokens
             top_p: 0.9,
+            stop: ['\n\n', 'User:', 'TARA:', chatUser.name + ':'], // Stop at natural breakpoints
         };
 
         console.log('Groq API payload:', JSON.stringify(groqPayload, null, 2));
@@ -518,6 +519,27 @@ ${responseLabel}:`;
 
         // Clean up the response (like old code)
         aiReply = aiReply.trim();
+
+        // Ensure response ends at a complete sentence
+        // Check if response was cut off mid-sentence
+        const lastChar = aiReply[aiReply.length - 1];
+        const sentenceEnders = ['.', '!', '?', '।', '॥']; // Including Hindi sentence enders
+
+        if (!sentenceEnders.includes(lastChar)) {
+            // Find the last complete sentence
+            let lastSentenceEnd = -1;
+            for (let i = aiReply.length - 1; i >= 0; i--) {
+                if (sentenceEnders.includes(aiReply[i])) {
+                    lastSentenceEnd = i;
+                    break;
+                }
+            }
+
+            // If we found a sentence ending, cut there
+            if (lastSentenceEnd > 0) {
+                aiReply = aiReply.substring(0, lastSentenceEnd + 1).trim();
+            }
+        }
 
         // Remove any character name prefix if it appears
         const possiblePrefixes = ['TARA:', 'You:', 'AI:', chatUser.name + ':'];
