@@ -245,7 +245,7 @@ export default function BlogsPage() {
                                                 <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
                                                     <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
                                                         <img
-                                                            src="/blog1.png"
+                                                            src="/blogs-img/blogs1.jpeg"
                                                             alt={post.title}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -316,7 +316,7 @@ export default function BlogsPage() {
                                                     <div className="md:flex">
                                                         <div className="md:w-1/3 aspect-video md:aspect-square bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
                                                             <img
-                                                                src="/blog1.png"
+                                                                src="/blogs-img/blogs1.jpeg"
                                                                 alt={post.title}
                                                                 className="w-full h-full object-cover"
                                                             />

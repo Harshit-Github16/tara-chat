@@ -169,7 +169,7 @@ Profile Page: Shows updated data
     personalityTraits: ["Creative", "Analytical"],
     
     // Profile fields
-    phone: "+91 7220007999",
+    phone: "+91 9876543210",
     location: "Mumbai, India", 
     bio: "Passionate developer...",
     

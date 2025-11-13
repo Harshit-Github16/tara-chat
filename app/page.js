@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,6 +31,52 @@ import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
 // import Footer from "./components/Footer";
 import Head from "next/head";
 export default function Home() {
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [activeSection, setActiveSection] = useState('home');
+
+  // Handle PWA install prompt
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallPrompt(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  // Track active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'features', 'how-it-works', 'testimonials'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    setDeferredPrompt(null);
+    setShowInstallPrompt(false);
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <Head>
@@ -91,6 +137,7 @@ export default function Home() {
       {/* Navigation */}
       <header className="sticky top-0 z-50 border-b border-rose-100 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          {/* Logo - Left */}
           <div className="flex items-center gap-2">
             <Image
               src="/taralogo.jpg"
@@ -103,13 +150,67 @@ export default function Home() {
             <span className="text-xl font-bold text-rose-600">Tara</span>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* <Link
-              href="/login"
-              className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
+          {/* Navigation Menu - Center */}
+          <nav className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+            <a
+              href="#home"
+              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'home'
+                ? 'text-rose-600 font-semibold'
+                : 'text-gray-700 hover:text-rose-600'
+                }`}
             >
-              Sign In
-            </Link> */}
+              Home
+            </a>
+            <a
+              href="#features"
+              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'features'
+                ? 'text-rose-600 font-semibold'
+                : 'text-gray-700 hover:text-rose-600'
+                }`}
+            >
+              Features
+            </a>
+            <a
+              href="#how-it-works"
+              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'how-it-works'
+                ? 'text-rose-600 font-semibold'
+                : 'text-gray-700 hover:text-rose-600'
+                }`}
+            >
+              How It Works
+            </a>
+            <a
+              href="#testimonials"
+              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'testimonials'
+                ? 'text-rose-600 font-semibold'
+                : 'text-gray-700 hover:text-rose-600'
+                }`}
+            >
+              Testimonials
+            </a>
+            <Link
+              href="/contact"
+              className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors"
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* Right Side Buttons */}
+          <div className="flex items-center gap-3">
+            {/* Install App Button */}
+            {showInstallPrompt && (
+              <button
+                onClick={handleInstall}
+                className="hidden sm:flex items-center gap-2 rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-all"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Install App
+              </button>
+            )}
+
             <Link
               href="/login"
               className="btn-shine rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
@@ -118,11 +219,11 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </header>
+      </header >
 
       <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-rose-50/50 via-white to-rose-50/30">
+        <section id="home" className="relative overflow-hidden bg-gradient-to-br from-rose-50/50 via-white to-rose-50/30">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.1),transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.05),transparent_50%)]"></div>
 
@@ -192,7 +293,7 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-1.5 sm:gap-2">
                       <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
-                      <span className="whitespace-nowrap">Non-Judgmental Support</span>
+                      <span className="whitespace-nowrap">Non-Judgmental</span>
                     </div>
                   </div>
                 </div>
@@ -535,7 +636,7 @@ export default function Home() {
             </div>
 
             {/* Second Row - Right to Left */}
-            <div className="relative overflow-hidden w-full">
+            <div className="relative overflow-hidden w-full pb-2">
               <div className="flex gap-6 animate-infinite-scroll-right">
                 <ReviewCard
                   name="Vikram Singh"
@@ -1043,7 +1144,7 @@ export default function Home() {
                   Get in touch
                 </h2>
                 <p className="mt-4 text-lg text-gray-600">
-                  Have questions about Tara? We&apos;d love to hear from you. Send us a message or connect with us on social media.
+                  Have questions about Tara? We'd love to hear from you. Send us a message or connect with us on social media.
                 </p>
 
                 <div className="mt-8 space-y-6">
@@ -1099,7 +1200,7 @@ export default function Home() {
                       </a>
 
                       <a
-                        href="https://wa.me/917220007999"
+                        href="https://wa.me/919876543210"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
@@ -1143,7 +1244,7 @@ export default function Home() {
                         name="lastName"
                         className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
                         placeholder="Doe"
-                        required
+                      // required
                       />
                     </div>
                   </div>

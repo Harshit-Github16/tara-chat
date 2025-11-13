@@ -839,7 +839,7 @@ export default function ChatListPage() {
       <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
         {/* Header */}
         <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/80 backdrop-blur-md">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-3 sm:px-4 py-3">
+          <div className="mx-auto flex  items-center justify-between px-3 sm:px-4 py-3">
             <div className="flex items-center gap-2 sm:gap-3">
               {/* Mobile Menu Button */}
               <button
@@ -864,7 +864,7 @@ export default function ChatListPage() {
           </div>
         </header>
 
-        <div className="mx-auto flex w-full max-w-7xl flex-1 relative gap-0 md:gap-3 md:px-3">
+        <div className="mx-auto flex w-full  2xl:w-full flex-1 relative gap-0 md:gap-3 md:px-3">
           {/* Mobile Sidebar Overlay */}
           {showMobileSidebar && (
             <div

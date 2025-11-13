@@ -39,7 +39,7 @@ export default function StructuredData() {
                 ],
                 "contactPoint": {
                     "@type": "ContactPoint",
-                    "telephone": "+91-7220007999",
+                    "telephone": "+91-9876543210",
                     "contactType": "Customer Service",
                     "email": "hello@tara4u.com",
                     "areaServed": "IN",

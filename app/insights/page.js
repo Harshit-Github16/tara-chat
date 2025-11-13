@@ -327,19 +327,18 @@ function ChartCard({ title, icon, children, disabled }) {
 function MoodMeter({ moodData = [], loading }) {
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    // Fixed mood intensity values
-    const moodIntensityMap = {
-        'happy': 10,
-        'excited': 9,
-        'grateful': 8,
-        'calm': 7,
-        'active': 7, // For daily login tracking
-        'tired': 5,
-        'confused': 4,
-        'stressed': 3,
-        'anxious': 2,
-        'sad': 1,
-        'angry': 1
+    // Mood emoji mapping
+    const moodEmojis = {
+        'happy': '😊',
+        'sad': '😢',
+        'angry': '😠',
+        'stressed': '😰',
+        'tired': '😴',
+        'calm': '😌',
+        'excited': '🤗',
+        'disappointed': '😔',
+        'frustrated': '😤',
+        'loved': '🥰'
     };
 
     // Create chart data for last 7 days
@@ -355,23 +354,29 @@ function MoodMeter({ moodData = [], loading }) {
         // Find ALL mood entries for this specific date
         const dayMoods = moodData.filter(m => m.date === dateStr);
 
-        // Calculate average mood for this day using fixed intensity values
+        // Calculate average mood for this day using actual intensity from database
         let avgDayMood = 0;
         let hasData = false;
+        let moodEmojisForDay = [];
 
         if (dayMoods.length > 0) {
             const total = dayMoods.reduce((sum, m) => {
-                const intensity = moodIntensityMap[m.mood.toLowerCase()] || 5;
+                // Use the actual intensity value stored in database (1-10)
+                const intensity = m.intensity || 5;
                 return sum + intensity;
             }, 0);
             avgDayMood = Math.round(total / dayMoods.length);
             hasData = true;
 
-            // Store moods with calculated intensity for overall average
+            // Get unique moods for the day (max 3 to show)
+            const uniqueMoods = [...new Set(dayMoods.map(m => m.mood))];
+            moodEmojisForDay = uniqueMoods.slice(0, 3).map(mood => moodEmojis[mood]).filter(Boolean);
+
+            // Store moods with actual intensity for overall average
             dayMoods.forEach(m => {
                 moodsWithData.push({
                     ...m,
-                    calculatedIntensity: moodIntensityMap[m.mood.toLowerCase()] || 5
+                    actualIntensity: m.intensity || 5
                 });
             });
         }
@@ -380,12 +385,13 @@ function MoodMeter({ moodData = [], loading }) {
             day: dayName,
             mood: avgDayMood,
             hasData: hasData,
-            count: dayMoods.length
+            count: dayMoods.length,
+            emojis: moodEmojisForDay
         });
     }
 
     const avgMood = moodsWithData.length > 0
-        ? (moodsWithData.reduce((sum, m) => sum + m.calculatedIntensity, 0) / moodsWithData.length).toFixed(1)
+        ? (moodsWithData.reduce((sum, m) => sum + m.actualIntensity, 0) / moodsWithData.length).toFixed(1)
         : 0;
 
     if (loading) {
@@ -401,6 +407,16 @@ function MoodMeter({ moodData = [], loading }) {
             <div className="flex items-end justify-between gap-2">
                 {chartData.map((item, i) => (
                     <div key={i} className="flex flex-col items-center gap-2">
+                        {/* Mood emojis on top - show multiple if multiple moods in a day */}
+                        {item.emojis && item.emojis.length > 0 && (
+                            <div className="flex gap-0.5 mb-1">
+                                {item.emojis.map((emoji, idx) => (
+                                    <div key={idx} className="text-base">
+                                        {emoji}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                         <div className="relative h-24 w-8 rounded-full bg-rose-100">
                             {item.hasData && (
                                 <div
@@ -411,13 +427,19 @@ function MoodMeter({ moodData = [], loading }) {
                         </div>
                         <span className="text-xs text-gray-600">{item.day}</span>
                         <span className="text-xs font-semibold text-rose-600">
-                            {item.hasData ? item.mood : '-'}
+                            {item.hasData ? `${item.mood}/10` : '-'}
                         </span>
+                        {/* Show count if multiple moods */}
+                        {item.count > 1 && (
+                            <span className="text-[10px] text-gray-400">
+                                ({item.count} moods)
+                            </span>
+                        )}
                     </div>
                 ))}
             </div>
             <div className="text-center text-sm text-gray-600">
-                Average mood this week: <span className="font-semibold text-rose-600">{avgMood}/10</span>
+                Average intensity this week: <span className="font-semibold text-rose-600">{avgMood}/10</span>
             </div>
         </div>
     );
