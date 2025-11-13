@@ -1043,7 +1043,7 @@ export default function Home() {
                   Get in touch
                 </h2>
                 <p className="mt-4 text-lg text-gray-600">
-                  Have questions about Tara? We'd love to hear from you. Send us a message or connect with us on social media.
+                  Have questions about Tara? We&apos;d love to hear from you. Send us a message or connect with us on social media.
                 </p>
 
                 <div className="mt-8 space-y-6">
@@ -1057,32 +1057,12 @@ export default function Home() {
                   {/* Social Media Section */}
                   <div className="pt-4">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect with us</h3>
-                    <div className="flex gap-4">
-                      <a
-                        href="https://www.instagram.com/tara4u.official"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 text-white hover:scale-110 transition-transform shadow-lg"
-                        aria-label="Instagram"
-                      >
-                        <FontAwesomeIcon icon={faInstagram} className="h-6 w-6" />
-                      </a>
-
-                      <a
-                        href="https://www.facebook.com/tara4u.official"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white hover:scale-110 transition-transform shadow-lg"
-                        aria-label="Facebook"
-                      >
-                        <FontAwesomeIcon icon={faFacebook} className="h-6 w-6" />
-                      </a>
-
+                    <div className="flex gap-3">
                       <a
                         href="https://twitter.com/tara4u_official"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-black text-white hover:scale-110 transition-transform shadow-lg"
+                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
                         aria-label="Twitter/X"
                       >
                         <FontAwesomeIcon icon={faXTwitter} className="h-6 w-6" />
@@ -1092,20 +1072,40 @@ export default function Home() {
                         href="https://www.linkedin.com/company/tara4u"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-blue-700 text-white hover:scale-110 transition-transform shadow-lg"
+                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
                         aria-label="LinkedIn"
                       >
                         <FontAwesomeIcon icon={faLinkedin} className="h-6 w-6" />
                       </a>
 
                       <a
-                        href="https://www.youtube.com/@tara4u"
+                        href="https://www.instagram.com/tara4u.official"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-12 h-12 rounded-full bg-red-600 text-white hover:scale-110 transition-transform shadow-lg"
-                        aria-label="YouTube"
+                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
+                        aria-label="Instagram"
                       >
-                        <FontAwesomeIcon icon={faYoutube} className="h-6 w-6" />
+                        <FontAwesomeIcon icon={faInstagram} className="h-6 w-6" />
+                      </a>
+
+                      <a
+                        href="https://www.facebook.com/tara4u.official"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
+                        aria-label="Facebook"
+                      >
+                        <FontAwesomeIcon icon={faFacebook} className="h-6 w-6" />
+                      </a>
+
+                      <a
+                        href="https://wa.me/917220007999"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
+                        aria-label="WhatsApp"
+                      >
+                        <FontAwesomeIcon icon={faWhatsapp} className="h-6 w-6" />
                       </a>
                     </div>
                   </div>

@@ -84,7 +84,7 @@ export default function TermsOfServicePage() {
                         <h2 className="text-2xl font-bold text-gray-800 mb-4">8. Contact</h2>
                         <p className="text-gray-700">
                             For questions about these Terms, contact us at:
-                            <a href="mailto:support@tara4u.com" className="text-rose-600 hover:underline ml-1">support@tara4u.com</a>
+                            <a href="mailto:hello@tara4u.com" className="text-rose-600 hover:underline ml-1">hello@tara4u.com</a>
                         </p>
                     </div>
                 </div>
