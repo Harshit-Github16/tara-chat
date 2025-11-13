@@ -1,7 +1,4 @@
-export const metadata = {
-    title: 'Offline - Tara',
-    description: 'You are currently offline',
-};
+'use client';
 
 export default function OfflinePage() {
     return (
