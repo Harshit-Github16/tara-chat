@@ -49,7 +49,7 @@ export default function Home() {
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'features', 'how-it-works', 'testimonials'];
+      const sections = ['home', 'features', 'how-it-works', 'blogs'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -151,7 +151,7 @@ export default function Home() {
           </div>
 
           {/* Navigation Menu - Center */}
-          <nav className="hidden md:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
+          <nav className="hidden lg:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
             <a
               href="#home"
               className={`text-sm font-medium transition-all duration-300 ${activeSection === 'home'
@@ -180,13 +180,13 @@ export default function Home() {
               How It Works
             </a>
             <a
-              href="#testimonials"
-              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'testimonials'
+              href="#blogs"
+              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'blogs'
                 ? 'text-rose-600 font-semibold'
                 : 'text-gray-700 hover:text-rose-600'
                 }`}
             >
-              Testimonials
+              Blogs
             </a>
             <Link
               href="/contact"
@@ -267,6 +267,13 @@ export default function Home() {
 
               <div className="relative">
                 <div className="relative rounded-3xl border border-rose-100 bg-white p-6 sm:p-8 shadow-2xl w-full max-w-full lg:min-w-[500px]">
+                  {/* Chat Icon - Top Right Corner */}
+                  <div className="absolute -top-3 -right-3 z-10">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center shadow-lg">
+                      <FontAwesomeIcon icon={faComments} className="h-6 w-6 text-white" />
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-4">
                     <FeaturePreview icon={faComments} title="Emotional Chat" desc="Express & reflect" />
                     <FeaturePreview icon={faBookOpen} title="Smart Journaling" desc="Guided insights" />
@@ -819,13 +826,17 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+
+                {/* Corner decorations */}
+                <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-rose-200 opacity-20"></div>
+                <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-rose-200 opacity-30"></div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Blog Section with Auto Slider */}
-        <section className="py-20 bg-gradient-to-br from-rose-100/30 to-rose-50/30 overflow-hidden">
+        <section id="blogs" className="py-20 bg-gradient-to-br from-rose-100/30 to-rose-50/30 overflow-hidden">
           <div className="mx-auto max-w-full px-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
