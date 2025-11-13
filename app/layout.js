@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import StructuredData from './components/StructuredData';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -36,7 +37,7 @@ export const metadata = {
   alternates: {
     canonical: 'https://tara4u.com',
   },
-  manifest: '/site.webmanifest',
+  manifest: '/manifest.json',
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -83,6 +84,15 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <StructuredData />
+        {/* PWA Meta Tags */}
+        <meta name="application-name" content="Tara" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Tara" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#8B5CF6" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-R6HNEYQSP3"></script>
         <script
@@ -111,6 +121,7 @@ export default function RootLayout({ children }) {
         <ErrorBoundary>
           <AuthProvider>
             {children}
+            <PWAInstallPrompt />
           </AuthProvider>
         </ErrorBoundary>
       </body>
