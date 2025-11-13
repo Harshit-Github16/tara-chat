@@ -609,7 +609,14 @@ export default function ChatListPage() {
       }));
 
       try {
-        await taraChat.sendMessage(messageText, {
+        console.log('Sending message to TARA with user details:', {
+          name: user.name,
+          gender: user.gender,
+          ageRange: user.ageRange,
+          profession: user.profession
+        });
+
+        const result = await taraChat.sendMessage(messageText, {
           name: user.name,
           gender: user.gender,
           ageRange: user.ageRange,
@@ -617,9 +624,12 @@ export default function ChatListPage() {
           interests: user.interests,
           personalityTraits: user.personalityTraits
         });
+
+        console.log('Message sent successfully, result:', result);
       } catch (error) {
         console.error('Failed to send message to TARA:', error);
-        alert('Failed to send message. Please try again.');
+        console.error('Error details:', error.message, error.stack);
+        alert(`Failed to send message: ${error.message}`);
         // Remove the temp message on error
         setChatMessages(prev => ({
           ...prev,

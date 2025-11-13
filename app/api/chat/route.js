@@ -355,19 +355,27 @@ Your approach:
 
 export async function POST(request) {
     try {
-        const { userId, chatUserId, message, userDetails, isGoalSuggestion, skipChatHistory } = await request.json();
+        console.log('=== CHAT API CALLED ===');
+        const body = await request.json();
+        console.log('Request body:', JSON.stringify(body, null, 2));
+
+        const { userId, chatUserId, message, userDetails, isGoalSuggestion, skipChatHistory } = body;
 
         if (!userId || !chatUserId || !message) {
+            console.error('Missing required fields:', { userId, chatUserId, message });
             return NextResponse.json({
                 error: 'User ID, Chat User ID, and message are required'
             }, { status: 400 });
         }
 
         if (!GROQ_API_KEY) {
+            console.error('GROQ_API_KEY not configured');
             return NextResponse.json({
                 error: 'GROQ API key not configured'
             }, { status: 500 });
         }
+
+        console.log('All validations passed, proceeding with chat...');
 
         const client = await clientPromise;
         const db = client.db('tara');
@@ -508,16 +516,18 @@ ${responseLabel}:`;
 
         // Call Groq API with better model (matching old code settings)
         const groqPayload = {
-            model: 'llama-3.3-70b-versatile', // Updated model (llama-3.1-70b-versatile is decommissioned)
+            model: 'llama-3.3-70b-versatile', // Using latest model
             messages: groqMessages,
             temperature: isGoalSuggestion ? 0.7 : 0.9, // More natural and varied
-            max_tokens: isGoalSuggestion ? 500 : 50, // Very short responses - just 1-2 sentences
+            max_tokens: isGoalSuggestion ? 500 : 150, // Increased for better responses
             top_p: 0.95,
-            stop: ['\n\n', '\n', 'User:', 'TARA:', chatUser.name + ':', '।।'], // Stop at line breaks too
+            stop: ['\n\n', 'User:', 'TARA:', chatUser.name + ':'], // Max 4 items for Groq API
         };
 
+        console.log('Calling Groq API with model:', groqPayload.model);
         console.log('Groq API payload:', JSON.stringify(groqPayload, null, 2));
 
+        console.log('Sending request to Groq API...');
         const groqResponse = await fetch(GROQ_API_URL, {
             method: 'POST',
             headers: {
@@ -527,14 +537,65 @@ ${responseLabel}:`;
             body: JSON.stringify(groqPayload),
         });
 
+        console.log('Groq API response status:', groqResponse.status);
+
         if (!groqResponse.ok) {
             const errorText = await groqResponse.text();
             console.error('Groq API error response:', errorText);
             console.error('Groq API status:', groqResponse.status);
-            throw new Error(`Groq API error: ${groqResponse.status} - ${errorText}`);
+
+            // Return a fallback response instead of throwing error
+            console.log('Using fallback response due to Groq API error');
+            const aiReply = "I'm here to listen. Tell me more about what's on your mind. 💛";
+
+            const userMessage = {
+                id: new ObjectId().toString(),
+                content: message,
+                sender: 'user',
+                type: 'text',
+                timestamp: new Date()
+            };
+
+            const aiMessage = {
+                id: new ObjectId().toString(),
+                content: aiReply,
+                sender: 'them',
+                type: 'text',
+                timestamp: new Date()
+            };
+
+            if (!skipChatHistory) {
+                await collection.updateOne(
+                    {
+                        firebaseUid: userId,
+                        'chatUsers.id': chatUserId
+                    },
+                    {
+                        $push: {
+                            'chatUsers.$.conversations': {
+                                $each: [userMessage, aiMessage]
+                            }
+                        },
+                        $set: {
+                            'chatUsers.$.lastMessageAt': new Date(),
+                            lastUpdated: new Date()
+                        }
+                    }
+                );
+            }
+
+            return NextResponse.json({
+                success: true,
+                userMessage,
+                aiMessage,
+                chatHistory: skipChatHistory ? chatHistory : [...chatHistory, userMessage, aiMessage],
+                warning: 'Using fallback response'
+            });
         }
 
         const groqData = await groqResponse.json();
+        console.log('Groq API response data:', JSON.stringify(groqData, null, 2));
+
         let aiReply = groqData.choices[0]?.message?.content || "Main yahin hoon, sun rahi hoon 💛";
 
         // Clean up the response (like old code)
@@ -581,6 +642,7 @@ ${responseLabel}:`;
         }
 
         console.log('Groq API response received, length:', aiReply.length);
+        console.log('AI Reply:', aiReply);
 
         // Create user message
         const userMessage = {
@@ -627,12 +689,16 @@ ${responseLabel}:`;
         console.log('Chat response generated successfully');
         console.log('Returning response with', skipChatHistory ? chatHistory.length : chatHistory.length + 2, 'total messages');
 
-        return NextResponse.json({
+        const responseData = {
             success: true,
             userMessage,
             aiMessage,
             chatHistory: skipChatHistory ? chatHistory : [...chatHistory, userMessage, aiMessage]
-        });
+        };
+
+        console.log('Response data:', JSON.stringify(responseData, null, 2));
+
+        return NextResponse.json(responseData);
 
     } catch (error) {
         console.error('Chat API Error:', error);
