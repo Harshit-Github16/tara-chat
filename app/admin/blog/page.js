@@ -43,7 +43,7 @@ export default function ManageBlogsPage() {
     const fetchBlogs = async () => {
         try {
             setLoading(true);
-            const response = await fetch('/api/admin/blog');
+            const response = await fetch('/api/admin/blogs');
             const data = await response.json();
             if (data.success) {
                 setBlogs(data.data);
@@ -59,7 +59,7 @@ export default function ManageBlogsPage() {
         if (!confirm('Are you sure you want to delete this blog?')) return;
 
         try {
-            const response = await fetch(`/api/admin/blog?id=${blogId}`, {
+            const response = await fetch(`/api/admin/blogs?id=${blogId}`, {
                 method: 'DELETE'
             });
             const data = await response.json();
@@ -245,7 +245,7 @@ function AddBlogModal({ onClose, onSuccess }) {
 
         try {
             setSubmitting(true);
-            const response = await fetch('/api/admin/blog', {
+            const response = await fetch('/api/admin/blogs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
