@@ -229,6 +229,17 @@ export default function BlogPostPage() {
         window.location.href = '/login';
     };
 
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-rose-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading blog post...</p>
+                </div>
+            </div>
+        );
+    }
+
     if (!post) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
