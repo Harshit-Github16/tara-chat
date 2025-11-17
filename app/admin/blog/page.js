@@ -81,7 +81,7 @@ export default function ManageBlogsPage() {
         <ProtectedRoute>
             <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
-                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+                    <div className="mx-auto flex max-w-9xl items-center justify-between px-4 py-3">
                         <div className="flex items-center gap-3">
                             <Link href="/admin" className="text-rose-600 hover:text-rose-700">
                                 <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5" />
@@ -98,7 +98,7 @@ export default function ManageBlogsPage() {
                     </div>
                 </header>
 
-                <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+                <main className="mx-auto w-full max-w-9xl flex-1 px-4 py-6">
                     {loading ? (
                         <div className="text-center py-12 text-gray-500">Loading blogs...</div>
                     ) : blogs.length === 0 ? (

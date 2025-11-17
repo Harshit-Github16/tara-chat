@@ -469,8 +469,17 @@ export async function POST(request) {
             systemPrompt += `\n\nIMPORTANT - FIRST MESSAGE: ${moodGreeting} Keep it brief, warm, and inviting (2-3 sentences max). Match the emotional tone of their mood.`;
         }
 
+        // Detect if conversation is getting boring (short, unengaged responses)
+        const lastUserMessages = recentHistory.filter(msg => msg.sender === 'user').slice(-3);
+        const boringPatterns = ['haa', 'nhi', 'kya', 'ok', 'hmm', 'bas', 'nothing', 'kuch nhi', 'pata nhi', 'nahi', 'ha', 'na', 'theek hai', 'sab theek', 'bas bdiya'];
+        const isConversationBoring = lastUserMessages.length >= 2 &&
+            lastUserMessages.every(msg =>
+                msg.content.trim().split(' ').length <= 3 ||
+                boringPatterns.some(pattern => msg.content.toLowerCase().includes(pattern))
+            );
+
         // Build context about the user
-        const userContext = userDetails ? `
+        let userContext = userDetails ? `
 User you're talking to:
 - Name: ${userDetails.name || 'User'}
 - Gender: ${userDetails.gender || 'Not specified'}
@@ -481,6 +490,17 @@ User you're talking to:
 
 Use this to personalize your responses and show you remember them.
 ` : '';
+
+        // If conversation is boring and user has interests, prompt TARA to bring up an interest
+        if (isConversationBoring && userDetails?.interests && userDetails.interests.length > 0 && chatUserId === 'tara-ai') {
+            const randomInterest = userDetails.interests[Math.floor(Math.random() * userDetails.interests.length)];
+            userContext += `\n\n🎯 IMPORTANT - ENGAGEMENT BOOST: The conversation seems flat. Bring up their interest in "${randomInterest}" naturally! Ask them something engaging about it to spark their interest. Examples:
+- "Btw yaar, you mentioned you like ${randomInterest}. What's been catching your attention lately?"
+- "Random question - since you're into ${randomInterest}, what's your take on [something related]?"
+- "Hey, I'm curious - with your interest in ${randomInterest}, have you tried/seen/done [something specific]?"
+
+Make it feel natural and conversational, not forced. The goal is to get them excited and talking!`;
+        }
 
         // Build conversation history text (like old code)
         let historyText = "";
@@ -519,7 +539,7 @@ ${responseLabel}:`;
             model: 'llama-3.3-70b-versatile', // Using latest model
             messages: groqMessages,
             temperature: isGoalSuggestion ? 0.7 : 0.9, // More natural and varied
-            max_tokens: isGoalSuggestion ? 500 : 150, // Increased for better responses
+            max_tokens: isGoalSuggestion ? 500 : 80, // Shorter responses for better UX
             top_p: 0.95,
             stop: ['\n\n', 'User:', 'TARA:', chatUser.name + ':'], // Max 4 items for Groq API
         };

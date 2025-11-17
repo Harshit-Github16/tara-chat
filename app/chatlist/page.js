@@ -94,6 +94,7 @@ export default function ChatListPage() {
   const [audioBlob, setAudioBlob] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [isAddingCelebrity, setIsAddingCelebrity] = useState(false);
   // Store messages per chat ID
   const [chatMessages, setChatMessages] = useState({});
 
@@ -776,6 +777,11 @@ export default function ChatListPage() {
       return;
     }
 
+    // Prevent double clicks
+    if (isAddingCelebrity) {
+      return;
+    }
+
     const newChatId = `celebrity-${celebrity.id}`;
 
     // Check if celebrity is already in chat list
@@ -786,6 +792,7 @@ export default function ChatListPage() {
       return;
     }
 
+    setIsAddingCelebrity(true);
     try {
       // Add celebrity to database
       const response = await fetch('/api/users', {
@@ -841,6 +848,8 @@ export default function ChatListPage() {
     } catch (error) {
       console.error('Failed to add celebrity:', error);
       alert('Failed to add celebrity. Please try again.');
+    } finally {
+      setIsAddingCelebrity(false);
     }
   };
 
@@ -967,7 +976,8 @@ export default function ChatListPage() {
                     <button
                       key={celebrity.id}
                       onClick={() => addCelebrityToChat(celebrity)}
-                      className="shrink-0 group cursor-pointer"
+                      disabled={isAddingCelebrity}
+                      className="shrink-0 group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="flex flex-col items-center gap-1">
                         {/* Rounded Avatar */}
@@ -1359,7 +1369,8 @@ export default function ChatListPage() {
                     <button
                       key={celebrity.id}
                       onClick={() => addCelebrityToChat(celebrity)}
-                      className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-50 hover:border-rose-200 transition-colors"
+                      disabled={isAddingCelebrity}
+                      className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-50 hover:border-rose-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200">
                         <Image
