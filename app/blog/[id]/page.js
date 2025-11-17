@@ -328,11 +328,19 @@ export default function BlogPostPage() {
 
                         {/* Author Info */}
                         <div className="flex items-center gap-4 mb-8 pb-6 border-b border-rose-100">
-                            <div className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center">
+                            <Link
+                                href={`/author/${post.author.toLowerCase().replace(/\s+/g, '-')}`}
+                                className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center hover:bg-rose-200 transition-colors"
+                            >
                                 <FontAwesomeIcon icon={faUser} className="h-8 w-8 text-rose-500" />
-                            </div>
+                            </Link>
                             <div className="flex-1">
-                                <p className="font-semibold text-gray-800 text-lg">{post.author}</p>
+                                <Link
+                                    href={`/author/${post.author.toLowerCase().replace(/\s+/g, '-')}`}
+                                    className="font-semibold text-gray-800 text-lg hover:text-rose-500 transition-colors"
+                                >
+                                    {post.author}
+                                </Link>
                                 <p className="text-gray-600 text-sm">{post.authorBio}</p>
                                 <p className="text-sm text-gray-500 mt-1">Published on {new Date(post.publishDate).toLocaleDateString()}</p>
                             </div>

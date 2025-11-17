@@ -98,7 +98,7 @@ export default function OnboardingPage() {
     const professions = [
         "Student",
         "Working Professional",
-        "Entrepreneur",
+        "Founder",
         "Freelancer",
         "Homemaker",
         "Retired",

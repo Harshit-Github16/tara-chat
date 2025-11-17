@@ -48,8 +48,8 @@ export async function POST(req) {
         const today = new Date().toISOString().split('T')[0];
         console.log('Mood MongoDB API: Today date:', today);
 
-        // Validate mood value
-        const validMoods = ['happy', 'sad', 'angry', 'stressed', 'tired', 'calm', 'excited', 'disappointed', 'frustrated', 'loved'];
+        // Validate mood value - all 12 moods from MoodCheckIn component
+        const validMoods = ['calm', 'happy', 'grateful', 'motivated', 'healing', 'lost', 'lonely', 'sad', 'stressed', 'anxious', 'overwhelmed', 'angry'];
         if (!validMoods.includes(mood.toLowerCase())) {
             console.log('Mood MongoDB API: Invalid mood value:', mood);
             return NextResponse.json({ error: 'Invalid mood value' }, { status: 400 });

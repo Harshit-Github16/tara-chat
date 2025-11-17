@@ -647,7 +647,7 @@ export default function Home() {
               <div className="flex gap-6 animate-infinite-scroll-right">
                 <ReviewCard
                   name="Vikram Singh"
-                  role="Entrepreneur"
+                  role="Founder"
                   rating={5}
                   review="Analytics dashboard toh kamaal ka hai! Apne emotional patterns ko visualize karke mental health ke better decisions le pata hoon."
                   avatar="VS"
@@ -669,7 +669,7 @@ export default function Home() {
                 {/* Multiple duplicates for seamless infinite loop */}
                 <ReviewCard
                   name="Vikram Singh"
-                  role="Entrepreneur"
+                  role="Founder"
                   rating={5}
                   review="Analytics dashboard toh kamaal ka hai! Apne emotional patterns ko visualize karke mental health ke better decisions le pata hoon."
                   avatar="VS"
@@ -690,7 +690,7 @@ export default function Home() {
                 />
                 <ReviewCard
                   name="Vikram Singh"
-                  role="Entrepreneur"
+                  role="Founder"
                   rating={5}
                   review="Analytics dashboard toh kamaal ka hai! Apne emotional patterns ko visualize karke mental health ke better decisions le pata hoon."
                   avatar="VS"
