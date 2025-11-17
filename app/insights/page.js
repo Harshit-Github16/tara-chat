@@ -6,6 +6,8 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import BottomNav from "../components/BottomNav";
+import MoodMeterChart, { calculateAverageMoodScore } from "../components/MoodMeterChart";
+import EmotionalWheel from "../components/EmotionalWheel";
 import {
     faChartLine,
     faBookOpen,
@@ -168,13 +170,7 @@ export default function InsightsPage() {
                             value={loading ? "..." : `${streak} ${streak === 1 ? 'day' : 'days'}`}
                             color="bg-orange-50 text-orange-600"
                         />
-                        <StatCard
-                            icon={faHeart}
-                            title="Emotional Insights"
-                            value="--"
-                            color="bg-rose-50 text-rose-600"
-                            disabled
-                        />
+                        <MoodScoreCard moodData={moodData} loading={loading} />
                         <StatCard
                             icon={faClock}
                             title="Recovery Time"
@@ -195,12 +191,12 @@ export default function InsightsPage() {
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Mood Meter - ACTIVE */}
                         <ChartCard title="Mood Meter" icon={faChartLine}>
-                            <MoodMeter moodData={moodData} loading={loading} />
+                            <MoodMeterChart moodData={moodData} loading={loading} />
                         </ChartCard>
 
-                        {/* Emotional Wheel - DISABLED */}
-                        <ChartCard title="Emotional Wheel" icon={faBrain} disabled>
-                            <DisabledChart />
+                        {/* Emotional Wheel - ACTIVE */}
+                        <ChartCard title="Emotional Wheel" icon={faBrain}>
+                            <EmotionalWheel />
                         </ChartCard>
 
                         {/* Check-in Streak - ACTIVE */}
@@ -298,6 +294,53 @@ function StatCard({ icon, title, value, color, disabled }) {
     );
 }
 
+function MoodScoreCard({ moodData, loading }) {
+    if (loading) {
+        return (
+            <div className="rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
+                <div className="flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+                        <FontAwesomeIcon icon={faHeart} />
+                    </span>
+                    <div>
+                        <div className="text-xs text-gray-500">Average Mood</div>
+                        <div className="text-lg font-bold text-gray-900">...</div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const { score, emoji } = calculateAverageMoodScore(moodData);
+    const numScore = parseFloat(score);
+
+    let color = 'bg-yellow-50 text-yellow-600';
+    let textColor = 'text-yellow-600';
+    if (numScore >= 1) {
+        color = 'bg-green-50 text-green-600';
+        textColor = 'text-green-600';
+    } else if (numScore <= -1) {
+        color = 'bg-red-50 text-red-600';
+        textColor = 'text-red-600';
+    }
+
+    return (
+        <div className="rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
+            <div className="flex items-center gap-3">
+                <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${color} text-2xl`}>
+                    {emoji}
+                </span>
+                <div>
+                    <div className="text-xs text-gray-500">Average Mood</div>
+                    <div className={`text-lg font-bold ${textColor}`}>
+                        {numScore > 0 ? '+' : ''}{score}/5
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function DisabledChart() {
     return (
         <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl relative">
@@ -325,20 +368,22 @@ function ChartCard({ title, icon, children, disabled }) {
 }
 
 function MoodMeter({ moodData = [], loading }) {
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-    // Mood emoji mapping
+    // Updated mood emoji mapping with new moods
     const moodEmojis = {
+        'calm': '�',
         'happy': '😊',
+        'grateful': '�',
+        'motivated': '�',
+        'healing': '🌱',
+        'lost': '🤔',
+        'lonely': '😔',
         'sad': '😢',
-        'angry': '😠',
         'stressed': '😰',
-        'tired': '😴',
-        'calm': '😌',
-        'excited': '🤗',
-        'disappointed': '😔',
-        'frustrated': '😤',
-        'loved': '🥰'
+        'anxious': '😟',
+        'overwhelmed': '😵',
+        'angry': '😠'
     };
 
     // Create chart data for last 7 days
@@ -354,29 +399,28 @@ function MoodMeter({ moodData = [], loading }) {
         // Find ALL mood entries for this specific date
         const dayMoods = moodData.filter(m => m.date === dateStr);
 
-        // Calculate average mood for this day using actual intensity from database
+        // Calculate average mood for this day
         let avgDayMood = 0;
         let hasData = false;
-        let moodEmojisForDay = [];
+        let dominantMood = null;
 
         if (dayMoods.length > 0) {
             const total = dayMoods.reduce((sum, m) => {
-                // Use the actual intensity value stored in database (1-10)
-                const intensity = m.intensity || 5;
+                // Intensity should be 1-5 now
+                const intensity = m.intensity || 3;
                 return sum + intensity;
             }, 0);
-            avgDayMood = Math.round(total / dayMoods.length);
+            avgDayMood = total / dayMoods.length;
             hasData = true;
 
-            // Get unique moods for the day (max 3 to show)
-            const uniqueMoods = [...new Set(dayMoods.map(m => m.mood))];
-            moodEmojisForDay = uniqueMoods.slice(0, 3).map(mood => moodEmojis[mood]).filter(Boolean);
+            // Get the most recent mood for the day
+            dominantMood = dayMoods[dayMoods.length - 1].mood;
 
             // Store moods with actual intensity for overall average
             dayMoods.forEach(m => {
                 moodsWithData.push({
                     ...m,
-                    actualIntensity: m.intensity || 5
+                    actualIntensity: m.intensity || 3
                 });
             });
         }
@@ -386,11 +430,11 @@ function MoodMeter({ moodData = [], loading }) {
             mood: avgDayMood,
             hasData: hasData,
             count: dayMoods.length,
-            emojis: moodEmojisForDay
+            dominantMood: dominantMood
         });
     }
 
-    const avgMood = moodsWithData.length > 0
+    const avgIntensity = moodsWithData.length > 0
         ? (moodsWithData.reduce((sum, m) => sum + m.actualIntensity, 0) / moodsWithData.length).toFixed(1)
         : 0;
 
@@ -402,94 +446,116 @@ function MoodMeter({ moodData = [], loading }) {
         return <div className="text-center text-gray-500 py-8">No mood data yet. Start checking in!</div>;
     }
 
+    // Calculate SVG path for smooth curve
+    const width = 100;
+    const height = 80;
+    const paddingLeft = 8;
+    const paddingRight = 5;
+    const paddingTop = 10;
+    const paddingBottom = 10;
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+
+    // Create points for the curve - 0 is at center, +5 is top, -5 is bottom
+    const points = chartData.map((item, i) => {
+        const x = paddingLeft + (i * (chartWidth / 6));
+        // Map intensity 1-5 to -5 to +5 scale (1 = -5, 3 = 0, 5 = +5)
+        const scaledValue = item.hasData ? ((item.mood - 3) * 2.5) : 0;
+        // Map to Y coordinate (top = +5, center = 0, bottom = -5)
+        const y = (height / 2) - (scaledValue * (chartHeight / 10));
+        return { x, y, hasData: item.hasData, mood: item.mood };
+    });
+
+    // Create smooth curve path using catmull-rom style curves
+    let pathD = '';
+    if (points.length > 0) {
+        pathD = `M ${points[0].x} ${points[0].y}`;
+
+        for (let i = 0; i < points.length - 1; i++) {
+            const current = points[i];
+            const next = points[i + 1];
+
+            // Control points for smooth curve
+            const cp1x = current.x + (next.x - current.x) / 3;
+            const cp1y = current.y;
+            const cp2x = current.x + 2 * (next.x - current.x) / 3;
+            const cp2y = next.y;
+
+            pathD += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${next.x} ${next.y}`;
+        }
+    }
+
     return (
-        <div className="space-y-4">
-            <div className="flex items-end justify-between gap-2">
+        <div className="space-y-6">
+            {/* Title */}
+            <div className="text-center">
+                <h3 className="text-lg font-bold text-gray-800">Weekly Mood</h3>
+            </div>
+
+            {/* SVG Chart */}
+            <div className="relative pl-6">
+                <svg
+                    viewBox={`0 0 ${width} ${height}`}
+                    className="w-full h-40"
+                    preserveAspectRatio="xMidYMid meet"
+                >
+                    {/* Mood curve with gradient */}
+                    <defs>
+                        {/* Horizontal gradient for smooth color transition */}
+                        <linearGradient id="moodGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#a5b4fc" />
+                            <stop offset="40%" stopColor="#5eead4" />
+                            <stop offset="100%" stopColor="#86efac" />
+                        </linearGradient>
+                    </defs>
+
+                    {/* Main curve line - smooth wave */}
+                    {pathD && (
+                        <path
+                            d={pathD}
+                            fill="none"
+                            stroke="url(#moodGradient)"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    )}
+                </svg>
+
+                {/* Y-axis labels */}
+                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-400 py-2">
+                    <span>+5</span>
+                    <span className="py-1">0</span>
+                    <span>−5</span>
+                </div>
+            </div>
+
+            {/* Day labels with mood emojis */}
+            <div className="flex justify-between items-center px-4">
                 {chartData.map((item, i) => (
-                    <div key={i} className="flex flex-col items-center gap-2">
-                        {/* Mood emojis on top - show multiple if multiple moods in a day */}
-                        {item.emojis && item.emojis.length > 0 && (
-                            <div className="flex gap-0.5 mb-1">
-                                {item.emojis.map((emoji, idx) => (
-                                    <div key={idx} className="text-base">
-                                        {emoji}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        <div className="relative h-24 w-8 rounded-full bg-rose-100">
-                            {item.hasData && (
-                                <div
-                                    className="absolute bottom-0 w-full rounded-full bg-rose-500"
-                                    style={{ height: `${(item.mood / 10) * 100}%` }}
-                                />
-                            )}
+                    <div key={i} className="flex flex-col items-center gap-1">
+                        {/* Mood emoji */}
+                        <div className="text-2xl">
+                            {item.hasData && item.dominantMood ? moodEmojis[item.dominantMood] || '😊' : '😐'}
                         </div>
-                        <span className="text-xs text-gray-600">{item.day}</span>
-                        <span className="text-xs font-semibold text-rose-600">
-                            {item.hasData ? `${item.mood}/10` : '-'}
-                        </span>
-                        {/* Show count if multiple moods */}
-                        {item.count > 1 && (
-                            <span className="text-[10px] text-gray-400">
-                                ({item.count} moods)
-                            </span>
-                        )}
+                        {/* Day name */}
+                        <span className="text-xs text-gray-500">{item.day}</span>
                     </div>
                 ))}
             </div>
-            <div className="text-center text-sm text-gray-600">
-                Average intensity this week: <span className="font-semibold text-rose-600">{avgMood}/10</span>
+
+            {/* Average intensity with color coding */}
+            <div className="text-center text-sm text-gray-600 pt-4 border-t border-gray-100">
+                Average intensity this week: <span className={`font-semibold ${avgIntensity >= 3.5 ? 'text-green-600' :
+                    avgIntensity >= 2.5 ? 'text-yellow-600' :
+                        'text-red-600'
+                    }`}>{avgIntensity}/5</span>
             </div>
         </div>
     );
 }
 
-function EmotionalWheel() {
-    const emotions = [
-        { name: "Joy", value: 85, color: "bg-yellow-400" },
-        { name: "Calm", value: 70, color: "bg-blue-400" },
-        { name: "Love", value: 90, color: "bg-rose-400" },
-        { name: "Anger", value: 20, color: "bg-red-400" },
-        { name: "Sad", value: 15, color: "bg-gray-400" },
-        { name: "Fear", value: 25, color: "bg-purple-400" },
-    ];
 
-    return (
-        <div className="relative mx-auto h-48 w-48">
-            <div className="absolute inset-0 rounded-full border-4 border-rose-100">
-                {emotions.map((emotion, i) => {
-                    const angle = (i * 60) - 90;
-                    const x = 50 + 35 * Math.cos((angle * Math.PI) / 180);
-                    const y = 50 + 35 * Math.sin((angle * Math.PI) / 180);
-
-                    return (
-                        <div
-                            key={emotion.name}
-                            className="absolute flex flex-col items-center"
-                            style={{
-                                left: `${x}%`,
-                                top: `${y}%`,
-                                transform: 'translate(-50%, -50%)'
-                            }}
-                        >
-                            <div className={`h-8 w-8 rounded-full ${emotion.color} flex items-center justify-center text-white text-xs font-bold`}>
-                                {emotion.value}
-                            </div>
-                            <span className="mt-1 text-xs text-gray-600">{emotion.name}</span>
-                        </div>
-                    );
-                })}
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="text-2xl font-bold text-rose-600">7.2</div>
-                    <div className="text-xs text-gray-500">Overall</div>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 function CheckInStreak({ checkInDates = [], loading }) {
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

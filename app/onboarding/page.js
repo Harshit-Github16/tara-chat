@@ -16,7 +16,8 @@ import {
     faPalette,
     faArrowRight,
     faArrowLeft,
-    faCheck
+    faCheck,
+    faChartPie
 } from "@fortawesome/free-solid-svg-icons";
 import confetti from "canvas-confetti";
 
@@ -32,12 +33,15 @@ export default function OnboardingPage() {
         ageRange: "",
         profession: "",
         interests: [],
-        personalityTraits: []
+        personalityTraits: [],
+        lifeAreas: []
     });
     const [showAddInterest, setShowAddInterest] = useState(false);
     const [showAddTrait, setShowAddTrait] = useState(false);
     const [newInterest, setNewInterest] = useState("");
     const [newTrait, setNewTrait] = useState("");
+    const [showAddLifeArea, setShowAddLifeArea] = useState(false);
+    const [newLifeArea, setNewLifeArea] = useState("");
 
     // Auto-fill user data from database
     useEffect(() => {
@@ -52,7 +56,8 @@ export default function OnboardingPage() {
                 ageRange: user.ageRange || "",
                 profession: user.profession || "",
                 interests: user.interests || [],
-                personalityTraits: user.personalityTraits || []
+                personalityTraits: user.personalityTraits || [],
+                lifeAreas: user.lifeAreas || []
             }));
         }
     }, [user, loading]);
@@ -112,6 +117,17 @@ export default function OnboardingPage() {
         "Ambitious", "Caring"
     ];
 
+    const lifeAreaOptions = [
+        "Financial Growth",
+        "Family",
+        "Health",
+        "Personal Growth",
+        "Love & Relationships",
+        "Career",
+        "Social Life",
+        "Spirituality"
+    ];
+
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
             ...prev,
@@ -150,8 +166,19 @@ export default function OnboardingPage() {
         }
     };
 
+    const handleAddCustomLifeArea = () => {
+        if (newLifeArea.trim() && !formData.lifeAreas.includes(newLifeArea.trim())) {
+            setFormData(prev => ({
+                ...prev,
+                lifeAreas: [...prev.lifeAreas, newLifeArea.trim()]
+            }));
+            setNewLifeArea("");
+            setShowAddLifeArea(false);
+        }
+    };
+
     const handleNext = async () => {
-        if (currentStep < 3) {
+        if (currentStep < 4) {
             setCurrentStep(currentStep + 1);
         } else {
             // Save onboarding data to database
@@ -205,6 +232,8 @@ export default function OnboardingPage() {
                 return formData.profession;
             case 3:
                 return formData.interests.length > 0 && formData.personalityTraits.length > 0;
+            case 4:
+                return formData.lifeAreas.length > 0;
             default:
                 return false;
         }
@@ -249,13 +278,13 @@ export default function OnboardingPage() {
                     {/* Progress Bar */}
                     <div className="mb-8">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Step {currentStep} of 3</span>
-                            <span className="text-sm text-gray-500">{Math.round((currentStep / 3) * 100)}% Complete</span>
+                            <span className="text-sm font-medium text-gray-600">Step {currentStep} of 4</span>
+                            <span className="text-sm text-gray-500">{Math.round((currentStep / 4) * 100)}% Complete</span>
                         </div>
                         <div className="w-full bg-rose-100 rounded-full h-2">
                             <div
                                 className="bg-rose-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${(currentStep / 3) * 100}%` }}
+                                style={{ width: `${(currentStep / 4) * 100}%` }}
                             ></div>
                         </div>
                     </div>
@@ -539,6 +568,93 @@ export default function OnboardingPage() {
                             </div>
                         )}
 
+                        {/* Step 4: Life Areas */}
+                        {currentStep === 4 && (
+                            <div className="space-y-6">
+                                <div className="text-center mb-6">
+                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
+                                        <FontAwesomeIcon icon={faChartPie} className="h-8 w-8 text-rose-600" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Life Areas That Matter</h2>
+                                    <p className="text-gray-600">Select areas important for your mental & emotional health</p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-4">
+                                        <FontAwesomeIcon icon={faChartPie} className="h-4 w-4 mr-2 text-rose-500" />
+                                        Select Your Focus Areas (Choose at least one)
+                                    </label>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {lifeAreaOptions.map((area) => (
+                                            <button
+                                                key={area}
+                                                type="button"
+                                                onClick={() => handleArrayToggle('lifeAreas', area)}
+                                                className={`px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left ${formData.lifeAreas.includes(area)
+                                                    ? 'bg-rose-200 text-rose-700 border-rose-200 shadow-md'
+                                                    : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'
+                                                    }`}
+                                            >
+                                                {area}
+                                            </button>
+                                        ))}
+
+                                        {/* Custom life areas added by user */}
+                                        {formData.lifeAreas.filter(a => !lifeAreaOptions.includes(a)).map((area) => (
+                                            <button
+                                                key={area}
+                                                type="button"
+                                                onClick={() => handleArrayToggle('lifeAreas', area)}
+                                                className="px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left bg-rose-200 text-rose-700 border-rose-200 shadow-md"
+                                            >
+                                                {area}
+                                            </button>
+                                        ))}
+
+                                        {/* Add Other Button */}
+                                        {!showAddLifeArea ? (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddLifeArea(true)}
+                                                className="px-6 py-4 rounded-lg border-2 border-dashed border-rose-300 text-rose-600 text-sm font-medium hover:bg-rose-50 transition-all"
+                                            >
+                                                + Add Other
+                                            </button>
+                                        ) : (
+                                            <div className="col-span-1 md:col-span-2 flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={newLifeArea}
+                                                    onChange={(e) => setNewLifeArea(e.target.value)}
+                                                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustomLifeArea()}
+                                                    placeholder="Type your life area..."
+                                                    className="flex-1 px-4 py-2 border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-200"
+                                                    autoFocus
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAddCustomLifeArea}
+                                                    className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                                                >
+                                                    Add
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setShowAddLifeArea(false);
+                                                        setNewLifeArea("");
+                                                    }}
+                                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Navigation Buttons */}
                         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
                             <button
@@ -566,7 +682,7 @@ export default function OnboardingPage() {
                                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                         Saving...
                                     </>
-                                ) : currentStep === 3 ? (
+                                ) : currentStep === 4 ? (
                                     <>
                                         <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
                                         Complete Setup

@@ -35,7 +35,8 @@ export async function PUT(request) {
             ageRange,
             profession,
             interests,
-            personalityTraits
+            personalityTraits,
+            lifeAreas
         } = body;
 
         // Validate required fields
@@ -55,6 +56,7 @@ export async function PUT(request) {
             profession: profession || '',
             interests: interests || [],
             personalityTraits: personalityTraits || [],
+            lifeAreas: lifeAreas || [],
             isOnboardingComplete: true,
             updatedAt: new Date()
         };
@@ -87,6 +89,7 @@ export async function PUT(request) {
                 profession: updatedUser.profession,
                 interests: updatedUser.interests,
                 personalityTraits: updatedUser.personalityTraits,
+                lifeAreas: updatedUser.lifeAreas,
                 createdAt: updatedUser.createdAt,
                 updatedAt: updatedUser.updatedAt,
                 lastLoginAt: updatedUser.lastLoginAt
@@ -144,6 +147,7 @@ export async function GET(request) {
                 profession: user.profession,
                 interests: user.interests,
                 personalityTraits: user.personalityTraits,
+                lifeAreas: user.lifeAreas,
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt,
                 lastLoginAt: user.lastLoginAt

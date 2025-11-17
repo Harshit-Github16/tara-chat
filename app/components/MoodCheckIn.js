@@ -4,21 +4,23 @@ import { useState } from 'react';
 import { api } from '../../lib/api';
 
 const MOOD_OPTIONS = [
-    { emoji: '😊', label: 'Happy', value: 'happy' },
-    { emoji: '😢', label: 'Sad', value: 'sad' },
-    { emoji: '😠', label: 'Angry', value: 'angry' },
-    { emoji: '😰', label: 'Stressed', value: 'stressed' },
-    { emoji: '😴', label: 'Tired', value: 'tired' },
-    { emoji: '😌', label: 'Calm', value: 'calm' },
-    { emoji: '🤗', label: 'Excited', value: 'excited' },
-    { emoji: '😔', label: 'Disappointed', value: 'disappointed' },
-    { emoji: '😤', label: 'Frustrated', value: 'frustrated' },
-    { emoji: '🥰', label: 'Loved', value: 'loved' }
+    { emoji: '😌', label: 'Calm', value: 'calm', description: 'Baseline of mental stability' },
+    { emoji: '😊', label: 'Happy', value: 'happy', description: 'Positive emotional uplift' },
+    { emoji: '🙏', label: 'Grateful', value: 'grateful', description: 'Emotional warmth + appreciation' },
+    { emoji: '💪', label: 'Motivated', value: 'motivated', description: 'Productive, action-focused' },
+    { emoji: '🌱', label: 'Healing', value: 'healing', description: 'Growth phase, reflective' },
+    { emoji: '🤔', label: 'Lost', value: 'lost', description: 'Mental fog, uncertainty' },
+    { emoji: '😔', label: 'Lonely', value: 'lonely', description: 'Emotional disconnection' },
+    { emoji: '😢', label: 'Sad', value: 'sad', description: 'Low emotional state' },
+    { emoji: '😰', label: 'Stressed', value: 'stressed', description: 'Mental pressure, cognitive load' },
+    { emoji: '😟', label: 'Anxious', value: 'anxious', description: 'Future worry, restlessness' },
+    { emoji: '😵', label: 'Overwhelmed', value: 'overwhelmed', description: 'Mental + emotional overload' },
+    { emoji: '😠', label: 'Angry', value: 'angry', description: 'Intense emotional friction' }
 ];
 
 export default function MoodCheckIn({ onMoodSaved }) {
-    const [selectedMood, setSelectedMood] = useState('happy');
-    const [intensity, setIntensity] = useState(5);
+    const [selectedMood, setSelectedMood] = useState('');
+    const [intensity, setIntensity] = useState(3);
     const [note, setNote] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState('');
@@ -80,7 +82,7 @@ export default function MoodCheckIn({ onMoodSaved }) {
                     <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3 sm:mb-4">
                         Select your mood:
                     </label>
-                    <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 sm:gap-3">
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3">
                         {MOOD_OPTIONS.map((mood) => (
                             <button
                                 key={mood.value}
@@ -90,36 +92,44 @@ export default function MoodCheckIn({ onMoodSaved }) {
                                     ? 'border-rose-500 bg-rose-50 scale-105 shadow-lg'
                                     : 'border-gray-200 hover:border-rose-300 hover:bg-rose-50'
                                     }`}
+                                title={mood.description}
                             >
                                 <div className="text-xl sm:text-3xl mb-1 sm:mb-2">{mood.emoji}</div>
                                 <div className="text-[9px] sm:text-xs font-medium text-gray-700 leading-tight break-words">{mood.label}</div>
                             </button>
                         ))}
                     </div>
+                    {selectedMoodData && (
+                        <div className="mt-3 p-3 bg-rose-50 rounded-lg border border-rose-100">
+                            <p className="text-xs sm:text-sm text-gray-600 text-center">
+                                <span className="font-semibold text-rose-600">{selectedMoodData.label}:</span> {selectedMoodData.description}
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Intensity Slider */}
                 <div>
                     <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 sm:mb-3">
-                        Intensity: {intensity}/10
+                        Intensity Level: {intensity}/5
                     </label>
-                    <div className="relative">
+                    <div className="relative pb-12">
                         <input
                             type="range"
                             min="1"
-                            max="10"
+                            max="5"
                             value={intensity}
                             onChange={(e) => setIntensity(parseInt(e.target.value))}
                             className="w-full h-2 bg-rose-200 rounded-lg appearance-none cursor-pointer slider-rose"
                             style={{
-                                background: `linear-gradient(to right, #fb7185 0%, #fb7185 ${(intensity - 1) * 11.11}%, #fecdd3 ${(intensity - 1) * 11.11}%, #fecdd3 100%)`
+                                background: `linear-gradient(to right, #fb7185 0%, #fb7185 ${(intensity - 1) * 25}%, #fecdd3 ${(intensity - 1) * 25}%, #fecdd3 100%)`
                             }}
                         />
                         {/* Selected Mood Emoji on Slider */}
                         {selectedMoodData && (
                             <div
                                 className="absolute top-[-40px] transform -translate-x-1/2 transition-all duration-200"
-                                style={{ left: `${(intensity - 1) * 11.11}%` }}
+                                style={{ left: `${(intensity - 1) * 25}%` }}
                             >
                                 <div className="text-4xl drop-shadow-lg">
                                     {selectedMoodData.emoji}
@@ -128,8 +138,11 @@ export default function MoodCheckIn({ onMoodSaved }) {
                         )}
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-2">
-                        <span>Low</span>
-                        <span>High</span>
+                        <span>1 - Mild</span>
+                        <span>2</span>
+                        <span>3 - Moderate</span>
+                        <span>4</span>
+                        <span>5 - Intense</span>
                     </div>
                 </div>
 
