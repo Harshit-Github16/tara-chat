@@ -172,7 +172,7 @@ export default function BlogsPage() {
                             <FontAwesomeIcon icon={faNewspaper} className="h-8 w-8 text-rose-500" />
                             <h1 className="text-4xl font-bold text-gray-800">Wellness Blog</h1>
                         </div>
-                        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                        <p className="text-gray-600 text-lg max-w-7xl mx-auto">
                             Discover insights, tips, and stories to support your mental wellness journey.
                             Expert advice from leading professionals in psychology, neuroscience, and wellness.
                         </p>
@@ -245,7 +245,7 @@ export default function BlogsPage() {
                                                 <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
                                                     <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
                                                         <img
-                                                            src="/blogs-img/blogs1.jpeg"
+                                                            src={post.featuredImage || "/blogs-img/blogs1.jpeg"}
                                                             alt={post.title}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -316,7 +316,7 @@ export default function BlogsPage() {
                                                     <div className="md:flex">
                                                         <div className="md:w-1/3 aspect-video md:aspect-square bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
                                                             <img
-                                                                src="/blogs-img/blogs1.jpeg"
+                                                                src={post.featuredImage || "/blogs-img/blogs1.jpeg"}
                                                                 alt={post.title}
                                                                 className="w-full h-full object-cover"
                                                             />
@@ -454,21 +454,7 @@ export default function BlogsPage() {
                                 </div>
                             </div>
 
-                            {/* Newsletter Signup */}
-                            <div className="bg-gradient-to-br from-rose-100 to-rose-200 rounded-2xl p-6">
-                                <h3 className="text-lg font-bold text-gray-800 mb-2">Stay Updated</h3>
-                                <p className="text-sm text-gray-600 mb-4">Get the latest wellness articles delivered to your inbox.</p>
-                                <div className="space-y-3">
-                                    <input
-                                        type="email"
-                                        placeholder="Enter your email"
-                                        className="w-full px-4 py-2 rounded-lg border border-rose-200 focus:border-rose-400 outline-none text-sm"
-                                    />
-                                    <button className="w-full bg-rose-600 text-white py-2 rounded-lg font-medium hover:bg-rose-700 transition-colors text-sm">
-                                        Subscribe
-                                    </button>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </main>

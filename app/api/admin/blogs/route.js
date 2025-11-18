@@ -38,9 +38,17 @@ export async function POST(request) {
             authorBio,
             category,
             tags,
+            featuredImage,
             featured,
-            trending
+            trending,
+            schemaType,
+            faqItems,
+            howToSteps,
+            initialLikes,
+            initialViews
         } = body;
+
+        console.log('Received featuredImage URL:', featuredImage);
 
         if (!title || !excerpt || !content || !author) {
             return NextResponse.json(
@@ -70,17 +78,21 @@ export async function POST(request) {
             content,
             author,
             authorBio: authorBio || '',
+            featuredImage: featuredImage || '',
             publishDate: new Date().toISOString().split('T')[0],
             readTime: calculateReadTime(content),
             category: category || 'General',
             tags: tags || [],
-            likes: 0,
+            likes: initialLikes || 0,
             likedBy: [],
             comments: [],
             commentCount: 0,
-            views: 0,
+            views: initialViews || 0,
             featured: featured || false,
             trending: trending || false,
+            schemaType: schemaType || 'BlogPosting',
+            faqItems: faqItems || [],
+            howToSteps: howToSteps || [],
             createdAt: new Date().toISOString()
         };
 
@@ -100,6 +112,114 @@ export async function POST(request) {
         console.error('Create blog error:', error);
         return NextResponse.json(
             { success: false, message: 'Failed to create blog' },
+            { status: 500 }
+        );
+    }
+}
+
+// PUT - Update existing blog
+export async function PUT(request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const blogId = searchParams.get('id');
+
+        if (!blogId) {
+            return NextResponse.json(
+                { success: false, message: 'Blog ID required' },
+                { status: 400 }
+            );
+        }
+
+        const body = await request.json();
+        const {
+            title,
+            slug: userSlug,
+            excerpt,
+            content,
+            author,
+            authorBio,
+            category,
+            tags,
+            featuredImage,
+            featured,
+            trending,
+            schemaType,
+            faqItems,
+            howToSteps
+        } = body;
+
+        if (!title || !excerpt || !content || !author) {
+            return NextResponse.json(
+                { success: false, message: 'Missing required fields' },
+                { status: 400 }
+            );
+        }
+
+        const client = await clientPromise;
+        const db = client.db('tara');
+        const { ObjectId } = require('mongodb');
+
+        // Check if slug needs to be updated and is unique
+        let slug = userSlug || generateSlug(title);
+        const existingBlog = await db.collection('blogs').findOne({
+            slug,
+            _id: { $ne: new ObjectId(blogId) }
+        });
+
+        if (existingBlog) {
+            // Slug exists for another blog, append counter
+            let counter = 1;
+            let baseSlug = slug;
+            while (await db.collection('blogs').findOne({
+                slug,
+                _id: { $ne: new ObjectId(blogId) }
+            })) {
+                slug = `${baseSlug}-${counter}`;
+                counter++;
+            }
+        }
+
+        const updatedBlog = {
+            title,
+            slug,
+            excerpt,
+            content,
+            author,
+            authorBio: authorBio || '',
+            featuredImage: featuredImage || '',
+            readTime: calculateReadTime(content),
+            category: category || 'General',
+            tags: tags || [],
+            featured: featured || false,
+            trending: trending || false,
+            schemaType: schemaType || 'BlogPosting',
+            faqItems: faqItems || [],
+            howToSteps: howToSteps || [],
+            updatedAt: new Date().toISOString()
+        };
+
+        const result = await db.collection('blogs').findOneAndUpdate(
+            { _id: new ObjectId(blogId) },
+            { $set: updatedBlog },
+            { returnDocument: 'after' }
+        );
+
+        if (!result.value) {
+            return NextResponse.json(
+                { success: false, message: 'Blog not found' },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json({
+            success: true,
+            data: result.value,
+            message: 'Blog updated successfully'
+        });
+    } catch (error) {
+        console.error('Update blog error:', error);
+        return NextResponse.json(
+            { success: false, message: 'Failed to update blog' },
             { status: 500 }
         );
     }
