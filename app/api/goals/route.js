@@ -1,15 +1,45 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 
+// POST - Create new goal or Update all goals (check for 'goals' array in body)
 export async function POST(request) {
     try {
-        const { userId, title, category, targetDays, description, why, howToAchieve } = await request.json();
+        const body = await request.json();
+        const { userId, goals, title, category, targetDays, description, why, howToAchieve } = body;
 
-        if (!userId || !title || !why || !howToAchieve) {
+        if (!userId) {
             return NextResponse.json({
-                error: 'Missing required fields'
+                error: 'User ID is required'
             }, { status: 400 });
         }
+
+        // If 'goals' array exists, update all goals
+        if (goals) {
+            return await updateAllGoals(userId, goals);
+        }
+
+        // Otherwise, create a new goal
+        if (!title || !why || !howToAchieve) {
+            return NextResponse.json({
+                error: 'Missing required fields for creating goal'
+            }, { status: 400 });
+        }
+
+        return await createGoal(userId, { title, category, targetDays, description, why, howToAchieve });
+
+    } catch (error) {
+        console.error('Goals API Error:', error);
+        return NextResponse.json(
+            { error: 'Failed to process request', details: error.message },
+            { status: 500 }
+        );
+    }
+}
+
+// Helper function to create a new goal
+async function createGoal(userId, goalData) {
+    try {
+        const { title, category, targetDays, description, why, howToAchieve } = goalData;
 
         const client = await clientPromise;
         const db = client.db('tara');
@@ -52,9 +82,47 @@ export async function POST(request) {
         });
 
     } catch (error) {
-        console.error('Goals API Error:', error);
+        console.error('Create Goal Error:', error);
         return NextResponse.json(
             { error: 'Failed to create goal', details: error.message },
+            { status: 500 }
+        );
+    }
+}
+
+// Helper function to update all goals
+async function updateAllGoals(userId, goals) {
+    try {
+        const client = await clientPromise;
+        const db = client.db('tara');
+        const collection = db.collection('users');
+
+        // Update all goals
+        const result = await collection.updateOne(
+            { firebaseUid: userId },
+            {
+                $set: {
+                    goals: goals,
+                    lastUpdated: new Date()
+                }
+            }
+        );
+
+        if (result.modifiedCount === 0) {
+            return NextResponse.json({
+                error: 'User not found or no changes made'
+            }, { status: 404 });
+        }
+
+        return NextResponse.json({
+            success: true,
+            goals: goals
+        });
+
+    } catch (error) {
+        console.error('Update Goals Error:', error);
+        return NextResponse.json(
+            { error: 'Failed to update goals', details: error.message },
             { status: 500 }
         );
     }
@@ -97,50 +165,7 @@ export async function GET(request) {
     }
 }
 
-export async function POST(request) {
-    try {
-        const { userId, goals } = await request.json();
 
-        if (!userId || !goals) {
-            return NextResponse.json({
-                error: 'User ID and goals are required'
-            }, { status: 400 });
-        }
-
-        const client = await clientPromise;
-        const db = client.db('tara');
-        const collection = db.collection('users');
-
-        // Update all goals
-        const result = await collection.updateOne(
-            { firebaseUid: userId },
-            {
-                $set: {
-                    goals: goals,
-                    lastUpdated: new Date()
-                }
-            }
-        );
-
-        if (result.modifiedCount === 0) {
-            return NextResponse.json({
-                error: 'User not found or no changes made'
-            }, { status: 404 });
-        }
-
-        return NextResponse.json({
-            success: true,
-            goals: goals
-        });
-
-    } catch (error) {
-        console.error('Goals API Error:', error);
-        return NextResponse.json(
-            { error: 'Failed to update goals', details: error.message },
-            { status: 500 }
-        );
-    }
-}
 
 export async function DELETE(request) {
     try {
