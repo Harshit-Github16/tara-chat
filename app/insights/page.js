@@ -8,6 +8,8 @@ import { api } from "../../lib/api";
 import BottomNav from "../components/BottomNav";
 import MoodMeterChart, { calculateAverageMoodScore } from "../components/MoodMeterChart";
 import EmotionalWheel from "../components/EmotionalWheel";
+import EmotionalFlowerChart from "../components/EmotionalFlowerChart";
+import LifeAreaSuggestions from "../components/LifeAreaSuggestions";
 import {
     faChartLine,
     faBookOpen,
@@ -194,25 +196,10 @@ export default function InsightsPage() {
                             <MoodMeterChart moodData={moodData} loading={loading} />
                         </ChartCard>
 
-                        {/* Emotional Wheel - ACTIVE */}
-                        <ChartCard title="Support Reflection Radar" icon={faBrain}>
-                            <EmotionalWheel />
-                        </ChartCard>
-
                         {/* Check-in Streak - ACTIVE */}
                         <ChartCard title="Check-in Calendar" icon={faCalendar}>
                             <CheckInStreak checkInDates={checkInDates} loading={loading} />
                         </ChartCard>
-
-                        {/* Support Reflection Radar - DISABLED */}
-                        <ChartCard title="Emotional Wheel" icon={faBullseye} disabled>
-                            <DisabledChart />
-                        </ChartCard>
-                    </div>
-
-                    {/* Suggestions & Triggers - DISABLED */}
-                    <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-                        {/* Mood Triggers - DISABLED */}
                         <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm relative overflow-hidden">
                             <div className="absolute inset-0 bg-gray-50/80 backdrop-blur-sm z-10 flex items-center justify-center">
                                 <div className="text-center px-4">
@@ -239,32 +226,27 @@ export default function InsightsPage() {
                                 ))}
                             </div>
                         </div>
-
-                        {/* Suggestions - DISABLED */}
-                        <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gray-50/80 backdrop-blur-sm z-10 flex items-center justify-center">
-                                <div className="text-center px-4">
-                                    <div className="text-3xl mb-2">🔒</div>
-                                    <div className="text-sm font-semibold text-gray-700 mb-1">Chat atleast 7 days to get insights</div>
-                                    <div className="text-xs text-gray-500">Keep chatting to unlock this feature</div>
-                                </div>
-                            </div>
-                            <h3 className="mb-4 text-lg font-semibold text-gray-900">Personalized Suggestions</h3>
-                            <div className="space-y-3 opacity-30">
-                                {SUGGESTIONS.map((suggestion, i) => (
-                                    <div key={i} className="flex items-start gap-3 rounded-xl bg-rose-50 p-3">
-                                        <span className="text-rose-500">
-                                            <FontAwesomeIcon icon={suggestion.icon} className="h-4 w-4" />
-                                        </span>
-                                        <div>
-                                            <div className="text-sm font-medium text-gray-900">{suggestion.title}</div>
-                                            <div className="text-xs text-gray-600">{suggestion.desc}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        {/* Emotional Wheel - ACTIVE */}
+                        <ChartCard title="Emotional Wheel" icon={faBullseye}>
+                            <EmotionalFlowerChart />
+                        </ChartCard>
                     </div>
+
+                    {/* Life Area Insights */}
+                    <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        {/* Support Reflection Radar - ACTIVE */}
+                        <ChartCard title="Support Reflection Radar" icon={faBrain}>
+                            <EmotionalWheel />
+                        </ChartCard>
+
+                        {/* AI-Generated Suggestions - ACTIVE */}
+                        <ChartCard title="Improvement Suggestions" icon={faNewspaper}>
+                            <LifeAreaSuggestions />
+                        </ChartCard>
+                    </div>
+
+                    {/* Suggestions & Triggers - DISABLED */}
+
                 </div>
 
                 <BottomNav activePage="insights" />
@@ -625,6 +607,19 @@ function CheckInStreak({ checkInDates = [], loading }) {
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
                     {currentStreak > 0 ? 'Keep it up! You\'re doing great' : 'Check in daily to build your streak'}
+                </div>
+            </div>
+
+            {/* Motivational Quote */}
+            <div className="mt-6 p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl border border-rose-100">
+                <div className="flex items-start gap-3">
+                    <div className="text-2xl flex-shrink-0">💭</div>
+                    <div>
+                        <p className="text-sm text-gray-700 italic leading-relaxed">
+                            "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity."
+                        </p>
+                        <p className="text-xs text-gray-500 mt-2 text-right">— Take care of yourself</p>
+                    </div>
                 </div>
             </div>
         </div>

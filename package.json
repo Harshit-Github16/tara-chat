@@ -20,6 +20,7 @@
     "canvas-confetti": "^1.9.4",
     "firebase": "^12.5.0",
     "google-auth-library": "^9.4.1",
+    "groq-sdk": "^0.35.0",
     "imagekit": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
