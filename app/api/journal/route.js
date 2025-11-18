@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 
-// POST - Create new journal
+// POST - Create or Update journal (check for action in query params)
 export async function POST(request) {
+    const { searchParams } = new URL(request.url);
+    const action = searchParams.get('action');
+
+    // If action is update, handle update
+    if (action === 'update') {
+        return await updateJournal(request);
+    }
+
+    // Otherwise, create new journal
+    return await createJournal(request);
+}
+
+// Helper function to create journal
+async function createJournal(request) {
     try {
         const { userId, journal } = await request.json();
 
@@ -30,8 +44,8 @@ export async function POST(request) {
     }
 }
 
-// PUT - Update existing journal
-export async function PUT(request) {
+// Helper function to update journal
+async function updateJournal(request) {
     try {
         const { userId, journalId, title, content, tags } = await request.json();
 

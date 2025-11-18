@@ -200,7 +200,7 @@ export default function ProfilePage() {
         setSaving(true);
         try {
             // Update profile in database
-            const response = await api.put('/api/onboarding', editData);
+            const response = await api.post('/api/onboarding', editData);
 
             if (response.ok) {
                 const data = await response.json();

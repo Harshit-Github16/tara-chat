@@ -25,10 +25,32 @@ export async function GET(request) {
     }
 }
 
-// POST - Create new blog
+// POST - Create or Update blog (check for id in query params)
 export async function POST(request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const blogId = searchParams.get('id');
         const body = await request.json();
+
+        // If blogId exists, update existing blog
+        if (blogId) {
+            return await updateBlog(blogId, body);
+        }
+
+        // Otherwise, create new blog
+        return await createBlog(body);
+    } catch (error) {
+        console.error('Blog API error:', error);
+        return NextResponse.json(
+            { success: false, message: 'Failed to process request' },
+            { status: 500 }
+        );
+    }
+}
+
+// Helper function to create blog
+async function createBlog(body) {
+    try {
         const {
             title,
             slug: userSlug,
@@ -117,20 +139,9 @@ export async function POST(request) {
     }
 }
 
-// PUT - Update existing blog
-export async function PUT(request) {
+// Helper function to update blog
+async function updateBlog(blogId, body) {
     try {
-        const { searchParams } = new URL(request.url);
-        const blogId = searchParams.get('id');
-
-        if (!blogId) {
-            return NextResponse.json(
-                { success: false, message: 'Blog ID required' },
-                { status: 400 }
-            );
-        }
-
-        const body = await request.json();
         const {
             title,
             slug: userSlug,
@@ -204,7 +215,7 @@ export async function PUT(request) {
             { returnDocument: 'after' }
         );
 
-        if (!result.value) {
+        if (!result) {
             return NextResponse.json(
                 { success: false, message: 'Blog not found' },
                 { status: 404 }
@@ -213,7 +224,7 @@ export async function PUT(request) {
 
         return NextResponse.json({
             success: true,
-            data: result.value,
+            data: result,
             message: 'Blog updated successfully'
         });
     } catch (error) {

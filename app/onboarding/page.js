@@ -189,7 +189,7 @@ export default function OnboardingPage() {
                 console.log('Token before onboarding API call:', token ? 'Present' : 'Missing');
                 console.log('Onboarding data:', formData);
 
-                const response = await api.put('/api/onboarding', formData);
+                const response = await api.post('/api/onboarding', formData);
 
                 if (response.ok) {
                     const data = await response.json();

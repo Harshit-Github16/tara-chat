@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getTokenFromRequest, verifyToken } from '../../../lib/jwt';
 import { User } from '../../../lib/models/User';
 
-export async function PUT(request) {
+export async function POST(request) {
     try {
         console.log('Onboarding API called');
         console.log('Headers:', Object.fromEntries(request.headers.entries()));

@@ -204,7 +204,7 @@ export default function JournalPage() {
                 const userId = user.firebaseUid || user.uid;
                 if (editing) {
                   // Update existing journal
-                  const response = await api.put('/api/journal', {
+                  const response = await api.post('/api/journal?action=update', {
                     userId: userId,
                     journalId: editing.id,
                     ...payload

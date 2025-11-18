@@ -275,13 +275,11 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                 initialLikes: editingBlog.likes || 0,
                 initialViews: editingBlog.views || 0
             });
-            // Set editor content
-            if (editorRef.current && editingBlog.content) {
-                editorRef.current.innerHTML = editingBlog.content;
-            }
             setCurrentStep(1); // Reset to step 1 when editing
         }
     }, [editingBlog]);
+
+
 
     // Generate slug from title
     const generateSlug = (title) => {
@@ -410,10 +408,8 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                 ? `/api/admin/blogs?id=${editingBlog._id}`
                 : '/api/admin/blogs';
 
-            const method = editingBlog ? 'PUT' : 'POST';
-
             const response = await fetch(url, {
-                method,
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(blogData)
             });
@@ -693,16 +689,21 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                     </div>
                                     {/* Rich Text Editor */}
                                     <div
+                                        key={`editor-${currentStep}`}
                                         ref={editorRef}
                                         contentEditable
                                         suppressContentEditableWarning
                                         onInput={(e) => {
-                                            setFormData(prev => ({ ...prev, content: e.currentTarget.innerHTML }));
+                                            if (e && e.currentTarget) {
+                                                const content = e.currentTarget.innerHTML || '';
+                                                setFormData(prev => ({ ...prev, content }));
+                                            }
                                         }}
+                                        dangerouslySetInnerHTML={{ __html: formData.content || '' }}
                                         className="min-h-[300px] max-h-[400px] overflow-y-auto px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-200"
                                         style={{ whiteSpace: 'pre-wrap' }}
-                                    >
-                                    </div>
+                                    />
+
                                 </div>
                                 <p className="text-xs text-gray-500 mt-1">Use the toolbar to format your content. Supports headings, lists, bold, italic, and links.</p>
                             </div>

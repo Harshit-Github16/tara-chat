@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }) => {
 
     const updateUser = async (userData) => {
         try {
-            const response = await api.put('/api/auth/me', userData);
+            const response = await api.post('/api/auth/me', userData);
 
             if (response.ok) {
                 const data = await response.json();

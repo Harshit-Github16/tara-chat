@@ -97,7 +97,7 @@ export async function GET(request) {
     }
 }
 
-export async function PUT(request) {
+export async function POST(request) {
     try {
         const { userId, goals } = await request.json();
 

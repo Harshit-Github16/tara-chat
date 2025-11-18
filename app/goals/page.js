@@ -73,7 +73,7 @@ export default function GoalsPage() {
             try {
                 const userId = user.firebaseUid || user.uid;
                 const response = await fetch('/api/goals', {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         userId,
