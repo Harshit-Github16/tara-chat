@@ -2,431 +2,367 @@
 import { useState, useEffect } from "react";
 import { api } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChartPie, faTimes, faSave, faBrain } from "@fortawesome/free-solid-svg-icons";
+import { faChartPie, faTimes, faCheckCircle, faLock, faClipboardList } from "@fortawesome/free-solid-svg-icons";
+import LifeAreaQuiz from "./LifeAreaQuiz";
 
-// Circular Emotional Wheel Chart Component
-function EmotionalWheelChart({ intensityData, lifeAreas }) {
+// Radar Chart Component
+function RadarChartView({ quizResults, lifeAreas }) {
     // Soft, light colors for each life area matching the theme
-    const baseColors = [
-        '#fb7185',  // rose-400
-        '#fb923c',  // orange-400
-        '#fbbf24',  // amber-400
-        '#34d399',  // emerald-400
-        '#22d3ee',  // cyan-400
-        '#60a5fa',  // blue-400
-        '#a78bfa',  // purple-400
-        '#f472b6'   // pink-400
-    ];
-
     const centerX = 200;
     const centerY = 200;
-    const maxRadius = 150;
-    const minRadius = 30;
-    const maxLevels = 5; // Maximum intensity levels
+    const maxRadius = 140;
+    const numAreas = lifeAreas.length;
+    const angleStep = (2 * Math.PI) / numAreas;
 
-    // Helper function to create petal path
-    const createPetalPath = (cx, cy, innerR, outerR, startA, endA, midA, angleStep) => {
-        const startX1 = cx + innerR * Math.cos(startA);
-        const startY1 = cy + innerR * Math.sin(startA);
-        const endX1 = cx + innerR * Math.cos(endA);
-        const endY1 = cy + innerR * Math.sin(endA);
+    // Create points for each life area
+    const points = lifeAreas.map((area, index) => {
+        const angle = index * angleStep - Math.PI / 2; // Start from top
+        const score = quizResults[area]?.score || 0;
+        const radius = (score / 100) * maxRadius;
 
-        const peakX = cx + outerR * Math.cos(midA);
-        const peakY = cy + outerR * Math.sin(midA);
+        return {
+            x: centerX + radius * Math.cos(angle),
+            y: centerY + radius * Math.sin(angle),
+            labelX: centerX + (maxRadius + 50) * Math.cos(angle),
+            labelY: centerY + (maxRadius + 50) * Math.sin(angle),
+            area,
+            score,
+            angle
+        };
+    });
 
-        const controlRadius = (innerR + outerR) / 2;
-        const control1X = cx + controlRadius * Math.cos(startA + angleStep * 0.25);
-        const control1Y = cy + controlRadius * Math.sin(startA + angleStep * 0.25);
-        const control2X = cx + controlRadius * Math.cos(endA - angleStep * 0.25);
-        const control2Y = cy + controlRadius * Math.sin(endA - angleStep * 0.25);
+    // Create path for filled area
+    const pathData = points.length > 0
+        ? `M ${points[0].x} ${points[0].y} ` +
+        points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ') +
+        ' Z'
+        : '';
 
-        return `
-            M ${startX1} ${startY1}
-            Q ${control1X} ${control1Y}, ${peakX} ${peakY}
-            Q ${control2X} ${control2Y}, ${endX1} ${endY1}
-            A ${innerR} ${innerR} 0 0 0 ${startX1} ${startY1}
-        `;
-    };
+    // Create grid circles
+    const gridLevels = [20, 40, 60, 80, 100];
+
+    if (lifeAreas.length === 0) {
+        return (
+            <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl">
+                <div className="text-center px-4">
+                    <div className="text-4xl mb-3">📊</div>
+                    <div className="text-base font-semibold text-gray-700 mb-2">
+                        No Life Areas Selected
+                    </div>
+                    <div className="text-sm text-gray-500">
+                        Complete onboarding to select your life areas
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div className="relative w-full max-w-md mx-auto">
-            <svg viewBox="0 0 400 400" className="w-full h-full">
-                {/* Center circle */}
-                <circle
-                    cx={centerX}
-                    cy={centerY}
-                    r={minRadius}
-                    fill="#fff"
-                    stroke="#e5e7eb"
-                    strokeWidth="2"
-                />
-
-                {/* Life area petals - single smooth petal with partial fill */}
-                {lifeAreas.map((area, index) => {
-                    const intensity = intensityData[area] || 0;
-                    const angleStep = (2 * Math.PI) / lifeAreas.length;
-                    const startAngle = index * angleStep - Math.PI / 2;
-                    const endAngle = startAngle + angleStep;
-                    const midAngle = (startAngle + endAngle) / 2;
-
-                    const baseColor = baseColors[index % baseColors.length];
-
-                    // Calculate colored portion radius (based on intensity)
-                    const coloredRadius = minRadius + ((intensity / maxLevels) * (maxRadius - minRadius));
-
-                    // Full petal path (gray background)
-                    const fullPetalPath = createPetalPath(
-                        centerX, centerY, minRadius, maxRadius,
-                        startAngle, endAngle, midAngle, angleStep
-                    );
-
-                    // Colored portion path (based on intensity)
-                    const coloredPetalPath = intensity > 0 ? createPetalPath(
-                        centerX, centerY, minRadius, coloredRadius,
-                        startAngle, endAngle, midAngle, angleStep
-                    ) : null;
-
+        <div className="relative w-full">
+            <svg
+                viewBox="0 0 400 400"
+                className="w-full h-auto"
+                style={{ maxHeight: '350px' }}
+            >
+                {/* Grid circles */}
+                {gridLevels.map((level) => {
+                    const r = (level / 100) * maxRadius;
                     return (
-                        <g key={area}>
-                            {/* Full petal - gray background */}
-                            <path
-                                d={fullPetalPath}
-                                fill="#e5e7eb"
-                                stroke="#d1d5db"
-                                strokeWidth="1.5"
-                                opacity="0.5"
+                        <g key={level}>
+                            <circle
+                                cx={centerX}
+                                cy={centerY}
+                                r={r}
+                                fill="none"
+                                stroke="#e5e7eb"
+                                strokeWidth="1"
                             />
-
-                            {/* Colored portion - overlays on gray */}
-                            {coloredPetalPath && (
-                                <path
-                                    d={coloredPetalPath}
-                                    fill={baseColor}
-                                    stroke={baseColor}
-                                    strokeWidth="1.5"
-                                    opacity="0.9"
-                                />
-                            )}
-
-                            {/* Label */}
+                            {/* Level labels */}
                             <text
-                                x={centerX + (maxRadius + 30) * Math.cos(midAngle)}
-                                y={centerY + (maxRadius + 30) * Math.sin(midAngle)}
-                                textAnchor="middle"
-                                dominantBaseline="middle"
-                                className="text-xs font-semibold fill-gray-700"
-                                style={{ fontSize: '12px' }}
+                                x={centerX + 5}
+                                y={centerY - r - 5}
+                                className="text-xs fill-gray-400"
+                                fontSize="10"
                             >
-                                {area.length > 12 ? area.substring(0, 10) + '...' : area}
+                                {level}%
                             </text>
-
-                            {/* Intensity number */}
-                            {intensity > 0 && (
-                                <text
-                                    x={centerX + (coloredRadius * 0.75) * Math.cos(midAngle)}
-                                    y={centerY + (coloredRadius * 0.75) * Math.sin(midAngle)}
-                                    textAnchor="middle"
-                                    dominantBaseline="middle"
-                                    className="text-sm font-bold fill-white"
-                                    style={{ fontSize: '16px', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
-                                >
-                                    {intensity}
-                                </text>
-                            )}
                         </g>
                     );
                 })}
 
-                {/* Center brain icon */}
+                {/* Grid lines from center to each point */}
+                {points.map((point, index) => (
+                    <line
+                        key={`line-${index}`}
+                        x1={centerX}
+                        y1={centerY}
+                        x2={centerX + maxRadius * Math.cos(point.angle)}
+                        y2={centerY + maxRadius * Math.sin(point.angle)}
+                        stroke="#e5e7eb"
+                        strokeWidth="1"
+                    />
+                ))}
+
+                {/* Filled area */}
+                {pathData && (
+                    <path
+                        d={pathData}
+                        fill="rgba(244, 63, 94, 0.2)"
+                        stroke="rgb(244, 63, 94)"
+                        strokeWidth="2.5"
+                    />
+                )}
+
+                {/* Data points */}
+                {points.map((point, index) => (
+                    <circle
+                        key={`point-${index}`}
+                        cx={point.x}
+                        cy={point.y}
+                        r="6"
+                        fill={point.score > 0 ? "rgb(244, 63, 94)" : "#d1d5db"}
+                        stroke="white"
+                        strokeWidth="2"
+                    />
+                ))}
+
+                {/* Labels */}
+                {points.map((point, index) => {
+                    // Calculate text anchor based on position
+                    let textAnchor = 'middle';
+                    if (point.labelX < centerX - 10) textAnchor = 'end';
+                    if (point.labelX > centerX + 10) textAnchor = 'start';
+
+                    const shortLabel = point.area.length > 15
+                        ? point.area.substring(0, 12) + '...'
+                        : point.area;
+
+                    return (
+                        <text
+                            key={`label-${index}`}
+                            x={point.labelX}
+                            y={point.labelY}
+                            textAnchor={textAnchor}
+                            className="text-xs font-semibold fill-gray-700"
+                            dominantBaseline="middle"
+                            fontSize="11"
+                        >
+                            {shortLabel}
+                        </text>
+                    );
+                })}
+
+                {/* Center icon */}
                 <foreignObject
-                    x={centerX - 15}
-                    y={centerY - 15}
-                    width="30"
-                    height="30"
+                    x={centerX - 20}
+                    y={centerY - 20}
+                    width="40"
+                    height="40"
                 >
                     <div className="flex items-center justify-center w-full h-full">
-                        <FontAwesomeIcon icon={faBrain} className="text-rose-500 text-2xl" />
+                        <FontAwesomeIcon icon={faChartPie} className="text-rose-500 text-2xl" />
                     </div>
                 </foreignObject>
             </svg>
-
-            {/* Legend */}
-            {/* <div className="mt-4 flex justify-center gap-3 flex-wrap text-xs text-gray-600">
-                <span>Intensity Scale:</span>
-                <span className="font-semibold">0 (Low)</span>
-                <span>→</span>
-                <span className="font-semibold">5 (High)</span>
-            </div> */}
         </div>
     );
 }
 
-// Add custom styles for slider
-if (typeof document !== 'undefined') {
-    const style = document.createElement('style');
-    style.textContent = `
-        .slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            border: 3px solid currentColor;
-        }
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            border: 3px solid currentColor;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .animate-fadeIn {
-            animation: fadeIn 0.2s ease-out;
-        }
-        .animate-slideUp {
-            animation: slideUp 0.3s ease-out;
-        }
-    `;
-    if (!document.querySelector('#emotional-wheel-styles')) {
-        style.id = 'emotional-wheel-styles';
-        document.head.appendChild(style);
-    }
-}
 
 export default function EmotionalWheel() {
-    const [showModal, setShowModal] = useState(false);
     const [lifeAreas, setLifeAreas] = useState([]);
-    const [intensityData, setIntensityData] = useState({});
-    const [loading, setLoading] = useState(false);
-    const [saving, setSaving] = useState(false);
+    const [quizResults, setQuizResults] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [selectedArea, setSelectedArea] = useState(null);
+    const [showQuiz, setShowQuiz] = useState(false);
+    const [showQuizList, setShowQuizList] = useState(false);
 
-    // Fetch data on component mount
     useEffect(() => {
-        fetchData();
+        fetchQuizData();
     }, []);
 
-    // Refresh data when modal opens
-    useEffect(() => {
-        if (showModal) {
-            fetchData();
-        }
-    }, [showModal]);
-
-    const fetchData = async () => {
-        setLoading(true);
+    const fetchQuizData = async () => {
         try {
-            const response = await api.get('/api/emotional-wheel');
+            setLoading(true);
+            const response = await api.get('/api/quiz/results');
+
             if (response.ok) {
                 const data = await response.json();
+                console.log('Quiz data received:', data);
                 setLifeAreas(data.lifeAreas || []);
-
-                // Initialize intensity data
-                const savedData = data.emotionalWheelData || {};
-                const initialData = {};
-                (data.lifeAreas || []).forEach(area => {
-                    initialData[area] = savedData[area] || 0;
-                });
-                setIntensityData(initialData);
+                setQuizResults(data.quizResults || {});
+            } else {
+                const errorData = await response.json();
+                console.error('API error:', errorData);
             }
         } catch (error) {
-            console.error('Error fetching emotional wheel data:', error);
+            console.error('Error fetching quiz data:', error);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleIntensityChange = (area, value) => {
-        setIntensityData(prev => ({
-            ...prev,
-            [area]: parseInt(value)
-        }));
+    const handleStartQuiz = (area) => {
+        setSelectedArea(area);
+        setShowQuiz(true);
+        setShowQuizList(false);
     };
 
-    const handleSave = async () => {
-        setSaving(true);
-        try {
-            const response = await api.post('/api/emotional-wheel', {
-                emotionalWheelData: intensityData
-            });
+    const handleQuizComplete = (area, score) => {
+        setQuizResults(prev => ({
+            ...prev,
+            [area]: { score }
+        }));
+        setShowQuiz(false);
+        setSelectedArea(null);
 
-            if (response.ok) {
-                alert('Emotional wheel data saved successfully!');
-                setShowModal(false);
-            }
-        } catch (error) {
-            console.error('Error saving emotional wheel data:', error);
-            alert('Failed to save data');
-        } finally {
-            setSaving(false);
+        // Check if all quizzes are completed
+        const allCompleted = lifeAreas.every(area => quizResults[area] || area === selectedArea);
+        if (!allCompleted) {
+            setShowQuizList(true);
         }
     };
 
-    const getColorForIntensity = (intensity) => {
-        const colors = [
-            '#f3f4f6', // 0 - gray-100
-            '#fef3c7', // 1 - amber-100
-            '#fed7aa', // 2 - orange-200
-            '#fdba74', // 3 - orange-300
-            '#fb923c', // 4 - orange-400
-            '#f97316'  // 5 - orange-500
-        ];
-        return colors[intensity] || colors[0];
-    };
-
-    // Show chart if user has selected life areas (even with 0 intensity)
     const hasLifeAreas = lifeAreas.length > 0;
+    const hasAnyQuizResults = Object.keys(quizResults).length > 0;
+    const allQuizzesCompleted = hasLifeAreas && lifeAreas.every(area => quizResults[area]);
 
     return (
         <>
-            {/* Emotional Wheel Visualization */}
+            {/* Radar Chart Visualization */}
             {loading ? (
                 <div className="text-center py-8">
                     <div className="w-8 h-8 border-4 border-rose-200 border-t-rose-500 rounded-full animate-spin mx-auto mb-2"></div>
                     <p className="text-gray-500 text-sm">Loading...</p>
                 </div>
-            ) : hasLifeAreas ? (
-                <EmotionalWheelChart intensityData={intensityData} lifeAreas={lifeAreas} />
             ) : (
-                <div className="text-center py-8 text-gray-500">
-                    <p className="mb-4">Please complete onboarding to select your life areas</p>
-                </div>
+                <>
+                    {hasLifeAreas ? (
+                        <RadarChartView quizResults={quizResults} lifeAreas={lifeAreas} />
+                    ) : (
+                        <div className="text-center py-8 text-gray-500">
+                            <p className="mb-4">Please complete onboarding to select your life areas</p>
+                        </div>
+                    )}
+
+                    {/* Get Report Button - Always show */}
+                    <button
+                        onClick={() => hasLifeAreas ? setShowQuizList(true) : alert('Please complete onboarding first')}
+                        disabled={!hasLifeAreas}
+                        className={`w-full mt-4 px-6 py-3 rounded-xl font-semibold transition-all shadow-lg flex items-center justify-center gap-3 ${hasLifeAreas
+                            ? 'bg-gradient-to-r from-rose-500 to-pink-500 text-white hover:from-rose-600 hover:to-pink-600'
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
+                    >
+                        <FontAwesomeIcon icon={faClipboardList} className="h-5 w-5" />
+                        {hasLifeAreas
+                            ? (hasAnyQuizResults ? 'Update Report' : 'Get Report')
+                            : 'Complete Onboarding First'
+                        }
+                    </button>
+                </>
             )}
 
-            {/* Update Button */}
-            {hasLifeAreas && (
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="w-full mt-4 bg-gradient-to-r from-rose-500 to-pink-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-rose-600 hover:to-pink-600 transition-all shadow-lg flex items-center justify-center gap-3"
-                >
-                    <FontAwesomeIcon icon={faChartPie} className="h-5 w-5" />
-                    Check Now
-                </button>
-            )}
-
-            {showModal && (
-                <div className="fixed inset-0 backdrop-blur-sm bg-white/60 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-hidden shadow-lg border border-rose-100">
-                        {/* Simple Header */}
-                        <div className="bg-white border-b border-rose-100 px-5 py-4 flex items-center justify-between">
-                            <h2 className="text-lg font-semibold text-gray-800">Rate Your Life Areas</h2>
+            {/* Quiz List Modal */}
+            {showQuizList && (
+                <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-2xl max-w-lg w-full max-h-[85vh] overflow-hidden shadow-xl">
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-rose-500 to-pink-500 px-6 py-4 flex items-center justify-between">
+                            <h2 className="text-xl font-bold text-white">Life Areas Assessment</h2>
                             <button
-                                onClick={() => setShowModal(false)}
-                                className="text-gray-400 hover:text-rose-500 transition-colors"
+                                onClick={() => setShowQuizList(false)}
+                                className="text-white/80 hover:text-white transition-colors"
                             >
                                 <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
                             </button>
                         </div>
 
                         {/* Content */}
-                        <div className="p-5 overflow-y-auto max-h-[calc(85vh-140px)]">
-                            {loading ? (
-                                <div className="text-center py-8">
-                                    <div className="w-8 h-8 border-3 border-rose-200 border-t-rose-500 rounded-full animate-spin mx-auto mb-3"></div>
-                                    <p className="text-gray-600 text-sm">Loading...</p>
-                                </div>
-                            ) : lifeAreas.length === 0 ? (
-                                <div className="text-center py-8">
-                                    <p className="text-gray-600 text-sm">No life areas selected</p>
-                                </div>
-                            ) : (
-                                <>
-                                    {/* Simple Life Areas with Sliders */}
-                                    <div className="space-y-4">
-                                        {lifeAreas.map((area) => {
-                                            const intensity = intensityData[area] || 0;
+                        <div className="p-6 overflow-y-auto max-h-[calc(85vh-80px)]">
+                            <p className="text-gray-600 text-sm mb-4">
+                                Complete quizzes for each life area to generate your personalized report
+                            </p>
 
-                                            return (
-                                                <div key={area} className="bg-white rounded-xl p-4 border border-rose-100">
-                                                    <div className="flex items-center justify-between mb-3">
-                                                        <label className="text-sm font-semibold text-gray-700">
-                                                            {area}
-                                                        </label>
-                                                        <span className="text-xl font-bold text-rose-500">
-                                                            {intensity}
-                                                        </span>
-                                                    </div>
+                            {/* Life Areas List */}
+                            <div className="space-y-3">
+                                {lifeAreas.map((area) => {
+                                    const result = quizResults[area];
+                                    const hasCompleted = result && result.score !== undefined;
 
-                                                    {/* Simple slider */}
-                                                    <input
-                                                        type="range"
-                                                        min="0"
-                                                        max="5"
-                                                        value={intensity}
-                                                        onChange={(e) => handleIntensityChange(area, e.target.value)}
-                                                        className="w-full h-2 rounded-full appearance-none cursor-pointer slider"
-                                                        style={{
-                                                            background: `linear-gradient(to right, #fb7185 0%, #fb7185 ${(intensity / 5) * 100}%, #fecdd3 ${(intensity / 5) * 100}%, #fecdd3 100%)`
-                                                        }}
+                                    return (
+                                        <div
+                                            key={area}
+                                            className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                {hasCompleted ? (
+                                                    <FontAwesomeIcon
+                                                        icon={faCheckCircle}
+                                                        className="h-5 w-5 text-green-500"
                                                     />
-
-                                                    {/* Simple markers */}
-                                                    <div className="flex justify-between mt-2">
-                                                        {[0, 1, 2, 3, 4, 5].map((mark) => (
-                                                            <span
-                                                                key={mark}
-                                                                className={`text-xs ${mark <= intensity
-                                                                    ? 'text-rose-500 font-medium'
-                                                                    : 'text-gray-400'
-                                                                    }`}
-                                                            >
-                                                                {mark}
-                                                            </span>
-                                                        ))}
-                                                    </div>
+                                                ) : (
+                                                    <FontAwesomeIcon
+                                                        icon={faLock}
+                                                        className="h-5 w-5 text-gray-400"
+                                                    />
+                                                )}
+                                                <div>
+                                                    <div className="font-medium text-gray-900">{area}</div>
+                                                    {hasCompleted && (
+                                                        <div className="text-sm text-gray-500">
+                                                            Score: {result.score}%
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
+                                            </div>
+                                            <button
+                                                onClick={() => handleStartQuiz(area)}
+                                                className={`px-4 py-2 rounded-lg font-medium transition-colors ${hasCompleted
+                                                    ? 'bg-rose-100 text-rose-600 hover:bg-rose-200'
+                                                    : 'bg-rose-500 text-white hover:bg-rose-600'
+                                                    }`}
+                                            >
+                                                {hasCompleted ? 'Retake' : 'Start'}
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
 
-                                    {/* Save Button */}
-                                    <div className="mt-5 flex gap-2">
-                                        <button
-                                            onClick={() => setShowModal(false)}
-                                            className="flex-1 px-4 py-2.5 border border-rose-200 rounded-lg text-gray-700 text-sm font-medium hover:bg-rose-50 transition-colors"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            onClick={handleSave}
-                                            disabled={saving}
-                                            className="flex-1 px-4 py-2.5 bg-rose-500 text-white rounded-lg text-sm font-semibold hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                                        >
-                                            {saving ? (
-                                                <>
-                                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                                    Saving...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <FontAwesomeIcon icon={faSave} className="h-5 w-5" />
-                                                    Save Changes
-                                                </>
-                                            )}
-                                        </button>
-                                    </div>
-                                </>
-                            )}
+                            {/* Progress Info */}
+                            <div className="mt-6 p-4 bg-rose-50 rounded-xl">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium text-gray-700">Progress</span>
+                                    <span className="text-sm font-bold text-rose-600">
+                                        {Object.keys(quizResults).length} / {lifeAreas.length}
+                                    </span>
+                                </div>
+                                <div className="w-full bg-rose-200 rounded-full h-2">
+                                    <div
+                                        className="bg-rose-500 h-2 rounded-full transition-all duration-300"
+                                        style={{
+                                            width: `${(Object.keys(quizResults).length / lifeAreas.length) * 100}%`
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Quiz Modal */}
+            {showQuiz && selectedArea && (
+                <LifeAreaQuiz
+                    lifeArea={selectedArea}
+                    onComplete={handleQuizComplete}
+                    onClose={() => {
+                        setShowQuiz(false);
+                        setSelectedArea(null);
+                        setShowQuizList(true);
+                    }}
+                />
             )}
         </>
     );

@@ -136,12 +136,23 @@ export default function OnboardingPage() {
     };
 
     const handleArrayToggle = (field, value) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: prev[field].includes(value)
-                ? prev[field].filter(item => item !== value)
-                : [...prev[field], value]
-        }));
+        setFormData(prev => {
+            const currentArray = prev[field];
+            const isRemoving = currentArray.includes(value);
+
+            // For life areas, enforce max 8 limit
+            if (field === 'lifeAreas' && !isRemoving && currentArray.length >= 8) {
+                alert('You can select maximum 8 life areas');
+                return prev;
+            }
+
+            return {
+                ...prev,
+                [field]: isRemoving
+                    ? currentArray.filter(item => item !== value)
+                    : [...currentArray, value]
+            };
+        });
     };
 
     const handleAddCustomInterest = () => {
@@ -233,7 +244,7 @@ export default function OnboardingPage() {
             case 3:
                 return formData.interests.length > 0 && formData.personalityTraits.length > 0;
             case 4:
-                return formData.lifeAreas.length > 0;
+                return formData.lifeAreas.length >= 4 && formData.lifeAreas.length <= 8;
             default:
                 return false;
         }
@@ -582,7 +593,10 @@ export default function OnboardingPage() {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-4">
                                         <FontAwesomeIcon icon={faChartPie} className="h-4 w-4 mr-2 text-rose-500" />
-                                        Select Your Focus Areas (Choose at least one)
+                                        Select Your Focus Areas (Minimum 4, Maximum 8)
+                                        <span className="ml-2 text-xs text-rose-600 font-semibold">
+                                            {formData.lifeAreas.length}/8 selected
+                                        </span>
                                     </label>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         {lifeAreaOptions.map((area) => (
