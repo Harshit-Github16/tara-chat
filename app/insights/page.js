@@ -195,7 +195,7 @@ export default function InsightsPage() {
                         </ChartCard>
 
                         {/* Emotional Wheel - ACTIVE */}
-                        <ChartCard title="Emotional Wheel" icon={faBrain}>
+                        <ChartCard title="Support Reflection Radar" icon={faBrain}>
                             <EmotionalWheel />
                         </ChartCard>
 
@@ -205,7 +205,7 @@ export default function InsightsPage() {
                         </ChartCard>
 
                         {/* Support Reflection Radar - DISABLED */}
-                        <ChartCard title="Support Reflection Radar" icon={faBullseye} disabled>
+                        <ChartCard title="Emotional Wheel" icon={faBullseye} disabled>
                             <DisabledChart />
                         </ChartCard>
                     </div>

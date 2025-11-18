@@ -644,6 +644,67 @@ export default function BlogPostPage() {
                         </div>
                     </div>
 
+                    {/* FAQ Section */}
+                    {post.faqItems && post.faqItems.length > 0 && (
+                        <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6 mb-8">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                                <FontAwesomeIcon icon={faBullseye} className="h-5 w-5 text-rose-500" />
+                                Frequently Asked Questions
+                            </h3>
+                            <div className="space-y-4">
+                                {post.faqItems.map((faq, index) => (
+                                    <details
+                                        key={index}
+                                        className="group border border-rose-100 rounded-xl overflow-hidden"
+                                    >
+                                        <summary className="flex items-center justify-between cursor-pointer px-6 py-4 bg-rose-50 hover:bg-rose-100 transition-colors">
+                                            <h4 className="font-semibold text-gray-800 pr-4">{faq.question}</h4>
+                                            <svg
+                                                className="w-5 h-5 text-rose-500 transition-transform group-open:rotate-180"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </summary>
+                                        <div className="px-6 py-4 bg-white">
+                                            <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                                        </div>
+                                    </details>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Related Blogs */}
+                    {relatedBlogs.length > 0 && (
+                        <div className="mb-8">
+                            <h3 className="text-2xl font-bold text-gray-800 mb-6">Related Articles</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {relatedBlogs.map((blog) => (
+                                    <Link
+                                        key={blog.id}
+                                        href={`/blog/${blog.id}`}
+                                        className="rounded-xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                                    >
+                                        <div className="aspect-video bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+                                            <img
+                                                src={blog.featuredImage || "/blogs-img/blogs1.jpeg"}
+                                                alt={blog.title}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="p-4">
+                                            <span className="text-xs text-rose-600 font-medium">{blog.category}</span>
+                                            <h4 className="font-semibold text-gray-800 mt-1 line-clamp-2">{blog.title}</h4>
+                                            <p className="text-sm text-gray-600 mt-2 line-clamp-2">{blog.excerpt}</p>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                 </main>
 

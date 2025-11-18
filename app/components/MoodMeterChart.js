@@ -244,6 +244,21 @@ export default function MoodMeterChart({ moodData = [], loading }) {
                             strokeLinejoin="round"
                         />
                     )}
+
+                    {/* Data points - show dots for each entry */}
+                    {points.map((point, i) => (
+                        point.hasData && (
+                            <circle
+                                key={`point-${i}`}
+                                cx={point.x}
+                                cy={point.y}
+                                r="6"
+                                fill="url(#moodGradient)"
+                                stroke="white"
+                                strokeWidth="2"
+                            />
+                        )
+                    ))}
                 </svg>
             </div>
 

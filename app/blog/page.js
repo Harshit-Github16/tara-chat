@@ -114,6 +114,8 @@ export default function BlogsPage() {
                 <meta name="twitter:title" content="Mental Health & Wellness Blog - Tara" />
                 <meta name="twitter:description" content="Expert insights and tips for better emotional wellness" />
                 <meta name="twitter:image" content="https://tara4u.com/og-image.jpg" />
+
+                {/* Main Blog Schema */}
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -126,43 +128,77 @@ export default function BlogsPage() {
                             "publisher": {
                                 "@type": "Organization",
                                 "name": "Tara",
-                                "logo": "https://yourdomain.com/taralogo.jpg"
-                            },
-                            "blogPost": blogs.map(post => ({
+                                "logo": {
+                                    "@type": "ImageObject",
+                                    "url": "https://tara4u.com/taralogo.jpg"
+                                }
+                            }
+                        })
+                    }}
+                />
+
+                {/* Individual Blog Post Schemas */}
+                {blogs.map((post) => (
+                    <script
+                        key={post.id}
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify({
+                                "@context": "https://schema.org",
                                 "@type": "BlogPosting",
                                 "headline": post.title,
                                 "description": post.excerpt,
+                                "image": post.featuredImage || "https://tara4u.com/og-image.jpg",
                                 "author": {
                                     "@type": "Person",
                                     "name": post.author
                                 },
+                                "publisher": {
+                                    "@type": "Organization",
+                                    "name": "Tara",
+                                    "logo": {
+                                        "@type": "ImageObject",
+                                        "url": "https://tara4u.com/taralogo.jpg"
+                                    }
+                                },
                                 "datePublished": post.publishDate,
-                                "url": `https://tara4u.com/blog/${post.id}`
-                            }))
-                        })
-                    }}
-                />
+                                "dateModified": post.updatedAt || post.publishDate,
+                                "mainEntityOfPage": {
+                                    "@type": "WebPage",
+                                    "@id": `https://tara4u.com/blog/${post.id}`
+                                },
+                                "url": `https://tara4u.com/blog/${post.id}`,
+                                "articleSection": post.category,
+                                "keywords": post.tags?.join(', ') || '',
+                                "wordCount": post.content?.split(' ').length || 0,
+                                "timeRequired": post.readTime || "5 min read"
+                            })
+                        }}
+                    />
+                ))}
             </Head>
             <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
-                {/* Header */}
-                <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
-                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-                        <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                            <img
-                                src="/taralogo.jpg"
-                                alt="Tara Logo"
-                                className="h-8 w-8 rounded-full object-cover"
-                            />
-                            <span className="text-lg font-semibold text-rose-600">Tara</span>
-                        </Link>
+                {/* Header - Only show if user is logged in */}
+                {user && (
+                    <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
+                        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+                            <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                                <img
+                                    src="/taralogo.jpg"
+                                    alt="Tara Logo"
+                                    className="h-8 w-8 rounded-full object-cover"
+                                />
+                                <span className="text-lg font-semibold text-rose-600">Tara</span>
+                            </Link>
 
-                        {/* Profile Icon */}
-                        <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
-                            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
-                        </Link>
+                            {/* Profile Icon */}
+                            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
+                                <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+                            </Link>
 
-                    </div>
-                </header>
+                        </div>
+                    </header>
+                )}
 
                 {/* Main Content */}
                 <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
@@ -314,11 +350,11 @@ export default function BlogsPage() {
                                             >
                                                 <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group-hover:border-rose-200">
                                                     <div className="md:flex">
-                                                        <div className="md:w-1/3 aspect-video md:aspect-square bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center relative overflow-hidden">
+                                                        <div className="w-full md:w-[40%]     flex items-center justify-center relative  flex-shrink-0">
                                                             <img
                                                                 src={post.featuredImage || "/blogs-img/blogs1.jpeg"}
                                                                 alt={post.title}
-                                                                className="w-full h-full object-cover"
+                                                                className="w-full h-full object-contain"
                                                             />
                                                             {post.trending && (
                                                                 <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
@@ -327,42 +363,44 @@ export default function BlogsPage() {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className="md:w-2/3 p-6">
-                                                            <div className="flex items-center gap-2 mb-3">
-                                                                <span className="px-3 py-1 bg-rose-100 text-rose-600 rounded-full text-xs font-medium">
-                                                                    {post.category}
-                                                                </span>
-                                                                <span className="text-xs text-gray-500">{post.readTime}</span>
-                                                                <span className="text-xs text-gray-500">•</span>
-                                                                <span className="text-xs text-gray-500">{new Date(post.publishDate).toLocaleDateString()}</span>
-                                                            </div>
-                                                            <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-rose-600 transition-colors">
-                                                                {post.title}
-                                                            </h3>
-                                                            <p className="text-gray-600 mb-4 line-clamp-2">{post.excerpt}</p>
-                                                            <div className="flex items-center justify-between">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center">
-                                                                        <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-500" />
-                                                                    </div>
-                                                                    <div>
-                                                                        <p className="text-sm font-medium text-gray-800">{post.author}</p>
-                                                                        <p className="text-xs text-gray-500">{post.authorBio}</p>
-                                                                    </div>
+                                                        <div className="md:w-[60%] ">
+                                                            <div className="p-4">
+                                                                <div className="flex items-center gap-2 mb-3">
+                                                                    <span className="px-3 py-1 bg-rose-100 text-rose-600 rounded-full text-xs font-medium">
+                                                                        {post.category}
+                                                                    </span>
+                                                                    <span className="text-xs text-gray-500">{post.readTime}</span>
+                                                                    <span className="text-xs text-gray-500">•</span>
+                                                                    <span className="text-xs text-gray-500">{new Date(post.publishDate).toLocaleDateString()}</span>
                                                                 </div>
-                                                                <div className="flex items-center gap-4 text-sm text-gray-500">
-                                                                    <span className="flex items-center gap-1">
-                                                                        <FontAwesomeIcon icon={faHeart} className="h-3 w-3" />
-                                                                        {post.likes}
-                                                                    </span>
-                                                                    <span className="flex items-center gap-1">
-                                                                        <FontAwesomeIcon icon={faComment} className="h-3 w-3" />
-                                                                        {post.commentCount || (Array.isArray(post.comments) ? post.comments.length : 0)}
-                                                                    </span>
-                                                                    <span className="flex items-center gap-1">
-                                                                        <FontAwesomeIcon icon={faEye} className="h-3 w-3" />
-                                                                        {post.views}
-                                                                    </span>
+                                                                <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-rose-600 transition-colors">
+                                                                    {post.title}
+                                                                </h3>
+                                                                <p className="text-gray-600 mb-4 line-clamp-2">{post.excerpt}</p>
+                                                                <div className="flex items-center justify-between">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center">
+                                                                            <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-500" />
+                                                                        </div>
+                                                                        <div>
+                                                                            <p className="text-sm font-medium text-gray-800">{post.author}</p>
+                                                                            <p className="text-xs text-gray-500">{post.authorBio}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                                                                        <span className="flex items-center gap-1">
+                                                                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3" />
+                                                                            {post.likes}
+                                                                        </span>
+                                                                        <span className="flex items-center gap-1">
+                                                                            <FontAwesomeIcon icon={faComment} className="h-3 w-3" />
+                                                                            {post.commentCount || (Array.isArray(post.comments) ? post.comments.length : 0)}
+                                                                        </span>
+                                                                        <span className="flex items-center gap-1">
+                                                                            <FontAwesomeIcon icon={faEye} className="h-3 w-3" />
+                                                                            {post.views}
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -459,7 +497,8 @@ export default function BlogsPage() {
                     </div>
                 </main>
 
-                <BottomNav activePage="blog" />
+                {/* Only show BottomNav if user is logged in */}
+                {user && <BottomNav activePage="blog" />}
             </div>
         </>
     );
