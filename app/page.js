@@ -25,6 +25,7 @@ import {
 
   faChevronDown,
   faChevronUp,
+  faBullseye,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
@@ -364,6 +365,130 @@ export default function Home() {
                 description="Access your emotional wellness tools anywhere with our responsive web app and mobile support."
                 features={["Web app", "Mobile optimized", "Offline support"]}
               />
+            </div>
+          </div>
+        </section>
+
+        {/* What You Get Section */}
+        <section className="py-20 bg-gradient-to-br from-rose-50 via-white to-rose-100/30 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(244,63,94,0.05),transparent_70%)]"></div>
+
+          <div className="mx-auto max-w-7xl px-6 relative">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-medium text-rose-700 mb-6">
+                <FontAwesomeIcon icon={faStar} className="h-4 w-4" />
+                Everything Included
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+                Your Complete Wellness Toolkit
+              </h2>
+              <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
+                Get access to everything you need for your emotional wellness journey - all in one place
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* 100+ Celebrities */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-4 right-4">
+                  <div className="bg-rose-200 text-rose-700 text-xs font-bold px-3 py-1 rounded-full">
+                    NEW
+                  </div>
+                </div>
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faUserAstronaut} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">100+</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">AI Celebrities & Characters</p>
+                <p className="text-xs text-gray-600">Chat with your favorite personalities and get inspired by their wisdom</p>
+              </div>
+
+              {/* Smart Goals */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faBullseye} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">AI-Powered</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Smart Goal Suggestions</p>
+                <p className="text-xs text-gray-600">Get personalized wellness goals based on your mood patterns and progress</p>
+              </div>
+
+              {/* Mood Tracking */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">12 Moods</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Advanced Mood Tracking</p>
+                <p className="text-xs text-gray-600">Track your emotional journey with 12 distinct mood states and detailed analytics</p>
+              </div>
+
+              {/* Journal Prompts */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faBookOpen} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Unlimited</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">AI Journal Prompts</p>
+                <p className="text-xs text-gray-600">Get personalized journaling prompts that adapt to your emotional state</p>
+              </div>
+
+              {/* Insights Dashboard */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Real-time</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Insights Dashboard</p>
+                <p className="text-xs text-gray-600">Visualize your progress with beautiful charts and actionable insights</p>
+              </div>
+
+              {/* 24/7 Support */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faComments} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">24/7</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Always Available</p>
+                <p className="text-xs text-gray-600">Your AI companion is always ready to listen, anytime you need support</p>
+              </div>
+
+              {/* Privacy First */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faShield} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">100%</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Private & Secure</p>
+                <p className="text-xs text-gray-600">End-to-end encryption ensures your data stays completely private</p>
+              </div>
+
+              {/* Free to Start */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-4 right-4">
+                  <div className="bg-green-200 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
+                    FREE
+                  </div>
+                </div>
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">₹0</h3>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Free to Start</p>
+                <p className="text-xs text-gray-600">Begin your wellness journey today with no credit card required</p>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-16 text-center">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all group"
+              >
+                Start Your Free Journey
+                <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <p className="mt-4 text-sm text-gray-600">No credit card required • Get started in 2 minutes</p>
             </div>
           </div>
         </section>

@@ -309,7 +309,7 @@ export default function BlogsPage() {
                                         {filteredPosts.map((post) => (
                                             <Link
                                                 key={post.id}
-                                                href={`/blogs/${post.id}`}
+                                                href={`/blog/${post.id}`}
                                                 className="group block"
                                             >
                                                 <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 group-hover:border-rose-200">

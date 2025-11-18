@@ -22,6 +22,7 @@ import {
   faBars,
   faNewspaper,
   faBullseye,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import BottomNav from "../components/BottomNav";
@@ -771,6 +772,51 @@ export default function ChatListPage() {
     }
   };
 
+  const deleteChat = async (chatId, e) => {
+    e.stopPropagation(); // Prevent chat selection when clicking delete
+
+    // Don't allow deleting TARA AI
+    if (chatId === 'tara-ai') {
+      alert('Cannot delete TARA AI');
+      return;
+    }
+
+    if (!confirm('Are you sure you want to delete this chat?')) {
+      return;
+    }
+
+    try {
+      // Remove from local state
+      setChats(prev => prev.filter(chat => chat.id !== chatId));
+
+      // Remove messages
+      setChatMessages(prev => {
+        const newMessages = { ...prev };
+        delete newMessages[chatId];
+        return newMessages;
+      });
+
+      // If deleted chat was active, switch to TARA
+      if (activeId === chatId) {
+        setActiveId('tara-ai');
+      }
+
+      // Delete from database
+      if (user?.uid) {
+        const response = await fetch(`/api/users?userId=${user.uid}&chatUserId=${chatId}`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete from database');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to delete chat:', error);
+      alert('Failed to delete chat. Please try again.');
+    }
+  };
+
   const addCelebrityToChat = async (celebrity) => {
     if (!user?.uid) {
       alert('Please log in to chat with celebrities.');
@@ -922,45 +968,58 @@ export default function ChatListPage() {
               </div>
               <div className="space-y-1">
                 {chats.map((c) => (
-                  <button
-                    key={c.id}
-                    onClick={() => {
-                      setActiveId(c.id);
-                      setShowMobileSidebar(false); // Close mobile sidebar when chat is selected
-                    }}
-                    className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${c.id === activeId
-                      ? "border-rose-200 bg-rose-100 text-rose-700"
-                      : "border-rose-100 bg-white text-gray-700 hover:bg-rose-100"
-                      }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* Avatar */}
-                      <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center flex-shrink-0">
-                        {c.avatar ? (
-                          <img
-                            src={c.avatar}
-                            alt={c.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
-                        )}
-                      </div>
-
-                      {/* Chat Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium truncate">{c.name}</span>
-                          {c.unread > 0 && (
-                            <span className="ml-2 inline-flex items-center rounded-full bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700 flex-shrink-0">
-                              {c.unread}
-                            </span>
+                  <div key={c.id} className="relative group">
+                    <button
+                      onClick={() => {
+                        setActiveId(c.id);
+                        setShowMobileSidebar(false); // Close mobile sidebar when chat is selected
+                      }}
+                      className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${c.id === activeId
+                        ? "border-rose-200 bg-rose-100 text-rose-700"
+                        : "border-rose-100 bg-white text-gray-700 hover:bg-rose-100"
+                        }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {/* Avatar */}
+                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center flex-shrink-0">
+                          {c.avatar ? (
+                            <img
+                              src={c.avatar}
+                              alt={c.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
                           )}
                         </div>
-                        <div className="mt-1 truncate text-xs text-gray-500">{c.last}</div>
+
+                        {/* Chat Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-medium truncate">{c.name}</span>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              {c.unread > 0 && (
+                                <span className="inline-flex items-center rounded-full bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700">
+                                  {c.unread}
+                                </span>
+                              )}
+                              {/* Delete button - only show for non-TARA chats */}
+                              {c.id !== 'tara-ai' && (
+                                <button
+                                  onClick={(e) => deleteChat(c.id, e)}
+                                  className="text-rose-400 hover:text-rose-600 transition-colors p-1"
+                                  title="Delete chat"
+                                >
+                                  <FontAwesomeIcon icon={faTrash} className="h-3 w-3" />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="mt-1 truncate text-xs text-gray-500">{c.last}</div>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </div>
                 ))}
               </div>
 
@@ -1070,9 +1129,34 @@ export default function ChatListPage() {
                   </div>
                 </div>
 
-                <div ref={messagesContainerRef} className="flex-1 space-y-2 sm:space-y-3 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4">
+                <div ref={messagesContainerRef} className="flex-1 space-y-2 sm:space-y-3 overflow-y-auto px-3 sm:px-4 py-3 sm:py-4 relative bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20">
+                  {/* Premium 3D Background Effects */}
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    {/* Animated gradient orbs */}
+                    <div className="absolute top-[10%] left-[5%] w-64 h-64 bg-gradient-to-br from-rose-200/20 to-rose-300/10 rounded-full blur-3xl animate-float-orb" style={{ animationDelay: '0s' }}></div>
+                    <div className="absolute top-[60%] right-[10%] w-80 h-80 bg-gradient-to-br from-rose-300/15 to-rose-400/10 rounded-full blur-3xl animate-float-orb" style={{ animationDelay: '2s' }}></div>
+                    <div className="absolute bottom-[20%] left-[15%] w-72 h-72 bg-gradient-to-br from-rose-100/20 to-rose-200/10 rounded-full blur-3xl animate-float-orb" style={{ animationDelay: '4s' }}></div>
+
+                    {/* Floating particles */}
+                    <div className="absolute top-[20%] left-[20%] w-2 h-2 bg-rose-300/40 rounded-full animate-float-particle" style={{ animationDelay: '0s', animationDuration: '8s' }}></div>
+                    <div className="absolute top-[40%] right-[25%] w-1.5 h-1.5 bg-rose-400/30 rounded-full animate-float-particle" style={{ animationDelay: '1s', animationDuration: '10s' }}></div>
+                    <div className="absolute top-[70%] left-[30%] w-2.5 h-2.5 bg-rose-200/40 rounded-full animate-float-particle" style={{ animationDelay: '2s', animationDuration: '9s' }}></div>
+                    <div className="absolute top-[50%] right-[15%] w-2 h-2 bg-rose-300/35 rounded-full animate-float-particle" style={{ animationDelay: '3s', animationDuration: '11s' }}></div>
+                    <div className="absolute top-[30%] left-[40%] w-1.5 h-1.5 bg-rose-400/40 rounded-full animate-float-particle" style={{ animationDelay: '4s', animationDuration: '7s' }}></div>
+                    <div className="absolute bottom-[30%] right-[35%] w-2 h-2 bg-rose-200/35 rounded-full animate-float-particle" style={{ animationDelay: '5s', animationDuration: '10s' }}></div>
+
+                    {/* Subtle grid pattern */}
+                    <div className="absolute inset-0 opacity-[0.02]" style={{
+                      backgroundImage: 'linear-gradient(rgba(244, 63, 94, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(244, 63, 94, 0.1) 1px, transparent 1px)',
+                      backgroundSize: '50px 50px'
+                    }}></div>
+
+                    {/* Radial gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-rose-50/10"></div>
+                  </div>
+
                   {messages.length === 0 && activeChat?.id === "tara-ai" ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center py-8">
+                    <div className="flex flex-col items-center justify-center h-full text-center py-8 relative z-10">
                       <img
                         src="/taralogo.jpg"
                         alt="TARA AI"
@@ -1401,6 +1485,57 @@ export default function ChatListPage() {
         )}
 
       </div>
+
+      {/* Premium 3D Background Animation Styles */}
+      <style jsx>{`
+        @keyframes float-orb {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+            opacity: 1;
+          }
+          33% {
+            transform: translate(30px, -30px) scale(1.1);
+            opacity: 0.8;
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+            opacity: 0.9;
+          }
+        }
+
+        @keyframes float-particle {
+          0% {
+            transform: translateY(0) translateX(0) scale(1);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          50% {
+            transform: translateY(-100px) translateX(20px) scale(1.2);
+            opacity: 0.8;
+          }
+          90% {
+            opacity: 0.5;
+          }
+          100% {
+            transform: translateY(-200px) translateX(-10px) scale(0.8);
+            opacity: 0;
+          }
+        }
+
+        .animate-float-orb {
+          animation: float-orb 20s ease-in-out infinite;
+        }
+
+        .animate-float-particle {
+          animation: float-particle 10s ease-in-out infinite;
+        }
+
+        .bg-gradient-radial {
+          background: radial-gradient(circle at center, var(--tw-gradient-stops));
+        }
+      `}</style>
     </ProtectedRoute>
   );
 }
