@@ -366,15 +366,29 @@ export default function ProfilePage() {
                                     About Me
                                 </h3>
                                 {isEditing ? (
-                                    <textarea
-                                        value={editData.bio}
-                                        onChange={(e) => handleInputChange('bio', e.target.value)}
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring resize-none"
-                                        rows="3"
-                                        placeholder="Tell us about yourself..."
-                                    />
+                                    <div>
+                                        <textarea
+                                            value={editData.bio}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (value.length <= 300) {
+                                                    handleInputChange('bio', value);
+                                                }
+                                            }}
+                                            className="w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring resize-none"
+                                            rows="3"
+                                            placeholder="Tell us about yourself..."
+                                            maxLength={300}
+                                        />
+                                        <div className="flex justify-between items-center mt-2">
+                                            <p className="text-xs text-gray-500">Share a brief introduction about yourself</p>
+                                            <p className={`text-xs font-medium ${editData.bio?.length >= 300 ? 'text-rose-500' : 'text-gray-500'}`}>
+                                                {editData.bio?.length || 0}/300
+                                            </p>
+                                        </div>
+                                    </div>
                                 ) : (
-                                    <p className="text-gray-600 leading-relaxed">{userProfile.bio}</p>
+                                    <p className="text-gray-600 leading-relaxed">{userProfile.bio || 'No bio added yet'}</p>
                                 )}
                             </div>
                         </div>
