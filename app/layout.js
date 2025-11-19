@@ -16,14 +16,14 @@ const poppins = Poppins({
 export const metadata = {
   metadataBase: new URL('https://tara4u.com'),
   title: {
-    default: "Tara - Your AI Mental Health & Wellness Companion | Emotional Support 24/7",
-    template: "%s | Tara - Mental Wellness Companion"
+    default: "Tara4U - Your AI Mental Health & Wellness Companion | Emotional Support 24/7",
+    template: "%s | Tara4U - Mental Wellness Companion"
   },
-  description: "Tara is your personal AI-powered mental health companion. Get 24/7 emotional support, chat with 100+ AI characters, track your mood, journal your thoughts, and receive personalized wellness insights. Start your mental wellness journey today - free to begin.",
-  keywords: ["mental health app", "AI therapy", "emotional wellness", "mindfulness app", "mental health support", "AI companion", "mood tracker", "journal app", "therapy chat", "emotional support", "mental wellness", "AI counseling", "stress relief", "anxiety help", "depression support", "tara", "tara4u", "mental health india"],
-  authors: [{ name: "Tara Team", url: "https://tara4u.com" }],
-  creator: "Tara Team",
-  publisher: "Tara",
+  description: "Your AI mental health companion. Get 24/7 emotional support, chat with 100+ AI characters, track moods, and journal thoughts. Free to start.",
+  keywords: ["mental health app", "AI therapy", "emotional wellness", "mindfulness app", "mental health support", "AI companion", "mood tracker", "journal app", "therapy chat", "emotional support", "mental wellness", "AI counseling", "stress relief", "anxiety help", "depression support", "tara4u", "tara 4u", "mental health india", "Tara", "AI friend"],
+  authors: [{ name: "Tara4U Team", url: "https://tara4u.com" }],
+  creator: "Tara4U Team",
+  publisher: "Tara4U",
   formatDetection: {
     email: false,
     address: false,
@@ -43,9 +43,9 @@ export const metadata = {
     type: "website",
     locale: "en_US",
     url: "https://tara4u.com",
-    siteName: "Tara - Mental Wellness Companion",
-    title: "Tara - Your AI Mental Health & Wellness Companion | 24/7 Emotional Support",
-    description: "Get personalized mental health support with Tara. Chat with 100+ AI characters, track moods, journal thoughts, and receive wellness insights. Free to start your journey.",
+    siteName: "Tara4U - Mental Wellness Companion",
+    title: "Tara4U - Your AI Mental Health & Wellness Companion | 24/7 Emotional Support",
+    description: "Your AI mental health companion. 24/7 emotional support, 100+ AI characters, mood tracking, and journaling. Free to start.",
     images: [
       {
         url: "https://tara4u.com/taralogo.jpg",
@@ -57,8 +57,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tara - Your AI Mental Health & Wellness Companion",
-    description: "Get 24/7 emotional support with Tara. Chat with 100+ AI characters, track moods, and receive personalized wellness insights. Free to start.",
+    title: "Tara4U - Your AI Mental Health & Wellness Companion",
+    description: "24/7 AI emotional support. Chat with 100+ characters, track moods, journal thoughts. Free to start.",
     images: ["https://tara4u.com/taralogo.jpg"],
     creator: "@tara4u",
     site: "@tara4u",
