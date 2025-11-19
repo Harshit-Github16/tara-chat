@@ -19,7 +19,14 @@ const ADMIN_EMAILS = [
 
 export default function BottomNav({ activePage }) {
     const { user } = useAuth();
+
+    // Debug logging
+    console.log('BottomNav - User:', user);
+    console.log('BottomNav - User email:', user?.email);
+    console.log('BottomNav - Admin emails:', ADMIN_EMAILS);
+
     const isAdmin = user?.email && ADMIN_EMAILS.includes(user.email);
+    console.log('BottomNav - Is admin:', isAdmin);
 
     return (
         <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">

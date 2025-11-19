@@ -644,7 +644,7 @@ export default function ProfilePage() {
                             <div className="mt-4 pt-4 border-t border-rose-100">
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full flex items-center justify-center gap-2 p-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
+                                    className="w-full flex items-center justify-center gap-2 p-3 bg-rose-50 text-rose-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
                                 >
                                     <FontAwesomeIcon icon={faSignOutAlt} className="h-4 w-4" />
                                     Logout
