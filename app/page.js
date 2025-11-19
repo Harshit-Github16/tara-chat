@@ -27,6 +27,7 @@ import {
   faChevronDown,
   faChevronUp,
   faBullseye,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
@@ -1340,7 +1341,7 @@ export default function Home() {
 
 
 
-        {/* CTA Section */}
+
         <section className="relative py-20 bg-gradient-to-br from-rose-100 via-rose-50 to-white overflow-hidden">
           {/* Background decorations */}
           <div className="absolute inset-0 bg-radial-strong"></div>
@@ -1460,7 +1461,6 @@ export default function Home() {
         </section>
 
 
-        {/* Contact Form */}
         <section className="py-20 bg-white">
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
@@ -1473,66 +1473,60 @@ export default function Home() {
                 </p>
 
                 <div className="mt-8 space-y-6">
-                  <ContactInfo
-                    icon={faEnvelope}
-                    title="Email us"
-                    info="hello@tara4u.com"
-                    description="We'll get back to you within 24 hours"
-                  />
+                  {/* Email Contact */}
+                  <div className="flex items-start gap-4 p-4 rounded-xl bg-rose-50 border border-rose-100 hover:bg-rose-100 transition-colors">
+                    <div className="flex-shrink-0">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-200">
+                        <FontAwesomeIcon icon={faEnvelope} className="h-6 w-6 text-rose-600" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900">Email us</h3>
+                      <a href="mailto:hello@tara4u.com" className="text-rose-600 hover:text-rose-700 font-medium">
+                        hello@tara4u.com
+                      </a>
+                      <p className="mt-1 text-sm text-gray-600">We'll get back to you within 24 hours</p>
+                    </div>
+                  </div>
 
-                  {/* Social Media Section */}
-                  <div className="pt-4">
+                  {/* Social Media */}
+                  <div className="p-6 rounded-xl bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-100">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect with us</h3>
-                    <div className="flex gap-3">
-                      <a
-                        href="https://twitter.com/tara4u_official"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
-                        aria-label="Twitter/X"
-                      >
-                        <FontAwesomeIcon icon={faXTwitter} className="h-6 w-6" />
+                    <div className="flex flex-wrap gap-3">
+                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                        <FontAwesomeIcon icon={faXTwitter} className="h-5 w-5 text-gray-700" />
+                        <span className="text-sm font-medium text-gray-700">Twitter</span>
                       </a>
+                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                        <FontAwesomeIcon icon={faInstagram} className="h-5 w-5 text-pink-600" />
+                        <span className="text-sm font-medium text-gray-700">Instagram</span>
+                      </a>
+                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                        <FontAwesomeIcon icon={faLinkedin} className="h-5 w-5 text-blue-600" />
+                        <span className="text-sm font-medium text-gray-700">LinkedIn</span>
+                      </a>
+                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                        <FontAwesomeIcon icon={faFacebook} className="h-5 w-5 text-blue-700" />
+                        <span className="text-sm font-medium text-gray-700">Facebook</span>
+                      </a>
+                    </div>
+                  </div>
 
-                      <a
-                        href="https://www.linkedin.com/company/tara4u"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
-                        aria-label="LinkedIn"
-                      >
-                        <FontAwesomeIcon icon={faLinkedin} className="h-6 w-6" />
-                      </a>
-
-                      <a
-                        href="https://www.instagram.com/tara4u.official"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
-                        aria-label="Instagram"
-                      >
-                        <FontAwesomeIcon icon={faInstagram} className="h-6 w-6" />
-                      </a>
-
-                      <a
-                        href="https://www.facebook.com/tara4u.official"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
-                        aria-label="Facebook"
-                      >
-                        <FontAwesomeIcon icon={faFacebook} className="h-6 w-6" />
-                      </a>
-
-                      <a
-                        href="https://wa.me/919876543210"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200 transition-all"
-                        aria-label="WhatsApp"
-                      >
-                        <FontAwesomeIcon icon={faWhatsapp} className="h-6 w-6" />
-                      </a>
+                  {/* Quick Info */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-white border border-rose-100">
+                      <div className="flex items-center gap-2 text-rose-600 mb-2">
+                        <FontAwesomeIcon icon={faClock} className="h-4 w-4" />
+                        <span className="text-sm font-semibold">Response Time</span>
+                      </div>
+                      <p className="text-sm text-gray-600">Usually within 24 hours</p>
+                    </div>
+                    <div className="p-4 rounded-xl bg-white border border-rose-100">
+                      <div className="flex items-center gap-2 text-rose-600 mb-2">
+                        <FontAwesomeIcon icon={faHeart} className="h-4 w-4" />
+                        <span className="text-sm font-semibold">Support</span>
+                      </div>
+                      <p className="text-sm text-gray-600">We're here to help you</p>
                     </div>
                   </div>
                 </div>
@@ -1627,11 +1621,11 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
-      </main>
+        </section >
+      </main >
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20 border-t border-rose-100">
+      < footer className="bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20 border-t border-rose-100" >
         <div className="mx-auto max-w-7xl px-6 py-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             {/* Brand Section */}
@@ -1694,10 +1688,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </footer>
+      </footer >
 
       {/* Fixed Bottom Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-rose-100 shadow-lg">
+      < div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-rose-100 shadow-lg" >
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             {/* Continue with Google */}
@@ -1719,17 +1713,18 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Login Modal */}
-      <LoginModal
+      < LoginModal
         isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
+        onClose={() => setShowLoginModal(false)
+        }
         onLoginSuccess={handleLoginSuccess}
       />
 
       {/* Onboarding Modal */}
-      <OnboardingModal
+      < OnboardingModal
         isOpen={showOnboardingModal}
         onClose={() => setShowOnboardingModal(false)}
         onComplete={handleOnboardingComplete}
