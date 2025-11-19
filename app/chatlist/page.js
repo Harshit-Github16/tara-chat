@@ -919,7 +919,7 @@ export default function ChatListPage() {
                 alt="Tara Logo"
                 className="h-7 w-7 sm:h-8 sm:w-8 rounded-full object-cover"
               />
-              <span className="text-base sm:text-lg font-semibold text-rose-600">Tara</span>
+              <span className="text-base sm:text-lg font-semibold text-rose-600">Tara4U</span>
             </div>
 
             {/* Profile Icon */}
@@ -955,7 +955,7 @@ export default function ChatListPage() {
                       setShowAdd(true);
                       setShowMobileSidebar(false);
                     }}
-                    className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-300 transition-colors"
+                    className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-300 transition-colors"
                   >
                     <FontAwesomeIcon icon={faPlus} /> Add User
                   </button>
@@ -976,7 +976,7 @@ export default function ChatListPage() {
                         setShowMobileSidebar(false); // Close mobile sidebar when chat is selected
                       }}
                       className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${c.id === activeId
-                        ? "border-rose-200 bg-rose-100 text-rose-700"
+                        ? "border-rose-200 bg-rose-100 text-rose-600"
                         : "border-rose-100 bg-white text-gray-700 hover:bg-rose-100"
                         }`}
                     >
@@ -1000,7 +1000,7 @@ export default function ChatListPage() {
                             <span className="font-medium truncate">{c.name}</span>
                             <div className="flex items-center gap-2 flex-shrink-0">
                               {c.unread > 0 && (
-                                <span className="inline-flex items-center rounded-full bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700">
+                                <span className="inline-flex items-center rounded-full bg-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-600">
                                   {c.unread}
                                 </span>
                               )}
@@ -1066,7 +1066,7 @@ export default function ChatListPage() {
                     <div className="flex flex-col items-center gap-1">
                       {/* Plus Button */}
                       <div className="w-12 h-12 bg-linear-to-br from-rose-200 to-rose-300 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform border border-rose-300">
-                        <FontAwesomeIcon icon={faPlus} className="h-4 w-4 text-rose-700" />
+                        <FontAwesomeIcon icon={faPlus} className="h-4 w-4 text-rose-600" />
                       </div>
                       {/* View More Text */}
                       <div className="text-xs font-medium text-rose-600 text-center leading-tight">
@@ -1089,7 +1089,7 @@ export default function ChatListPage() {
                   <p className="text-gray-500 mb-4">Start a conversation with one of our AI coaches</p>
                   <button
                     onClick={() => setShowAdd(true)}
-                    className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                    className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300"
                   >
                     <FontAwesomeIcon icon={faPlus} />
                     Start Chat
@@ -1241,7 +1241,7 @@ export default function ChatListPage() {
                       </div>
                       <button
                         onClick={sendAudioMessage}
-                        className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                        className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300"
                       >
                         Send
                       </button>
@@ -1337,7 +1337,7 @@ export default function ChatListPage() {
                     <button
                       type="submit"
                       disabled={!message.trim() || isSendingMessage}
-                      className="inline-flex items-center gap-1 sm:gap-2 rounded-full bg-rose-200 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-rose-700 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                      className="inline-flex items-center gap-1 sm:gap-2 rounded-full bg-rose-200 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-rose-600 hover:bg-rose-300 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                     >
                       <FontAwesomeIcon icon={faPaperPlane} className="h-3 w-3 sm:h-4 sm:w-4" />
                       <span className="hidden sm:inline">{isSendingMessage ? 'Sending...' : 'Send'}</span>
@@ -1582,7 +1582,7 @@ function ChatBubble({ who, type = 'text', content, duration }) {
     <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-2xl px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm shadow-sm ${isMe
-          ? "rounded-br-sm bg-rose-100 text-rose-700"
+          ? "rounded-br-sm bg-rose-100 text-rose-600"
           : "rounded-bl-sm bg-gray-100 text-gray-800"
           }`}
       >
@@ -1719,7 +1719,7 @@ function AddUserModal({ chats, setActiveId, setChatMessages, onClose, onCreate }
               </button>
               <button
                 type="submit"
-                className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-700 hover:bg-rose-300 shadow-sm"
+                className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-300 shadow-sm"
               >
                 Create
               </button>

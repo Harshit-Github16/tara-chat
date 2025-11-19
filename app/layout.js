@@ -1,6 +1,7 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import StructuredData from './components/StructuredData';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -84,14 +85,20 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <StructuredData />
+
+        {/* Favicon Links */}
+        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/favicon.ico" />
+        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" type="image/png" sizes="16x16" />
+        <link rel="apple-touch-icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" sizes="180x180" />
+
         {/* PWA Meta Tags */}
-        <meta name="application-name" content="Tara" />
+        <meta name="application-name" content="Tara4U" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Tara" />
+        <meta name="apple-mobile-web-app-title" content="Tara4U" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#8B5CF6" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <meta name="theme-color" content="#f43f5e" />
         <link rel="manifest" href="/manifest.json" />
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-R6HNEYQSP3"></script>
@@ -120,8 +127,10 @@ export default function RootLayout({ children }) {
 
         <ErrorBoundary>
           <AuthProvider>
-            {children}
-            <PWAInstallPrompt />
+            <ThemeProvider>
+              {children}
+              <PWAInstallPrompt />
+            </ThemeProvider>
           </AuthProvider>
         </ErrorBoundary>
       </body>

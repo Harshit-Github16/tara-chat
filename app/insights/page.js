@@ -127,7 +127,7 @@ export default function InsightsPage() {
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                         </Link>
                         <div className="flex items-center gap-3">
                             <div className="flex gap-2 rounded-full bg-rose-50 p-1 text-xs font-medium">

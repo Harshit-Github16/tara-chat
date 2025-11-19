@@ -31,7 +31,7 @@ export default function ContactPage() {
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                     <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                         <img src="/taralogo.jpg" alt="Tara Logo" className="h-8 w-8 rounded-full object-cover" />
-                        <span className="text-lg font-semibold text-rose-600">Tara</span>
+                        <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                     </Link>
                 </div>
             </header>
@@ -56,7 +56,7 @@ export default function ContactPage() {
                                     </div>
                                     <div>
                                         {/* <h3 className="font-semibold text-gray-800 mb-1">Email</h3> */}
-                                        <a href="mailto:hello@tara4u.com" className="text-rose-600 hover:text-rose-700">
+                                        <a href="mailto:hello@tara4u.com" className="text-rose-600 hover:text-rose-600">
                                             hello@tara4u.com
                                         </a>
                                         <p className="text-sm text-gray-500 mt-1">We'll get back to you within 24 hours</p>
@@ -197,7 +197,7 @@ export default function ContactPage() {
 
                                 <button
                                     type="submit"
-                                    className="w-full rounded-full bg-rose-200 px-6 py-3 text-sm font-bold text-rose-700 hover:bg-rose-300 transition-colors flex items-center justify-center gap-2"
+                                    className="w-full rounded-full bg-rose-200 px-6 py-3 text-sm font-bold text-rose-600 hover:bg-rose-300 transition-colors flex items-center justify-center gap-2"
                                 >
                                     <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4" />
                                     Send Message

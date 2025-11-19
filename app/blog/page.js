@@ -188,7 +188,7 @@ export default function BlogsPage() {
                                     alt="Tara Logo"
                                     className="h-8 w-8 rounded-full object-cover"
                                 />
-                                <span className="text-lg font-semibold text-rose-600">Tara</span>
+                                <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                             </Link>
 
                             {/* Profile Icon */}
@@ -251,7 +251,7 @@ export default function BlogsPage() {
                                     key={category}
                                     onClick={() => setSelectedCategory(category)}
                                     className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === category
-                                        ? 'bg-rose-200 text-rose-700'
+                                        ? 'bg-rose-200 text-rose-600'
                                         : 'bg-rose-50 text-gray-600 border border-rose-200 hover:bg-rose-100'
                                         }`}
                                 >
@@ -426,7 +426,7 @@ export default function BlogsPage() {
                                     {isAdmin && blogs.length === 0 && (
                                         <Link
                                             href="/admin/blogs"
-                                            className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+                                            className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
                                         >
                                             <FontAwesomeIcon icon={faNewspaper} /> Create First Blog
                                         </Link>

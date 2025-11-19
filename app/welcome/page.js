@@ -165,7 +165,7 @@ export default function WelcomePage() {
             <div className="text-center">
               <button
                 onClick={() => setShowMoodCheckIn(true)}
-                className="text-sm text-rose-600 hover:text-rose-700 font-medium underline"
+                className="text-sm text-rose-600 hover:text-rose-600 font-medium underline"
               >
                 Want to update your mood?
               </button>

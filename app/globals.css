@@ -3,25 +3,80 @@
 :root {
   --background: #ffffff;
   --foreground: #1f2937;
-  /* gray-800 */
-  --primary: #f43f5e;
-  /* rose-500 */
-  --primary-light: #fff1f2;
-  /* rose-50 */
-  --primary-dark: #e11d48;
-  /* rose-600 */
+
+  /* Rose Color Palette - Globally Managed */
+  --rose-50: #fff1f2;
+  --rose-100: #ffe4e6;
+  --rose-200: #fecdd3;
+  --rose-300: #fda4af;
+  --rose-400: #fb7185;
+  --rose-500: #f43f5e;
+  --rose-600: #e11d48;
+  --rose-700: #be123c;
+  --rose-800: #9f1239;
+  --rose-900: #881337;
+
+  /* Pink Color Palette - Globally Managed */
+  --pink-50: #fdf2f8;
+  --pink-100: #fce7f3;
+  --pink-200: #fbcfe8;
+  --pink-300: #f9a8d4;
+  --pink-400: #f472b6;
+  --pink-500: #ec4899;
+  --pink-600: #db2777;
+  --pink-700: #be185d;
+
+  /* Gradient Backgrounds - Globally Managed */
+  --gradient-main: linear-gradient(to bottom right, var(--rose-50), white, var(--rose-100));
+  --gradient-light: linear-gradient(to bottom right, var(--rose-50), white, var(--rose-50));
+  --gradient-header: linear-gradient(to right, var(--rose-50), var(--rose-100));
+  --gradient-button: linear-gradient(to right, var(--rose-400), var(--rose-600));
+  --gradient-card: linear-gradient(to bottom right, var(--rose-50), var(--rose-100));
+  --gradient-stats: linear-gradient(to right, var(--rose-50), var(--pink-50));
+  --gradient-security: linear-gradient(to bottom right, #f0fdf4, #d1fae5);
+  --gradient-offline: linear-gradient(to bottom right, #faf5ff, var(--pink-50));
+
+  /* Radial Gradients - Globally Managed */
+  --radial-gradient-1: radial-gradient(circle at 30% 20%, var(--rose-500), transparent 50%);
+  --radial-gradient-2: radial-gradient(circle at 70% 80%, var(--rose-500), transparent 50%);
+  --radial-gradient-3: radial-gradient(circle at 50% 50%, var(--rose-500), transparent 70%);
+  --radial-gradient-4: radial-gradient(circle at 20% 50%, var(--rose-500), transparent 50%);
+  --radial-gradient-5: radial-gradient(circle at 80% 20%, var(--rose-500), transparent 50%);
+
+  /* Legacy variables for compatibility */
+  --primary: var(--rose-500);
+  --primary-light: var(--rose-50);
+  --primary-dark: var(--rose-600);
   --secondary: #fffbfb;
-  /* rose-25 */
-  --accent: #fda4af;
-  /* rose-300 */
-  --border: #ffe4e6;
-  /* rose-100 */
+  --accent: var(--rose-300);
+  --border: var(--rose-100);
   --muted: #fafafa;
-  /* neutral-50 */
 }
 
 @theme inline {
   --color-background: var(--background);
+
+  /* Rose colors for Tailwind */
+  --color-rose-50: var(--rose-50);
+  --color-rose-100: var(--rose-100);
+  --color-rose-200: var(--rose-200);
+  --color-rose-300: var(--rose-300);
+  --color-rose-400: var(--rose-400);
+  --color-rose-500: var(--rose-500);
+  --color-rose-600: var(--rose-600);
+  --color-rose-700: var(--rose-700);
+  --color-rose-800: var(--rose-800);
+  --color-rose-900: var(--rose-900);
+
+  /* Pink colors for Tailwind */
+  --color-pink-50: var(--pink-50);
+  --color-pink-100: var(--pink-100);
+  --color-pink-200: var(--pink-200);
+  --color-pink-300: var(--pink-300);
+  --color-pink-400: var(--pink-400);
+  --color-pink-500: var(--pink-500);
+  --color-pink-600: var(--pink-600);
+  --color-pink-700: var(--pink-700);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
@@ -100,6 +155,70 @@ select:focus {
 
 .text-primary-dark {
   color: var(--primary-dark);
+}
+
+/* Gradient utility classes - Globally Managed */
+.bg-gradient-main {
+  background: var(--gradient-main);
+}
+
+.bg-gradient-light {
+  background: var(--gradient-light);
+}
+
+.bg-gradient-header {
+  background: var(--gradient-header);
+}
+
+.bg-gradient-button {
+  background: var(--gradient-button);
+}
+
+.bg-gradient-card {
+  background: var(--gradient-card);
+}
+
+.bg-gradient-stats {
+  background: var(--gradient-stats);
+}
+
+.bg-gradient-security {
+  background: var(--gradient-security);
+}
+
+.bg-gradient-offline {
+  background: var(--gradient-offline);
+}
+
+/* Radial gradient utility classes with opacity control */
+.bg-radial-1 {
+  background: var(--radial-gradient-1);
+  opacity: 0.1;
+}
+
+.bg-radial-2 {
+  background: var(--radial-gradient-2);
+  opacity: 0.05;
+}
+
+.bg-radial-3 {
+  background: var(--radial-gradient-3);
+  opacity: 0.05;
+}
+
+.bg-radial-4 {
+  background: var(--radial-gradient-4);
+  opacity: 0.05;
+}
+
+.bg-radial-5 {
+  background: var(--radial-gradient-5);
+  opacity: 0.03;
+}
+
+.bg-radial-strong {
+  background: var(--radial-gradient-1);
+  opacity: 0.15;
 }
 
 .border-primary {

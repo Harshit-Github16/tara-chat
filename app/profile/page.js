@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BottomNav from "../components/BottomNav";
+import ThemeSelector from "../components/ThemeSelector";
 import {
     faUser,
     faEdit,
@@ -258,7 +259,7 @@ export default function ProfilePage() {
     // Show loading while user data is being fetched
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--gradient-main)' }}>
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-rose-200 border-t-rose-500 rounded-full animate-spin mx-auto mb-4"></div>
                     <p className="text-gray-600">Loading your profile...</p>
@@ -268,7 +269,7 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
+        <div className="flex min-h-screen flex-col" style={{ background: 'var(--gradient-main)' }}>
             {/* Header */}
             <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
                 <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
@@ -278,9 +279,10 @@ export default function ProfilePage() {
                             alt="Tara Logo"
                             className="h-8 w-8 rounded-full object-cover"
                         />
-                        <span className="text-lg font-semibold text-rose-600">Tara</span>
+                        <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                     </Link>
                     <div className="flex items-center gap-3">
+                        <ThemeSelector />
                         {!isEditing ? (
                             <button
                                 onClick={handleEdit}
@@ -333,7 +335,7 @@ export default function ProfilePage() {
                     <div className="lg:col-span-2 space-y-6">
                         {/* Profile Header Card */}
                         <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden">
-                            <div className="bg-gradient-to-r from-rose-50 to-rose-100 px-6 py-8">
+                            <div className="px-6 py-8" style={{ background: 'var(--gradient-header)' }}>
                                 <div className="flex items-center gap-6">
                                     <div className="h-20 w-20 rounded-full bg-white/80 flex items-center justify-center shadow-sm">
                                         <FontAwesomeIcon icon={faUser} className="h-10 w-10 text-rose-400" />
