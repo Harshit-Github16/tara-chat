@@ -1215,9 +1215,9 @@ export default function Home() {
                   {/* Apple Button with Coming Soon Tag */}
                   <div className="relative inline-block w-full sm:w-auto">
                     {/* Coming Soon Tag */}
-                    <span className="absolute -top-2 -right-2 rounded-full bg-rose-600 text-white text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 shadow-md z-10">
+                    {/* <span className="absolute -top-2 -right-2 rounded-full bg-rose-600 text-white text-[10px] sm:text-xs font-semibold px-1.5 sm:px-2 py-0.5 shadow-md z-10">
                       Coming Soon
-                    </span>
+                    </span> */}
 
                     <Link
                       href="/login"

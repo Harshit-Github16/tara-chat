@@ -216,13 +216,22 @@ export default function JournalPage() {
                 const userId = user.firebaseUid || user.uid;
                 if (editing) {
                   // Update existing journal
+                  const journalId = editing._id || editing.id;
+                  console.log('Updating journal with ID:', journalId, 'Payload:', payload);
+
                   const response = await api.post('/api/journal?action=update', {
                     userId: userId,
-                    journalId: editing.id,
+                    journalId: journalId,
                     ...payload
                   });
+
                   if (response.ok) {
+                    console.log('Journal updated successfully');
                     setEntries((prev) => prev.map((e) => (e._id === editing._id ? { ...e, ...payload } : e)));
+                  } else {
+                    const errorData = await response.json();
+                    console.error('Failed to update journal:', errorData);
+                    alert('Failed to update journal: ' + (errorData.error || 'Unknown error'));
                   }
                 } else {
                   // Create new journal
