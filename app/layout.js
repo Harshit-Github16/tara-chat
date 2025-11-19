@@ -87,10 +87,10 @@ export default function RootLayout({ children }) {
         <StructuredData />
 
         {/* Favicon Links */}
-        <link rel="icon" href="https://d3oodytt0tuddk.cloudfront.net/images/favicon/favicon.ico" />
-        <link rel="icon" href="https://d3oodytt0tuddk.cloudfront.net/images/favicon/favicon-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="icon" href="https://d3oodytt0tuddk.cloudfront.net/images/favicon/favicon-16x16.png" type="image/png" sizes="16x16" />
-        <link rel="apple-touch-icon" href="https://d3oodytt0tuddk.cloudfront.net/images/favicon/apple-touch-icon.png" sizes="180x180" />
+        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/favicon.ico" />
+        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" type="image/png" sizes="16x16" />
+        <link rel="apple-touch-icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" sizes="180x180" />
 
         {/* PWA Meta Tags */}
         <meta name="application-name" content="Tara4U" />
