@@ -946,25 +946,26 @@ export default function ChatListPage() {
             ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
           `}>
             <div className="h-full border-r border-rose-100 bg-white p-3 shadow-xl md:shadow-sm overflow-y-auto">
-              {/* Mobile Close Button */}
-              <div className="md:hidden flex justify-between items-center mb-4">
+              {/* Header with Close Button (Mobile) and Add User Button */}
+              <div className="mb-4 flex items-center justify-between">
                 <span className="text-sm font-semibold text-gray-700">Chats</span>
-                <button
-                  onClick={() => setShowMobileSidebar(false)}
-                  className="rounded-full p-2 text-gray-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
-                </button>
-              </div>
-
-              <div className="mb-3 hidden md:flex items-center justify-between">
-                <div className="text-sm font-semibold text-gray-700">Chats</div>
-                <button
-                  onClick={() => setShowAdd(true)}
-                  className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-300 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faPlus} /> Add User
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setShowAdd(true);
+                      setShowMobileSidebar(false);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-300 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faPlus} /> Add User
+                  </button>
+                  <button
+                    onClick={() => setShowMobileSidebar(false)}
+                    className="md:hidden rounded-full p-2 text-gray-500 hover:bg-rose-100 hover:text-rose-600 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
               <div className="space-y-1">
                 {chats.map((c) => (
