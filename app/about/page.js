@@ -11,7 +11,7 @@ export default function AboutPage() {
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                     <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                         <img src="/taralogo.jpg" alt="Tara Logo" className="h-8 w-8 rounded-full object-cover" />
-                        <span className="text-lg font-semibold text-rose-600">Tara</span>
+                        <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                     </Link>
                 </div>
             </header>
@@ -142,7 +142,7 @@ export default function AboutPage() {
                     </p>
                     <Link
                         href="/login"
-                        className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-3 text-lg font-bold text-rose-700 hover:bg-rose-300 transition-colors"
+                        className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-3 text-lg font-bold text-rose-600 hover:bg-rose-300 transition-colors"
                     >
                         Get Started Free
                     </Link>

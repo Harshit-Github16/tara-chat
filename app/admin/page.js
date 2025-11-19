@@ -81,7 +81,7 @@ export default function AdminPage() {
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara Admin</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4U Admin</span>
                         </Link>
 
                         <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">

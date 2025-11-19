@@ -440,7 +440,7 @@ export default function OnboardingPage() {
                                                 type="button"
                                                 onClick={() => handleArrayToggle('interests', interest)}
                                                 className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${formData.interests.includes(interest)
-                                                    ? 'bg-rose-200 text-rose-700 border-rose-200'
+                                                    ? 'bg-rose-200 text-rose-600 border-rose-200'
                                                     : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'
                                                     }`}
                                             >
@@ -454,7 +454,7 @@ export default function OnboardingPage() {
                                                 key={interest}
                                                 type="button"
                                                 onClick={() => handleArrayToggle('interests', interest)}
-                                                className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-700 border-rose-200"
+                                                className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-600 border-rose-200"
                                             >
                                                 {interest}
                                             </button>
@@ -515,7 +515,7 @@ export default function OnboardingPage() {
                                                 type="button"
                                                 onClick={() => handleArrayToggle('personalityTraits', trait)}
                                                 className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${formData.personalityTraits.includes(trait)
-                                                    ? 'bg-rose-200 text-rose-700 border-rose-200'
+                                                    ? 'bg-rose-200 text-rose-600 border-rose-200'
                                                     : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'
                                                     }`}
                                             >
@@ -529,7 +529,7 @@ export default function OnboardingPage() {
                                                 key={trait}
                                                 type="button"
                                                 onClick={() => handleArrayToggle('personalityTraits', trait)}
-                                                className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-700 border-rose-200"
+                                                className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-600 border-rose-200"
                                             >
                                                 {trait}
                                             </button>
@@ -605,7 +605,7 @@ export default function OnboardingPage() {
                                                 type="button"
                                                 onClick={() => handleArrayToggle('lifeAreas', area)}
                                                 className={`px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left ${formData.lifeAreas.includes(area)
-                                                    ? 'bg-rose-200 text-rose-700 border-rose-200 shadow-md'
+                                                    ? 'bg-rose-200 text-rose-600 border-rose-200 shadow-md'
                                                     : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'
                                                     }`}
                                             >
@@ -619,7 +619,7 @@ export default function OnboardingPage() {
                                                 key={area}
                                                 type="button"
                                                 onClick={() => handleArrayToggle('lifeAreas', area)}
-                                                className="px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left bg-rose-200 text-rose-700 border-rose-200 shadow-md"
+                                                className="px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left bg-rose-200 text-rose-600 border-rose-200 shadow-md"
                                             >
                                                 {area}
                                             </button>

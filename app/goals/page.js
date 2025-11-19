@@ -313,7 +313,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                         </Link>
                         <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100">
                             <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
@@ -334,7 +334,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                             <div className="text-xs text-gray-600">Completed</div>
                         </div>
                         <div className="rounded-2xl border border-pink-100 bg-white p-4 text-center">
-                            <div className="text-2xl font-bold text-pink-600">
+                            <div className="text-2xl font-bold text-rose-600">
                                 {Math.round(
                                     activeGoals.reduce((acc, g) => acc + g.progress, 0) / (activeGoals.length || 1)
                                 )}
@@ -402,7 +402,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                             <p className="text-gray-500 mb-4">Start your wellness journey by setting your first goal</p>
                             <button
                                 onClick={() => setShowModal(true)}
-                                className="rounded-full bg-rose-200 px-6 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300"
+                                className="rounded-full bg-rose-200 px-6 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300"
                             >
                                 Set Your First Goal
                             </button>
@@ -535,7 +535,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                                 </button>
                                 <button
                                     onClick={addGoal}
-                                    className="flex-1 rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-700 hover:bg-rose-300"
+                                    className="flex-1 rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-300"
                                 >
                                     Create Goal
                                 </button>

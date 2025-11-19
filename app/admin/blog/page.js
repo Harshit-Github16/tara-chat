@@ -90,7 +90,7 @@ export default function ManageBlogsPage() {
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
                     <div className="mx-auto flex max-w-9xl items-center justify-between px-4 py-3">
                         <div className="flex items-center gap-3">
-                            <Link href="/admin" className="text-rose-600 hover:text-rose-700">
+                            <Link href="/admin" className="text-rose-600 hover:text-rose-600">
                                 <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5" />
                             </Link>
                             <span className="text-lg font-semibold text-rose-600">Manage Blogs</span>
@@ -98,7 +98,7 @@ export default function ManageBlogsPage() {
 
                         <button
                             onClick={() => setShowModal(true)}
-                            className="flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+                            className="flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
                         >
                             <FontAwesomeIcon icon={faPlus} /> Add Blog
                         </button>
@@ -115,7 +115,7 @@ export default function ManageBlogsPage() {
                             <p className="text-gray-600 mb-4">Create your first blog post</p>
                             <button
                                 onClick={() => setShowModal(true)}
-                                className="rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+                                className="rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
                             >
                                 <FontAwesomeIcon icon={faPlus} /> Add Blog
                             </button>
@@ -446,7 +446,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                             type="button"
                             onClick={() => setCurrentStep(1)}
                             className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-colors ${currentStep === 1
-                                ? 'bg-rose-200 text-rose-700'
+                                ? 'bg-rose-200 text-rose-600'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                         >
@@ -456,7 +456,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                             type="button"
                             onClick={() => setCurrentStep(2)}
                             className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-colors ${currentStep === 2
-                                ? 'bg-rose-200 text-rose-700'
+                                ? 'bg-rose-200 text-rose-600'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                         >
@@ -466,7 +466,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                             type="button"
                             onClick={() => setCurrentStep(3)}
                             className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-colors ${currentStep === 3
-                                ? 'bg-rose-200 text-rose-700'
+                                ? 'bg-rose-200 text-rose-600'
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                 }`}
                         >
@@ -536,7 +536,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         accept="image/*"
                                         onChange={handleImageUpload}
                                         disabled={uploading}
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rose-50 file:text-rose-700 hover:file:bg-rose-100"
+                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100"
                                     />
                                     {uploading && (
                                         <div className="space-y-1">
@@ -951,7 +951,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                             <button
                                 type="button"
                                 onClick={() => setCurrentStep(2)}
-                                className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+                                className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
                             >
                                 Next: Content & Details →
                             </button>
@@ -961,7 +961,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                             <button
                                 type="button"
                                 onClick={() => setCurrentStep(3)}
-                                className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+                                className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
                             >
                                 Next: SEO Schema →
                             </button>
@@ -972,7 +972,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                 type="button"
                                 onClick={handleSubmit}
                                 disabled={submitting}
-                                className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm disabled:opacity-50"
+                                className="rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm disabled:opacity-50"
                             >
                                 {submitting ? (editingBlog ? 'Updating...' : 'Creating...') : (editingBlog ? 'Update Blog' : 'Create Blog')}
                             </button>
@@ -1008,7 +1008,7 @@ function FAQEditor({ faqItems, onChange }) {
                 <button
                     type="button"
                     onClick={addFAQ}
-                    className="px-3 py-1 bg-rose-200 text-rose-700 rounded-lg text-xs font-medium hover:bg-rose-300"
+                    className="px-3 py-1 bg-rose-200 text-rose-600 rounded-lg text-xs font-medium hover:bg-rose-300"
                 >
                     + Add FAQ
                 </button>
@@ -1074,7 +1074,7 @@ function HowToEditor({ steps, onChange }) {
                 <button
                     type="button"
                     onClick={addStep}
-                    className="px-3 py-1 bg-rose-200 text-rose-700 rounded-lg text-xs font-medium hover:bg-rose-300"
+                    className="px-3 py-1 bg-rose-200 text-rose-600 rounded-lg text-xs font-medium hover:bg-rose-300"
                 >
                     + Add Step
                 </button>

@@ -89,7 +89,7 @@ export default function JournalPage() {
                 alt="Tara Logo"
                 className="h-8 w-8 rounded-full object-cover"
               />
-              <span className="text-lg font-semibold text-rose-600">Tara</span>
+              <span className="text-lg font-semibold text-rose-600">Tara4U</span>
             </Link>
 
             {/* Profile Icon */}
@@ -114,7 +114,7 @@ export default function JournalPage() {
               </button>
               <button
                 onClick={() => { setEditing(null); setShowModal(true); }}
-                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
               >
                 <FontAwesomeIcon icon={faPlus} /> Create Journal
               </button>
@@ -170,7 +170,7 @@ export default function JournalPage() {
                                   }
                                 }
                               }}
-                              className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+                              className="inline-flex items-center gap-1 rounded-full border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
                             >
                               Delete
                             </button>
@@ -254,7 +254,7 @@ function EmptyState({ onNew, onGenerate }) {
         <button onClick={onGenerate} className="rounded-full border-2 border-rose-300 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-50 shadow-sm">
           <FontAwesomeIcon icon={faWandSparkles} /> AI Generate
         </button>
-        <button onClick={onNew} className="rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm">
+        <button onClick={onNew} className="rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm">
           <FontAwesomeIcon icon={faPlus} /> Write Manually
         </button>
       </div>
@@ -320,7 +320,7 @@ function JournalModal({ initial, onClose, onSave }) {
             <button type="button" onClick={onClose} className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200">
               Cancel
             </button>
-            <button type="submit" className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-300 shadow-sm">
+            <button type="submit" className="rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm">
               Save
             </button>
           </div>

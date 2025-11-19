@@ -249,7 +249,7 @@ export default function BlogPostPage() {
                     <FontAwesomeIcon icon={faNewspaper} className="h-16 w-16 text-gray-300 mb-4" />
                     <h2 className="text-xl font-semibold text-gray-600 mb-2">Blog post not found</h2>
                     <p className="text-gray-500 mb-4">The article you're looking for doesn't exist or has been moved.</p>
-                    <Link href="/blog" className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 font-medium">
+                    <Link href="/blog" className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-600 font-medium">
                         <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                         Back to Blogs
                     </Link>
@@ -290,7 +290,7 @@ export default function BlogPostPage() {
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4U</span>
                         </div>
                         <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
                             <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
@@ -303,7 +303,7 @@ export default function BlogPostPage() {
                     {/* Back Button */}
                     <Link
                         href="/blog"
-                        className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-700 mb-6 transition-colors font-medium"
+                        className="inline-flex items-center gap-2 text-rose-600 hover:text-rose-600 mb-6 transition-colors font-medium"
                     >
                         <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
                         Back to Blogs

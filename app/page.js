@@ -148,7 +148,7 @@ export default function Home() {
               className="h-8 w-8 rounded-full object-cover"
               priority
             />
-            <span className="text-xl font-bold text-rose-600">Tara</span>
+            <span className="text-xl font-bold text-rose-500">Tara4U</span>
           </div>
 
           {/* Navigation Menu - Center */}
@@ -216,7 +216,7 @@ export default function Home() {
               href="/login"
               className="btn-shine rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
             >
-              Get Started
+              Talk Now
             </Link>
           </div>
         </div>
@@ -225,8 +225,8 @@ export default function Home() {
       <main>
         {/* Hero Section */}
         <section id="home" className="relative overflow-hidden bg-gradient-to-br from-rose-50/50 via-white to-rose-50/30">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.1),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.05),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-radial-1"></div>
+          <div className="absolute inset-0 bg-radial-2"></div>
 
           <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-32">
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
@@ -371,7 +371,7 @@ export default function Home() {
 
         {/* What You Get Section */}
         <section className="py-20 bg-gradient-to-br from-rose-50 via-white to-rose-100/30 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(244,63,94,0.05),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-radial-3"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center mb-16">
@@ -496,8 +496,8 @@ export default function Home() {
         {/* How It Works */}
         <section id="how-it-works" className="py-20 bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20 relative overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(244,63,94,0.05),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(244,63,94,0.03),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-radial-4"></div>
+          <div className="absolute inset-0 bg-radial-5"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center">
@@ -583,8 +583,8 @@ export default function Home() {
         {/* Social Proof */}
         <section className="py-20 bg-gradient-to-br from-white via-rose-50/20 to-white relative overflow-hidden">
           {/* Background elements */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.03),transparent_70%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.02),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-radial-5"></div>
+          <div className="absolute inset-0 bg-radial-5"></div>
 
           <div className="mx-auto max-w-7xl px-6 relative">
             <div className="text-center">
@@ -1154,8 +1154,8 @@ export default function Home() {
         {/* CTA Section */}
         <section className="relative py-20 bg-gradient-to-br from-rose-100 via-rose-50 to-white overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,63,94,0.15),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(244,63,94,0.1),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-radial-strong"></div>
+          <div className="absolute inset-0 bg-radial-1"></div>
 
           <div className="relative mx-auto max-w-5xl px-6">
             <div className="rounded-3xl border border-rose-200 bg-white/80 backdrop-blur-sm p-12 shadow-2xl">
@@ -1456,7 +1456,7 @@ export default function Home() {
                   className="h-8 w-8 rounded-full object-cover"
                   loading="lazy"
                 />
-                <span className="text-xl font-bold text-rose-600">Tara</span>
+                <span className="text-xl font-bold text-rose-500">Tara4U</span>
               </div>
               <p className="text-gray-600 mb-4 text-sm">
                 Your personal emotional Well being companion.
@@ -1506,6 +1506,31 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Fixed Bottom Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-rose-100 shadow-lg">
+        <div className="max-w-4xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-3">
+            {/* Continue with Google */}
+            <Link
+              href="/login"
+              className="btn-shine flex-1 flex items-center justify-center gap-2 bg-white border-2 border-gray-300 hover:border-rose-400 rounded-full px-4 py-3 font-semibold text-gray-700 hover:text-rose-600 transition-all shadow-sm hover:shadow-md"
+            >
+              <FontAwesomeIcon icon={faGoogle} className="h-5 w-5 text-red-500" />
+              <span className="hidden sm:inline">Continue with</span> Google
+            </Link>
+
+            {/* Continue with Apple */}
+            <Link
+              href="/login"
+              className="btn-shine flex-1 flex items-center justify-center gap-2 bg-black hover:bg-gray-900 rounded-full px-4 py-3 font-semibold text-white transition-all shadow-sm hover:shadow-md"
+            >
+              <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
+              <span className="hidden sm:inline">Continue with</span> Apple
+            </Link>
+          </div>
+        </div>
+      </div>
     </div >
   );
 }
