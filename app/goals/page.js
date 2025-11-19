@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BottomNav from "../components/BottomNav";
 import {
@@ -18,7 +20,7 @@ import {
     faBrain,
     faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import ProtectedRoute from "../components/ProtectedRoute";
+import LoginPromptOverlay from "../components/LoginPromptOverlay";
 import { useAuth } from "../contexts/AuthContext";
 import confetti from "canvas-confetti";
 
@@ -31,12 +33,14 @@ const GOAL_CATEGORIES = [
 ];
 
 export default function GoalsPage() {
-    const { user } = useAuth();
+    const router = useRouter();
+    const { user, loading: authLoading } = useAuth();
     const [goals, setGoals] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedGoalForSuggestions, setSelectedGoalForSuggestions] = useState(null);
     const [aiSuggestions, setAiSuggestions] = useState({});
     const [loadingSuggestions, setLoadingSuggestions] = useState({});
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
     const [newGoal, setNewGoal] = useState({
         title: "",
         category: "mental",
@@ -45,6 +49,19 @@ export default function GoalsPage() {
         why: "",
         howToAchieve: "",
     });
+
+    // Check if user is logged in
+    useEffect(() => {
+        if (!authLoading && !user) {
+            setShowLoginPrompt(true);
+        } else {
+            setShowLoginPrompt(false);
+        }
+    }, [user, authLoading]);
+
+    const handleLoginClick = () => {
+        router.push('/');
+    };
 
     // Load goals from database
     useEffect(() => {
@@ -302,8 +319,21 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
     const completedGoals = goals.filter((g) => g.completed);
 
     return (
-        <ProtectedRoute>
-            <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-50">
+        <>
+            <Head>
+                <title>AI Goals - Set & Track Wellness Goals | Tara Emotional Wellness</title>
+                <meta name="description" content="Set and achieve your emotional wellness goals with AI-powered suggestions. Track progress, get motivated, and celebrate milestones with Tara's smart goal tracking system." />
+                <meta name="keywords" content="wellness goals, mental health goals, goal tracking, AI goal setting, emotional wellness goals, personal development, habit tracking, goal achievement" />
+                <link rel="canonical" href="https://yourdomain.com/goals" />
+                <meta property="og:title" content="AI Goals - Set & Track Wellness Goals | Tara" />
+                <meta property="og:description" content="Set and achieve your emotional wellness goals with AI-powered suggestions and tracking." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://yourdomain.com/goals" />
+            </Head>
+
+            {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+
+            <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-50 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
@@ -544,7 +574,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                     </div>
                 )}
             </div>
-        </ProtectedRoute>
+        </>
     );
 }
 

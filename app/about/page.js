@@ -141,7 +141,7 @@ export default function AboutPage() {
                         Join thousands of users who trust Tara for their mental health and emotional wellness.
                     </p>
                     <Link
-                        href="/login"
+                        href="/"
                         className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-3 text-lg font-bold text-rose-600 hover:bg-rose-300 transition-colors"
                     >
                         Get Started Free

@@ -245,14 +245,14 @@ export default function ProfilePage() {
             await logout();
             console.log('Logout successful');
 
-            // Redirect to login page
-            window.location.href = '/login';
+            // Redirect to home page
+            window.location.href = '/';
         } catch (error) {
             console.error('Logout error:', error);
             // Fallback - still clear localStorage and redirect
             localStorage.removeItem('authToken');
             localStorage.removeItem('user');
-            window.location.href = '/login';
+            window.location.href = '/';
         }
     };
 

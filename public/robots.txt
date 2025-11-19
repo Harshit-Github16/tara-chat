@@ -1,25 +1,33 @@
 # Tara - AI Mental Health Companion
 User-agent: *
 
-# Allow public pages
+# Allow all public and SEO-optimized pages
 Allow: /
+Allow: /about
+Allow: /contact
 Allow: /blog
 Allow: /blog/*
+Allow: /chatlist
+Allow: /journal
+Allow: /goals
+Allow: /insights
+Allow: /privacy-policy
+Allow: /terms-of-service
 
-# Disallow protected pages (require authentication)
+# Disallow protected/internal pages
 Disallow: /api/
 Disallow: /admin/
-Disallow: /login
-Disallow: /chatlist
-Disallow: /chat
-Disallow: /journal
-Disallow: /goals
-Disallow: /insights
+Disallow: /admin-check/
 Disallow: /profile
-Disallow: /onboarding
 Disallow: /welcome
 Disallow: /test-*
 Disallow: /debug/
+Disallow: /offline
 
-# Sitemap location
+# Disallow deleted pages
+Disallow: /login
+Disallow: /onboarding
+
+# Sitemap locations
 Sitemap: https://tara4u.com/sitemap.xml
+Sitemap: https://tara4u.com/blog-sitemap.xml

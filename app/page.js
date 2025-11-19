@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComments,
@@ -29,12 +30,30 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
+import LoginModal from "./components/LoginModal";
+import OnboardingModal from "./components/OnboardingModal";
+import { useAuth } from "./contexts/AuthContext";
 // import Footer from "./components/Footer";
 import Head from "next/head";
 export default function Home() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showOnboardingModal, setShowOnboardingModal] = useState(false);
+  const [showFeaturesDropdown, setShowFeaturesDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showMobileFeaturesDropdown, setShowMobileFeaturesDropdown] = useState(false);
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
+
+  // Cleanup dropdown timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (dropdownTimeout) clearTimeout(dropdownTimeout);
+    };
+  }, [dropdownTimeout]);
 
   // Handle PWA install prompt
   useEffect(() => {
@@ -76,6 +95,29 @@ export default function Home() {
     const { outcome } = await deferredPrompt.userChoice;
     setDeferredPrompt(null);
     setShowInstallPrompt(false);
+  };
+
+  const handleLoginSuccess = (isNewUser, userData) => {
+    if (isNewUser || !userData.isOnboardingComplete) {
+      setShowOnboardingModal(true);
+    } else {
+      router.push('/welcome');
+    }
+  };
+
+  const handleOnboardingComplete = () => {
+    router.push('/welcome');
+  };
+
+  const handleTalkNowClick = (e) => {
+    e.preventDefault();
+    if (user && user.isOnboardingComplete) {
+      router.push('/welcome');
+    } else if (user && !user.isOnboardingComplete) {
+      setShowOnboardingModal(true);
+    } else {
+      setShowLoginModal(true);
+    }
   };
 
   return (
@@ -153,42 +195,87 @@ export default function Home() {
 
           {/* Navigation Menu - Center */}
           <nav className="hidden lg:flex items-center gap-6 absolute left-1/2 transform -translate-x-1/2">
-            <a
-              href="#home"
-              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'home'
-                ? 'text-rose-600 font-semibold'
-                : 'text-gray-700 hover:text-rose-600'
-                }`}
+            {/* Features Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => {
+                if (dropdownTimeout) clearTimeout(dropdownTimeout);
+                setShowFeaturesDropdown(true);
+              }}
+              onMouseLeave={() => {
+                const timeout = setTimeout(() => {
+                  setShowFeaturesDropdown(false);
+                }, 200);
+                setDropdownTimeout(timeout);
+              }}
             >
-              Home
-            </a>
+              <button
+                className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-all duration-300 flex items-center gap-1"
+              >
+                Features
+                <svg
+                  className={`w-4 h-4 transition-transform duration-200 ${showFeaturesDropdown ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              {showFeaturesDropdown && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-rose-100 py-2 z-50"
+                  onMouseEnter={() => {
+                    if (dropdownTimeout) clearTimeout(dropdownTimeout);
+                  }}
+                  onMouseLeave={() => {
+                    const timeout = setTimeout(() => {
+                      setShowFeaturesDropdown(false);
+                    }, 200);
+                    setDropdownTimeout(timeout);
+                  }}
+                >
+                  <Link
+                    href="/chatlist"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faComments} className="h-4 w-4" />
+                    Chat List
+                  </Link>
+                  <Link
+                    href="/journal"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faBookOpen} className="h-4 w-4" />
+                    Journals
+                  </Link>
+                  <Link
+                    href="/goals"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faBullseye} className="h-4 w-4" />
+                    Goals
+                  </Link>
+                  <Link
+                    href="/insights"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faChartLine} className="h-4 w-4" />
+                    Insights
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <a
-              href="#features"
-              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'features'
-                ? 'text-rose-600 font-semibold'
-                : 'text-gray-700 hover:text-rose-600'
-                }`}
-            >
-              Features
-            </a>
-            <a
-              href="#how-it-works"
-              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'how-it-works'
-                ? 'text-rose-600 font-semibold'
-                : 'text-gray-700 hover:text-rose-600'
-                }`}
-            >
-              How It Works
-            </a>
-            <a
-              href="#blogs"
-              className={`text-sm font-medium transition-all duration-300 ${activeSection === 'blogs'
-                ? 'text-rose-600 font-semibold'
-                : 'text-gray-700 hover:text-rose-600'
-                }`}
+              href="/blog"
+              className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-all duration-300"
             >
               Blogs
             </a>
+
             <Link
               href="/contact"
               className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors"
@@ -199,6 +286,20 @@ export default function Home() {
 
           {/* Right Side Buttons */}
           <div className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="lg:hidden p-2 text-gray-700 hover:text-rose-600 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {showMobileMenu ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+
             {/* Install App Button */}
             {showInstallPrompt && (
               <button
@@ -212,14 +313,102 @@ export default function Home() {
               </button>
             )}
 
-            <Link
-              href="/login"
+            <button
+              onClick={handleTalkNowClick}
               className="btn-shine rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
             >
               Talk Now
-            </Link>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {showMobileMenu && (
+          <div className="lg:hidden border-t border-rose-100 bg-white">
+            <div className="px-6 py-4 space-y-3">
+              {/* Features Dropdown */}
+              <div>
+                <button
+                  onClick={() => setShowMobileFeaturesDropdown(!showMobileFeaturesDropdown)}
+                  className="w-full flex items-center justify-between text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors py-2"
+                >
+                  Features
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${showMobileFeaturesDropdown ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showMobileFeaturesDropdown && (
+                  <div className="pl-4 mt-2 space-y-2">
+                    <Link
+                      href="/chatlist"
+                      className="flex items-center gap-3 py-2 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <FontAwesomeIcon icon={faComments} className="h-4 w-4" />
+                      Chat List
+                    </Link>
+                    <Link
+                      href="/journal"
+                      className="flex items-center gap-3 py-2 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <FontAwesomeIcon icon={faBookOpen} className="h-4 w-4" />
+                      Journals
+                    </Link>
+                    <Link
+                      href="/goals"
+                      className="flex items-center gap-3 py-2 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <FontAwesomeIcon icon={faBullseye} className="h-4 w-4" />
+                      Goals
+                    </Link>
+                    <Link
+                      href="/insights"
+                      className="flex items-center gap-3 py-2 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <FontAwesomeIcon icon={faChartLine} className="h-4 w-4" />
+                      Insights
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <Link
+                href="/blog"
+                className="block text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Blogs
+              </Link>
+
+              <Link
+                href="/contact"
+                className="block text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Contact
+              </Link>
+
+              <button
+                onClick={() => {
+                  setShowMobileMenu(false);
+                  handleTalkNowClick();
+                }}
+                className="w-full mt-4 rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
+              >
+                Talk Now
+              </button>
+            </div>
+          </div>
+        )}
       </header >
 
       <main>
@@ -249,12 +438,12 @@ export default function Home() {
                   and get personalized insights for better emotional health.
                 </p>
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                  <Link
-                    href="/login"
+                  <button
+                    onClick={handleTalkNowClick}
                     className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
                   >Get Started
                     <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  </button>
                   {/* <Link
                     href="#demo"
                     className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
@@ -481,13 +670,13 @@ export default function Home() {
 
             {/* CTA */}
             <div className="mt-16 text-center">
-              <Link
-                href="/login"
+              <button
+                onClick={handleTalkNowClick}
                 className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all group"
               >
                 Start Your Free Journey
                 <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              </button>
               <p className="mt-4 text-sm text-gray-600">No credit card required • Get started in 2 minutes</p>
             </div>
           </div>
@@ -1200,8 +1389,8 @@ export default function Home() {
                 </div> */}
                 <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
                   {/* Google Button */}
-                  <Link
-                    href="/login"
+                  <button
+                    onClick={handleTalkNowClick}
                     className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 md:px-6 py-3 sm:px-10 sm:py-5 text-base sm:text-lg font-semibold text-rose-700 shadow-lg hover:bg-rose-300 hover:shadow-xl transition-all transform hover:scale-105 w-full sm:w-auto"
                   >
                     <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
@@ -1210,7 +1399,7 @@ export default function Home() {
                       icon={faArrowRight}
                       className="h-4 w-4 transition-transform group-hover:translate-x-1"
                     />
-                  </Link>
+                  </button>
 
                   {/* Apple Button with Coming Soon Tag */}
                   <div className="relative inline-block w-full sm:w-auto">
@@ -1219,13 +1408,13 @@ export default function Home() {
                       Coming Soon
                     </span> */}
 
-                    <Link
-                      href="/login"
+                    <button
+                      onClick={handleTalkNowClick}
                       className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose-200 bg-white px-6 py-3 sm:px-10 sm:py-5 text-base sm:text-lg font-semibold text-rose-600 hover:bg-rose-50 transition-all transform hover:scale-105 w-full sm:w-auto"
                     >
                       <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
                       Continue with Apple
-                    </Link>
+                    </button>
                   </div>
                 </div>
 
@@ -1512,25 +1701,39 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             {/* Continue with Google */}
-            <Link
-              href="/login"
+            <button
+              onClick={handleTalkNowClick}
               className="btn-shine flex-1 flex items-center justify-center gap-2 bg-white border-2 border-gray-300 hover:border-rose-400 rounded-full px-4 py-3 font-semibold text-gray-700 hover:text-rose-600 transition-all shadow-sm hover:shadow-md"
             >
               <FontAwesomeIcon icon={faGoogle} className="h-5 w-5 text-red-500" />
               <span className="hidden sm:inline">Continue with</span> Google
-            </Link>
+            </button>
 
             {/* Continue with Apple */}
-            <Link
-              href="/login"
+            <button
+              onClick={handleTalkNowClick}
               className="btn-shine flex-1 flex items-center justify-center gap-2 bg-black hover:bg-gray-900 rounded-full px-4 py-3 font-semibold text-white transition-all shadow-sm hover:shadow-md"
             >
               <FontAwesomeIcon icon={faApple} className="h-5 w-5" />
               <span className="hidden sm:inline">Continue with</span> Apple
-            </Link>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
+
+      {/* Onboarding Modal */}
+      <OnboardingModal
+        isOpen={showOnboardingModal}
+        onClose={() => setShowOnboardingModal(false)}
+        onComplete={handleOnboardingComplete}
+      />
     </div >
   );
 }

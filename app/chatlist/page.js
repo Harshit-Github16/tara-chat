@@ -1,9 +1,11 @@
 "use client";
 import { useMemo, useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import TaraChat from "../components/TaraChat";
-import ProtectedRoute from "../components/ProtectedRoute";
+import LoginPromptOverlay from "../components/LoginPromptOverlay";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -75,16 +77,24 @@ const EMOJIS = [
 ];
 
 export default function ChatListPage() {
+  const router = useRouter();
   const { user, loading } = useAuth();
   const defaultTaraChat = { id: "tara-ai", name: "TARA AI", last: "", unread: 0, avatar: "/taralogo.jpg" };
   const [chats, setChats] = useState([defaultTaraChat]);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
-  // Debug: Log user state
+  // Check if user is logged in
   useEffect(() => {
-    console.log('ChatList - User:', user);
-    console.log('ChatList - Loading:', loading);
-    console.log('ChatList - User UID:', user?.uid);
+    if (!loading && !user) {
+      setShowLoginPrompt(true);
+    } else {
+      setShowLoginPrompt(false);
+    }
   }, [user, loading]);
+
+  const handleLoginClick = () => {
+    router.push('/');
+  };
   const [activeId, setActiveId] = useState("tara-ai");
   const [message, setMessage] = useState("");
   const [showAdd, setShowAdd] = useState(false);
@@ -900,8 +910,21 @@ export default function ChatListPage() {
   };
 
   return (
-    <ProtectedRoute>
-      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
+    <>
+      <Head>
+        <title>AI Chat - Talk to 100+ AI Characters | Tara Emotional Wellness</title>
+        <meta name="description" content="Chat with 100+ AI characters for emotional support, motivation, and guidance. Get 24/7 companionship from Tara's diverse AI personalities including life coaches, therapists, and celebrities." />
+        <meta name="keywords" content="AI chat, emotional support chat, AI companion, virtual therapist, AI life coach, mental health chat, AI characters, celebrity AI chat, emotional wellness" />
+        <link rel="canonical" href="https://yourdomain.com/chatlist" />
+        <meta property="og:title" content="AI Chat - Talk to 100+ AI Characters | Tara" />
+        <meta property="og:description" content="Chat with 100+ AI characters for emotional support and guidance. Available 24/7." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/chatlist" />
+      </Head>
+
+      {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+
+      <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
         {/* Header */}
         <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/80 backdrop-blur-md">
           <div className="mx-auto flex  items-center justify-between px-3 sm:px-4 py-3">
@@ -1537,7 +1560,8 @@ export default function ChatListPage() {
           background: radial-gradient(circle at center, var(--tw-gradient-stops));
         }
       `}</style>
-    </ProtectedRoute>
+
+    </>
   );
 }
 

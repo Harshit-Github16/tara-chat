@@ -16,9 +16,10 @@ export default function ProtectedRoute({ children }) {
             const token = localStorage.getItem('authToken');
 
             if (!token) {
-                console.log('No authToken found in localStorage, redirecting to login');
+                console.log('No authToken found in localStorage, redirecting to home');
                 const currentPath = window.location.pathname;
-                router.replace(`/login?redirect=${currentPath}`);
+                // Redirect to home page - login modal will be triggered there
+                router.replace(`/?redirect=${currentPath}`);
                 return;
             }
 

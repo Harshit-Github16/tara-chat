@@ -5,11 +5,23 @@ export default async function sitemap() {
 
     // Static pages
     const routes = [
-        { path: '', changeFreq: 'daily', priority: 1.0 },
+        // Main pages
+        { path: '', changeFreq: 'daily', priority: 0.9 },
+        { path: '/about', changeFreq: 'monthly', priority: 0.7 },
+        { path: '/contact', changeFreq: 'monthly', priority: 0.6 },
+
+        // Feature pages (SEO-optimized)
+        { path: '/chatlist', changeFreq: 'weekly', priority: 0.9 },
+        { path: '/journal', changeFreq: 'weekly', priority: 0.9 },
+        { path: '/goals', changeFreq: 'weekly', priority: 0.9 },
+        { path: '/insights', changeFreq: 'weekly', priority: 0.9 },
+
+        // Blog
         { path: '/blog', changeFreq: 'daily', priority: 0.8 },
+
+        // Legal pages
         { path: '/privacy-policy', changeFreq: 'yearly', priority: 0.3 },
         { path: '/terms-of-service', changeFreq: 'yearly', priority: 0.3 },
-        { path: '/contact', changeFreq: 'yearly', priority: 0.3 },
     ].map((route) => ({
         url: `${baseUrl}${route.path}`,
         lastModified: new Date().toISOString(),

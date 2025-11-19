@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProtectedRoute from "../components/ProtectedRoute";
+import LoginPromptOverlay from "../components/LoginPromptOverlay";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import BottomNav from "../components/BottomNav";
@@ -25,13 +27,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function InsightsPage() {
-    const { user } = useAuth();
+    const router = useRouter();
+    const { user, loading: authLoading } = useAuth();
     const [selectedPeriod, setSelectedPeriod] = useState("week");
     const [moodData, setMoodData] = useState([]);
     const [checkInDates, setCheckInDates] = useState([]);
     const [avgMood, setAvgMood] = useState(0);
     const [streak, setStreak] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+    // Check if user is logged in
+    useEffect(() => {
+        if (!authLoading && !user) {
+            setShowLoginPrompt(true);
+        } else {
+            setShowLoginPrompt(false);
+        }
+    }, [user, authLoading]);
+
+    const handleLoginClick = () => {
+        router.push('/');
+    };
 
     // Fetch mood data and calculate insights
     useEffect(() => {
@@ -116,8 +133,21 @@ export default function InsightsPage() {
     };
 
     return (
-        <ProtectedRoute>
-            <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
+        <>
+            <Head>
+                <title>AI Insights - Track Your Emotional Wellness Journey | Tara</title>
+                <meta name="description" content="Get personalized insights into your emotional wellness journey. Track mood patterns, analyze emotional trends, and receive AI-powered recommendations with Tara's advanced analytics." />
+                <meta name="keywords" content="emotional insights, mood analytics, wellness tracking, mental health insights, emotional patterns, mood trends, AI analytics, emotional wellness dashboard" />
+                <link rel="canonical" href="https://yourdomain.com/insights" />
+                <meta property="og:title" content="AI Insights - Track Your Emotional Wellness Journey | Tara" />
+                <meta property="og:description" content="Get personalized insights into your emotional wellness with AI-powered analytics and tracking." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://yourdomain.com/insights" />
+            </Head>
+
+            {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+
+            <div className={`min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
@@ -251,7 +281,7 @@ export default function InsightsPage() {
 
                 <BottomNav activePage="insights" />
             </div>
-        </ProtectedRoute>
+        </>
     );
 }
 

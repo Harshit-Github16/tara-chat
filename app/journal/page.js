@@ -1,20 +1,37 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper, faBullseye, faWandSparkles } from "@fortawesome/free-solid-svg-icons";
-import ProtectedRoute from "../components/ProtectedRoute";
+import LoginPromptOverlay from "../components/LoginPromptOverlay";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import BottomNav from "../components/BottomNav";
 
 export default function JournalPage() {
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [entries, setEntries] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+  // Check if user is logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      setShowLoginPrompt(true);
+    } else {
+      setShowLoginPrompt(false);
+    }
+  }, [user, authLoading]);
+
+  const handleLoginClick = () => {
+    router.push('/');
+  };
 
   // Load journals from MongoDB
   useEffect(() => {
@@ -91,8 +108,21 @@ export default function JournalPage() {
   }
 
   return (
-    <ProtectedRoute>
-      <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
+    <>
+      <Head>
+        <title>AI Journal - Smart Journaling with AI Prompts | Tara Emotional Wellness</title>
+        <meta name="description" content="Write and reflect with AI-powered journaling. Get personalized prompts, track your emotional journey, and gain insights from your daily reflections with Tara's smart journal." />
+        <meta name="keywords" content="AI journal, smart journaling, emotional journal, daily reflection, AI prompts, mental health journal, mood journal, gratitude journal, therapy journal" />
+        <link rel="canonical" href="https://yourdomain.com/journal" />
+        <meta property="og:title" content="AI Journal - Smart Journaling with AI Prompts | Tara" />
+        <meta property="og:description" content="Write and reflect with AI-powered journaling. Get personalized prompts and insights." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/journal" />
+      </Head>
+
+      {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+
+      <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
         <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
             <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -260,7 +290,7 @@ export default function JournalPage() {
           />
         )}
       </div>
-    </ProtectedRoute>
+    </>
   );
 }
 

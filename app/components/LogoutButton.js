@@ -13,7 +13,7 @@ export default function LogoutButton({ className = "", showIcon = true, children
         setLoading(true);
         try {
             await signOutUser();
-            router.replace('/login');
+            router.replace('/');
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
