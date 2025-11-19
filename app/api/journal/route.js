@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 // POST - Create or Update journal (check for action in query params)
 export async function POST(request) {
@@ -28,15 +29,21 @@ async function createJournal(request) {
         const db = client.db('tara');
         const collection = db.collection('users');
 
+        // Add unique _id to journal entry
+        const journalWithId = {
+            _id: new ObjectId().toString(),
+            ...journal
+        };
+
         await collection.updateOne(
             { firebaseUid: userId },
             {
-                $push: { journals: journal },
+                $push: { journals: journalWithId },
                 $set: { lastUpdated: new Date() }
             }
         );
 
-        return NextResponse.json({ success: true, journal });
+        return NextResponse.json({ success: true, journal: journalWithId });
 
     } catch (error) {
         console.error('Create journal error:', error);
@@ -63,7 +70,7 @@ async function updateJournal(request) {
         if (tags !== undefined) updateFields['journals.$.tags'] = tags;
 
         await collection.updateOne(
-            { firebaseUid: userId, 'journals.id': journalId },
+            { firebaseUid: userId, 'journals._id': journalId },
             {
                 $set: {
                     ...updateFields,
@@ -93,13 +100,32 @@ export async function DELETE(request) {
         const db = client.db('tara');
         const collection = db.collection('users');
 
-        await collection.updateOne(
+        // First, get the user to find and remove the journal manually
+        const user = await collection.findOne({ firebaseUid: userId });
+
+        if (!user || !user.journals) {
+            return NextResponse.json({ error: 'User or journals not found' }, { status: 404 });
+        }
+
+        // Filter out the journal with matching _id or id
+        const updatedJournals = user.journals.filter(
+            journal => journal._id !== journalId && journal.id !== journalId
+        );
+
+        console.log('Before delete:', user.journals.length, 'After delete:', updatedJournals.length);
+
+        // Update with filtered journals
+        const result = await collection.updateOne(
             { firebaseUid: userId },
             {
-                $pull: { journals: { id: journalId } },
-                $set: { lastUpdated: new Date() }
+                $set: {
+                    journals: updatedJournals,
+                    lastUpdated: new Date()
+                }
             }
         );
+
+        console.log('Delete result:', result.modifiedCount, 'documents modified');
 
         return NextResponse.json({ success: true });
 

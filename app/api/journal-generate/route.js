@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -67,9 +68,9 @@ export async function POST(request) {
         // Generate AI summary using Groq
         const summary = await generateJournalSummary(dayMessages, userData);
 
-        // Create journal entry
+        // Create journal entry with unique _id
         const journalEntry = {
-            id: `j${Date.now()}`,
+            _id: new ObjectId().toString(),
             date: targetDate,
             createdAt: new Date().toISOString(),
             title: `Daily Reflection - ${new Date(targetDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
