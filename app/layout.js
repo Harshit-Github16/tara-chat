@@ -75,7 +75,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Tara4u - Your AI Mental Health & Wellness Companion",
     description: "24/7 AI emotional support. Chat with 100+ characters, track moods, journal thoughts. Free to start.",
-    images: ["https://tara4u.com/taralogo.jpg"],
+    images: ["https://www.tara4u.com/taralogo.jpg"],
     creator: "@tara4u",
     site: "@tara4u",
   },
@@ -91,8 +91,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
+    google: "1tf2MCcwJHhddK0aBPazdX4QdaHRgyLtWyj7QhsN9gk",
   },
 };
 
