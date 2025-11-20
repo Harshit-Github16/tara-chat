@@ -1107,13 +1107,24 @@ export default function ChatListPage() {
                               )}
                               {/* Delete button - only show for non-TARA chats */}
                               {c.id !== 'tara-ai' && (
-                                <button
-                                  onClick={(e) => deleteChat(c.id, e)}
-                                  className="text-rose-400 hover:text-rose-600 transition-colors p-1"
+                                <div
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteChat(c.id, e);
+                                  }}
+                                  className="text-rose-400 hover:text-rose-600 transition-colors p-1 cursor-pointer"
                                   title="Delete chat"
+                                  role="button"
+                                  tabIndex={0}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                      e.stopPropagation();
+                                      deleteChat(c.id, e);
+                                    }
+                                  }}
                                 >
                                   <FontAwesomeIcon icon={faTrash} className="h-3 w-3" />
-                                </button>
+                                </div>
                               )}
                             </div>
                           </div>
