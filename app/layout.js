@@ -39,6 +39,22 @@ export const metadata = {
     canonical: 'https://www.tara4u.com',
   },
   manifest: '/manifest.json',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/taralogo.jpg', sizes: '32x32', type: 'image/jpeg' },
+      { url: '/taralogo.jpg', sizes: '16x16', type: 'image/jpeg' },
+    ],
+    apple: [
+      { url: '/taralogo.jpg', sizes: '180x180', type: 'image/jpeg' },
+    ],
+    other: [
+      {
+        rel: 'apple-touch-icon-precomposed',
+        url: '/taralogo.jpg',
+      },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -85,12 +101,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <StructuredData />
-
-        {/* Favicon Links */}
-        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/favicon.ico" />
-        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" type="image/png" sizes="32x32" />
-        <link rel="icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" type="image/png" sizes="16x16" />
-        <link rel="apple-touch-icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" sizes="180x180" />
 
         {/* PWA Meta Tags */}
         <meta name="application-name" content="Tara4u" />
