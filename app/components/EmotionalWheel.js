@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { api } from "../../lib/api";
+import { useInsights } from "../contexts/InsightsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChartPie, faTimes, faCheckCircle, faLock, faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import LifeAreaQuiz from "./LifeAreaQuiz";
@@ -170,6 +171,7 @@ function RadarChartView({ quizResults, lifeAreas }) {
 
 
 export default function EmotionalWheel() {
+    const { quizResults: contextQuizResults, loading: contextLoading } = useInsights();
     const [lifeAreas, setLifeAreas] = useState([]);
     const [quizResults, setQuizResults] = useState({});
     const [loading, setLoading] = useState(true);
@@ -178,34 +180,14 @@ export default function EmotionalWheel() {
     const [showQuizList, setShowQuizList] = useState(false);
 
     useEffect(() => {
-        fetchQuizData();
-    }, []);
-
-    const fetchQuizData = async () => {
-        try {
-            setLoading(true);
-            const response = await api.get('/api/quiz/results');
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Quiz data received:', data);
-                setLifeAreas(data.lifeAreas || []);
-                setQuizResults(data.quizResults || {});
-            } else {
-                // Silently handle error - user might not be logged in
-                console.log('Could not fetch quiz data - user may not be logged in');
-                setLifeAreas([]);
-                setQuizResults({});
-            }
-        } catch (error) {
-            // Silently handle error - user might not be logged in
-            console.log('Error fetching quiz data - user may not be logged in');
-            setLifeAreas([]);
-            setQuizResults({});
-        } finally {
+        if (contextQuizResults) {
+            setLifeAreas(contextQuizResults.lifeAreas || []);
+            setQuizResults(contextQuizResults.quizResults || {});
+            setLoading(false);
+        } else if (!contextLoading) {
             setLoading(false);
         }
-    };
+    }, [contextQuizResults, contextLoading]);
 
     const handleStartQuiz = (area) => {
         setSelectedArea(area);

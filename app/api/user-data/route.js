@@ -1,10 +1,30 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
+import { verifyToken } from '../../../lib/jwt';
 
 export async function GET(request) {
     try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
+        // Get authorization header
+        const authHeader = request.headers.get('authorization');
+
+        // Support both token-based and query param based auth
+        let userId;
+
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            // Token-based authentication
+            const token = authHeader.split(' ')[1];
+            const decoded = verifyToken(token);
+
+            if (!decoded) {
+                return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+            }
+
+            userId = decoded.firebaseUid || decoded.userId;
+        } else {
+            // Fallback to query param (for backward compatibility)
+            const { searchParams } = new URL(request.url);
+            userId = searchParams.get('userId');
+        }
 
         if (!userId) {
             return NextResponse.json({
@@ -25,12 +45,9 @@ export async function GET(request) {
         }
 
         return NextResponse.json({
-            success: true,
-            data: {
-                journals: userData.journals || [],
-                goals: userData.goals || [],
-                moods: userData.moods || []
-            }
+            journals: userData.journals || [],
+            goals: userData.goals || [],
+            moods: userData.moods || []
         });
 
     } catch (error) {

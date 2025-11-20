@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { api } from "../../lib/api";
+import { useInsights } from "../contexts/InsightsContext";
 import { faBullseye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -17,43 +17,26 @@ const EMOTIONS = [
 ];
 
 export default function EmotionalFlowerChart() {
+    const { userData, loading: contextLoading } = useInsights();
     const [emotionData, setEmotionData] = useState({});
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchJournalData();
-    }, []);
+        if (userData) {
+            const moods = userData.moods || [];
+            const journals = userData.journals || [];
 
-    const fetchJournalData = async () => {
-        try {
-            setLoading(true);
+            console.log('Using context data - moods:', moods.length, 'journals:', journals.length);
 
-            // Fetch both mood entries and journals from user data
-            const response = await api.get('/api/user-data');
-
-            if (response.ok) {
-                const data = await response.json();
-                const moods = data.moods || [];
-                const journals = data.journals || [];
-
-                console.log('Fetched moods:', moods.length, 'journals:', journals.length);
-
-                // Analyze emotions from both moods and journals
-                const emotions = analyzeEmotions(moods, journals);
-                setEmotionData(emotions);
-            } else {
-                // Silently handle error - user might not be logged in
-                console.log('Could not fetch user data - user may not be logged in');
-                setEmotionData({});
-            }
-        } catch (error) {
-            // Silently handle error - user might not be logged in
-            console.log('Error fetching journal data - user may not be logged in');
+            // Analyze emotions from both moods and journals
+            const emotions = analyzeEmotions(moods, journals);
+            setEmotionData(emotions);
+            setLoading(false);
+        } else if (!contextLoading) {
             setEmotionData({});
-        } finally {
             setLoading(false);
         }
-    };
+    }, [userData, contextLoading]);
 
     const analyzeEmotions = (moods, journals) => {
         // Initialize emotion counts

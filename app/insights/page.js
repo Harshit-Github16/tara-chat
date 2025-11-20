@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoginPromptOverlay from "../components/LoginPromptOverlay";
 import { useAuth } from "../contexts/AuthContext";
-import { api } from "../../lib/api";
+import { InsightsProvider, useInsights } from "../contexts/InsightsContext";
 import BottomNav from "../components/BottomNav";
 import MoodMeterChart, { calculateAverageMoodScore } from "../components/MoodMeterChart";
 import EmotionalWheel from "../components/EmotionalWheel";
@@ -26,15 +26,14 @@ import {
     faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function InsightsPage() {
+function InsightsPageContent() {
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
+    const { moodData, loading } = useInsights();
     const [selectedPeriod, setSelectedPeriod] = useState("week");
-    const [moodData, setMoodData] = useState([]);
     const [checkInDates, setCheckInDates] = useState([]);
-    const [avgMood, setAvgMood] = useState(0);
+
     const [streak, setStreak] = useState(0);
-    const [loading, setLoading] = useState(true);
     const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     // Check if user is logged in
@@ -50,87 +49,23 @@ export default function InsightsPage() {
         router.push('/');
     };
 
-    // Fetch mood data and calculate insights
+    // Calculate insights when moodData changes
     useEffect(() => {
-        if (user?.uid) {
-            fetchMoodData();
+        if (moodData && moodData.moodByDate) {
+            // Use backend calculated data
+            setStreak(moodData.streakCount || 0);
+
+            // Extract check-in dates from moodByDate
+            const dates = Object.keys(moodData.moodByDate).map(dateStr => {
+                // Convert DD-MM-YYYY to YYYY-MM-DD
+                const [day, month, year] = dateStr.split('-');
+                return `${year}-${month}-${day}`;
+            });
+            setCheckInDates(dates);
         }
-    }, [user]);
+    }, [moodData]);
 
-    const fetchMoodData = async () => {
-        try {
-            setLoading(true);
-            // Fetch mood data from MongoDB
-            const response = await api.get('/api/mood-mongo?limit=30');
 
-            if (response.ok) {
-                const data = await response.json();
-                const moods = data.data?.entries || [];
-
-                console.log('Fetched mood data:', moods);
-                console.log('Sample mood entry:', moods[0]);
-                setMoodData(moods);
-
-                // Calculate average mood
-                if (moods.length > 0) {
-                    const total = moods.reduce((sum, m) => sum + (m.intensity || 5), 0);
-                    setAvgMood((total / moods.length).toFixed(1));
-                }
-
-                // Extract unique check-in dates
-                const dates = moods.map(m => m.date).filter((v, i, a) => a.indexOf(v) === i);
-                setCheckInDates(dates);
-
-                // Calculate streak
-                calculateStreak(dates);
-            }
-        } catch (error) {
-            console.error('Error fetching mood data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const calculateStreak = (dates) => {
-        if (dates.length === 0) {
-            setStreak(0);
-            return;
-        }
-
-        // Sort dates in descending order
-        const sortedDates = dates.sort((a, b) => new Date(b) - new Date(a));
-        const today = new Date().toISOString().split('T')[0];
-
-        // Check if today or yesterday has entry
-        const latestDate = sortedDates[0];
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-        if (latestDate !== today && latestDate !== yesterdayStr) {
-            setStreak(0);
-            return;
-        }
-
-        // Count consecutive days
-        let currentStreak = 1;
-        let currentDate = new Date(latestDate);
-
-        for (let i = 1; i < sortedDates.length; i++) {
-            const prevDate = new Date(currentDate);
-            prevDate.setDate(prevDate.getDate() - 1);
-            const prevDateStr = prevDate.toISOString().split('T')[0];
-
-            if (sortedDates[i] === prevDateStr) {
-                currentStreak++;
-                currentDate = new Date(sortedDates[i]);
-            } else {
-                break;
-            }
-        }
-
-        setStreak(currentStreak);
-    };
 
     return (
         <>
@@ -202,7 +137,7 @@ export default function InsightsPage() {
                             value={loading ? "..." : `${streak} ${streak === 1 ? 'day' : 'days'}`}
                             color="bg-orange-50 text-orange-600"
                         />
-                        <MoodScoreCard moodData={moodData} loading={loading} />
+                        <MoodScoreCard moodData={moodData?.entries || []} weeklyAverage={moodData?.weeklyAverage} loading={loading} />
                         <StatCard
                             icon={faClock}
                             title="Recovery Time"
@@ -223,7 +158,7 @@ export default function InsightsPage() {
                     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Mood Meter - ACTIVE */}
                         <ChartCard title="Mood Meter" icon={faChartLine}>
-                            <MoodMeterChart moodData={moodData} loading={loading} />
+                            <MoodMeterChart moodData={moodData?.entries || []} loading={loading} />
                         </ChartCard>
 
                         {/* Check-in Streak - ACTIVE */}
@@ -306,7 +241,7 @@ function StatCard({ icon, title, value, color, disabled }) {
     );
 }
 
-function MoodScoreCard({ moodData, loading }) {
+function MoodScoreCard({ moodData, weeklyAverage, loading }) {
     if (loading) {
         return (
             <div className="rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
@@ -323,15 +258,32 @@ function MoodScoreCard({ moodData, loading }) {
         );
     }
 
-    const { score, emoji } = calculateAverageMoodScore(moodData);
-    const numScore = parseFloat(score);
+    // Use backend calculated weekly average
+    const numScore = weeklyAverage || 0;
 
+    // Get emoji based on score (-3 to +3 range)
+    let emoji = '😐';
     let color = 'bg-yellow-50 text-yellow-600';
     let textColor = 'text-yellow-600';
-    if (numScore >= 1) {
+
+    if (numScore >= 2) {
+        emoji = '😊';
         color = 'bg-green-50 text-green-600';
         textColor = 'text-green-600';
-    } else if (numScore <= -1) {
+    } else if (numScore >= 1) {
+        emoji = '🙂';
+        color = 'bg-green-50 text-green-600';
+        textColor = 'text-green-600';
+    } else if (numScore >= -1) {
+        emoji = '😐';
+        color = 'bg-yellow-50 text-yellow-600';
+        textColor = 'text-yellow-600';
+    } else if (numScore >= -2) {
+        emoji = '😔';
+        color = 'bg-red-50 text-red-600';
+        textColor = 'text-red-600';
+    } else {
+        emoji = '😢';
         color = 'bg-red-50 text-red-600';
         textColor = 'text-red-600';
     }
@@ -343,9 +295,9 @@ function MoodScoreCard({ moodData, loading }) {
                     {emoji}
                 </span>
                 <div>
-                    <div className="text-xs text-gray-500">Average Mood</div>
+                    <div className="text-xs text-gray-500">Weekly Average</div>
                     <div className={`text-lg font-bold ${textColor}`}>
-                        {numScore > 0 ? '+' : ''}{score}/5
+                        {numScore > 0 ? '+' : ''}{numScore.toFixed(1)}/3
                     </div>
                 </div>
             </div>
@@ -744,6 +696,14 @@ function MobileNavLink({ href, icon, label, active, disabled }) {
             <FontAwesomeIcon icon={icon} className="h-5 w-5" />
             {label}
         </Link>
+    );
+}
+
+export default function InsightsPage() {
+    return (
+        <InsightsProvider>
+            <InsightsPageContent />
+        </InsightsProvider>
     );
 }
 

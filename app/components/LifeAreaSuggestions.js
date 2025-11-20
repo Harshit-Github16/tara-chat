@@ -1,52 +1,35 @@
 "use client";
 import { useState, useEffect } from "react";
 import { api } from "../../lib/api";
+import { useInsights } from "../contexts/InsightsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLightbulb, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function LifeAreaSuggestions() {
+    const { quizResults: contextQuizResults, loading: contextLoading } = useInsights();
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [hasQuizData, setHasQuizData] = useState(false);
 
     useEffect(() => {
-        fetchSuggestions();
-    }, []);
+        if (contextQuizResults) {
+            const quizResultsData = contextQuizResults.quizResults || {};
+            const lifeAreas = contextQuizResults.lifeAreas || [];
 
-    const fetchSuggestions = async () => {
-        try {
-            setLoading(true);
-
-            // Fetch quiz results
-            const response = await api.get('/api/quiz/results');
-
-            if (response.ok) {
-                const data = await response.json();
-                const quizResults = data.quizResults || {};
-                const lifeAreas = data.lifeAreas || [];
-
-                // Check if user has completed any quizzes
-                if (Object.keys(quizResults).length > 0) {
-                    setHasQuizData(true);
-
-                    // Generate AI suggestions based on quiz results
-                    await generateSuggestions(quizResults, lifeAreas);
-                } else {
-                    setHasQuizData(false);
-                }
+            // Check if user has completed any quizzes
+            if (Object.keys(quizResultsData).length > 0) {
+                setHasQuizData(true);
+                // Generate AI suggestions based on quiz results
+                generateSuggestions(quizResultsData, lifeAreas);
             } else {
-                // Silently handle error - user might not be logged in
-                console.log('Could not fetch quiz results - user may not be logged in');
                 setHasQuizData(false);
+                setLoading(false);
             }
-        } catch (error) {
-            // Silently handle error - user might not be logged in
-            console.log('Error fetching suggestions - user may not be logged in');
+        } else if (!contextLoading) {
             setHasQuizData(false);
-        } finally {
             setLoading(false);
         }
-    };
+    }, [contextQuizResults, contextLoading]);
 
     const generateSuggestions = async (quizResults, lifeAreas) => {
         try {
