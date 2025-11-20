@@ -59,7 +59,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Tara4u - Your AI Mental Health & Wellness Companion",
     description: "24/7 AI emotional support. Chat with 100+ characters, track moods, journal thoughts. Free to start.",
-    images: ["https://www.tara4u.com/taralogo.jpg"],
+    images: ["https://tara4u.com/taralogo.jpg"],
     creator: "@tara4u",
     site: "@tara4u",
   },
