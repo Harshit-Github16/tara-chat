@@ -131,7 +131,7 @@ export default function Home() {
 
         <meta name="keywords" content="mental health app, AI companion, emotional wellness, mindfulness, therapy chat, mood tracking, journal app, personal growth, mental wellness, AI therapy, celebrity chat, emotional support" />
 
-        <link rel="canonical" href="https://yourdomain.com" />
+        <link rel="canonical" href="https://www.tara4u.com" />
 
         <meta property="og:title" content="Tara - AI Mental Health & Wellness Companion" />
 
@@ -139,9 +139,9 @@ export default function Home() {
 
         <meta property="og:type" content="website" />
 
-        <meta property="og:url" content="https://yourdomain.com" />
+        <meta property="og:url" content="https://www.tara4u.com" />
 
-        <meta property="og:image" content="https://yourdomain.com/taralogo.jpg" />
+        <meta property="og:image" content="https://www.tara4u.com/taralogo.jpg" />
 
         <script
 
@@ -157,7 +157,7 @@ export default function Home() {
 
               "name": "Tara",
 
-              "url": "https://yourdomain.com",
+              "url": "https://www.tara4u.com",
 
               "description": "AI-powered mental health and wellness companion",
 
@@ -165,7 +165,7 @@ export default function Home() {
 
                 "@type": "SearchAction",
 
-                "target": "https://yourdomain.com/search?q={search_term_string}",
+                "target": "https://www.tara4u.com/search?q={search_term_string}",
 
                 "query-input": "required name=search_term_string"
 
@@ -191,7 +191,7 @@ export default function Home() {
               className="h-8 w-8 rounded-full object-cover"
               priority
             />
-            <span className="text-xl font-bold text-rose-500">Tara4U</span>
+            <span className="text-xl font-bold text-rose-500">Tara4u</span>
           </div>
 
           {/* Navigation Menu - Center */}
@@ -1639,7 +1639,7 @@ export default function Home() {
                   className="h-8 w-8 rounded-full object-cover"
                   loading="lazy"
                 />
-                <span className="text-xl font-bold text-rose-500">Tara4U</span>
+                <span className="text-xl font-bold text-rose-500">Tara4u</span>
               </div>
               <p className="text-gray-600 mb-4 text-sm">
                 Your personal emotional Well being companion.

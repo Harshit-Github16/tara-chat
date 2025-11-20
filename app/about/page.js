@@ -11,7 +11,7 @@ export default function AboutPage() {
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
                     <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                         <img src="/taralogo.jpg" alt="Tara Logo" className="h-8 w-8 rounded-full object-cover" />
-                        <span className="text-lg font-semibold text-rose-600">Tara4U</span>
+                        <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                     </Link>
                 </div>
             </header>

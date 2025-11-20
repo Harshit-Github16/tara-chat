@@ -1,7 +1,7 @@
 import clientPromise from '../../lib/mongodb';
 
 export async function GET() {
-    const baseUrl = 'https://tara4u.com';
+    const baseUrl = 'https://www.tara4u.com';
 
     try {
         const client = await clientPromise;

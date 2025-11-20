@@ -1,5 +1,5 @@
 export async function GET() {
-    const baseUrl = 'https://tara4u.com';
+    const baseUrl = 'https://www.tara4u.com';
     const currentDate = new Date().toISOString();
 
     const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>

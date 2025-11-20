@@ -113,11 +113,11 @@ export default function JournalPage() {
         <title>AI Journal - Smart Journaling with AI Prompts | Tara Emotional Wellness</title>
         <meta name="description" content="Write and reflect with AI-powered journaling. Get personalized prompts, track your emotional journey, and gain insights from your daily reflections with Tara's smart journal." />
         <meta name="keywords" content="AI journal, smart journaling, emotional journal, daily reflection, AI prompts, mental health journal, mood journal, gratitude journal, therapy journal" />
-        <link rel="canonical" href="https://yourdomain.com/journal" />
+        <link rel="canonical" href="https://www.tara4u.com/journal" />
         <meta property="og:title" content="AI Journal - Smart Journaling with AI Prompts | Tara" />
         <meta property="og:description" content="Write and reflect with AI-powered journaling. Get personalized prompts and insights." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com/journal" />
+        <meta property="og:url" content="https://www.tara4u.com/journal" />
       </Head>
 
       {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
@@ -131,7 +131,7 @@ export default function JournalPage() {
                 alt="Tara Logo"
                 className="h-8 w-8 rounded-full object-cover"
               />
-              <span className="text-lg font-semibold text-rose-600">Tara4U</span>
+              <span className="text-lg font-semibold text-rose-600">Tara4u</span>
             </Link>
 
             {/* Profile Icon */}

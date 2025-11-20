@@ -25,6 +25,6 @@ export default function robots() {
                 ],
             },
         ],
-        sitemap: 'https://tara4u.com/sitemap.xml',
+        sitemap: 'https://www.tara4u.com/sitemap.xml',
     };
 }

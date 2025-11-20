@@ -29,5 +29,5 @@ Disallow: /login
 Disallow: /onboarding
 
 # Sitemap locations
-Sitemap: https://tara4u.com/sitemap.xml
-Sitemap: https://tara4u.com/blog-sitemap.xml
+Sitemap: https://www.tara4u.com/sitemap.xml
+Sitemap: https://www.tara4u.com/blog-sitemap.xml

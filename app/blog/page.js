@@ -104,16 +104,16 @@ export default function BlogsPage() {
                 <title>Mental Health & Wellness Blog | Expert Tips & Insights - Tara</title>
                 <meta name="description" content="Discover expert insights, tips, and stories to support your mental wellness journey. Read articles from leading professionals in psychology, neuroscience, and wellness." />
                 <meta name="keywords" content="mental health blog, wellness articles, psychology tips, mindfulness guides, emotional wellness, mental health resources, therapy insights, self-care tips, tara4u" />
-                <link rel="canonical" href="https://tara4u.com/blog" />
+                <link rel="canonical" href="https://www.tara4u.com/blog" />
                 <meta property="og:title" content="Mental Health & Wellness Blog - Tara" />
                 <meta property="og:description" content="Expert insights and tips for better emotional wellness. Read articles from leading professionals in psychology and mental health." />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://tara4u.com/blog" />
-                <meta property="og:image" content="https://tara4u.com/og-image.jpg" />
+                <meta property="og:url" content="https://www.tara4u.com/blog" />
+                <meta property="og:image" content="https://www.tara4u.com/og-image.jpg" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Mental Health & Wellness Blog - Tara" />
                 <meta name="twitter:description" content="Expert insights and tips for better emotional wellness" />
-                <meta name="twitter:image" content="https://tara4u.com/og-image.jpg" />
+                <meta name="twitter:image" content="https://www.tara4u.com/og-image.jpg" />
 
                 {/* Main Blog Schema */}
                 <script
@@ -124,13 +124,13 @@ export default function BlogsPage() {
                             "@type": "Blog",
                             "name": "Tara Wellness Blog",
                             "description": "Expert insights and tips for mental health and emotional wellness",
-                            "url": "https://tara4u.com/blog",
+                            "url": "https://www.tara4u.com/blog",
                             "publisher": {
                                 "@type": "Organization",
                                 "name": "Tara",
                                 "logo": {
                                     "@type": "ImageObject",
-                                    "url": "https://tara4u.com/taralogo.jpg"
+                                    "url": "https://www.tara4u.com/taralogo.jpg"
                                 }
                             }
                         })
@@ -148,7 +148,7 @@ export default function BlogsPage() {
                                 "@type": "BlogPosting",
                                 "headline": post.title,
                                 "description": post.excerpt,
-                                "image": post.featuredImage || "https://tara4u.com/og-image.jpg",
+                                "image": post.featuredImage || "https://www.tara4u.com/og-image.jpg",
                                 "author": {
                                     "@type": "Person",
                                     "name": post.author
@@ -158,16 +158,16 @@ export default function BlogsPage() {
                                     "name": "Tara",
                                     "logo": {
                                         "@type": "ImageObject",
-                                        "url": "https://tara4u.com/taralogo.jpg"
+                                        "url": "https://www.tara4u.com/taralogo.jpg"
                                     }
                                 },
                                 "datePublished": post.publishDate,
                                 "dateModified": post.updatedAt || post.publishDate,
                                 "mainEntityOfPage": {
                                     "@type": "WebPage",
-                                    "@id": `https://tara4u.com/blog/${post.id}`
+                                    "@id": `https://www.tara4u.com/blog/${post.id}`
                                 },
-                                "url": `https://tara4u.com/blog/${post.id}`,
+                                "url": `https://www.tara4u.com/blog/${post.id}`,
                                 "articleSection": post.category,
                                 "keywords": post.tags?.join(', ') || '',
                                 "wordCount": post.content?.split(' ').length || 0,
@@ -188,7 +188,7 @@ export default function BlogsPage() {
                                     alt="Tara Logo"
                                     className="h-8 w-8 rounded-full object-cover"
                                 />
-                                <span className="text-lg font-semibold text-rose-600">Tara4U</span>
+                                <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                             </Link>
 
                             {/* Profile Icon */}

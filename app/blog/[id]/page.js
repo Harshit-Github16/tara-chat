@@ -271,8 +271,8 @@ export default function BlogPostPage() {
                 author={post.author}
                 datePublished={post.publishDate}
                 dateModified={post.updatedAt || post.publishDate}
-                image={post.featuredImage || "https://tara4u.com/og-image.jpg"}
-                url={`https://tara4u.com/blog/${post.id}`}
+                image={post.featuredImage || "https://www.tara4u.com/og-image.jpg"}
+                url={`https://www.tara4u.com/blog/${post.id}`}
                 category={post.category}
                 tags={post.tags || []}
                 schemaType={post.schemaType || "BlogPosting"}
@@ -290,7 +290,7 @@ export default function BlogPostPage() {
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara4U</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                         </div>
                         <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
                             <FontAwesomeIcon icon={faUser} className="h-5 w-5" />

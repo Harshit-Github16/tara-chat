@@ -55,11 +55,17 @@ export default function WelcomePage() {
     }
   }, [loading, user]);
 
-  const handleMoodSaved = () => {
+  const handleMoodSaved = (moodEntry) => {
     setMoodSaved(true);
-    // Redirect to chatlist after 1 second
+    // Redirect to chatlist after 1 second with mood data
     setTimeout(() => {
-      router.push('/chatlist');
+      // Pass mood data via URL params
+      const moodData = encodeURIComponent(JSON.stringify({
+        mood: moodEntry.mood,
+        intensity: moodEntry.intensity,
+        note: moodEntry.note
+      }));
+      router.push(`/chatlist?fromMood=true&moodData=${moodData}`);
     }, 1000);
   };
 

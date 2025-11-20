@@ -4,30 +4,30 @@ export default function StructuredData() {
         "@graph": [
             {
                 "@type": "WebSite",
-                "@id": "https://tara4u.com/#website",
-                "url": "https://tara4u.com",
+                "@id": "https://www.tara4u.com/#website",
+                "url": "https://www.tara4u.com",
                 "name": "Tara - Mental Wellness Companion",
                 "description": "AI-powered mental health and emotional wellness companion",
                 "publisher": {
-                    "@id": "https://tara4u.com/#organization"
+                    "@id": "https://www.tara4u.com/#organization"
                 },
                 "potentialAction": {
                     "@type": "SearchAction",
                     "target": {
                         "@type": "EntryPoint",
-                        "urlTemplate": "https://tara4u.com/search?q={search_term_string}"
+                        "urlTemplate": "https://www.tara4u.com/search?q={search_term_string}"
                     },
                     "query-input": "required name=search_term_string"
                 }
             },
             {
                 "@type": "Organization",
-                "@id": "https://tara4u.com/#organization",
+                "@id": "https://www.tara4u.com/#organization",
                 "name": "Tara",
-                "url": "https://tara4u.com",
+                "url": "https://www.tara4u.com",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://tara4u.com/taralogo.jpg",
+                    "url": "https://www.tara4u.com/taralogo.jpg",
                     "width": 512,
                     "height": 512
                 },
@@ -49,7 +49,7 @@ export default function StructuredData() {
             {
                 "@type": "WebApplication",
                 "name": "Tara - Mental Wellness Companion",
-                "url": "https://tara4u.com",
+                "url": "https://www.tara4u.com",
                 "applicationCategory": "HealthApplication",
                 "operatingSystem": "Web, iOS, Android",
                 "offers": {

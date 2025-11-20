@@ -1,7 +1,7 @@
 import clientPromise from '../lib/mongodb';
 
 export default async function sitemap() {
-    const baseUrl = 'https://tara4u.com';
+    const baseUrl = 'https://www.tara4u.com';
 
     // Static pages
     const routes = [

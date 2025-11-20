@@ -68,7 +68,7 @@ export default function BlogSchema({
                 "name": "Tara",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://tara4u.com/taralogo.jpg",
+                    "url": "https://www.tara4u.com/taralogo.jpg",
                     "width": 200,
                     "height": 200
                 }
@@ -104,7 +104,7 @@ export default function BlogSchema({
                 "name": "Tara",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://tara4u.com/taralogo.jpg",
+                    "url": "https://www.tara4u.com/taralogo.jpg",
                     "width": 200,
                     "height": 200
                 }
@@ -130,13 +130,13 @@ export default function BlogSchema({
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://yourdomain.com"
+                "item": "https://www.tara4u.com"
             },
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Blogs",
-                "item": "https://yourdomain.com/blog"
+                "item": "https://www.tara4u.com/blog"
             },
             {
                 "@type": "ListItem",

@@ -22,11 +22,11 @@ function updateFile(filePath) {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;
 
-        // Replace "Tara</span>" with "Tara4U</span>" in navbar
+        // Replace "Tara</span>" with "Tara4u</span>" in navbar
         if (content.includes('text-rose-600">Tara</span>')) {
             content = content.replace(
                 /text-rose-600">Tara<\/span>/g,
-                'text-rose-600">Tara4U</span>'
+                'text-rose-600">Tara4u</span>'
             );
             modified = true;
         }
@@ -35,7 +35,7 @@ function updateFile(filePath) {
         if (content.includes('text-base sm:text-lg font-semibold text-rose-600">Tara</span>')) {
             content = content.replace(
                 /text-base sm:text-lg font-semibold text-rose-600">Tara<\/span>/g,
-                'text-base sm:text-lg font-semibold text-rose-600">Tara4U</span>'
+                'text-base sm:text-lg font-semibold text-rose-600">Tara4u</span>'
             );
             modified = true;
         }
@@ -51,7 +51,7 @@ function updateFile(filePath) {
     }
 }
 
-console.log('🔄 Updating "Tara" to "Tara4U" in navbar...\n');
+console.log('🔄 Updating "Tara" to "Tara4u" in navbar...\n');
 
 filesToUpdate.forEach(file => {
     if (fs.existsSync(file)) {

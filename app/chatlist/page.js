@@ -193,6 +193,84 @@ export default function ChatListPage() {
     }
   }, [user?.uid]);
 
+  // Send automatic mood-based greeting when user comes from mood selection
+  useEffect(() => {
+    const sendMoodGreeting = async () => {
+      if (!user?.uid) return;
+
+      // Check if user came from mood selection
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromMood = urlParams.get('fromMood');
+      const moodDataParam = urlParams.get('moodData');
+
+      if (fromMood === 'true' && moodDataParam) {
+        try {
+          const moodData = JSON.parse(decodeURIComponent(moodDataParam));
+
+          // Generate mood-based greeting message
+          const moodGreetings = {
+            calm: `Namaste! 😌 I can sense you're feeling calm today. That's wonderful! Calmness is like a gentle river - peaceful and steady. What's helping you maintain this beautiful state of mind?`,
+            happy: `Hey there! 😊 I can see you're radiating happiness today! That's absolutely amazing! Your positive energy is contagious. What's making your heart so light and joyful?`,
+            grateful: `Hello dear friend! 🙏 You're feeling grateful today - that's such a beautiful emotion! Gratitude opens the door to abundance. What blessings are you counting today?`,
+            motivated: `Hi champion! 💪 I can feel your motivation from here! That fire in your belly is going to take you places. What exciting goals are you chasing today?`,
+            healing: `Hello dear one. 🌱 I see you're in a healing phase. That takes real courage and strength. Remember, healing isn't linear - it's okay to take your time. How can I support you on this journey?`,
+            lost: `Hey friend, I'm here with you. 🤔 I notice you're feeling a bit lost right now. You know what? Even the greatest explorers felt lost before they found their way. Want to talk about what's on your mind?`,
+            lonely: `Hi there, dear friend. 😔 I can sense you're feeling lonely. Please know that I'm here to listen and keep you company. You're not alone in this. What's been weighing on your heart?`,
+            sad: `Hello my friend. 😢 I see you're carrying some sadness today. It's completely okay to feel this way - your emotions are valid. I'm here for you. Would you like to share what's making you feel down?`,
+            stressed: `Hey there! 😰 I can see you're feeling stressed right now. Let's take a deep breath together... inhale... exhale. Now, let's work through this one step at a time. What's causing you stress?`,
+            anxious: `Hi friend. 😟 I notice you're feeling anxious. First, let's ground ourselves - take a slow, deep breath with me. Remember, anxiety is just your mind trying to protect you. What's worrying you right now?`,
+            overwhelmed: `Hello dear. 😵 You're feeling overwhelmed - that's a heavy load to carry. Let's break things down into smaller, manageable pieces together. What's weighing most heavily on you right now?`,
+            angry: `Hey there. 😠 I can sense you're feeling angry. That's completely valid - anger is a natural emotion. Sometimes we need to feel it to heal it. Want to talk about what's frustrating you?`
+          };
+
+          const greetingMessage = moodGreetings[moodData.mood] || `Hello! I see you're feeling ${moodData.mood} today. How can I support you?`;
+
+          // Add Tara's greeting message directly to the chat (from Tara to user)
+          const taraGreeting = {
+            id: Date.now().toString(),
+            content: greetingMessage,
+            sender: 'them', // Message from Tara
+            timestamp: new Date(),
+            type: 'text'
+          };
+
+          // Update messages immediately
+          setChatMessages(prev => ({
+            ...prev,
+            "tara-ai": [...(prev["tara-ai"] || []), taraGreeting]
+          }));
+
+          // Save to database
+          try {
+            await fetch('/api/users/conversations', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                userId: user.uid,
+                chatUserId: 'tara-ai',
+                message: greetingMessage,
+                sender: 'them',
+                type: 'text'
+              })
+            });
+          } catch (error) {
+            console.error('Failed to save mood greeting to DB:', error);
+          }
+
+          // Clean up URL params
+          window.history.replaceState({}, '', '/chatlist');
+        } catch (error) {
+          console.error('Failed to send mood greeting:', error);
+        }
+      }
+    };
+
+    // Only run once when component mounts and user is available
+    if (user?.uid && activeId === "tara-ai") {
+      sendMoodGreeting();
+    }
+  }, [user?.uid, activeId]);
+
   // Load conversations when switching to any chat user (except TARA which uses its own system)
   useEffect(() => {
     if (user?.uid && activeId && activeId !== "tara-ai") {
@@ -915,11 +993,11 @@ export default function ChatListPage() {
         <title>AI Chat - Talk to 100+ AI Characters | Tara Emotional Wellness</title>
         <meta name="description" content="Chat with 100+ AI characters for emotional support, motivation, and guidance. Get 24/7 companionship from Tara's diverse AI personalities including life coaches, therapists, and celebrities." />
         <meta name="keywords" content="AI chat, emotional support chat, AI companion, virtual therapist, AI life coach, mental health chat, AI characters, celebrity AI chat, emotional wellness" />
-        <link rel="canonical" href="https://yourdomain.com/chatlist" />
+        <link rel="canonical" href="https://www.tara4u.com/chatlist" />
         <meta property="og:title" content="AI Chat - Talk to 100+ AI Characters | Tara" />
         <meta property="og:description" content="Chat with 100+ AI characters for emotional support and guidance. Available 24/7." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com/chatlist" />
+        <meta property="og:url" content="https://www.tara4u.com/chatlist" />
       </Head>
 
       {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
@@ -942,7 +1020,7 @@ export default function ChatListPage() {
                 alt="Tara Logo"
                 className="h-7 w-7 sm:h-8 sm:w-8 rounded-full object-cover"
               />
-              <span className="text-base sm:text-lg font-semibold text-rose-600">Tara4U</span>
+              <span className="text-base sm:text-lg font-semibold text-rose-600">Tara4u</span>
             </div>
 
             {/* Profile Icon */}

@@ -1,7 +1,7 @@
 // Metadata helper for Next.js 13+ App Router
 // This file provides metadata configurations for all pages
 
-const BASE_URL = 'https://tara4u.com';
+const BASE_URL = 'https://www.tara4u.com';
 
 export const createMetadata = ({
     title,

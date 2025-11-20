@@ -34,9 +34,15 @@ export default function LifeAreaSuggestions() {
                 } else {
                     setHasQuizData(false);
                 }
+            } else {
+                // Silently handle error - user might not be logged in
+                console.log('Could not fetch quiz results - user may not be logged in');
+                setHasQuizData(false);
             }
         } catch (error) {
-            console.error('Error fetching suggestions:', error);
+            // Silently handle error - user might not be logged in
+            console.log('Error fetching suggestions - user may not be logged in');
+            setHasQuizData(false);
         } finally {
             setLoading(false);
         }

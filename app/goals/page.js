@@ -324,11 +324,11 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                 <title>AI Goals - Set & Track Wellness Goals | Tara Emotional Wellness</title>
                 <meta name="description" content="Set and achieve your emotional wellness goals with AI-powered suggestions. Track progress, get motivated, and celebrate milestones with Tara's smart goal tracking system." />
                 <meta name="keywords" content="wellness goals, mental health goals, goal tracking, AI goal setting, emotional wellness goals, personal development, habit tracking, goal achievement" />
-                <link rel="canonical" href="https://yourdomain.com/goals" />
+                <link rel="canonical" href="https://www.tara4u.com/goals" />
                 <meta property="og:title" content="AI Goals - Set & Track Wellness Goals | Tara" />
                 <meta property="og:description" content="Set and achieve your emotional wellness goals with AI-powered suggestions and tracking." />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://yourdomain.com/goals" />
+                <meta property="og:url" content="https://www.tara4u.com/goals" />
             </Head>
 
             {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
@@ -343,7 +343,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara4U</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                         </Link>
                         <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100">
                             <FontAwesomeIcon icon={faUser} className="h-5 w-5" />

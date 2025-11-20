@@ -41,9 +41,15 @@ export default function EmotionalFlowerChart() {
                 // Analyze emotions from both moods and journals
                 const emotions = analyzeEmotions(moods, journals);
                 setEmotionData(emotions);
+            } else {
+                // Silently handle error - user might not be logged in
+                console.log('Could not fetch user data - user may not be logged in');
+                setEmotionData({});
             }
         } catch (error) {
-            console.error('Error fetching journal data:', error);
+            // Silently handle error - user might not be logged in
+            console.log('Error fetching journal data - user may not be logged in');
+            setEmotionData({});
         } finally {
             setLoading(false);
         }

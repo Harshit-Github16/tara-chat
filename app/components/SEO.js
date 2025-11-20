@@ -19,10 +19,10 @@ export default function SEO({
         "@type": "Organization",
         "name": "Tara",
         "description": "AI-powered mental health and wellness companion",
-        "url": "https://yourdomain.com",
+        "url": "https://www.tara4u.com",
         "logo": {
             "@type": "ImageObject",
-            "url": "https://yourdomain.com/taralogo.jpg",
+            "url": "https://www.tara4u.com/taralogo.jpg",
             "width": 200,
             "height": 200
         },
@@ -43,11 +43,11 @@ export default function SEO({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Tara",
-        "url": "https://yourdomain.com",
+        "url": "https://www.tara4u.com",
         "description": description,
         "potentialAction": {
             "@type": "SearchAction",
-            "target": "https://yourdomain.com/search?q={search_term_string}",
+            "target": "https://www.tara4u.com/search?q={search_term_string}",
             "query-input": "required name=search_term_string"
         }
     };

@@ -138,11 +138,11 @@ export default function InsightsPage() {
                 <title>AI Insights - Track Your Emotional Wellness Journey | Tara</title>
                 <meta name="description" content="Get personalized insights into your emotional wellness journey. Track mood patterns, analyze emotional trends, and receive AI-powered recommendations with Tara's advanced analytics." />
                 <meta name="keywords" content="emotional insights, mood analytics, wellness tracking, mental health insights, emotional patterns, mood trends, AI analytics, emotional wellness dashboard" />
-                <link rel="canonical" href="https://yourdomain.com/insights" />
+                <link rel="canonical" href="https://www.tara4u.com/insights" />
                 <meta property="og:title" content="AI Insights - Track Your Emotional Wellness Journey | Tara" />
                 <meta property="og:description" content="Get personalized insights into your emotional wellness with AI-powered analytics and tracking." />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://yourdomain.com/insights" />
+                <meta property="og:url" content="https://www.tara4u.com/insights" />
             </Head>
 
             {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
@@ -157,7 +157,7 @@ export default function InsightsPage() {
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
-                            <span className="text-lg font-semibold text-rose-600">Tara4U</span>
+                            <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                         </Link>
                         <div className="flex items-center gap-3">
                             <div className="flex gap-2 rounded-full bg-rose-50 p-1 text-xs font-medium">

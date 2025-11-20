@@ -14,16 +14,16 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://tara4u.com'),
+  metadataBase: new URL('https://www.tara4u.com'),
   title: {
-    default: "Tara4U - Your AI Mental Health & Wellness Companion | Emotional Support 24/7",
-    template: "%s | Tara4U - Mental Wellness Companion"
+    default: "Tara4u - Your AI Mental Health & Wellness Companion | Emotional Support 24/7",
+    template: "%s | Tara4u - Mental Wellness Companion"
   },
   description: "Your AI mental health companion. Get 24/7 emotional support, chat with 100+ AI characters, track moods, and journal thoughts. Free to start.",
   keywords: ["mental health app", "AI therapy", "emotional wellness", "mindfulness app", "mental health support", "AI companion", "mood tracker", "journal app", "therapy chat", "emotional support", "mental wellness", "AI counseling", "stress relief", "anxiety help", "depression support", "tara4u", "tara 4u", "mental health india", "Tara", "AI friend"],
-  authors: [{ name: "Tara4U Team", url: "https://tara4u.com" }],
-  creator: "Tara4U Team",
-  publisher: "Tara4U",
+  authors: [{ name: "Tara4u Team", url: "https://www.tara4u.com" }],
+  creator: "Tara4u Team",
+  publisher: "Tara4u",
   formatDetection: {
     email: false,
     address: false,
@@ -36,19 +36,19 @@ export const metadata = {
     userScalable: true,
   },
   alternates: {
-    canonical: 'https://tara4u.com',
+    canonical: 'https://www.tara4u.com',
   },
   manifest: '/manifest.json',
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://tara4u.com",
-    siteName: "Tara4U - Mental Wellness Companion",
-    title: "Tara4U - Your AI Mental Health & Wellness Companion | 24/7 Emotional Support",
+    url: "https://www.tara4u.com",
+    siteName: "Tara4u - Mental Wellness Companion",
+    title: "Tara4u - Your AI Mental Health & Wellness Companion | 24/7 Emotional Support",
     description: "Your AI mental health companion. 24/7 emotional support, 100+ AI characters, mood tracking, and journaling. Free to start.",
     images: [
       {
-        url: "https://tara4u.com/taralogo.jpg",
+        url: "https://www.tara4u.com/taralogo.jpg",
         width: 1200,
         height: 630,
         alt: "Tara - AI Mental Health & Wellness Companion",
@@ -57,9 +57,9 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tara4U - Your AI Mental Health & Wellness Companion",
+    title: "Tara4u - Your AI Mental Health & Wellness Companion",
     description: "24/7 AI emotional support. Chat with 100+ characters, track moods, journal thoughts. Free to start.",
-    images: ["https://tara4u.com/taralogo.jpg"],
+    images: ["https://www.tara4u.com/taralogo.jpg"],
     creator: "@tara4u",
     site: "@tara4u",
   },
@@ -93,10 +93,10 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="https://ik.imagekit.io/exerovn5q/icon-384x384.png" sizes="180x180" />
 
         {/* PWA Meta Tags */}
-        <meta name="application-name" content="Tara4U" />
+        <meta name="application-name" content="Tara4u" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Tara4U" />
+        <meta name="apple-mobile-web-app-title" content="Tara4u" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#f43f5e" />
         <link rel="manifest" href="/manifest.json" />

@@ -192,11 +192,16 @@ export default function EmotionalWheel() {
                 setLifeAreas(data.lifeAreas || []);
                 setQuizResults(data.quizResults || {});
             } else {
-                const errorData = await response.json();
-                console.error('API error:', errorData);
+                // Silently handle error - user might not be logged in
+                console.log('Could not fetch quiz data - user may not be logged in');
+                setLifeAreas([]);
+                setQuizResults({});
             }
         } catch (error) {
-            console.error('Error fetching quiz data:', error);
+            // Silently handle error - user might not be logged in
+            console.log('Error fetching quiz data - user may not be logged in');
+            setLifeAreas([]);
+            setQuizResults({});
         } finally {
             setLoading(false);
         }
