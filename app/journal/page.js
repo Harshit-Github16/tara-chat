@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper, faBullseye, faWandSparkles } from "@fortawesome/free-solid-svg-icons";
-import LoginPromptOverlay from "../components/LoginPromptOverlay";
+import LoginModal from "../components/LoginModal";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import BottomNav from "../components/BottomNav";
@@ -18,19 +18,23 @@ export default function JournalPage() {
   const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
     if (!authLoading && !user) {
-      setShowLoginPrompt(true);
+      setShowLoginModal(true);
     } else {
-      setShowLoginPrompt(false);
+      setShowLoginModal(false);
     }
   }, [user, authLoading]);
 
-  const handleLoginClick = () => {
-    router.push('/');
+  const handleLoginSuccess = (isNewUser, userData) => {
+    if (isNewUser || !userData.isOnboardingComplete) {
+      router.push('/?showOnboarding=true');
+    } else {
+      setShowLoginModal(false);
+    }
   };
 
   // Load journals from MongoDB
@@ -120,9 +124,14 @@ export default function JournalPage() {
         <meta property="og:url" content="https://www.tara4u.com/journal" />
       </Head>
 
-      {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLoginSuccess={handleLoginSuccess}
+        showCloseButton={false}
+      />
 
-      <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
+      <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginModal ? 'blur-sm pointer-events-none' : ''}`}>
         <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
             <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -258,10 +267,12 @@ export default function JournalPage() {
                   if (response.ok) {
                     console.log('Journal updated successfully');
                     setEntries((prev) => prev.map((e) => (e._id === editing._id ? { ...e, ...payload } : e)));
+                    setShowModal(false);
                   } else {
                     const errorData = await response.json();
                     console.error('Failed to update journal:', errorData);
                     alert('Failed to update journal: ' + (errorData.error || 'Unknown error'));
+                    return;
                   }
                 } else {
                   // Create new journal
@@ -278,10 +289,17 @@ export default function JournalPage() {
                   });
 
                   if (response.ok) {
-                    setEntries((prev) => [newJournal, ...prev]);
+                    const data = await response.json();
+                    // Use the journal returned from API which has the _id
+                    setEntries((prev) => [data.journal, ...prev]);
+                    setShowModal(false);
+                  } else {
+                    const errorData = await response.json();
+                    console.error('Failed to create journal:', errorData);
+                    alert('Failed to create journal: ' + (errorData.error || 'Unknown error'));
+                    return;
                   }
                 }
-                setShowModal(false);
               } catch (error) {
                 console.error('Error saving journal:', error);
                 alert('Failed to save journal');

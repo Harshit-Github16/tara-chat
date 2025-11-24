@@ -20,8 +20,9 @@ import {
     faBrain,
     faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import LoginPromptOverlay from "../components/LoginPromptOverlay";
+import LoginModal from "../components/LoginModal";
 import { useAuth } from "../contexts/AuthContext";
+import { api } from "../../lib/api";
 import confetti from "canvas-confetti";
 
 const GOAL_CATEGORIES = [
@@ -40,7 +41,7 @@ export default function GoalsPage() {
     const [selectedGoalForSuggestions, setSelectedGoalForSuggestions] = useState(null);
     const [aiSuggestions, setAiSuggestions] = useState({});
     const [loadingSuggestions, setLoadingSuggestions] = useState({});
-    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
     const [newGoal, setNewGoal] = useState({
         title: "",
         category: "mental",
@@ -53,14 +54,18 @@ export default function GoalsPage() {
     // Check if user is logged in
     useEffect(() => {
         if (!authLoading && !user) {
-            setShowLoginPrompt(true);
+            setShowLoginModal(true);
         } else {
-            setShowLoginPrompt(false);
+            setShowLoginModal(false);
         }
     }, [user, authLoading]);
 
-    const handleLoginClick = () => {
-        router.push('/');
+    const handleLoginSuccess = (isNewUser, userData) => {
+        if (isNewUser || !userData.isOnboardingComplete) {
+            router.push('/?showOnboarding=true');
+        } else {
+            setShowLoginModal(false);
+        }
     };
 
     // Load goals from database
@@ -140,52 +145,94 @@ export default function GoalsPage() {
         }
     };
 
-    const toggleGoalComplete = (goalId) => {
-        const updatedGoals = goals.map((goal) => {
-            if (goal.id === goalId) {
-                const newCompletedState = !goal.completed;
+    const toggleGoalComplete = async (goalId) => {
+        const goal = goals.find(g => g.id === goalId);
+        if (!goal) return;
 
-                // Trigger confetti when goal is completed
-                if (newCompletedState) {
-                    const defaults = {
-                        spread: 360,
-                        ticks: 50,
-                        gravity: 0,
-                        decay: 0.94,
-                        startVelocity: 30,
-                        colors: ["#FFE400", "#FFBD00", "#E89400", "#FFCA6C", "#FDFFB8"],
-                    };
+        const newCompletedState = !goal.completed;
 
-                    const shoot = () => {
-                        confetti({
-                            ...defaults,
-                            particleCount: 40,
-                            scalar: 1.2,
-                            shapes: ["star"],
-                        });
-                        confetti({
-                            ...defaults,
-                            particleCount: 10,
-                            scalar: 0.75,
-                            shapes: ["circle"],
-                        });
-                    };
+        // If marking as complete, call API
+        if (newCompletedState) {
+            try {
+                const response = await api.post('/api/goals/goal-status', {
+                    goalId,
+                    isComplete: true,
+                    isDelete: false
+                });
 
-                    setTimeout(shoot, 0);
-                    setTimeout(shoot, 100);
-                    setTimeout(shoot, 200);
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to complete goal');
+                    return;
                 }
 
-                return { ...goal, completed: newCompletedState };
+                // Trigger confetti when goal is completed
+                const defaults = {
+                    spread: 360,
+                    ticks: 50,
+                    gravity: 0,
+                    decay: 0.94,
+                    startVelocity: 30,
+                    colors: ["#FFE400", "#FFBD00", "#E89400", "#FFCA6C", "#FDFFB8"],
+                };
+
+                const shoot = () => {
+                    confetti({
+                        ...defaults,
+                        particleCount: 40,
+                        scalar: 1.2,
+                        shapes: ["star"],
+                    });
+                    confetti({
+                        ...defaults,
+                        particleCount: 10,
+                        scalar: 0.75,
+                        shapes: ["circle"],
+                    });
+                };
+
+                setTimeout(shoot, 0);
+                setTimeout(shoot, 100);
+                setTimeout(shoot, 200);
+            } catch (error) {
+                console.error('Complete goal error:', error);
+                alert('Failed to complete goal');
+                return;
             }
-            return goal;
+        }
+
+        // Update local state
+        const updatedGoals = goals.map((g) => {
+            if (g.id === goalId) {
+                return { ...g, completed: newCompletedState };
+            }
+            return g;
         });
-        saveGoals(updatedGoals);
+        setGoals(updatedGoals);
     };
 
-    const deleteGoal = (goalId) => {
-        if (confirm("Are you sure you want to delete this goal?")) {
-            saveGoals(goals.filter((goal) => goal.id !== goalId));
+    const deleteGoal = async (goalId) => {
+        if (!confirm("Are you sure you want to delete this goal?")) {
+            return;
+        }
+
+        try {
+            const response = await api.post('/api/goals/goal-status', {
+                goalId,
+                isDelete: true,
+                isComplete: false
+            });
+
+            if (response.ok) {
+                // Remove from local state
+                setGoals(goals.filter((goal) => goal.id !== goalId));
+            } else {
+                const error = await response.json();
+                alert(error.error || 'Failed to delete goal');
+            }
+        } catch (error) {
+            console.error('Delete goal error:', error);
+            alert('Failed to delete goal');
         }
     };
 
@@ -298,16 +345,34 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
         return suggestions.slice(0, 5);
     };
 
-    const checkInGoal = (goalId) => {
-        const updatedGoals = goals.map((goal) => {
-            if (goal.id === goalId) {
-                const checkIns = [...(goal.checkIns || []), new Date().toISOString()];
-                const progress = Math.min(100, (checkIns.length / goal.targetDays) * 100);
-                return { ...goal, checkIns, progress };
+    const checkInGoal = async (goalId) => {
+        try {
+            const response = await api.patch(`/api/goals/${goalId}`, {});
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Update local state with response data
+                const updatedGoals = goals.map((goal) => {
+                    if (goal.id === goalId) {
+                        return {
+                            ...goal,
+                            checkIns: data.goal.checkIns,
+                            progress: data.goal.progress,
+                            completed: data.goal.completed
+                        };
+                    }
+                    return goal;
+                });
+                setGoals(updatedGoals);
+            } else {
+                const error = await response.json();
+                alert(error.error || 'Failed to check in');
             }
-            return goal;
-        });
-        saveGoals(updatedGoals);
+        } catch (error) {
+            console.error('Check-in error:', error);
+            alert('Failed to check in');
+        }
     };
 
     const getCategoryColor = (category) => {
@@ -331,9 +396,14 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                 <meta property="og:url" content="https://www.tara4u.com/goals" />
             </Head>
 
-            {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+            <LoginModal
+                isOpen={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+                onLoginSuccess={handleLoginSuccess}
+                showCloseButton={false}
+            />
 
-            <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-50 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
+            <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-50 ${showLoginModal ? 'blur-sm pointer-events-none' : ''}`}>
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">

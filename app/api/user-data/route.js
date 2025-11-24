@@ -45,9 +45,12 @@ export async function GET(request) {
         }
 
         return NextResponse.json({
-            journals: userData.journals || [],
-            goals: userData.goals || [],
-            moods: userData.moods || []
+            success: true,
+            data: {
+                journals: userData.journals || [],
+                goals: userData.goals || [],
+                moods: userData.moods || []
+            }
         });
 
     } catch (error) {

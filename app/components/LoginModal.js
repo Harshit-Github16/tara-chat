@@ -10,7 +10,7 @@ import ClientOnly from "./ClientOnly";
 import { signInWithGoogle } from "../../lib/firebase";
 import { useAuth } from "../contexts/AuthContext";
 
-export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
+export default function LoginModal({ isOpen, onClose, onLoginSuccess, showCloseButton = true }) {
     const router = useRouter();
     const { user, loading: authLoading, checkAuth } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -38,9 +38,16 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             console.log('Refreshing AuthContext...');
             await checkAuth();
 
+            // Check if there's a redirect URL stored
+            const redirectUrl = localStorage.getItem('redirectAfterLogin');
+
             // Call success callback
             if (onLoginSuccess) {
                 onLoginSuccess(isNewUser, user);
+            } else if (redirectUrl && redirectUrl !== '/') {
+                // If there's a stored redirect URL and no custom callback, redirect there
+                localStorage.removeItem('redirectAfterLogin');
+                router.push(redirectUrl);
             }
 
             // Close modal
@@ -58,13 +65,15 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
-                {/* Close Button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                >
-                    <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-gray-600" />
-                </button>
+                {/* Close Button - Only show on home page */}
+                {showCloseButton && (
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                    >
+                        <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-gray-600" />
+                    </button>
+                )}
 
                 <div className="p-8">
                     {/* Header */}

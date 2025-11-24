@@ -67,6 +67,23 @@ export default function Home() {
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
+  // Check for openLogin and showOnboarding query parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get('openLogin') === 'true') {
+      setShowLoginModal(true);
+      // Clean up URL without reloading
+      window.history.replaceState({}, '', '/');
+    }
+
+    if (urlParams.get('showOnboarding') === 'true') {
+      setShowOnboardingModal(true);
+      // Clean up URL without reloading
+      window.history.replaceState({}, '', '/');
+    }
+  }, []);
+
   // Track active section on scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -99,15 +116,31 @@ export default function Home() {
   };
 
   const handleLoginSuccess = (isNewUser, userData) => {
+    // Check if there's a redirect URL stored
+    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+
     if (isNewUser || !userData.isOnboardingComplete) {
       setShowOnboardingModal(true);
+    } else if (redirectUrl && redirectUrl !== '/') {
+      // Redirect to the stored URL
+      localStorage.removeItem('redirectAfterLogin');
+      router.push(redirectUrl);
     } else {
       router.push('/welcome');
     }
   };
 
   const handleOnboardingComplete = () => {
-    router.push('/welcome');
+    // Check if there's a redirect URL stored
+    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+
+    if (redirectUrl && redirectUrl !== '/') {
+      // Redirect to the stored URL
+      localStorage.removeItem('redirectAfterLogin');
+      router.push(redirectUrl);
+    } else {
+      router.push('/welcome');
+    }
   };
 
   const handleTalkNowClick = (e) => {

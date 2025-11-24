@@ -4,18 +4,17 @@ import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import LoginPromptOverlay from "../components/LoginPromptOverlay";
+import LoginModal from "../components/LoginModal";
 import { useAuth } from "../contexts/AuthContext";
 import { InsightsProvider, useInsights } from "../contexts/InsightsContext";
 import BottomNav from "../components/BottomNav";
-import MoodMeterChart, { calculateAverageMoodScore } from "../components/MoodMeterChart";
+import MoodMeterChart from "../components/MoodMeterChart";
 import EmotionalWheel from "../components/EmotionalWheel";
 import EmotionalFlowerChart from "../components/EmotionalFlowerChart";
 import LifeAreaSuggestions from "../components/LifeAreaSuggestions";
+import MoodTriggers from "../components/MoodTriggers";
 import {
     faChartLine,
-    faBookOpen,
-    faComments,
     faUser,
     faFire,
     faHeart,
@@ -24,6 +23,7 @@ import {
     faCalendar,
     faClock,
     faNewspaper,
+    faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 
 function InsightsPageContent() {
@@ -34,19 +34,23 @@ function InsightsPageContent() {
     const [checkInDates, setCheckInDates] = useState([]);
 
     const [streak, setStreak] = useState(0);
-    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
 
     // Check if user is logged in
     useEffect(() => {
         if (!authLoading && !user) {
-            setShowLoginPrompt(true);
+            setShowLoginModal(true);
         } else {
-            setShowLoginPrompt(false);
+            setShowLoginModal(false);
         }
     }, [user, authLoading]);
 
-    const handleLoginClick = () => {
-        router.push('/');
+    const handleLoginSuccess = (isNewUser, userData) => {
+        if (isNewUser || !userData.isOnboardingComplete) {
+            router.push('/?showOnboarding=true');
+        } else {
+            setShowLoginModal(false);
+        }
     };
 
     // Calculate insights when moodData changes
@@ -80,9 +84,14 @@ function InsightsPageContent() {
                 <meta property="og:url" content="https://www.tara4u.com/insights" />
             </Head>
 
-            {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+            <LoginModal
+                isOpen={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+                onLoginSuccess={handleLoginSuccess}
+                showCloseButton={false}
+            />
 
-            <div className={`min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
+            <div className={`min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginModal ? 'blur-sm pointer-events-none' : ''}`}>
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
@@ -165,32 +174,12 @@ function InsightsPageContent() {
                         <ChartCard title="Check-in Calendar" icon={faCalendar}>
                             <CheckInStreak checkInDates={checkInDates} loading={loading} />
                         </ChartCard>
-                        <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gray-50/80 backdrop-blur-sm z-10 flex items-center justify-center">
-                                <div className="text-center px-4">
-                                    <div className="text-3xl mb-2">🔒</div>
-                                    <div className="text-sm font-semibold text-gray-700 mb-1">Chat atleast 7 days to get insights</div>
-                                    <div className="text-xs text-gray-500">Keep chatting to unlock this feature</div>
-                                </div>
-                            </div>
-                            <h3 className="mb-4 text-lg font-semibold text-gray-900">Mood Triggers</h3>
-                            <div className="space-y-3 opacity-30">
-                                {MOOD_TRIGGERS.map((trigger, i) => (
-                                    <div key={i} className="flex items-center justify-between">
-                                        <span className="text-sm text-gray-700">{trigger.name}</span>
-                                        <div className="flex items-center gap-2">
-                                            <div className="h-2 w-16 rounded-full bg-gray-200">
-                                                <div
-                                                    className="h-2 rounded-full bg-rose-500"
-                                                    style={{ width: `${trigger.impact}%` }}
-                                                />
-                                            </div>
-                                            <span className="text-xs text-gray-500">{trigger.impact}%</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+
+                        {/* Mood Triggers - ACTIVE */}
+                        <ChartCard title="Mood Triggers" icon={faBolt}>
+                            <MoodTriggers />
+                        </ChartCard>
+
                         {/* Emotional Wheel - ACTIVE */}
                         <ChartCard title="Emotional Wheel" icon={faBullseye}>
                             <EmotionalFlowerChart />
@@ -305,17 +294,7 @@ function MoodScoreCard({ moodData, weeklyAverage, loading }) {
     );
 }
 
-function DisabledChart() {
-    return (
-        <div className="flex items-center justify-center h-64 bg-gray-50 rounded-xl relative">
-            <div className="text-center px-4">
-                <div className="text-4xl mb-3">🔒</div>
-                <div className="text-base font-semibold text-gray-700 mb-2">Chat atleast 7 days to get insights</div>
-                <div className="text-sm text-gray-500">Keep chatting with TARA to unlock detailed insights</div>
-            </div>
-        </div>
-    );
-}
+
 
 function ChartCard({ title, icon, children, disabled }) {
     return (
@@ -330,196 +309,6 @@ function ChartCard({ title, icon, children, disabled }) {
         </div>
     );
 }
-
-function MoodMeter({ moodData = [], loading }) {
-    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
-    // Updated mood emoji mapping with new moods
-    const moodEmojis = {
-        'calm': '�',
-        'happy': '😊',
-        'grateful': '�',
-        'motivated': '�',
-        'healing': '🌱',
-        'lost': '🤔',
-        'lonely': '😔',
-        'sad': '😢',
-        'stressed': '😰',
-        'anxious': '😟',
-        'overwhelmed': '😵',
-        'angry': '😠'
-    };
-
-    // Create chart data for last 7 days
-    const chartData = [];
-    const moodsWithData = [];
-
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
-        const dayName = dayNames[date.getDay()];
-
-        // Find ALL mood entries for this specific date
-        const dayMoods = moodData.filter(m => m.date === dateStr);
-
-        // Calculate average mood for this day
-        let avgDayMood = 0;
-        let hasData = false;
-        let dominantMood = null;
-
-        if (dayMoods.length > 0) {
-            const total = dayMoods.reduce((sum, m) => {
-                // Intensity should be 1-5 now
-                const intensity = m.intensity || 3;
-                return sum + intensity;
-            }, 0);
-            avgDayMood = total / dayMoods.length;
-            hasData = true;
-
-            // Get the most recent mood for the day
-            dominantMood = dayMoods[dayMoods.length - 1].mood;
-
-            // Store moods with actual intensity for overall average
-            dayMoods.forEach(m => {
-                moodsWithData.push({
-                    ...m,
-                    actualIntensity: m.intensity || 3
-                });
-            });
-        }
-
-        chartData.push({
-            day: dayName,
-            mood: avgDayMood,
-            hasData: hasData,
-            count: dayMoods.length,
-            dominantMood: dominantMood
-        });
-    }
-
-    const avgIntensity = moodsWithData.length > 0
-        ? (moodsWithData.reduce((sum, m) => sum + m.actualIntensity, 0) / moodsWithData.length).toFixed(1)
-        : 0;
-
-    if (loading) {
-        return <div className="text-center text-gray-500 py-8">Loading...</div>;
-    }
-
-    if (moodData.length === 0) {
-        return <div className="text-center text-gray-500 py-8">No mood data yet. Start checking in!</div>;
-    }
-
-    // Calculate SVG path for smooth curve
-    const width = 100;
-    const height = 80;
-    const paddingLeft = 8;
-    const paddingRight = 5;
-    const paddingTop = 10;
-    const paddingBottom = 10;
-    const chartWidth = width - paddingLeft - paddingRight;
-    const chartHeight = height - paddingTop - paddingBottom;
-
-    // Create points for the curve - 0 is at center, +5 is top, -5 is bottom
-    const points = chartData.map((item, i) => {
-        const x = paddingLeft + (i * (chartWidth / 6));
-        // Map intensity 1-5 to -5 to +5 scale (1 = -5, 3 = 0, 5 = +5)
-        const scaledValue = item.hasData ? ((item.mood - 3) * 2.5) : 0;
-        // Map to Y coordinate (top = +5, center = 0, bottom = -5)
-        const y = (height / 2) - (scaledValue * (chartHeight / 10));
-        return { x, y, hasData: item.hasData, mood: item.mood };
-    });
-
-    // Create smooth curve path using catmull-rom style curves
-    let pathD = '';
-    if (points.length > 0) {
-        pathD = `M ${points[0].x} ${points[0].y}`;
-
-        for (let i = 0; i < points.length - 1; i++) {
-            const current = points[i];
-            const next = points[i + 1];
-
-            // Control points for smooth curve
-            const cp1x = current.x + (next.x - current.x) / 3;
-            const cp1y = current.y;
-            const cp2x = current.x + 2 * (next.x - current.x) / 3;
-            const cp2y = next.y;
-
-            pathD += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${next.x} ${next.y}`;
-        }
-    }
-
-    return (
-        <div className="space-y-6">
-            {/* Title */}
-            <div className="text-center">
-                <h3 className="text-lg font-bold text-gray-800">Weekly Mood</h3>
-            </div>
-
-            {/* SVG Chart */}
-            <div className="relative pl-6">
-                <svg
-                    viewBox={`0 0 ${width} ${height}`}
-                    className="w-full h-40"
-                    preserveAspectRatio="xMidYMid meet"
-                >
-                    {/* Mood curve with gradient */}
-                    <defs>
-                        {/* Horizontal gradient for smooth color transition */}
-                        <linearGradient id="moodGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="#a5b4fc" />
-                            <stop offset="40%" stopColor="#5eead4" />
-                            <stop offset="100%" stopColor="#86efac" />
-                        </linearGradient>
-                    </defs>
-
-                    {/* Main curve line - smooth wave */}
-                    {pathD && (
-                        <path
-                            d={pathD}
-                            fill="none"
-                            stroke="url(#moodGradient)"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    )}
-                </svg>
-
-                {/* Y-axis labels */}
-                <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-400 py-2">
-                    <span>+5</span>
-                    <span className="py-1">0</span>
-                    <span>−5</span>
-                </div>
-            </div>
-
-            {/* Day labels with mood emojis */}
-            <div className="flex justify-between items-center px-4">
-                {chartData.map((item, i) => (
-                    <div key={i} className="flex flex-col items-center gap-1">
-                        {/* Mood emoji */}
-                        <div className="text-2xl">
-                            {item.hasData && item.dominantMood ? moodEmojis[item.dominantMood] || '😊' : '😐'}
-                        </div>
-                        {/* Day name */}
-                        <span className="text-xs text-gray-500">{item.day}</span>
-                    </div>
-                ))}
-            </div>
-
-            {/* Average intensity with color coding */}
-            <div className="text-center text-sm text-gray-600 pt-4 border-t border-gray-100">
-                Average intensity this week: <span className={`font-semibold ${avgIntensity >= 3.5 ? 'text-green-600' :
-                    avgIntensity >= 2.5 ? 'text-yellow-600' :
-                        'text-red-600'
-                    }`}>{avgIntensity}/5</span>
-            </div>
-        </div>
-    );
-}
-
-
 
 function CheckInStreak({ checkInDates = [], loading }) {
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -608,97 +397,6 @@ function CheckInStreak({ checkInDates = [], loading }) {
     );
 }
 
-function SupportRadar() {
-    const categories = [
-        { name: "Family", value: 85 },
-        { name: "Friends", value: 70 },
-        { name: "Work", value: 60 },
-        { name: "Health", value: 90 },
-        { name: "Hobbies", value: 75 },
-        { name: "Goals", value: 80 },
-    ];
-
-    return (
-        <div className="relative mx-auto h-48 w-48">
-            {[20, 40, 60, 80, 100].map((radius) => (
-                <div
-                    key={radius}
-                    className="absolute border border-gray-200 rounded-full"
-                    style={{
-                        width: `${radius}%`,
-                        height: `${radius}%`,
-                        left: `${(100 - radius) / 2}%`,
-                        top: `${(100 - radius) / 2}%`,
-                    }}
-                />
-            ))}
-
-            {categories.map((category, i) => {
-                const angle = (i * 60) - 90;
-                const radius = (category.value / 100) * 40;
-                const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
-                const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
-
-                return (
-                    <div key={category.name}>
-                        <div
-                            className="absolute bg-rose-300"
-                            style={{
-                                left: '50%',
-                                top: '50%',
-                                width: '1px',
-                                height: `${radius}%`,
-                                transformOrigin: 'top',
-                                transform: `rotate(${angle + 90}deg)`,
-                            }}
-                        />
-                        <div
-                            className="absolute h-3 w-3 rounded-full bg-rose-500"
-                            style={{
-                                left: `${x}%`,
-                                top: `${y}%`,
-                                transform: 'translate(-50%, -50%)'
-                            }}
-                        />
-                        <div
-                            className="absolute text-xs text-gray-600"
-                            style={{
-                                left: `${50 + 45 * Math.cos((angle * Math.PI) / 180)}%`,
-                                top: `${50 + 45 * Math.sin((angle * Math.PI) / 180)}%`,
-                                transform: 'translate(-50%, -50%)'
-                            }}
-                        >
-                            {category.name}
-                        </div>
-                    </div>
-                );
-            })}
-        </div>
-    );
-}
-
-function MobileNavLink({ href, icon, label, active, disabled }) {
-    if (disabled) {
-        return (
-            <div className="flex flex-col items-center gap-1 rounded-xl px-2 py-2 text-gray-400 opacity-50 cursor-not-allowed">
-                <FontAwesomeIcon icon={icon} className="h-5 w-5" />
-                {label}
-            </div>
-        );
-    }
-
-    return (
-        <Link
-            href={href}
-            className={`flex flex-col items-center gap-1 rounded-xl px-2 py-2 ${active ? "text-rose-600" : "text-gray-600"
-                }`}
-        >
-            <FontAwesomeIcon icon={icon} className="h-5 w-5" />
-            {label}
-        </Link>
-    );
-}
-
 export default function InsightsPage() {
     return (
         <InsightsProvider>
@@ -706,34 +404,3 @@ export default function InsightsPage() {
         </InsightsProvider>
     );
 }
-
-const MOOD_TRIGGERS = [
-    { name: "Work Stress", impact: 85 },
-    { name: "Sleep Quality", impact: 70 },
-    { name: "Exercise", impact: 60 },
-    { name: "Social Media", impact: 45 },
-    { name: "Weather", impact: 30 },
-];
-
-const SUGGESTIONS = [
-    {
-        icon: faBrain,
-        title: "Try 5-minute meditation",
-        desc: "Your stress levels are high today"
-    },
-    {
-        icon: faHeart,
-        title: "Call a friend",
-        desc: "Social connection boosts mood"
-    },
-    {
-        icon: faBullseye,
-        title: "Take a short walk",
-        desc: "Physical activity helps anxiety"
-    },
-    {
-        icon: faBookOpen,
-        title: "Journal your thoughts",
-        desc: "Writing helps process emotions"
-    },
-];

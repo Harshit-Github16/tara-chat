@@ -1,19 +1,69 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Image from "next/image";
+import { signInWithGoogle } from "../../lib/firebase";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginPromptOverlay({ onLoginClick }) {
     const router = useRouter();
+    const pathname = usePathname();
+    const { checkAuth } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleLoginClick = () => {
+    // Store current page URL for redirect after login
+    useEffect(() => {
+        if (pathname && pathname !== '/') {
+            localStorage.setItem('redirectAfterLogin', pathname);
+        }
+    }, [pathname]);
+
+    const handleLoginClick = async () => {
         if (onLoginClick) {
             onLoginClick();
-        } else {
-            router.push('/');
+            return;
+        }
+
+        // Direct Google login from overlay
+        setLoading(true);
+        setError("");
+
+        try {
+            // Store redirect URL
+            if (pathname && pathname !== '/') {
+                localStorage.setItem('redirectAfterLogin', pathname);
+            }
+
+            console.log('Starting Google login from overlay...');
+            const { user, isNewUser } = await signInWithGoogle();
+            console.log('Login successful, user:', user, 'isNewUser:', isNewUser);
+
+            // Refresh auth context
+            await checkAuth();
+
+            // Check if there's a redirect URL
+            const redirectUrl = localStorage.getItem('redirectAfterLogin');
+
+            if (isNewUser || !user.isOnboardingComplete) {
+                // New user or incomplete onboarding - go to home for onboarding
+                router.push('/?showOnboarding=true');
+            } else if (redirectUrl && redirectUrl !== '/') {
+                // Existing user with complete onboarding - redirect back
+                localStorage.removeItem('redirectAfterLogin');
+                router.push(redirectUrl);
+            } else {
+                // Default - go to welcome
+                router.push('/welcome');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            setError(error.message || "Failed to sign in. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,16 +97,33 @@ export default function LoginPromptOverlay({ onLoginClick }) {
                         Please sign in to access this feature and start your emotional wellness journey
                     </p>
 
+                    {/* Error Message */}
+                    {error && (
+                        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl">
+                            <p className="text-sm text-red-600 text-center">{error}</p>
+                        </div>
+                    )}
+
                     {/* Login Button */}
                     <button
                         onClick={handleLoginClick}
-                        className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-400 to-rose-600 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                        disabled={loading}
+                        className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-400 to-rose-600 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div className="relative flex items-center justify-center gap-3">
-                            <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
-                            <span>Sign in with Google</span>
-                            <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            {loading ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <span>Signing you in...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <FontAwesomeIcon icon={faGoogle} className="h-5 w-5" />
+                                    <span>Sign in with Google</span>
+                                    <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                </>
+                            )}
                         </div>
                     </button>
 

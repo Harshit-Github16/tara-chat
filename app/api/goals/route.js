@@ -1,11 +1,51 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 
-// POST - Create new goal or Update all goals (check for 'goals' array in body)
+// OPTIONS - Handle CORS preflight
+export async function OPTIONS(request) {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+    });
+}
+
+// POST - Create new goal
 export async function POST(request) {
     try {
-        const body = await request.json();
-        const { userId, goals, title, category, targetDays, description, why, howToAchieve } = body;
+        let body;
+        try {
+            body = await request.json();
+        } catch (parseError) {
+            return NextResponse.json({
+                error: 'Invalid JSON in request body'
+            }, { status: 400 });
+        }
+
+        const { title, category, targetDays, description, why, howToAchieve } = body;
+
+        // Get authorization header
+        const authHeader = request.headers.get('authorization');
+
+        let userId;
+
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const token = authHeader.split(' ')[1];
+            const { verifyToken } = await import('../../../lib/jwt');
+            const decoded = verifyToken(token);
+
+            if (!decoded) {
+                return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+            }
+
+            userId = decoded.firebaseUid || decoded.userId;
+        } else {
+            // Fallback to body userId
+            userId = body.userId;
+        }
 
         if (!userId) {
             return NextResponse.json({
@@ -13,22 +53,18 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        // If 'goals' array exists, update all goals
-        if (goals) {
-            return await updateAllGoals(userId, goals);
-        }
-
-        // Otherwise, create a new goal
+        // Create a new goal
         if (!title || !why || !howToAchieve) {
             return NextResponse.json({
-                error: 'Missing required fields for creating goal'
+                error: 'Missing required fields: title, why, howToAchieve',
+                received: { title: !!title, why: !!why, howToAchieve: !!howToAchieve }
             }, { status: 400 });
         }
 
         return await createGoal(userId, { title, category, targetDays, description, why, howToAchieve });
 
     } catch (error) {
-        console.error('Goals API Error:', error);
+        console.error('Goals API POST Error:', error);
         return NextResponse.json(
             { error: 'Failed to process request', details: error.message },
             { status: 500 }
@@ -90,52 +126,35 @@ async function createGoal(userId, goalData) {
     }
 }
 
-// Helper function to update all goals
-async function updateAllGoals(userId, goals) {
-    try {
-        const client = await clientPromise;
-        const db = client.db('tara');
-        const collection = db.collection('users');
 
-        // Update all goals
-        const result = await collection.updateOne(
-            { firebaseUid: userId },
-            {
-                $set: {
-                    goals: goals,
-                    lastUpdated: new Date()
-                }
-            }
-        );
-
-        if (result.modifiedCount === 0) {
-            return NextResponse.json({
-                error: 'User not found or no changes made'
-            }, { status: 404 });
-        }
-
-        return NextResponse.json({
-            success: true,
-            goals: goals
-        });
-
-    } catch (error) {
-        console.error('Update Goals Error:', error);
-        return NextResponse.json(
-            { error: 'Failed to update goals', details: error.message },
-            { status: 500 }
-        );
-    }
-}
 
 export async function GET(request) {
     try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
+        // Get authorization header
+        const authHeader = request.headers.get('authorization');
+
+        // Support both token-based and query param based auth (for backward compatibility)
+        let userId;
+
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const token = authHeader.split(' ')[1];
+            const { verifyToken } = await import('../../../lib/jwt');
+            const decoded = verifyToken(token);
+
+            if (!decoded) {
+                return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+            }
+
+            userId = decoded.firebaseUid || decoded.userId;
+        } else {
+            // Fallback to query param
+            const { searchParams } = new URL(request.url);
+            userId = searchParams.get('userId');
+        }
 
         if (!userId) {
             return NextResponse.json({
-                error: 'User ID is required'
+                error: 'User ID is required. Use ?userId=YOUR_USER_ID or provide Authorization header'
             }, { status: 400 });
         }
 
@@ -147,13 +166,64 @@ export async function GET(request) {
 
         if (!userData) {
             return NextResponse.json({
-                error: 'User not found'
+                error: 'User not found',
+                userId: userId
             }, { status: 404 });
         }
 
+        const goals = userData.goals || [];
+
+        // Calculate progress for each goal
+        const goalsWithProgress = goals.map(goal => {
+            const checkIns = goal.checkIns || [];
+            const targetDays = goal.targetDays || 30;
+            const progress = Math.min(Math.round((checkIns.length / targetDays) * 100), 100);
+            const completed = progress >= 100;
+
+            // Calculate streak (consecutive days)
+            let streak = 0;
+            if (checkIns.length > 0) {
+                const sortedCheckIns = [...checkIns].sort((a, b) => new Date(b) - new Date(a));
+                const today = new Date().toISOString().split('T')[0];
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+                // Check if checked in today or yesterday
+                if (sortedCheckIns[0] === today || sortedCheckIns[0] === yesterdayStr) {
+                    streak = 1;
+
+                    // Count consecutive days
+                    for (let i = 1; i < sortedCheckIns.length; i++) {
+                        const currentDate = new Date(sortedCheckIns[i - 1]);
+                        const previousDate = new Date(sortedCheckIns[i]);
+
+                        const diffTime = currentDate - previousDate;
+                        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                        if (diffDays === 1) {
+                            streak++;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return {
+                ...goal,
+                progress,
+                completed,
+                streak,
+                totalCheckIns: checkIns.length
+            };
+        });
+
         return NextResponse.json({
             success: true,
-            goals: userData.goals || []
+            userId: userId,
+            totalGoals: goalsWithProgress.length,
+            goals: goalsWithProgress
         });
 
     } catch (error) {
@@ -167,46 +237,4 @@ export async function GET(request) {
 
 
 
-export async function DELETE(request) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
-        const goalId = searchParams.get('goalId');
 
-        if (!userId || !goalId) {
-            return NextResponse.json({
-                error: 'User ID and Goal ID are required'
-            }, { status: 400 });
-        }
-
-        const client = await clientPromise;
-        const db = client.db('tara');
-        const collection = db.collection('users');
-
-        // Remove goal from user's goals array
-        const result = await collection.updateOne(
-            { firebaseUid: userId },
-            {
-                $pull: { goals: { id: goalId } },
-                $set: { lastUpdated: new Date() }
-            }
-        );
-
-        if (result.modifiedCount === 0) {
-            return NextResponse.json({
-                error: 'User or goal not found'
-            }, { status: 404 });
-        }
-
-        return NextResponse.json({
-            success: true
-        });
-
-    } catch (error) {
-        console.error('Goals API Error:', error);
-        return NextResponse.json(
-            { error: 'Failed to delete goal', details: error.message },
-            { status: 500 }
-        );
-    }
-}

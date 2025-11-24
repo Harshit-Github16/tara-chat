@@ -100,7 +100,20 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                 const response = await api.post('/api/onboarding', formData);
                 if (response.ok) {
                     await checkAuth();
-                    if (onComplete) onComplete();
+
+                    // Check if there's a redirect URL stored
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin');
+
+                    if (onComplete) {
+                        onComplete();
+                    } else if (redirectUrl && redirectUrl !== '/') {
+                        // If there's a stored redirect URL and no custom callback, redirect there
+                        localStorage.removeItem('redirectAfterLogin');
+                        router.push(redirectUrl);
+                    } else {
+                        router.push('/welcome');
+                    }
+
                     onClose();
                 }
             } catch (error) {

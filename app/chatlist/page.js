@@ -5,7 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
 import TaraChat from "../components/TaraChat";
-import LoginPromptOverlay from "../components/LoginPromptOverlay";
+import LoginModal from "../components/LoginModal";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -81,19 +81,23 @@ export default function ChatListPage() {
   const { user, loading } = useAuth();
   const defaultTaraChat = { id: "tara-ai", name: "TARA AI", last: "", unread: 0, avatar: "/taralogo.jpg" };
   const [chats, setChats] = useState([defaultTaraChat]);
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Check if user is logged in
   useEffect(() => {
     if (!loading && !user) {
-      setShowLoginPrompt(true);
+      setShowLoginModal(true);
     } else {
-      setShowLoginPrompt(false);
+      setShowLoginModal(false);
     }
   }, [user, loading]);
 
-  const handleLoginClick = () => {
-    router.push('/');
+  const handleLoginSuccess = (isNewUser, userData) => {
+    if (isNewUser || !userData.isOnboardingComplete) {
+      router.push('/?showOnboarding=true');
+    } else {
+      setShowLoginModal(false);
+    }
   };
   const [activeId, setActiveId] = useState("tara-ai");
   const [message, setMessage] = useState("");
@@ -959,9 +963,14 @@ export default function ChatListPage() {
         <meta property="og:url" content="https://www.tara4u.com/chatlist" />
       </Head>
 
-      {showLoginPrompt && <LoginPromptOverlay onLoginClick={handleLoginClick} />}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLoginSuccess={handleLoginSuccess}
+        showCloseButton={false}
+      />
 
-      <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginPrompt ? 'blur-sm pointer-events-none' : ''}`}>
+      <div className={`flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100 ${showLoginModal ? 'blur-sm pointer-events-none' : ''}`}>
         {/* Header */}
         <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/80 backdrop-blur-md">
           <div className="mx-auto flex  items-center justify-between px-3 sm:px-4 py-3">
