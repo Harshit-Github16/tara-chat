@@ -41,25 +41,25 @@ export default function ProfileCompletionCircle({ size = "md", showPercentage = 
     // Size configurations
     const sizeConfig = {
         sm: {
-            container: "w-8 h-8",
+            container: "w-6 h-6",
             icon: "h-3 w-3",
             stroke: 2,
             radius: 14,
             text: "text-[8px]"
         },
         md: {
-            container: "w-10 h-10",
+            container: "w-9 h-9",
             icon: "h-4 w-4",
             stroke: 2.5,
             radius: 18,
             text: "text-[9px]"
         },
         lg: {
-            container: "w-16 h-16",
-            icon: "h-7 w-7",
+            container: "w-10 h-10",
+            icon: "h-6 w-6",
             stroke: 3,
             radius: 28,
-            text: "text-xs"
+            text: "text-[8px]"
         }
     };
 
