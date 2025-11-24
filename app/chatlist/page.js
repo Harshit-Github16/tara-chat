@@ -28,6 +28,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import BottomNav from "../components/BottomNav";
+import ProfileCompletionCircle from "../components/ProfileCompletionCircle";
 
 
 
@@ -991,9 +992,9 @@ export default function ChatListPage() {
               <span className="text-base sm:text-lg font-semibold text-rose-600">Tara4u</span>
             </div>
 
-            {/* Profile Icon */}
-            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
-              <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+            {/* Profile Icon with Completion Circle */}
+            <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100 transition-colors">
+              <ProfileCompletionCircle size="md" showPercentage={false} />
             </Link>
           </div>
         </header>

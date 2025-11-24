@@ -9,6 +9,7 @@ import LoginModal from "../components/LoginModal";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
 import BottomNav from "../components/BottomNav";
+import ProfileCompletionCircle from "../components/ProfileCompletionCircle";
 
 export default function JournalPage() {
   const router = useRouter();
@@ -143,9 +144,9 @@ export default function JournalPage() {
               <span className="text-lg font-semibold text-rose-600">Tara4u</span>
             </Link>
 
-            {/* Profile Icon */}
-            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
-              <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+            {/* Profile Icon with Completion Circle */}
+            <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100 transition-colors">
+              <ProfileCompletionCircle size="md" showPercentage={false} />
             </Link>
 
           </div>

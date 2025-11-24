@@ -5,6 +5,7 @@ import { api } from "../../lib/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BottomNav from "../components/BottomNav";
 import ThemeSelector from "../components/ThemeSelector";
+import ProfileCompletionCircle from "../components/ProfileCompletionCircle";
 import {
     faUser,
     faEdit,
@@ -337,8 +338,8 @@ export default function ProfilePage() {
                         <div className="rounded-2xl border border-rose-100 bg-white shadow-sm overflow-hidden">
                             <div className="px-6 py-8" style={{ background: 'var(--gradient-header)' }}>
                                 <div className="flex items-center gap-6">
-                                    <div className="h-20 w-20 rounded-full bg-white/80 flex items-center justify-center shadow-sm">
-                                        <FontAwesomeIcon icon={faUser} className="h-10 w-10 text-rose-400" />
+                                    <div className="relative">
+                                        <ProfileCompletionCircle size="lg" showPercentage={true} />
                                     </div>
                                     <div className="flex-1">
                                         {isEditing ? (
@@ -577,6 +578,9 @@ export default function ProfilePage() {
 
                     {/* Right Column - Stats & Activity */}
                     <div className="space-y-6">
+                        {/* Profile Completion Card */}
+                        <ProfileCompletionCard userProfile={userProfile} />
+
                         {/* Stats Card */}
                         <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
                             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
@@ -681,5 +685,97 @@ function MobileNavLink({ href, icon, label, active, disabled }) {
             <FontAwesomeIcon icon={icon} className="h-5 w-5" />
             {label}
         </Link>
+    );
+}
+
+function ProfileCompletionCard({ userProfile }) {
+    const fields = [
+        { key: 'name', label: 'Name', value: userProfile.name },
+        { key: 'nickname', label: 'Nickname', value: userProfile.nickname },
+        { key: 'phone', label: 'Phone', value: userProfile.phone },
+        { key: 'location', label: 'Location', value: userProfile.location },
+        { key: 'profession', label: 'Profession', value: userProfile.profession },
+        { key: 'bio', label: 'Bio', value: userProfile.bio },
+        { key: 'interests', label: 'Interests', value: userProfile.interests, isArray: true },
+        { key: 'personalityTraits', label: 'Personality', value: userProfile.personalityTraits, isArray: true },
+        { key: 'gender', label: 'Gender', value: userProfile.gender },
+        { key: 'ageRange', label: 'Age Range', value: userProfile.ageRange },
+    ];
+
+    const completedFields = fields.filter(field => {
+        if (field.isArray) {
+            return field.value && Array.isArray(field.value) && field.value.length > 0;
+        }
+        return field.value && field.value.trim() !== '';
+    });
+
+    const incompleteFields = fields.filter(field => {
+        if (field.isArray) {
+            return !field.value || !Array.isArray(field.value) || field.value.length === 0;
+        }
+        return !field.value || field.value.trim() === '';
+    });
+
+    const percentage = Math.round((completedFields.length / fields.length) * 100);
+
+    const getColorClass = () => {
+        if (percentage >= 80) return "text-green-600 bg-green-50 border-green-200";
+        if (percentage >= 50) return "text-orange-600 bg-orange-50 border-orange-200";
+        return "text-rose-600 bg-rose-50 border-rose-200";
+    };
+
+    return (
+        <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-400" />
+                Profile Completion
+            </h3>
+
+            {/* Progress Bar */}
+            <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-600">
+                        {completedFields.length} of {fields.length} completed
+                    </span>
+                    <span className={`text-sm font-bold ${percentage >= 80 ? 'text-green-600' : percentage >= 50 ? 'text-orange-600' : 'text-rose-600'}`}>
+                        {percentage}%
+                    </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                        className={`h-2.5 rounded-full transition-all duration-500 ${percentage >= 80 ? 'bg-green-500' : percentage >= 50 ? 'bg-orange-500' : 'bg-rose-500'}`}
+                        style={{ width: `${percentage}%` }}
+                    ></div>
+                </div>
+            </div>
+
+            {/* Incomplete Fields */}
+            {incompleteFields.length > 0 && (
+                <div className={`rounded-lg border p-3 ${getColorClass()}`}>
+                    <p className="text-xs font-semibold mb-2">Complete your profile:</p>
+                    <ul className="space-y-1">
+                        {incompleteFields.slice(0, 5).map((field) => (
+                            <li key={field.key} className="text-xs flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                {field.label}
+                            </li>
+                        ))}
+                        {incompleteFields.length > 5 && (
+                            <li className="text-xs italic">
+                                +{incompleteFields.length - 5} more fields
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            )}
+
+            {/* Completion Message */}
+            {percentage === 100 && (
+                <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-center">
+                    <p className="text-sm font-semibold text-green-600">🎉 Profile Complete!</p>
+                    <p className="text-xs text-green-600 mt-1">You've filled out all your information</p>
+                </div>
+            )}
+        </div>
     );
 }

@@ -23,6 +23,7 @@ import {
 import LoginModal from "../components/LoginModal";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
+import ProfileCompletionCircle from "../components/ProfileCompletionCircle";
 import confetti from "canvas-confetti";
 
 const GOAL_CATEGORIES = [
@@ -415,8 +416,8 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                             />
                             <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                         </Link>
-                        <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100">
-                            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+                        <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100">
+                            <ProfileCompletionCircle size="md" showPercentage={false} />
                         </Link>
                     </div>
                 </header>
@@ -449,7 +450,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                         onClick={() => setShowModal(true)}
                         className="mb-6 w-full rounded-2xl border-2 border-dashed border-rose-200 bg-rose-50 p-4 text-rose-600 hover:bg-rose-100 transition-colors"
                     >
-                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                        <FontAwesomeIcon icon={faPlus} className="mr-2 h-10 w-10 mx-auto" />
                         Set New Goal
                     </button>
 
