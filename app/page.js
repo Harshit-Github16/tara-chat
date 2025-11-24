@@ -48,6 +48,11 @@ export default function Home() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showMobileFeaturesDropdown, setShowMobileFeaturesDropdown] = useState(false);
   const [dropdownTimeout, setDropdownTimeout] = useState(null);
+  const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const moods = ['Sad', 'Low', 'Stressed', 'Anxious', 'Overwhelmed', 'Pressure at work', 'Financial pressure', 'Need someone to talk to', 'Social pressure', 'Lonely', 'Tired', 'Confused'];
 
   // Cleanup dropdown timeout on unmount
   useEffect(() => {
@@ -55,6 +60,35 @@ export default function Home() {
       if (dropdownTimeout) clearTimeout(dropdownTimeout);
     };
   }, [dropdownTimeout]);
+
+  // Typing effect for mood text
+  useEffect(() => {
+    const currentMood = moods[currentMoodIndex];
+    let timeout;
+
+    if (!isDeleting && displayedText === currentMood) {
+      // Pause before deleting
+      timeout = setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && displayedText === '') {
+      // Move to next mood
+      setIsDeleting(false);
+      setCurrentMoodIndex((prevIndex) => (prevIndex + 1) % moods.length);
+    } else {
+      // Type or delete character
+      const typingSpeed = isDeleting ? 50 : 100;
+      timeout = setTimeout(() => {
+        setDisplayedText(prev => {
+          if (isDeleting) {
+            return currentMood.substring(0, prev.length - 1);
+          } else {
+            return currentMood.substring(0, prev.length + 1);
+          }
+        });
+      }, typingSpeed);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isDeleting, currentMoodIndex, moods]);
 
   // Handle PWA install prompt
   useEffect(() => {
@@ -303,6 +337,13 @@ export default function Home() {
               )}
             </div>
 
+            <Link
+              href="/about"
+              className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-all duration-300"
+            >
+              About Us
+            </Link>
+
             <a
               href="/blog"
               className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-all duration-300"
@@ -351,7 +392,7 @@ export default function Home() {
               onClick={handleTalkNowClick}
               className="btn-shine rounded-full bg-rose-200 px-5 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
             >
-              Talk Now
+              Start Talking
             </button>
           </div>
         </div>
@@ -416,6 +457,14 @@ export default function Home() {
               </div>
 
               <Link
+                href="/about"
+                className="block text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                About Us
+              </Link>
+
+              <Link
                 href="/blog"
                 className="block text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors py-2"
                 onClick={() => setShowMobileMenu(false)}
@@ -438,7 +487,7 @@ export default function Home() {
                 }}
                 className="w-full mt-4 rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
               >
-                Talk Now
+                Start Talking
               </button>
             </div>
           </div>
@@ -451,87 +500,150 @@ export default function Home() {
           <div className="absolute inset-0 bg-radial-1"></div>
           <div className="absolute inset-0 bg-radial-2"></div>
 
-          <div className="relative mx-auto max-w-7xl px-6 py-20 lg:py-32">
-            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+          <div className="relative mx-auto max-w-[1600px] px-6 lg:px-12 py-12 lg:py-20">
+            <div className="grid grid-cols-1 items-center gap-8 lg:gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               <div className="text-center lg:text-left">
                 {/* <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
                   <span className="font-bold">TARA</span> = Talk, Align, Reflect, Act
                 </div> */}
-                <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                  Talk
-                  <span className="bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent"> Heal </span>
-                  Grow
+                <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl flex flex-wrap items-baseline gap-2">
+                  <span className="text-gray-900">Feeling</span>
+                  <span className="inline-block bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent">
+                    {displayedText}
+                    <span className="animate-blink">|</span>
+                    <span className="text-gray-900">?</span>
+                  </span>
                 </h1>
-                <h2 className="text-2xl font-semibold ">
-                  Your Personal Emotional Wellness Companion
-
-
+                <h2 className="mt-4 text-xl sm:text-2xl font-semibold text-gray-700">
+                  You're stronger than you think, Your mind deserves a place to breathe
                 </h2>
-                <p className="mt-6 text-lg text-gray-600 sm:text-xl">
-                  Connect with 100+ AI characters, track your moods, journal your thoughts,
-                  and get personalized insights for better emotional health.
+                <p className="mt-6 text-lg text-gray-600">
+                  Talk, Align, Reflect, Act (Tara) helps you to heal and find clarity with an AI companion, Tara4u is built to understand your emotions and support your mental wellbeing 24/7 and holds space for your feelings, help you calm the chaos, and guide you back to emotional balance—anytime you need.
                 </p>
-                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                  <button
-                    onClick={handleTalkNowClick}
-                    className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all"
-                  >Get Started
-                    <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </button>
-                  {/* <Link
-                    href="#demo"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-8 py-4 text-base font-medium text-rose-600 hover:bg-rose-200 transition-all"
-                  >
-                    <FontAwesomeIcon icon={faPlay} className="h-4 w-4" />
-                    Watch Demo
-                  </Link> */}
+                {/* Quick reassurance */}
+                <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                    <span>Available 24/7</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                    <span>Completely Private</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                    <span>No Judgment</span>
+                  </div>
                 </div>
 
               </div>
 
-              <div className="relative">
-                <div className="relative rounded-3xl border border-rose-100 bg-white p-6 sm:p-8 shadow-2xl w-full max-w-full lg:min-w-[500px]">
-                  {/* Chat Icon - Top Right Corner */}
-                  <div className="absolute -top-3 -right-3 z-10">
-                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center shadow-lg">
-                      <FontAwesomeIcon icon={faComments} className="h-6 w-6 text-white" />
-                    </div>
-                  </div>
+              {/* Mobile Frame Mockup */}
+              <div className="relative flex justify-center lg:justify-end">
+                {/* Mobile Device Frame */}
+                <div className="relative w-[320px] sm:w-[360px]">
+                  {/* Phone Frame */}
+                  <div className="relative bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
+                    {/* Notch */}
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-10"></div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <FeaturePreview icon={faComments} title="Emotional Chat" desc="Express & reflect" />
-                    <FeaturePreview icon={faBookOpen} title="Smart Journaling" desc="Guided insights" />
-                    <FeaturePreview icon={faChartLine} title="Mood Analytics" desc="Track progress" />
-                    <FeaturePreview icon={faUserAstronaut} title="100+ Characters" desc="Find your guide" />
-                  </div>
-                  <div className="mt-6 rounded-2xl bg-rose-200 p-4">
-                    <div className="flex items-center gap-3">
+                    {/* Screen */}
+                    <div className="relative bg-white rounded-[2.5rem] overflow-hidden h-[600px] sm:h-[650px]">
+                      {/* Chat Header */}
+                      <div className="bg-rose-200 px-4 py-4 flex items-center gap-3 shadow-sm">
+                        <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
+                          <FontAwesomeIcon icon={faHeart} className="h-5 w-5 text-rose-500" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="text-gray-800 font-semibold text-sm">Emotional Support</div>
+                          <div className="text-gray-600 text-xs flex items-center gap-1">
+                            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                            Always here for you
+                          </div>
+                        </div>
+                      </div>
 
-                      <div>
-                        <div className="text-sm font-semibold text-gray-900">Life Coach</div>
-                        <div className="text-xs text-gray-600">Ready to unlock your potential? Let's grow together! 🚀</div>
+                      {/* Chat Messages */}
+                      <div className="p-4 space-y-4 bg-rose-50/30 h-[calc(100%-140px)] overflow-y-auto">
+                        {/* AI Message 1 */}
+                        <div className="flex gap-2 items-start">
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-white" />
+                          </div>
+                          <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
+                            <p className="text-sm text-gray-800">Hi there! I'm here to listen. How are you feeling today? 💙</p>
+                            <span className="text-xs text-gray-400 mt-1 block">Just now</span>
+                          </div>
+                        </div>
+
+                        {/* User Message */}
+                        <div className="flex gap-2 items-start justify-end">
+                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-[75%]">
+                            <p className="text-sm text-gray-800">I'm feeling really stressed about work lately...</p>
+                            <span className="text-xs text-gray-600 mt-1 block text-right">Just now</span>
+                          </div>
+                        </div>
+
+                        {/* AI Message 2 - Typing indicator */}
+                        <div className="flex gap-2 items-start">
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-white" />
+                          </div>
+                          <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
+                            <p className="text-sm text-gray-800">I hear you, and it's completely valid to feel stressed. Work pressure can be overwhelming. Would you like to talk about what's been weighing on you? Sometimes just expressing it can help. 🤗</p>
+                            <span className="text-xs text-gray-400 mt-1 block">Just now</span>
+                          </div>
+                        </div>
+
+                        {/* Typing Indicator */}
+                        <div className="flex gap-2 items-start">
+                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-white" />
+                          </div>
+                          <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm">
+                            <div className="flex gap-1">
+                              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Input Area */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 bg-gray-100 rounded-full px-4 py-2">
+                            <p className="text-sm text-gray-400">Type your message...</p>
+                          </div>
+                          <button className="h-10 w-10 rounded-full bg-gradient-to-r from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                            <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 text-white" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500 lg:justify-start">
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
-                      <span className="whitespace-nowrap">Free to start</span>
+
+                  {/* Floating Badge - Bottom Left */}
+                  <div className="absolute -bottom-6 left-4 bg-white rounded-xl shadow-xl px-3 py-2 border border-rose-100 z-20">
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-green-500" />
+                      <span className="text-xs font-semibold text-gray-800 whitespace-nowrap">100% Private</span>
                     </div>
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
-                      <span className="whitespace-nowrap">End-to-End Encryption</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 text-rose-500 flex-shrink-0" />
-                      <span className="whitespace-nowrap">Non-Judgmental</span>
+                  </div>
+
+                  {/* Floating Badge - Top Right */}
+                  <div className="absolute top-16 -right-6 bg-white rounded-xl shadow-xl px-3 py-2 border border-rose-100 z-20">
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                      <span className="text-xs font-semibold text-gray-800 whitespace-nowrap">Always Online</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-rose-200 opacity-20"></div>
-
-                <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-rose-200 opacity-30"></div>
+                {/* Background Decorations */}
+                <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-rose-200 opacity-20 blur-2xl"></div>
+                <div className="absolute -bottom-8 -left-8 h-40 w-40 rounded-full bg-rose-300 opacity-20 blur-2xl"></div>
               </div>
 
             </div>
@@ -539,9 +651,194 @@ export default function Home() {
 
         </section>
 
+        {/* Benefits Section */}
+        <section className="py-20 bg-white">
+          <div className="mx-auto px-6 lg:px-12">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+                Why Choose Tara?
+              </h2>
+              <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                Transform your emotional wellness with features designed for real results
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+              {/* Benefit 1 - Improved Emotional Stability */}
+              <div className="group relative bg-gradient-to-br from-rose-50 to-white rounded-2xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-rose-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Improved Emotional Stability</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Build resilience and maintain emotional balance through consistent support and guided reflection. Learn to navigate life's ups and downs with confidence.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 2 - Early Detection */}
+              <div className="group relative bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-purple-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-purple-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Early Detection of Mental Health Risks</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    AI-powered mood tracking identifies patterns and potential concerns early, helping you take proactive steps toward better mental health.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 3 - Reduced Stress & Anxiety */}
+              <div className="group relative bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-blue-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faComments} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Reduced Stress & Anxiety</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Express your worries in a judgment-free space. Our AI companions provide calming support and practical coping strategies whenever you need them.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 4 - Goal Setting & Personal Growth */}
+              <div className="group relative bg-gradient-to-br from-green-50 to-white rounded-2xl border border-green-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-green-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faBullseye} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Goal Setting & Personal Growth</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Set meaningful wellness goals and track your progress. AI-powered insights help you stay motivated and celebrate every milestone.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 5 - Purpose & Direction */}
+              <div className="group relative bg-gradient-to-br from-orange-50 to-white rounded-2xl border border-orange-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-orange-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faArrowRight} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Purpose & Direction</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Discover clarity and meaning through guided journaling and reflection. Find your path forward with personalized insights and support.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 6 - Privacy & Safe Space */}
+              <div className="group relative bg-gradient-to-br from-pink-50 to-white rounded-2xl border border-pink-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-pink-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faShield} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Privacy & Safe Space to Express</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Your thoughts are completely private with end-to-end encryption. Express yourself freely without fear of judgment or data breaches.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 7 - Better Sleep Quality */}
+              <div className="group relative bg-gradient-to-br from-indigo-50 to-white rounded-2xl border border-indigo-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-indigo-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faClock} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Better Sleep Quality</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Release daily stress through evening journaling and calming conversations. Clear your mind for more restful, rejuvenating sleep.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 8 - Enhanced Self-Awareness */}
+              <div className="group relative bg-gradient-to-br from-teal-50 to-white rounded-2xl border border-teal-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-teal-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faUser} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Enhanced Self-Awareness</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Understand your emotions, triggers, and patterns better. Gain deep insights into what makes you feel your best and what holds you back.
+                  </p>
+                </div>
+              </div>
+
+              {/* Benefit 9 - Improved Relationships */}
+              <div className="group relative bg-gradient-to-br from-cyan-50 to-white rounded-2xl border border-cyan-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-cyan-200 rounded-bl-full opacity-20"></div>
+                <div className="relative">
+                  <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FontAwesomeIcon icon={faUserAstronaut} className="h-7 w-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">Improved Relationships</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Better emotional regulation leads to healthier connections. Learn communication skills and empathy through guided conversations.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-16 text-center">
+              <button
+                onClick={handleTalkNowClick}
+                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all group"
+              >
+                Start Your Wellness Journey
+                <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+              <p className="mt-4 text-sm text-gray-600">Free to start • No credit card required</p>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
-        <section id="features" className="py-20 bg-white">
-          <div className="mx-auto max-w-7xl px-6">
+        <section id="features" className="relative py-20 bg-gradient-to-br from-rose-50/30 via-white to-rose-50/20 overflow-hidden">
+          {/* Animated SVG Background Elements */}
+          <div className="absolute inset-0 pointer-events-none">
+            {/* Floating Hearts */}
+            <svg className="absolute top-10 left-10 w-16 h-16 text-rose-200 animate-float" style={{ animationDelay: '0s' }} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+
+            <svg className="absolute top-32 right-20 w-12 h-12 text-rose-100 animate-float" style={{ animationDelay: '1s' }} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+
+            {/* Floating Circles */}
+            <div className="absolute top-20 right-10 w-24 h-24 rounded-full bg-rose-100 opacity-30 animate-pulse-slow"></div>
+            <div className="absolute bottom-20 left-20 w-32 h-32 rounded-full bg-rose-200 opacity-20 animate-pulse-slow" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute top-1/2 left-1/4 w-20 h-20 rounded-full bg-rose-100 opacity-25 animate-float" style={{ animationDelay: '2s' }}></div>
+
+            {/* Sparkles */}
+            <svg className="absolute bottom-32 right-32 w-8 h-8 text-rose-300 animate-spin-slow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0l2.163 7.837L22 10l-7.837 2.163L12 20l-2.163-7.837L2 10l7.837-2.163L12 0z" />
+            </svg>
+
+            <svg className="absolute top-1/3 right-1/3 w-6 h-6 text-rose-200 animate-spin-slow" style={{ animationDelay: '1s' }} viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0l2.163 7.837L22 10l-7.837 2.163L12 20l-2.163-7.837L2 10l7.837-2.163L12 0z" />
+            </svg>
+
+            {/* Wavy Lines */}
+            <svg className="absolute bottom-10 left-1/3 w-40 h-20 text-rose-100 opacity-50" viewBox="0 0 200 100">
+              <path d="M0,50 Q50,20 100,50 T200,50" stroke="currentColor" strokeWidth="2" fill="none" className="animate-wave" />
+            </svg>
+          </div>
+
+          <div className="relative mx-auto max-w-7xl px-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
                 Everything you need for emotional wellness
