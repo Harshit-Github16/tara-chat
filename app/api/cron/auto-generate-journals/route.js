@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import clientPromise from '../../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
+// Use separate key for journal generation
+const GROQ_API_KEY = process.env.GROQ_API_KEY_INSIGHTS;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const CRON_SECRET = process.env.CRON_SECRET || 'your-secret-key-here';
 

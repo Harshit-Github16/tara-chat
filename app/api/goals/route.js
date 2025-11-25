@@ -177,8 +177,15 @@ export async function GET(request) {
         const goalsWithProgress = goals.map(goal => {
             const checkIns = goal.checkIns || [];
             const targetDays = goal.targetDays || 30;
-            const progress = Math.min(Math.round((checkIns.length / targetDays) * 100), 100);
-            const completed = progress >= 100;
+            const calculatedProgress = Math.min(Math.round((checkIns.length / targetDays) * 100), 100);
+
+            // IMPORTANT: Respect manually set completed status from database
+            // If goal.completed is explicitly set (true or false), use it
+            // Otherwise, calculate based on progress
+            const completed = goal.completed !== undefined ? goal.completed : (calculatedProgress >= 100);
+
+            // Use stored progress if available, otherwise use calculated
+            const progress = goal.progress !== undefined ? goal.progress : calculatedProgress;
 
             // Calculate streak (consecutive days)
             let streak = 0;

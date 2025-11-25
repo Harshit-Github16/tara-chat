@@ -23,10 +23,21 @@ export default function BottomNav({ activePage }) {
     // Debug logging
     console.log('BottomNav - User:', user);
     console.log('BottomNav - User email:', user?.email);
+    console.log('BottomNav - User email type:', typeof user?.email);
+    console.log('BottomNav - User email length:', user?.email?.length);
     console.log('BottomNav - Admin emails:', ADMIN_EMAILS);
 
     const isAdmin = user?.email && ADMIN_EMAILS.includes(user.email);
     console.log('BottomNav - Is admin:', isAdmin);
+
+    // Detailed comparison for debugging
+    if (user?.email) {
+        ADMIN_EMAILS.forEach(adminEmail => {
+            const matches = user.email === adminEmail;
+            const trimmedMatches = user.email.trim() === adminEmail.trim();
+            console.log(`BottomNav - "${user.email}" === "${adminEmail}": ${matches} (trimmed: ${trimmedMatches})`);
+        });
+    }
 
     return (
         <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">

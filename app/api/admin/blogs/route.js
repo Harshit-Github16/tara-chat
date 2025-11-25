@@ -190,6 +190,16 @@ async function updateBlog(blogId, body) {
             }
         }
 
+        // Get existing blog to preserve stats
+        const existingBlogData = await db.collection('blogs').findOne({ _id: new ObjectId(blogId) });
+
+        if (!existingBlogData) {
+            return NextResponse.json(
+                { success: false, message: 'Blog not found' },
+                { status: 404 }
+            );
+        }
+
         const updatedBlog = {
             title,
             slug,
@@ -206,7 +216,13 @@ async function updateBlog(blogId, body) {
             schemaType: schemaType || 'BlogPosting',
             faqItems: faqItems || [],
             howToSteps: howToSteps || [],
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
+            // Preserve existing stats - CRITICAL!
+            likes: existingBlogData.likes || 0,
+            likedBy: existingBlogData.likedBy || [],
+            views: existingBlogData.views || 0,
+            comments: existingBlogData.comments || [],
+            commentCount: existingBlogData.commentCount || 0
         };
 
         const result = await db.collection('blogs').findOneAndUpdate(

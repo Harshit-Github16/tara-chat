@@ -106,7 +106,14 @@ export default function BlogPostPage() {
 
     const incrementView = async (blogId) => {
         try {
-            await fetch(`/api/blogs/${blogId}/view`, { method: 'POST' });
+            const response = await fetch(`/api/blog/${blogId}/view`, { method: 'POST' });
+            const data = await response.json();
+            if (data.success) {
+                // Update local state to reflect new view count
+                setPost(prev => prev ? { ...prev, views: (prev.views || 0) + 1 } : null);
+            } else {
+                console.error('Failed to increment view:', data.message);
+            }
         } catch (error) {
             console.error('Error incrementing view:', error);
         }
@@ -342,7 +349,7 @@ export default function BlogPostPage() {
                                 </span>
                                 <span className="flex items-center gap-1 text-sm text-gray-500">
                                     <FontAwesomeIcon icon={faEye} className="h-3 w-3" />
-                                    {post.views.toLocaleString()} views
+                                    {(post.views || 0).toLocaleString()} views
                                 </span>
                             </div>
 

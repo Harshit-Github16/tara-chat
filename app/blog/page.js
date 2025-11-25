@@ -562,7 +562,7 @@ export default function BlogsPage() {
                                                             <div className="flex items-center gap-4 text-sm text-gray-500">
                                                                 <span className="flex items-center gap-1">
                                                                     <FontAwesomeIcon icon={faHeart} className="h-3 w-3" />
-                                                                    {post.likes}
+                                                                    {post.likes || 0}
                                                                 </span>
                                                                 <span className="flex items-center gap-1">
                                                                     <FontAwesomeIcon icon={faComment} className="h-3 w-3" />
@@ -636,7 +636,7 @@ export default function BlogsPage() {
                                                                     <div className="flex items-center gap-4 text-sm text-gray-500">
                                                                         <span className="flex items-center gap-1">
                                                                             <FontAwesomeIcon icon={faHeart} className="h-3 w-3" />
-                                                                            {post.likes}
+                                                                            {post.likes || 0}
                                                                         </span>
                                                                         <span className="flex items-center gap-1">
                                                                             <FontAwesomeIcon icon={faComment} className="h-3 w-3" />
@@ -644,7 +644,7 @@ export default function BlogsPage() {
                                                                         </span>
                                                                         <span className="flex items-center gap-1">
                                                                             <FontAwesomeIcon icon={faEye} className="h-3 w-3" />
-                                                                            {post.views}
+                                                                            {post.views || 0}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -709,7 +709,7 @@ export default function BlogsPage() {
                                                         <span>•</span>
                                                         <span className="flex items-center gap-1">
                                                             <FontAwesomeIcon icon={faHeart} className="h-3 w-3" />
-                                                            {post.likes}
+                                                            {post.likes || 0}
                                                         </span>
                                                     </div>
                                                 </div>

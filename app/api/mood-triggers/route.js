@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import clientPromise from "../../../lib/mongodb";
 import { verifyToken } from "../../../lib/jwt";
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
+// Use separate key for insights generation
+const GROQ_API_KEY = process.env.GROQ_API_KEY_INSIGHTS;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // GET - Analyze journals and extract mood triggers

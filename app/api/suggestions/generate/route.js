@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import Groq from 'groq-sdk';
 
+// Use separate key for insights/suggestions generation
 const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY
+    apiKey: process.env.GROQ_API_KEY_INSIGHTS
 });
 
 export async function POST(request) {

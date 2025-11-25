@@ -70,16 +70,22 @@ export async function POST(request) {
 
         // Handle COMPLETE
         if (isComplete) {
+            console.log('Goal Status API - Marking goal as complete:', { userId, goalId });
+
             // Get user to find the goal
             const user = await users.findOne({ firebaseUid: userId });
             if (!user) {
+                console.error('Goal Status API - User not found:', userId);
                 return NextResponse.json({ error: 'User not found' }, { status: 404 });
             }
 
             const goalIndex = user.goals?.findIndex(g => g.id === goalId);
             if (goalIndex === -1 || goalIndex === undefined) {
+                console.error('Goal Status API - Goal not found:', { goalId, availableGoals: user.goals?.map(g => g.id) });
                 return NextResponse.json({ error: 'Goal not found' }, { status: 404 });
             }
+
+            console.log('Goal Status API - Found goal at index:', goalIndex);
 
             // Update goal to completed
             const result = await users.updateOne(
@@ -95,12 +101,19 @@ export async function POST(request) {
                 }
             );
 
+            console.log('Goal Status API - Update result:', {
+                matchedCount: result.matchedCount,
+                modifiedCount: result.modifiedCount
+            });
+
             if (result.modifiedCount === 0) {
+                console.error('Goal Status API - Failed to update goal in database');
                 return NextResponse.json({
                     error: 'Failed to update goal'
                 }, { status: 500 });
             }
 
+            console.log('Goal Status API - Goal marked as complete successfully');
             return NextResponse.json({
                 success: true,
                 action: 'completed',

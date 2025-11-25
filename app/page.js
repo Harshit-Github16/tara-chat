@@ -75,7 +75,7 @@ export default function Home() {
       setCurrentMoodIndex((prevIndex) => (prevIndex + 1) % moods.length);
     } else {
       // Type or delete character
-      const typingSpeed = isDeleting ? 50 : 100;
+      const typingSpeed = isDeleting ? 30 : 50;
       timeout = setTimeout(() => {
         setDisplayedText(prev => {
           if (isDeleting) {
@@ -541,83 +541,99 @@ export default function Home() {
               {/* Mobile Frame Mockup */}
               <div className="relative flex justify-center lg:justify-end">
                 {/* Mobile Device Frame */}
-                <div className="relative w-[320px] sm:w-[360px]">
+                <div className="relative w-[280px] sm:w-[320px] md:w-[340px] lg:w-[360px]">
                   {/* Phone Frame */}
-                  <div className="relative bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
+                  <div className="relative bg-gray-900 rounded-[2.5rem] md:rounded-[3rem] p-2 md:p-3 shadow-2xl">
                     {/* Notch */}
-                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-10"></div>
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 md:w-40 h-6 md:h-7 bg-gray-900 rounded-b-3xl z-10"></div>
 
                     {/* Screen */}
-                    <div className="relative bg-white rounded-[2.5rem] overflow-hidden h-[600px] sm:h-[650px]">
+                    <div className="relative bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden h-[520px] sm:h-[580px] md:h-[620px] lg:h-[650px]">
                       {/* Chat Header */}
-                      <div className="bg-rose-200 px-4 py-4 flex items-center gap-3 shadow-sm">
-                        <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
-                          <FontAwesomeIcon icon={faHeart} className="h-5 w-5 text-rose-500" />
+                      <div className="bg-rose-200 px-3 md:px-4 py-3 md:py-4 flex items-center gap-2 md:gap-3 shadow-sm">
+                        <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-white flex items-center justify-center">
+                          <FontAwesomeIcon icon={faHeart} className="h-4 w-4 md:h-5 md:w-5 text-rose-500" />
                         </div>
                         <div className="flex-1">
-                          <div className="text-gray-800 font-semibold text-sm">Emotional Support</div>
-                          <div className="text-gray-600 text-xs flex items-center gap-1">
-                            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                          <div className="text-gray-800 font-semibold text-xs md:text-sm">Emotional Support</div>
+                          <div className="text-gray-600 text-[10px] md:text-xs flex items-center gap-1">
+                            <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-green-500"></div>
                             Always here for you
                           </div>
                         </div>
                       </div>
 
                       {/* Chat Messages */}
-                      <div className="p-4 space-y-4 bg-rose-50/30 h-[calc(100%-140px)] overflow-y-auto">
+                      <div className="p-3 md:p-4 space-y-3 md:space-y-4 bg-rose-50/30 h-[calc(100%-120px)] md:h-[calc(100%-140px)] overflow-y-auto">
+                        {/* User Message 1 */}
+                        <div className="flex gap-1.5 md:gap-2 items-start justify-end">
+                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                            <p className="text-xs md:text-sm text-gray-800">Hi</p>
+                            <span className="text-[10px] md:text-xs text-gray-600 mt-1 block text-right">Just now</span>
+                          </div>
+                        </div>
+
                         {/* AI Message 1 */}
-                        <div className="flex gap-2 items-start">
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
-                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-white" />
+                        <div className="flex gap-1.5 md:gap-2 items-start">
+                          <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
                           </div>
-                          <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
-                            <p className="text-sm text-gray-800">Hi there! I'm here to listen. How are you feeling today? 💙</p>
-                            <span className="text-xs text-gray-400 mt-1 block">Just now</span>
-                          </div>
-                        </div>
-
-                        {/* User Message */}
-                        <div className="flex gap-2 items-start justify-end">
-                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm max-w-[75%]">
-                            <p className="text-sm text-gray-800">I'm feeling really stressed about work lately...</p>
-                            <span className="text-xs text-gray-600 mt-1 block text-right">Just now</span>
+                          <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                            <p className="text-xs md:text-sm text-gray-800">Hello, How are you feeling today?</p>
+                            <span className="text-[10px] md:text-xs text-gray-400 mt-1 block">Just now</span>
                           </div>
                         </div>
 
-                        {/* AI Message 2 - Typing indicator */}
-                        <div className="flex gap-2 items-start">
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
-                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-white" />
+                        {/* User Message 2 */}
+                        <div className="flex gap-1.5 md:gap-2 items-start justify-end">
+                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                            <p className="text-xs md:text-sm text-gray-800">A bit low due to stress</p>
+                            <span className="text-[10px] md:text-xs text-gray-600 mt-1 block text-right">Just now</span>
                           </div>
-                          <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm max-w-[75%]">
-                            <p className="text-sm text-gray-800">I hear you, and it's completely valid to feel stressed. Work pressure can be overwhelming. Would you like to talk about what's been weighing on you? Sometimes just expressing it can help. 🤗</p>
-                            <span className="text-xs text-gray-400 mt-1 block">Just now</span>
+                        </div>
+
+                        {/* AI Message 2 */}
+                        <div className="flex gap-1.5 md:gap-2 items-start">
+                          <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                          </div>
+                          <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                            <p className="text-xs md:text-sm text-gray-800">What happened? Please tell me if anything bothering you lately? I am here for you</p>
+                            <span className="text-[10px] md:text-xs text-gray-400 mt-1 block">Just now</span>
+                          </div>
+                        </div>
+
+                        {/* User Message 3 */}
+                        <div className="flex gap-1.5 md:gap-2 items-start justify-end">
+                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                            <p className="text-xs md:text-sm text-gray-800">I have been facing many challenges and due to that I am unable to sleep. I am thinking about those issues day and night</p>
+                            <span className="text-[10px] md:text-xs text-gray-600 mt-1 block text-right">Just now</span>
                           </div>
                         </div>
 
                         {/* Typing Indicator */}
-                        <div className="flex gap-2 items-start">
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
-                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-white" />
+                        <div className="flex gap-1.5 md:gap-2 items-start">
+                          <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
                           </div>
-                          <div className="bg-white rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm">
+                          <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-1.5 md:py-2 shadow-sm">
                             <div className="flex gap-1">
-                              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                              <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                              <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                              <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
                             </div>
                           </div>
                         </div>
                       </div>
 
                       {/* Input Area */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3">
+                      <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-3 md:px-4 py-2 md:py-3">
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-gray-100 rounded-full px-4 py-2">
-                            <p className="text-sm text-gray-400">Type your message...</p>
+                          <div className="flex-1 bg-gray-100 rounded-full px-3 md:px-4 py-1.5 md:py-2">
+                            <p className="text-xs md:text-sm text-gray-400">Type your message...</p>
                           </div>
-                          <button className="h-10 w-10 rounded-full bg-gradient-to-r from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
-                            <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 text-white" />
+                          <button className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-gradient-to-r from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                            <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 md:h-4 md:w-4 text-white" />
                           </button>
                         </div>
                       </div>
@@ -625,18 +641,18 @@ export default function Home() {
                   </div>
 
                   {/* Floating Badge - Bottom Left */}
-                  <div className="absolute -bottom-6 left-4 bg-white rounded-xl shadow-xl px-3 py-2 border border-rose-100 z-20">
-                    <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-green-500" />
-                      <span className="text-xs font-semibold text-gray-800 whitespace-nowrap">100% Private</span>
+                  <div className="absolute -bottom-4 md:-bottom-6 left-2 md:left-4 bg-white rounded-lg md:rounded-xl shadow-xl px-2 md:px-3 py-1.5 md:py-2 border border-rose-100 z-20">
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                      <FontAwesomeIcon icon={faCheck} className="h-2.5 w-2.5 md:h-3 md:w-3 text-green-500" />
+                      <span className="text-[10px] md:text-xs font-semibold text-gray-800 whitespace-nowrap">100% Private</span>
                     </div>
                   </div>
 
                   {/* Floating Badge - Top Right */}
-                  <div className="absolute top-16 -right-6 bg-white rounded-xl shadow-xl px-3 py-2 border border-rose-100 z-20">
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-                      <span className="text-xs font-semibold text-gray-800 whitespace-nowrap">Always Online</span>
+                  <div className="absolute top-12 md:top-16 -right-4 md:-right-6 bg-white rounded-lg md:rounded-xl shadow-xl px-2 md:px-3 py-1.5 md:py-2 border border-rose-100 z-20">
+                    <div className="flex items-center gap-1.5 md:gap-2">
+                      <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-green-500 animate-pulse"></div>
+                      <span className="text-[10px] md:text-xs font-semibold text-gray-800 whitespace-nowrap">Always Online</span>
                     </div>
                   </div>
                 </div>

@@ -155,17 +155,24 @@ export default function GoalsPage() {
         // If marking as complete, call API
         if (newCompletedState) {
             try {
+                console.log('Marking goal as complete:', goalId);
                 const response = await api.post('/api/goals/goal-status', {
                     goalId,
                     isComplete: true,
                     isDelete: false
                 });
 
+                console.log('Complete goal response:', response);
+
                 if (!response.ok) {
                     const error = await response.json();
+                    console.error('Failed to complete goal:', error);
                     alert(error.error || 'Failed to complete goal');
                     return;
                 }
+
+                const data = await response.json();
+                console.log('Goal completed successfully:', data);
 
                 // Trigger confetti when goal is completed
                 const defaults = {
@@ -195,21 +202,31 @@ export default function GoalsPage() {
                 setTimeout(shoot, 0);
                 setTimeout(shoot, 100);
                 setTimeout(shoot, 200);
+
+                // Update local state after successful API call
+                const updatedGoals = goals.map((g) => {
+                    if (g.id === goalId) {
+                        return { ...g, completed: true, progress: 100 };
+                    }
+                    return g;
+                });
+                setGoals(updatedGoals);
             } catch (error) {
                 console.error('Complete goal error:', error);
-                alert('Failed to complete goal');
+                alert('Failed to complete goal: ' + error.message);
                 return;
             }
+        } else {
+            // If unmarking as complete, just update local state
+            // (No API call needed for uncomplete)
+            const updatedGoals = goals.map((g) => {
+                if (g.id === goalId) {
+                    return { ...g, completed: false };
+                }
+                return g;
+            });
+            setGoals(updatedGoals);
         }
-
-        // Update local state
-        const updatedGoals = goals.map((g) => {
-            if (g.id === goalId) {
-                return { ...g, completed: newCompletedState };
-            }
-            return g;
-        });
-        setGoals(updatedGoals);
     };
 
     const deleteGoal = async (goalId) => {

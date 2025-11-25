@@ -12,6 +12,10 @@ const nextConfig = {
   reactCompiler: true,
   // Explicitly use webpack for PWA support
   turbo: {},
+  env: {
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+    GROQ_API_KEY_INSIGHTS: process.env.GROQ_API_KEY_INSIGHTS,
+  },
 };
 
 export default withSerwist(nextConfig);
