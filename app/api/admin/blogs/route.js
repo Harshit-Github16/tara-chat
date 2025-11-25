@@ -142,6 +142,9 @@ async function createBlog(body) {
 // Helper function to update blog
 async function updateBlog(blogId, body) {
     try {
+        console.log('Update Blog API - Blog ID:', blogId);
+        console.log('Update Blog API - Request body keys:', Object.keys(body));
+
         const {
             title,
             slug: userSlug,
@@ -156,10 +159,16 @@ async function updateBlog(blogId, body) {
             trending,
             schemaType,
             faqItems,
-            howToSteps
+            howToSteps,
+            initialLikes,
+            initialViews
         } = body;
 
+        console.log('Update Blog API - Title:', title);
+        console.log('Update Blog API - Featured Image:', featuredImage);
+
         if (!title || !excerpt || !content || !author) {
+            console.error('Update Blog API - Missing required fields:', { title: !!title, excerpt: !!excerpt, content: !!content, author: !!author });
             return NextResponse.json(
                 { success: false, message: 'Missing required fields' },
                 { status: 400 }
@@ -218,12 +227,23 @@ async function updateBlog(blogId, body) {
             howToSteps: howToSteps || [],
             updatedAt: new Date().toISOString(),
             // Preserve existing stats - CRITICAL!
-            likes: existingBlogData.likes || 0,
+            // If initialLikes/initialViews provided in edit, use them (for manual adjustment)
+            // Otherwise preserve existing values
+            likes: initialLikes !== undefined ? initialLikes : (existingBlogData.likes || 0),
             likedBy: existingBlogData.likedBy || [],
-            views: existingBlogData.views || 0,
+            views: initialViews !== undefined ? initialViews : (existingBlogData.views || 0),
             comments: existingBlogData.comments || [],
             commentCount: existingBlogData.commentCount || 0
         };
+
+        console.log('Update Blog API - Stats being saved:', {
+            likes: updatedBlog.likes,
+            views: updatedBlog.views,
+            fromPayload: { initialLikes, initialViews },
+            fromExisting: { likes: existingBlogData.likes, views: existingBlogData.views }
+        });
+
+        console.log('Update Blog API - Updating blog with slug:', slug);
 
         const result = await db.collection('blogs').findOneAndUpdate(
             { _id: new ObjectId(blogId) },
@@ -231,12 +251,17 @@ async function updateBlog(blogId, body) {
             { returnDocument: 'after' }
         );
 
+        console.log('Update Blog API - Update result:', result ? 'Success' : 'Failed');
+
         if (!result) {
+            console.error('Update Blog API - Blog not found after update');
             return NextResponse.json(
                 { success: false, message: 'Blog not found' },
                 { status: 404 }
             );
         }
+
+        console.log('Update Blog API - Blog updated successfully:', result._id);
 
         return NextResponse.json({
             success: true,

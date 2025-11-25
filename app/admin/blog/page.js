@@ -384,6 +384,13 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        console.log('Submit Handler - Editing blog:', editingBlog ? editingBlog._id : 'New blog');
+        console.log('Submit Handler - Form data:', {
+            title: formData.title,
+            hasImage: !!formData.featuredImage,
+            hasContent: !!formData.content
+        });
+
         if (!formData.title || !formData.excerpt || !formData.content || !formData.author) {
             showError('Please fill all required fields');
             return;
@@ -402,11 +409,17 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                 tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean)
             };
 
-            console.log('Sending blog data with image URL:', blogData.featuredImage);
+            console.log('Sending blog data:', {
+                title: blogData.title,
+                imageURL: blogData.featuredImage,
+                isEditing: !!editingBlog
+            });
 
             const url = editingBlog
                 ? `/api/admin/blogs?id=${editingBlog._id}`
                 : '/api/admin/blogs';
+
+            console.log('API URL:', url);
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -414,10 +427,17 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                 body: JSON.stringify(blogData)
             });
 
+            console.log('Response status:', response.status);
+
             const data = await response.json();
+            console.log('Response data:', data);
+
             if (data.success) {
+                console.log('Blog saved successfully:', data.data._id);
+                showSuccess(`Blog ${editingBlog ? 'updated' : 'created'} successfully!`);
                 onSuccess(data.data);
             } else {
+                console.error('Failed to save blog:', data.message);
                 showError(data.message || `Failed to ${editingBlog ? 'update' : 'create'} blog`);
             }
         } catch (error) {
