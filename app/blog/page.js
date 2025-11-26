@@ -6,6 +6,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BlogSchema from "../components/BlogSchema";
 import BottomNav from "../components/BottomNav";
+import ProfileCompletionCircle from "../components/ProfileCompletionCircle";
 import { useAuth } from "../contexts/AuthContext";
 import {
     faChartLine,
@@ -204,9 +205,9 @@ export default function BlogsPage() {
                                 <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                             </Link>
 
-                            {/* Profile Icon */}
-                            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
-                                <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+                            {/* Profile Icon with Completion Circle */}
+                            <Link href="/profile" className="relative">
+                                <ProfileCompletionCircle />
                             </Link>
                         </div>
                     </header>

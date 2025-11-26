@@ -70,8 +70,53 @@ export default function ProfilePage() {
         "Ambitious", "Caring"
     ];
 
-    // Load user data from database
+    // Load user data from database and fetch stats
     useEffect(() => {
+        const fetchUserStats = async () => {
+            const userId = user?.firebaseUid || user?.uid;
+            if (!userId) {
+                console.log('No user ID found');
+                return;
+            }
+
+            console.log('Fetching stats for user:', userId);
+
+            try {
+                // Fetch user data from existing API
+                const response = await api.get(`/api/user-data?userId=${userId}`);
+                console.log('User data response status:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('User data:', data);
+
+                    if (data.success && data.data) {
+                        const { journals, goals, moods } = data.data;
+
+                        // Calculate stats
+                        const journalEntries = journals?.length || 0;
+                        const activeGoals = goals?.filter(g => g.completed === false).length || 0;
+                        const completedGoals = goals?.filter(g => g.completed === true).length || 0;
+                        const moodCheckIns = moods?.length || 0;
+
+                        // Update stats
+                        setStats([
+                            { label: "Journal Entries", value: journalEntries.toString(), icon: faBookOpen, color: "text-green-500" },
+                            { label: "Active Goals", value: activeGoals.toString(), icon: faBullseye, color: "text-blue-500" },
+                            { label: "Completed Goals", value: completedGoals.toString(), icon: faFire, color: "text-orange-500" },
+                            { label: "Mood Check-ins", value: moodCheckIns.toString(), icon: faHeart, color: "text-purple-500" }
+                        ]);
+
+                        console.log('✅ Stats updated:', { journalEntries, activeGoals, completedGoals, moodCheckIns });
+                    }
+                } else {
+                    console.error('Failed to fetch user data:', response.status);
+                }
+            } catch (error) {
+                console.error('Error fetching user stats:', error);
+            }
+        };
+
         if (user && !loading) {
             const profile = {
                 name: user.name || "",
@@ -89,6 +134,9 @@ export default function ProfilePage() {
             };
             setUserProfile(profile);
             setEditData(profile);
+
+            // Fetch user stats
+            fetchUserStats();
         }
     }, [user, loading]);
 

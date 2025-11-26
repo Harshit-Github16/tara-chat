@@ -685,316 +685,111 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {/* Benefit 1 - Improved Emotional Stability */}
-              <div className="group relative bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl border border-rose-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-rose-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-rose-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faHeart} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Improved Emotional Stability</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Build resilience and maintain emotional balance through consistent support and guided reflection. Learn to navigate life's ups and downs with confidence.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Improved Emotional Stability</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Build resilience and maintain emotional balance through consistent support and guided reflection. Learn to navigate life's ups and downs with confidence.
+                </p>
               </div>
 
               {/* Benefit 2 - Early Detection */}
-              <div className="group relative bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl border border-purple-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faChartLine} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Early Detection of Mental Health Risks</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    AI-powered mood tracking identifies patterns and potential concerns early, helping you take proactive steps toward better mental health.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Early Detection of Mental Health Risks</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  AI-powered mood tracking identifies patterns and potential concerns early, helping you take proactive steps toward better mental health.
+                </p>
               </div>
 
               {/* Benefit 3 - Reduced Stress & Anxiety */}
-              <div className="group relative bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl border border-blue-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faComments} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Reduced Stress & Anxiety</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Express your worries in a judgment-free space. Our AI companions provide calming support and practical coping strategies whenever you need them.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faComments} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Reduced Stress & Anxiety</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Express your worries in a judgment-free space. Our AI companions provide calming support and practical coping strategies whenever you need them.
+                </p>
               </div>
 
               {/* Benefit 4 - Goal Setting & Personal Growth */}
-              <div className="group relative bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl border border-green-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-green-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-green-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faBullseye} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Goal Setting & Personal Growth</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Set meaningful wellness goals and track your progress. AI-powered insights help you stay motivated and celebrate every milestone.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faBullseye} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Goal Setting & Personal Growth</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Set meaningful wellness goals and track your progress. AI-powered insights help you stay motivated and celebrate every milestone.
+                </p>
               </div>
 
               {/* Benefit 5 - Purpose & Direction */}
-              <div className="group relative bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl border border-orange-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-orange-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faArrowRight} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Purpose & Direction</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Discover clarity and meaning through guided journaling and reflection. Find your path forward with personalized insights and support.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faArrowRight} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Purpose & Direction</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Discover clarity and meaning through guided journaling and reflection. Find your path forward with personalized insights and support.
+                </p>
               </div>
 
               {/* Benefit 6 - Privacy & Safe Space */}
-              <div className="group relative bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl border border-pink-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faShield} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Privacy & Safe Space to Express</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Your thoughts are completely private with end-to-end encryption. Express yourself freely without fear of judgment or data breaches.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faShield} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Privacy & Safe Space to Express</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Your thoughts are completely private with end-to-end encryption. Express yourself freely without fear of judgment or data breaches.
+                </p>
               </div>
 
               {/* Benefit 7 - Better Sleep Quality */}
-              <div className="group relative bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl border border-indigo-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-indigo-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faClock} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Better Sleep Quality</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Release daily stress through evening journaling and calming conversations. Clear your mind for more restful, rejuvenating sleep.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faClock} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Better Sleep Quality</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Release daily stress through evening journaling and calming conversations. Clear your mind for more restful, rejuvenating sleep.
+                </p>
               </div>
 
               {/* Benefit 8 - Enhanced Self-Awareness */}
-              <div className="group relative bg-gradient-to-br from-teal-50 to-cyan-50 rounded-3xl border border-teal-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-teal-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-teal-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faUser} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Enhanced Self-Awareness</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Understand your emotions, triggers, and patterns better. Gain deep insights into what makes you feel your best and what holds you back.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faUser} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Enhanced Self-Awareness</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Understand your emotions, triggers, and patterns better. Gain deep insights into what makes you feel your best and what holds you back.
+                </p>
               </div>
 
               {/* Benefit 9 - Improved Relationships */}
-              <div className="group relative bg-gradient-to-br from-violet-50 to-fuchsia-50 rounded-3xl border border-violet-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-violet-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-violet-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faUserAstronaut} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Improved Relationships</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Better emotional regulation leads to healthier connections. Learn communication skills and empathy through guided conversations.
-                  </p>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faUserAstronaut} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Improved Relationships</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Better emotional regulation leads to healthier connections. Learn communication skills and empathy through guided conversations.
+                </p>
               </div>
             </div>
 
-            {/* CTA */}
-            <div className="mt-16 text-center">
-              <button
-                onClick={handleTalkNowClick}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all group"
-              >
-                Start Your Wellness Journey
-                <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
-              <p className="mt-4 text-sm text-gray-600">Free to start • No credit card required</p>
-            </div>
+
           </div>
         </section>
 
-        {/* Who Can Use Tara Section */}
-        <section className="relative py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-hidden">
-          {/* Decorative Elements */}
-          <div className="absolute inset-0 pointer-events-none opacity-20">
-            <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-200 blur-3xl"></div>
-            <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-pink-200 blur-3xl"></div>
-          </div>
-
-          <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
-            {/* Header */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-5 py-2 text-sm font-semibold text-rose-600 mb-6">
-                <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
-                For Everyone, Everywhere
-              </div>
-              <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
-                Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Whether you're managing a home, building a career, or navigating life's challenges — Tara is here for you
-              </p>
-            </div>
-
-            {/* Grid Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-              {/* Card 1: Homemakers */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-8 hover:shadow-2xl hover:border-rose-200 transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-rose-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Homemakers</h3>
-                  </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    Managing a household is a full-time job. Tara helps you rediscover balance, set boundaries, and prioritize your emotional wellbeing.
-                  </p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Find time for yourself without guilt</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Manage stress and overwhelm</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Rediscover your purpose and identity</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Card 2: Working Professionals */}
-              <div className="group relative bg-white rounded-2xl border border-blue-100 p-8 hover:shadow-2xl hover:border-blue-200 transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Working Professionals</h3>
-                  </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    Work pressure can take a toll. Tara helps you manage stress, prevent burnout, and maintain work-life balance.
-                  </p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Handle work pressure and deadlines</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Prevent burnout and exhaustion</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Build confidence and clarity</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Card 3: Students */}
-              <div className="group relative bg-white rounded-2xl border border-purple-100 p-8 hover:shadow-2xl hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <FontAwesomeIcon icon={faBookOpen} className="h-7 w-7 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Students</h3>
-                  </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    Academic pressure and career confusion are real. Tara helps you manage exam stress, build focus, and find direction.
-                  </p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Manage exam stress and pressure</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Build focus and productivity</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Find clarity and direction</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* Card 4: Traders & Entrepreneurs */}
-              <div className="group relative bg-white rounded-2xl border border-green-100 p-8 hover:shadow-2xl hover:border-green-200 transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <FontAwesomeIcon icon={faBullseye} className="h-7 w-7 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900">Traders & Entrepreneurs</h3>
-                  </div>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    High-stakes decisions and financial pressure are exhausting. Tara helps you stay emotionally balanced and mentally clear.
-                  </p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Handle financial stress and losses</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Make clear, confident decisions</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700">Stay emotionally balanced</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom CTA */}
-            <div className="mt-16 text-center">
-              <p className="text-lg text-gray-600 mb-6">
-                No matter who you are or what you're going through, Tara is here to support you
-              </p>
-              <button
-                onClick={handleTalkNowClick}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-              >
-                Start Your Journey
-                <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </section>
+        {/* Who Can Use Tara Section - Auto Sliding Carousel */}
+        <WhoCanUseTaraCarousel />
 
         {/* Features Section */}
         <section id="features" className="relative py-20 bg-white overflow-hidden">
@@ -1045,177 +840,153 @@ export default function Home() {
 
             <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {/* Feature 1 - AI Emotional Chat */}
-              <div className="group relative bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl border border-blue-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faComments} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">AI Emotional Chat</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Connect with 100+ unique AI characters, each designed to provide different types of emotional support and guidance.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm">Personalized conversations</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm">24/7 availability</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-blue-500" />
-                      <span className="text-sm">Multiple personality types</span>
-                    </li>
-                  </ul>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faComments} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">AI Emotional Chat</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Connect with 100+ unique AI characters, each designed to provide different types of emotional support and guidance.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Personalized conversations</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">24/7 availability</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Multiple personality types</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Feature 2 - Smart Journaling */}
-              <div className="group relative bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl border border-purple-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faBookOpen} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Smart Journaling</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Guided journaling with AI-powered prompts and insights to help you process emotions and track growth.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-purple-500" />
-                      <span className="text-sm">Daily prompts</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-purple-500" />
-                      <span className="text-sm">Mood tracking</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-purple-500" />
-                      <span className="text-sm">Progress insights</span>
-                    </li>
-                  </ul>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faBookOpen} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Smart Journaling</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Guided journaling with AI-powered prompts and insights to help you process emotions and track growth.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Daily prompts</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Mood tracking</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Progress insights</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Feature 3 - Emotional Analytics */}
-              <div className="group relative bg-gradient-to-br from-cyan-50 to-teal-50 rounded-3xl border border-cyan-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-cyan-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faChartLine} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Emotional Analytics</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Visualize your emotional patterns with beautiful charts and get personalized recommendations.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-cyan-500" />
-                      <span className="text-sm">Mood trends</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-cyan-500" />
-                      <span className="text-sm">Trigger analysis</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-cyan-500" />
-                      <span className="text-sm">Recovery insights</span>
-                    </li>
-                  </ul>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Emotional Analytics</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Visualize your emotional patterns with beautiful charts and get personalized recommendations.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Mood trends</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Trigger analysis</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Recovery insights</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Feature 4 - Wellness Tracking */}
-              <div className="group relative bg-gradient-to-br from-rose-50 to-orange-50 rounded-3xl border border-rose-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-rose-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-rose-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faHeart} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Wellness Tracking</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Monitor your emotional health with streak tracking, mood meters, and wellness goals.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                      <span className="text-sm">Daily check-ins</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                      <span className="text-sm">Streak rewards</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
-                      <span className="text-sm">Goal setting</span>
-                    </li>
-                  </ul>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Wellness Tracking</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Monitor your emotional health with streak tracking, mood meters, and wellness goals.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Daily check-ins</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Streak rewards</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Goal setting</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Feature 5 - Privacy First */}
-              <div className="group relative bg-gradient-to-br from-emerald-50 to-green-50 rounded-3xl border border-emerald-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-emerald-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faShield} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Privacy First</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Your emotional data is encrypted and private. We never share your personal information.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-emerald-500" />
-                      <span className="text-sm">End-to-end encryption</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-emerald-500" />
-                      <span className="text-sm">Local storage</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-emerald-500" />
-                      <span className="text-sm">GDPR compliant</span>
-                    </li>
-                  </ul>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faShield} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Privacy First</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Your emotional data is encrypted and private. We never share your personal information.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">End-to-end encryption</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Local storage</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">GDPR compliant</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Feature 6 - Cross Platform */}
-              <div className="group relative bg-gradient-to-br from-violet-50 to-purple-50 rounded-3xl border border-violet-100 p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-violet-200/20 rounded-bl-full"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-violet-100/20 rounded-tr-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faMobile} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Cross Platform</h3>
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    Access your emotional wellness tools anywhere with our responsive web app and mobile support.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-violet-500" />
-                      <span className="text-sm">Web app</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-violet-500" />
-                      <span className="text-sm">Mobile optimized</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-gray-700">
-                      <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-violet-500" />
-                      <span className="text-sm">Offline support</span>
-                    </li>
-                  </ul>
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faMobile} className="h-7 w-7 text-rose-600" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Cross Platform</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Access your emotional wellness tools anywhere with our responsive web app and mobile support.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Web app</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Mobile optimized</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Offline support</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -1245,131 +1016,97 @@ export default function Home() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
               {/* 100+ Celebrities */}
-              <div className="group relative bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl border border-rose-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-rose-200/20 rounded-bl-full"></div>
-                <div className="absolute top-4 right-4 z-10">
-                  <div className="bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="absolute top-4 right-4">
+                  <div className="bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                     NEW
                   </div>
                 </div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faUserAstronaut} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">100+</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">AI Celebrities & Characters</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Chat with your favorite personalities and get inspired by their wisdom</p>
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faUserAstronaut} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">100+</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">AI Celebrities & Characters</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Chat with your favorite personalities and get inspired by their wisdom</p>
               </div>
 
               {/* Smart Goals */}
-              <div className="group relative bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl border border-indigo-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-200/20 rounded-bl-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faBullseye} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">AI-Powered</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">Smart Goal Suggestions</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Get personalized wellness goals based on your mood patterns and progress</p>
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faBullseye} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">AI-Powered</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">Smart Goal Suggestions</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Get personalized wellness goals based on your mood patterns and progress</p>
               </div>
 
               {/* Mood Tracking */}
-              <div className="group relative bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl border border-purple-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-purple-200/20 rounded-bl-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faHeart} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">12 Moods</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">Advanced Mood Tracking</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Track your emotional journey with 12 distinct mood states and detailed analytics</p>
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">12 Moods</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">Advanced Mood Tracking</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Track your emotional journey with 12 distinct mood states and detailed analytics</p>
               </div>
 
               {/* Journal Prompts */}
-              <div className="group relative bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl border border-green-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-green-200/20 rounded-bl-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faBookOpen} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">Unlimited</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">AI Journal Prompts</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Get personalized journaling prompts that adapt to your emotional state</p>
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faBookOpen} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">Unlimited</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">AI Journal Prompts</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Get personalized journaling prompts that adapt to your emotional state</p>
               </div>
 
               {/* Insights Dashboard */}
-              <div className="group relative bg-gradient-to-br from-orange-50 to-amber-50 rounded-3xl border border-orange-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-orange-200/20 rounded-bl-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faChartLine} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">Real-time</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">Insights Dashboard</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Visualize your progress with beautiful charts and actionable insights</p>
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">Real-time</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">Insights Dashboard</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Visualize your progress with beautiful charts and actionable insights</p>
               </div>
 
               {/* 24/7 Support */}
-              <div className="group relative bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl border border-blue-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-200/20 rounded-bl-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faComments} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">24/7</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">Always Available</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Your AI companion is always ready to listen, anytime you need support</p>
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faComments} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">24/7</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">Always Available</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Your AI companion is always ready to listen, anytime you need support</p>
               </div>
 
               {/* Privacy First */}
-              <div className="group relative bg-gradient-to-br from-teal-50 to-cyan-50 rounded-3xl border border-teal-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-teal-200/20 rounded-bl-full"></div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faShield} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">100%</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">Private & Secure</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">End-to-end encryption ensures your data stays completely private</p>
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faShield} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">100%</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">Private & Secure</p>
+                <p className="text-xs text-gray-600 leading-relaxed">End-to-end encryption ensures your data stays completely private</p>
               </div>
 
               {/* Free to Start */}
-              <div className="group relative bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl border border-pink-100 p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-pink-200/20 rounded-bl-full"></div>
-                <div className="absolute top-4 right-4 z-10">
-                  <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
+                <div className="absolute top-4 right-4">
+                  <div className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                     FREE
                   </div>
                 </div>
-                <div className="relative">
-                  <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-pink-400 to-pink-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <FontAwesomeIcon icon={faHeart} className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">₹0</h3>
-                  <p className="text-base font-semibold text-gray-800 mb-2">Free to Start</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">Begin your wellness journey today with no credit card required</p>
+                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                  <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-600" />
                 </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">₹0</h3>
+                <p className="text-sm font-semibold text-gray-800 mb-2">Free to Start</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Begin your wellness journey today with no credit card required</p>
               </div>
             </div>
 
-            {/* CTA */}
-            <div className="mt-16 text-center">
-              <button
-                onClick={handleTalkNowClick}
-                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-8 py-4 text-base font-semibold text-rose-700 shadow-lg hover:bg-rose-300 transition-all group"
-              >
-                Start Your Free Journey
-                <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
-              <p className="mt-4 text-sm text-gray-600">No credit card required • Get started in 2 minutes</p>
-            </div>
+
           </div>
         </section>
 
@@ -1841,132 +1578,7 @@ export default function Home() {
         </section>
 
         {/* Blog Section with Auto Slider */}
-        <section id="blogs" className="py-20 bg-gradient-to-br from-rose-100/30 to-rose-50/30 overflow-hidden">
-          <div className="mx-auto max-w-full px-6">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                Latest from our blog
-              </h2>
-              <p className="mt-4 text-lg text-gray-600">
-                Expert insights and tips for better emotional wellness
-              </p>
-            </div>
-
-            <div className="mt-16 relative ">
-              <div className="overflow-hidden">
-                <div className="flex gap-6 animate-blog-slider">
-                  <BlogCard
-                    title="5 Daily Habits for Better Emotional Health"
-                    excerpt="Discover simple yet powerful daily practices that can significantly improve your emotional well-being and resilience."
-                    date="Nov 1, 2024"
-                    readTime="5 min read"
-                    category="Wellness Tips"
-                  />
-                  <BlogCard
-                    title="Understanding Your Emotional Patterns"
-                    excerpt="Learn how to identify and break negative emotional cycles using data-driven insights and mindful awareness."
-                    date="Oct 28, 2024"
-                    readTime="7 min read"
-                    category="Psychology"
-                  />
-                  <BlogCard
-                    title="The Science Behind AI Emotional Support"
-                    excerpt="Explore how artificial intelligence is revolutionizing mental health support and what makes it so effective."
-                    date="Oct 25, 2024"
-                    readTime="6 min read"
-                    category="Technology"
-                  />
-                  <BlogCard
-                    title="Mindfulness Techniques for Daily Life"
-                    excerpt="Simple mindfulness practices you can incorporate into your daily routine to reduce stress and improve mental clarity."
-                    date="Oct 20, 2024"
-                    readTime="4 min read"
-                    category="Mindfulness"
-                  />
-                  {/* Duplicate for seamless loop */}
-                  <BlogCard
-                    title="5 Daily Habits for Better Emotional Health"
-                    excerpt="Discover simple yet powerful daily practices that can significantly improve your emotional well-being and resilience."
-                    date="Nov 1, 2024"
-                    readTime="5 min read"
-                    category="Wellness Tips"
-                  />
-                  <BlogCard
-                    title="Understanding Your Emotional Patterns"
-                    excerpt="Learn how to identify and break negative emotional cycles using data-driven insights and mindful awareness."
-                    date="Oct 28, 2024"
-                    readTime="7 min read"
-                    category="Psychology"
-                  />
-                  <BlogCard
-                    title="The Science Behind AI Emotional Support"
-                    excerpt="Explore how artificial intelligence is revolutionizing mental health support and what makes it so effective."
-                    date="Oct 25, 2024"
-                    readTime="6 min read"
-                    category="Technology"
-                  />
-                  <BlogCard
-                    title="Mindfulness Techniques for Daily Life"
-                    excerpt="Simple mindfulness practices you can incorporate into your daily routine to reduce stress and improve mental clarity."
-                    date="Oct 20, 2024"
-                    readTime="4 min read"
-                    category="Mindfulness"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-center mt-8">
-                <Link
-                  href="/blog"
-                  className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-6 py-3 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
-                >
-                  View All Articles
-                  <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Blog Slider Animation CSS */}
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              @keyframes blog-slider {
-                0% {
-                  transform: translateX(0);
-                }
-                100% {
-                  transform: translateX(-50%);
-                }
-              }
-
-              .animate-blog-slider {
-                animation: blog-slider 40s linear infinite;
-                width: max-content;
-                will-change: transform;
-              }
-
-              /* Disable blog slider animation on mobile */
-              @media (max-width: 768px) {
-                .animate-blog-slider {
-                  animation: none;
-                  overflow-x: auto;
-                  scroll-snap-type: x mandatory;
-                  -webkit-overflow-scrolling: touch;
-                }
-              }
-
-              .animate-blog-slider:hover {
-                animation-play-state: paused;
-              }
-
-              @media (prefers-reduced-motion: reduce) {
-                .animate-blog-slider {
-                  animation: none;
-                }
-              }
-            `
-          }} />
-        </section>
+        <BlogSliderSection />
 
         {/* FAQ Accordion Section */}
         <section className="py-20 bg-gradient-to-br from-rose-50/20 to-white">
@@ -2623,9 +2235,9 @@ function BenefitItem({ icon, title, description }) {
   );
 }
 
-function BlogCard({ title, excerpt, date, readTime, category }) {
+function BlogCard({ id, title, excerpt, date, readTime, category }) {
   return (
-    <div className="flex-shrink-0 w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
+    <Link href={id ? `/blog/${id}` : '/blog'} className="flex-shrink-0 w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
       <div className="flex items-center gap-2 mb-4">
         <span className="inline-flex items-center rounded-full bg-rose-200 px-3 py-1 text-xs font-medium text-rose-700">
           {category}
@@ -2647,7 +2259,7 @@ function BlogCard({ title, excerpt, date, readTime, category }) {
           <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -2754,5 +2366,365 @@ function FAQAccordion({ faqs }) {
         </div>
       ))}
     </div>
+  );
+}
+
+// Who Can Use Tara Carousel Component
+function WhoCanUseTaraCarousel() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      title: "Homemakers",
+      icon: faHeart,
+      color: "rose",
+      image: "/slider/homemaker.jpg",
+      description: "Managing a household is a full-time job. Tara helps you rediscover balance, set boundaries, and prioritize your emotional wellbeing.",
+      points: [
+        "Find time for yourself without guilt",
+        "Manage stress and overwhelm",
+        "Rediscover your purpose and identity"
+      ]
+    },
+    {
+      title: "Working Professionals",
+      icon: faChartLine,
+      color: "rose",
+      image: "/slider/workingprofessional.jpg",
+      description: "Work pressure can take a toll. Tara helps you manage stress, prevent burnout, and maintain work-life balance.",
+      points: [
+        "Handle work pressure and deadlines",
+        "Prevent burnout and exhaustion",
+        "Build confidence and clarity"
+      ]
+    },
+    {
+      title: "Students",
+      icon: faBookOpen,
+      color: "rose",
+      image: "/slider/students.jpg",
+      description: "Academic pressure and career confusion are real. Tara helps you manage exam stress, build focus, and find direction.",
+      points: [
+        "Manage exam stress and pressure",
+        "Build focus and productivity",
+        "Find clarity and direction"
+      ]
+    },
+    {
+      title: "Traders & Entrepreneurs",
+      icon: faBullseye,
+      color: "rose",
+      image: "/slider/business.jpg",
+      description: "High-stakes decisions and financial pressure are exhausting. Tara helps you stay emotionally balanced and mentally clear.",
+      points: [
+        "Handle financial stress and losses",
+        "Make clear, confident decisions",
+        "Stay emotionally balanced"
+      ]
+    },
+    {
+      title: "Parents",
+      icon: faHeart,
+      color: "rose",
+      image: "/slider/homemaker.jpg",
+      description: "Parenting is rewarding but challenging. Tara helps you manage parenting stress, find patience, and maintain your own wellbeing.",
+      points: [
+        "Handle parenting challenges with calm",
+        "Balance family and personal needs",
+        "Build emotional resilience"
+      ]
+    },
+    {
+      title: "Senior Citizens",
+      icon: faUser,
+      color: "rose",
+      image: "/slider/homemaker.jpg",
+      description: "Life transitions and health concerns can be overwhelming. Tara provides companionship, emotional support, and helps you stay positive.",
+      points: [
+        "Combat loneliness and isolation",
+        "Manage health-related anxiety",
+        "Stay mentally active and engaged"
+      ]
+    },
+    {
+      title: "Healthcare Workers",
+      icon: faHeart,
+      color: "rose",
+      image: "/slider/workingprofessional.jpg",
+      description: "Caring for others is emotionally draining. Tara helps you process difficult emotions, prevent compassion fatigue, and prioritize self-care.",
+      points: [
+        "Process emotional trauma",
+        "Prevent compassion fatigue",
+        "Maintain work-life boundaries"
+      ]
+    },
+    {
+      title: "Anyone Seeking Support",
+      icon: faComments,
+      color: "rose",
+      image: "/slider/students.jpg",
+      description: "No matter your situation, Tara is here for you. Get 24/7 emotional support, guidance, and a safe space to express yourself.",
+      points: [
+        "24/7 emotional support",
+        "Judgment-free conversations",
+        "Personalized guidance and care"
+      ]
+    }
+  ];
+
+  // Auto-slide effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000); // Change slide every 4 seconds
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  return (
+    <section className="relative py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-200 blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-pink-200 blur-3xl"></div>
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-5 py-2 text-sm font-semibold text-rose-600 mb-6">
+            <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
+            For Everyone, Everywhere
+          </div>
+          <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
+            Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Whether you're managing a home, building a career, or navigating life's challenges — Tara is here for you
+          </p>
+        </div>
+
+        <div className="relative">
+          <div className="relative h-[500px] md:h-[400px]">
+            {slides.map((slide, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === currentSlide
+                  ? 'opacity-100 translate-x-0'
+                  : index < currentSlide
+                    ? 'opacity-0 -translate-x-full'
+                    : 'opacity-0 translate-x-full'
+                  }`}
+              >
+                <div className="bg-white rounded-3xl border border-rose-100 p-8 md:p-10 shadow-xl h-full flex flex-col md:flex-row gap-8 items-center">
+                  <div className="w-full md:w-1/3 flex-shrink-0">
+                    <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden bg-rose-50">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex-1">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="h-14 w-14 rounded-xl bg-rose-100 flex items-center justify-center flex-shrink-0">
+                        <FontAwesomeIcon icon={slide.icon} className="h-7 w-7 text-rose-600" />
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{slide.title}</h3>
+                    </div>
+                    <p className="text-gray-600 mb-6 leading-relaxed">
+                      {slide.description}
+                    </p>
+                    <ul className="space-y-3">
+                      {slide.points.map((point, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700">{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-center gap-2 mt-8">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide
+                  ? 'w-8 bg-rose-500'
+                  : 'w-2 bg-rose-200 hover:bg-rose-300'
+                  }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Blog Slider Section Component with API
+function BlogSliderSection() {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/admin/blogs');
+      const data = await response.json();
+
+      if (data.success && data.data) {
+        // Get latest 4 blogs
+        setBlogs(data.data.slice(0, 4));
+      }
+    } catch (error) {
+      console.error('Failed to fetch blogs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  const calculateReadTime = (content) => {
+    if (!content) return '5 min read';
+    const wordsPerMinute = 200;
+    const wordCount = content.split(/\s+/).length;
+    const minutes = Math.ceil(wordCount / wordsPerMinute);
+    return `${minutes} min read`;
+  };
+
+  return (
+    <section id="blogs" className="py-20 bg-gradient-to-br from-rose-100/30 to-rose-50/30 overflow-hidden">
+      <div className="mx-auto max-w-full px-6">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+            Latest from our blog
+          </h2>
+          <p className="mt-4 text-lg text-gray-600">
+            Expert insights and tips for better emotional wellness
+          </p>
+        </div>
+
+        <div className="mt-16 relative">
+          {loading ? (
+            // Loader
+            <div className="overflow-hidden">
+              <div className="flex gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="min-w-[350px] bg-white rounded-2xl border border-rose-100 p-6 animate-pulse">
+                    <div className="h-4 bg-rose-100 rounded w-20 mb-4"></div>
+                    <div className="h-6 bg-rose-100 rounded w-3/4 mb-3"></div>
+                    <div className="h-4 bg-rose-100 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-rose-100 rounded w-5/6 mb-4"></div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="h-3 bg-rose-100 rounded w-24"></div>
+                      <div className="h-3 bg-rose-100 rounded w-20"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : blogs.length > 0 ? (
+            // Blogs
+            <div className="overflow-hidden">
+              <div className="flex gap-6 animate-blog-slider">
+                {/* Original blogs */}
+                {blogs.map((blog) => (
+                  <BlogCard
+                    key={blog._id}
+                    id={blog._id}
+                    title={blog.title}
+                    excerpt={blog.excerpt || blog.content?.substring(0, 150) + '...'}
+                    date={formatDate(blog.publishDate || blog.createdAt)}
+                    readTime={calculateReadTime(blog.content)}
+                    category={blog.category || 'Wellness'}
+                  />
+                ))}
+                {/* Duplicate for seamless loop */}
+                {blogs.map((blog) => (
+                  <BlogCard
+                    key={`dup-${blog._id}`}
+                    id={blog._id}
+                    title={blog.title}
+                    excerpt={blog.excerpt || blog.content?.substring(0, 150) + '...'}
+                    date={formatDate(blog.publishDate || blog.createdAt)}
+                    readTime={calculateReadTime(blog.content)}
+                    category={blog.category || 'Wellness'}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : (
+            // No blogs
+            <div className="text-center py-12">
+              <p className="text-gray-600">No blogs available at the moment.</p>
+            </div>
+          )}
+
+          <div className="flex justify-center mt-8">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-6 py-3 text-sm font-medium text-rose-600 hover:bg-rose-200 transition-all"
+            >
+              View All Articles
+              <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Blog Slider Animation CSS */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes blog-slider {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+
+          .animate-blog-slider {
+            animation: blog-slider 40s linear infinite;
+            width: max-content;
+            will-change: transform;
+          }
+
+          @media (max-width: 768px) {
+            .animate-blog-slider {
+              animation: none;
+              overflow-x: auto;
+              scroll-snap-type: x mandatory;
+              -webkit-overflow-scrolling: touch;
+            }
+          }
+
+          .animate-blog-slider:hover {
+            animation-play-state: paused;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .animate-blog-slider {
+              animation: none;
+            }
+          }
+        `
+      }} />
+    </section>
   );
 }
