@@ -1440,6 +1440,9 @@ export default function ChatListPage() {
               setChatMessages={setChatMessages}
               onClose={() => setShowAdd(false)}
               onCreate={async (payload) => {
+                // Close modal immediately to prevent multiple clicks
+                setShowAdd(false);
+
                 try {
                   // Check if user is logged in
                   if (!user || !user.id) {
@@ -1499,7 +1502,6 @@ export default function ChatListPage() {
 
                     setChats((prev) => [...prev, newChat]);
                     setActiveId(chatUser.id);
-                    setShowAdd(false);
                   } else {
                     alert('Failed to create user. Please try again.');
                   }
@@ -1708,11 +1710,18 @@ function AddUserModal({ chats, setActiveId, setChatMessages, onClose, onCreate }
   const [gender, setGender] = useState("male");
   const [avatar, setAvatar] = useState(AVATARS[0]);
   const [role, setRole] = useState(ROLES[0]);
+  const [isCreating, setIsCreating] = useState(false);
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
-    if (!name.trim()) return;
-    onCreate({ name, gender, avatar, role });
+    if (!name.trim() || isCreating) return;
+
+    setIsCreating(true);
+    try {
+      await onCreate({ name, gender, avatar, role });
+    } finally {
+      setIsCreating(false);
+    }
   }
 
   return (
@@ -1795,15 +1804,17 @@ function AddUserModal({ chats, setActiveId, setChatMessages, onClose, onCreate }
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200"
+                disabled={isCreating}
+                className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-300 shadow-sm"
+                disabled={isCreating}
+                className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Create
+                {isCreating ? 'Creating...' : 'Create'}
               </button>
             </div>
           </form>

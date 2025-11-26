@@ -65,9 +65,7 @@ async function createBlog(body) {
             trending,
             schemaType,
             faqItems,
-            howToSteps,
-            initialLikes,
-            initialViews
+            howToSteps
         } = body;
 
         console.log('Received featuredImage URL:', featuredImage);
@@ -105,11 +103,11 @@ async function createBlog(body) {
             readTime: calculateReadTime(content),
             category: category || 'General',
             tags: tags || [],
-            likes: initialLikes || 0,
+            likes: 0,
             likedBy: [],
             comments: [],
             commentCount: 0,
-            views: initialViews || 0,
+            views: 0,
             featured: featured || false,
             trending: trending || false,
             schemaType: schemaType || 'BlogPosting',
@@ -159,9 +157,7 @@ async function updateBlog(blogId, body) {
             trending,
             schemaType,
             faqItems,
-            howToSteps,
-            initialLikes,
-            initialViews
+            howToSteps
         } = body;
 
         console.log('Update Blog API - Title:', title);
@@ -227,20 +223,17 @@ async function updateBlog(blogId, body) {
             howToSteps: howToSteps || [],
             updatedAt: new Date().toISOString(),
             // Preserve existing stats - CRITICAL!
-            // If initialLikes/initialViews provided in edit, use them (for manual adjustment)
-            // Otherwise preserve existing values
-            likes: initialLikes !== undefined ? initialLikes : (existingBlogData.likes || 0),
+            // Stats are automatically managed, not manually editable
+            likes: existingBlogData.likes || 0,
             likedBy: existingBlogData.likedBy || [],
-            views: initialViews !== undefined ? initialViews : (existingBlogData.views || 0),
+            views: existingBlogData.views || 0,
             comments: existingBlogData.comments || [],
             commentCount: existingBlogData.commentCount || 0
         };
 
-        console.log('Update Blog API - Stats being saved:', {
+        console.log('Update Blog API - Preserving stats:', {
             likes: updatedBlog.likes,
-            views: updatedBlog.views,
-            fromPayload: { initialLikes, initialViews },
-            fromExisting: { likes: existingBlogData.likes, views: existingBlogData.views }
+            views: updatedBlog.views
         });
 
         console.log('Update Blog API - Updating blog with slug:', slug);

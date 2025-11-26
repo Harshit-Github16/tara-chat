@@ -834,6 +834,168 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Who Can Use Tara Section */}
+        <section className="relative py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute inset-0 pointer-events-none opacity-20">
+            <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-200 blur-3xl"></div>
+            <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-pink-200 blur-3xl"></div>
+          </div>
+
+          <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
+            {/* Header */}
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-5 py-2 text-sm font-semibold text-rose-600 mb-6">
+                <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
+                For Everyone, Everywhere
+              </div>
+              <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
+                Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Whether you're managing a home, building a career, or navigating life's challenges — Tara is here for you
+              </p>
+            </div>
+
+            {/* Grid Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+              {/* Card 1: Homemakers */}
+              <div className="group relative bg-white rounded-2xl border border-rose-100 p-8 hover:shadow-2xl hover:border-rose-200 transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-rose-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                      <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Homemakers</h3>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Managing a household is a full-time job. Tara helps you rediscover balance, set boundaries, and prioritize your emotional wellbeing.
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Find time for yourself without guilt</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Manage stress and overwhelm</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Rediscover your purpose and identity</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Card 2: Working Professionals */}
+              <div className="group relative bg-white rounded-2xl border border-blue-100 p-8 hover:shadow-2xl hover:border-blue-200 transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                      <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Working Professionals</h3>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Work pressure can take a toll. Tara helps you manage stress, prevent burnout, and maintain work-life balance.
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Handle work pressure and deadlines</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Prevent burnout and exhaustion</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Build confidence and clarity</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Card 3: Students */}
+              <div className="group relative bg-white rounded-2xl border border-purple-100 p-8 hover:shadow-2xl hover:border-purple-200 transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                      <FontAwesomeIcon icon={faBookOpen} className="h-7 w-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Students</h3>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Academic pressure and career confusion are real. Tara helps you manage exam stress, build focus, and find direction.
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Manage exam stress and pressure</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Build focus and productivity</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Find clarity and direction</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Card 4: Traders & Entrepreneurs */}
+              <div className="group relative bg-white rounded-2xl border border-green-100 p-8 hover:shadow-2xl hover:border-green-200 transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-100 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                      <FontAwesomeIcon icon={faBullseye} className="h-7 w-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900">Traders & Entrepreneurs</h3>
+                  </div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    High-stakes decisions and financial pressure are exhausting. Tara helps you stay emotionally balanced and mentally clear.
+                  </p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Handle financial stress and losses</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Make clear, confident decisions</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">Stay emotionally balanced</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="mt-16 text-center">
+              <p className="text-lg text-gray-600 mb-6">
+                No matter who you are or what you're going through, Tara is here to support you
+              </p>
+              <button
+                onClick={handleTalkNowClick}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              >
+                Start Your Journey
+                <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
         <section id="features" className="relative py-20 bg-white overflow-hidden">
           {/* Animated SVG Background Elements */}

@@ -41,9 +41,9 @@ export const metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: [
+      { url: 'https://ik.imagekit.io/exerovn5q/32x32px%20logo%20(1).png', sizes: '32x32', type: 'image/png' },
+      { url: 'https://ik.imagekit.io/exerovn5q/32x32px%20logo%20(1).png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
-      { url: '/taralogo.jpg', sizes: '32x32', type: 'image/jpeg' },
-      { url: '/taralogo.jpg', sizes: '16x16', type: 'image/jpeg' },
     ],
     apple: [
       { url: '/taralogo.jpg', sizes: '180x180', type: 'image/jpeg' },

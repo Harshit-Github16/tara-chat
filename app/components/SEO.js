@@ -121,7 +121,8 @@ export default function SEO({
             <meta name="apple-mobile-web-app-title" content="Tara" />
 
             {/* Favicon */}
-            <link rel="icon" href="/favicon.ico" />
+            <link rel="icon" href="https://ik.imagekit.io/exerovn5q/32x32px%20logo%20(1).png" sizes="32x32" type="image/png" />
+
             <link rel="apple-touch-icon" href="/taralogo.jpg" />
 
             {/* Structured Data */}

@@ -537,3 +537,99 @@ linking cursor animation for typing effect */
 .animate-wave {
   animation: wave 3s ease-in-out infinite;
 }
+
+/* Auto-
+scrolling slider animation for "Who Can Use" section */
+@keyframes slide-infinite {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0);
+  }
+
+  30% {
+    transform: translateX(-100%);
+  }
+
+  55% {
+    transform: translateX(-100%);
+  }
+
+  60% {
+    transform: translateX(-200%);
+  }
+
+  85% {
+    transform: translateX(-200%);
+  }
+
+  90% {
+    transform: translateX(-300%);
+  }
+
+  100% {
+    transform: translateX(-300%);
+  }
+}
+
+.animate-slide-infinite {
+  animation: slide-infinite 32s ease-in-out infinite;
+}
+
+/* Pause animation on hover */
+.animate-slide-infinite:hover {
+  animation-play-state: paused;
+}
+
+/* Who 
+Can Use Section - Paragraph width constraint */
+#home+section+section .grid p {
+  max-width: 90%;
+}
+
+@media (min-width: 1024px) {
+  #home+section+section .grid p {
+    max-width: 85%;
+  }
+}
+
+
+/* Who Can Use Section - Constrain paragraph width in slides */
+.animate-slide-infinite p.text-lg {
+  max-width: 500px !important;
+}
+
+@media (max-width: 1023px) {
+  .animate-slide-infinite p.text-lg {
+    max-width: 100% !important;
+  }
+}
+
+
+/* Fix slider - consistent height for all slides */
+.animate-slide-infinite>div {
+  min-height: 500px;
+}
+
+.animate-slide-infinite .aspect-square {
+  aspect-ratio: auto !important;
+  height: 400px !important;
+}
+
+.animate-slide-infinite img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 1023px) {
+  .animate-slide-infinite>div {
+    min-height: auto;
+  }
+
+  .animate-slide-infinite .aspect-square {
+    height: 300px !important;
+  }
+}

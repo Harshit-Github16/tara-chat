@@ -245,9 +245,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
         trending: false,
         schemaType: 'BlogPosting',
         faqItems: [],
-        howToSteps: [],
-        initialLikes: 0,
-        initialViews: 0
+        howToSteps: []
     });
     const [submitting, setSubmitting] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -271,9 +269,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                 trending: editingBlog.trending || false,
                 schemaType: editingBlog.schemaType || 'BlogPosting',
                 faqItems: editingBlog.faqItems || [],
-                howToSteps: editingBlog.howToSteps || [],
-                initialLikes: editingBlog.likes || 0,
-                initialViews: editingBlog.views || 0
+                howToSteps: editingBlog.howToSteps || []
             });
             setCurrentStep(1); // Reset to step 1 when editing
         }
@@ -778,32 +774,6 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                                         className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
                                         placeholder="wellness, mental-health"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Initial Stats */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Initial Likes</label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        value={formData.initialLikes}
-                                        onChange={(e) => setFormData({ ...formData, initialLikes: parseInt(e.target.value) || 0 })}
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
-                                        placeholder="0"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Initial Views</label>
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        value={formData.initialViews}
-                                        onChange={(e) => setFormData({ ...formData, initialViews: parseInt(e.target.value) || 0 })}
-                                        className="w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
-                                        placeholder="0"
                                     />
                                 </div>
                             </div>
