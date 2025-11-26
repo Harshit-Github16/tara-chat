@@ -89,19 +89,17 @@ export const pageMetadata = {
     }),
 
     chatlist: createMetadata({
-        title: 'AI Chat & Celebrity Conversations | Mental Health Support',
-        description: 'Chat with 100+ AI characters & celebrities for emotional support, motivation & guidance. Start meaningful conversations for your mental wellness.',
+        title: 'AI Chat & Conversations | Mental Health Support',
+        description: 'Chat with AI characters for emotional support, motivation & guidance. Start meaningful conversations for your mental wellness.',
         path: '/chatlist',
         keywords: [
             'AI chat',
-            'celebrity chat',
             'emotional support chat',
             'mental health conversations',
             'AI therapy',
             'virtual companions',
             'emotional wellness chat',
             'AI characters',
-            'celebrity AI',
             'mental health support',
         ],
     }),

@@ -32,10 +32,7 @@ export const COMMON_FAQS = [
         question: "Is Tara free to use?",
         answer: "Yes, Tara offers a free tier with basic features including mood tracking, journaling, and limited AI chat sessions. Premium features are available with advanced insights and unlimited conversations."
     },
-    {
-        question: "How does the celebrity chat feature work?",
-        answer: "Tara's celebrity chat feature allows you to have conversations with AI versions of famous personalities. These AI models are trained to respond in the style and personality of celebrities, providing motivation, advice, and entertainment while maintaining appropriate boundaries."
-    },
+    // Celebrity FAQ removed - feature temporarily disabled
 
     {
         question: "Can Tara replace professional therapy?",

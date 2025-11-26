@@ -68,12 +68,12 @@ export async function GET(request) {
     }
 }
 
-// POST - Add a new chat user (custom or celebrity)
+// POST - Add a new chat user (custom only, celebrity feature disabled)
 export async function POST(request) {
     try {
-        const { userId, name, avatar, gender, role, type, celebrityId, celebrityRole } = await request.json();
+        const { userId, name, avatar, gender, role, type } = await request.json();
 
-        console.log('POST /api/users - Request:', { userId, name, avatar, gender, role, type, celebrityId, celebrityRole });
+        console.log('POST /api/users - Request:', { userId, name, avatar, gender, role, type });
 
         if (!userId || !name) {
             return NextResponse.json({ error: 'User ID and name are required' }, { status: 400 });
@@ -83,11 +83,11 @@ export async function POST(request) {
         const db = client.db('tara'); // Same database as User model
         const collection = db.collection('users');
 
-        // Create new chat user
+        // Create new chat user (custom only, celebrity feature disabled)
         const newChatUser = {
-            id: celebrityId || new ObjectId().toString(),
+            id: new ObjectId().toString(),
             name,
-            type: type || 'custom', // 'custom', 'celebrity', or 'ai'
+            type: type || 'custom', // 'custom' or 'ai'
             avatar: avatar || null,
             gender: gender || 'other',
             role: role || 'Chill Friend',
@@ -95,11 +95,6 @@ export async function POST(request) {
             createdAt: new Date(),
             lastMessageAt: new Date()
         };
-
-        // Add celebrityRole if provided (for celebrities)
-        if (celebrityRole) {
-            newChatUser.celebrityRole = celebrityRole;
-        }
 
         // First, check if user document exists
         const userDoc = await collection.findOne({ firebaseUid: userId });

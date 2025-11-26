@@ -2,8 +2,8 @@ import Head from 'next/head';
 
 export default function SEO({
     title = "Tara - AI Mental Health & Wellness Companion",
-    description = "Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Chat with celebrities, track insights, and build healthy habits.",
-    keywords = "mental health, AI companion, wellness, mindfulness, emotional support, therapy, meditation, personal growth, mental wellness, AI chat, celebrity chat, mood tracking, journal, insights",
+    description = "Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Track insights and build healthy habits.",
+    keywords = "mental health, AI companion, wellness, mindfulness, emotional support, therapy, meditation, personal growth, mental wellness, AI chat, mood tracking, journal, insights",
     canonicalUrl = "",
     ogImage = "/taralogo.jpg",
     ogType = "website",

@@ -35,7 +35,7 @@ import LoginModal from "./components/LoginModal";
 import OnboardingModal from "./components/OnboardingModal";
 import { useAuth } from "./contexts/AuthContext";
 // import Footer from "./components/Footer";
-import Head from "next/head";
+
 export default function Home() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -68,7 +68,7 @@ export default function Home() {
 
     if (!isDeleting && displayedText === currentMood) {
       // Pause before deleting
-      timeout = setTimeout(() => setIsDeleting(true), 2000);
+      timeout = setTimeout(() => setIsDeleting(true), 1000);
     } else if (isDeleting && displayedText === '') {
       // Move to next mood
       setIsDeleting(false);
@@ -190,61 +190,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      <Head>
 
-        <title>Tara - AI Mental Health & Wellness Companion | Emotional Support Chat</title>
-
-        <meta name="description" content="Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Chat with 100+ AI characters, track moods, and build healthy habits." />
-
-        <meta name="keywords" content="mental health app, AI companion, emotional wellness, mindfulness, therapy chat, mood tracking, journal app, personal growth, mental wellness, AI therapy, celebrity chat, emotional support" />
-
-        <link rel="canonical" href="https://www.tara4u.com" />
-
-        <meta property="og:title" content="Tara - AI Mental Health & Wellness Companion" />
-
-        <meta property="og:description" content="Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth." />
-
-        <meta property="og:type" content="website" />
-
-        <meta property="og:url" content="https://www.tara4u.com" />
-
-        <meta property="og:image" content="https://www.tara4u.com/taralogo.jpg" />
-
-        <script
-
-          type="application/ld+json"
-
-          dangerouslySetInnerHTML={{
-
-            __html: JSON.stringify({
-
-              "@context": "https://schema.org",
-
-              "@type": "WebSite",
-
-              "name": "Tara",
-
-              "url": "https://www.tara4u.com",
-
-              "description": "AI-powered mental health and wellness companion",
-
-              "potentialAction": {
-
-                "@type": "SearchAction",
-
-                "target": "https://www.tara4u.com/search?q={search_term_string}",
-
-                "query-input": "required name=search_term_string"
-
-              }
-
-            })
-
-          }}
-
-        />
-
-      </Head>
       {/* Navigation */}
       <header className="sticky top-0 z-50 border-b border-rose-100 bg-white/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -518,8 +464,23 @@ export default function Home() {
                   You're stronger than you think, Your mind deserves a place to breathe
                 </h2>
                 <p className="mt-6 text-lg text-gray-600">
-                  Talk, Align, Reflect, Act (Tara) helps you to heal and find clarity with an AI companion, Tara4u is built to understand your emotions and support your mental wellbeing 24/7 and holds space for your feelings, help you calm the chaos, and guide you back to emotional balance—anytime you need.
+                  <span className="font-semibold text-gray-900">Talk, Align, Reflect, Act.</span> Tara is your 24/7 AI companion designed to help you heal and find clarity. We hold space for your feelings, help you calm the chaos, and guide you back to emotional balance—whenever you need it.
                 </p>
+
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <button
+                    onClick={handleTalkNowClick}
+                    className="rounded-full bg-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-rose-700 transition-all hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    Start Chatting Now - It's Free
+                  </button>
+                  <Link
+                    href="/#how-it-works"
+                    className="rounded-full bg-white px-8 py-4 text-lg font-semibold text-rose-600 shadow-md border border-rose-100 hover:bg-rose-50 transition-all"
+                  >
+                    See How It Works
+                  </Link>
+                </div>
                 {/* Quick reassurance */}
                 <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-600">
                   <div className="flex items-center gap-2">
@@ -539,7 +500,7 @@ export default function Home() {
               </div>
 
               {/* Mobile Frame Mockup */}
-              <div className="relative flex justify-center lg:justify-end">
+              <div className="relative hidden lg:flex justify-center lg:justify-end">
                 {/* Mobile Device Frame */}
                 <div className="relative w-[280px] sm:w-[320px] md:w-[340px] lg:w-[360px]">
                   {/* Phone Frame */}
@@ -685,34 +646,43 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {/* Benefit 1 - Improved Emotional Stability */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-3xl border border-rose-100 p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <FontAwesomeIcon icon={faHeart} className="h-24 w-24 text-rose-500 transform rotate-12" />
+                </div>
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
                   <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Improved Emotional Stability</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 relative z-10">Improved Emotional Stability</h3>
+                <p className="text-gray-600 leading-relaxed relative z-10">
                   Build resilience and maintain emotional balance through consistent support and guided reflection. Learn to navigate life's ups and downs with confidence.
                 </p>
               </div>
 
               {/* Benefit 2 - Early Detection */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-3xl border border-rose-100 p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <FontAwesomeIcon icon={faChartLine} className="h-24 w-24 text-rose-500 transform -rotate-12" />
+                </div>
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
                   <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Early Detection of Mental Health Risks</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 relative z-10">Early Detection of Mental Health Risks</h3>
+                <p className="text-gray-600 leading-relaxed relative z-10">
                   AI-powered mood tracking identifies patterns and potential concerns early, helping you take proactive steps toward better mental health.
                 </p>
               </div>
 
               {/* Benefit 3 - Reduced Stress & Anxiety */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-3xl border border-rose-100 p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <FontAwesomeIcon icon={faComments} className="h-24 w-24 text-rose-500 transform rotate-6" />
+                </div>
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
                   <FontAwesomeIcon icon={faComments} className="h-7 w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Reduced Stress & Anxiety</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 relative z-10">Reduced Stress & Anxiety</h3>
+                <p className="text-gray-600 leading-relaxed relative z-10">
                   Express your worries in a judgment-free space. Our AI companions provide calming support and practical coping strategies whenever you need them.
                 </p>
               </div>
@@ -2504,13 +2474,13 @@ function WhoCanUseTaraCarousel() {
   }, [slides.length]);
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-hidden">
+    <section className="relative py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-x-hidden">
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-200 blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-pink-200 blur-3xl"></div>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-12">
+      <div className="relative mx-auto px-6 lg:px-12">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-5 py-2 text-sm font-semibold text-rose-600 mb-6">
             <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
@@ -2524,68 +2494,171 @@ function WhoCanUseTaraCarousel() {
           </p>
         </div>
 
-        <div className="relative">
-          <div className="relative h-[500px] md:h-[400px]">
-            {slides.map((slide, index) => (
-              <div
-                key={index}
-                className={`absolute inset-0 transition-all duration-700 ease-in-out ${index === currentSlide
-                  ? 'opacity-100 translate-x-0'
-                  : index < currentSlide
-                    ? 'opacity-0 -translate-x-full'
-                    : 'opacity-0 translate-x-full'
-                  }`}
-              >
-                <div className="bg-white rounded-3xl border border-rose-100 p-8 md:p-10 shadow-xl h-full flex flex-col md:flex-row gap-8 items-center">
-                  <div className="w-full md:w-1/3 flex-shrink-0">
-                    <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden bg-rose-50">
-                      <img
-                        src={slide.image}
-                        alt={slide.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
+        <div className="relative mx-auto px-4">
+          {/* Left Arrow */}
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white border-2 border-rose-300 shadow-lg hover:bg-rose-50 hover:scale-110 transition-all flex items-center justify-center"
+            aria-label="Previous slide"
+          >
+            <FontAwesomeIcon icon={faChevronDown} className="h-5 w-5 text-rose-600 rotate-90" />
+          </button>
 
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="h-14 w-14 rounded-xl bg-rose-100 flex items-center justify-center flex-shrink-0">
-                        <FontAwesomeIcon icon={slide.icon} className="h-7 w-7 text-rose-600" />
-                      </div>
-                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900">{slide.title}</h3>
-                    </div>
-                    <p className="text-gray-600 mb-6 leading-relaxed">
-                      {slide.description}
-                    </p>
-                    <ul className="space-y-3">
-                      {slide.points.map((point, idx) => (
-                        <li key={idx} className="flex items-start gap-3">
-                          <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{point}</span>
-                        </li>
-                      ))}
-                    </ul>
+          {/* Right Arrow */}
+          <button
+            onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white border-2 border-rose-300 shadow-lg hover:bg-rose-50 hover:scale-110 transition-all flex items-center justify-center"
+            aria-label="Next slide"
+          >
+            <FontAwesomeIcon icon={faChevronDown} className="h-5 w-5 text-rose-600 -rotate-90" />
+          </button>
+
+          {/* 3 Cards Container */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12">
+            {/* Left Card */}
+            <div key={`left-${currentSlide}`} className="hidden md:block opacity-60 transition-all duration-700 ease-in-out transform hover:scale-105 animate-fadeIn">
+              <div className="bg-white rounded-2xl border border-rose-200 p-6 h-[550px] shadow-lg overflow-hidden flex flex-col">
+                <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
+                  <img
+                    src={slides[(currentSlide - 1 + slides.length) % slides.length].image}
+                    alt={slides[(currentSlide - 1 + slides.length) % slides.length].title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                    <FontAwesomeIcon icon={slides[(currentSlide - 1 + slides.length) % slides.length].icon} className="h-6 w-6 text-white" />
                   </div>
+                  <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
+                    {slides[(currentSlide - 1 + slides.length) % slides.length].title}
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+                    {slides[(currentSlide - 1 + slides.length) % slides.length].description}
+                  </p>
+                  <ul className="space-y-2">
+                    {slides[(currentSlide - 1 + slides.length) % slides.length].points.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
+                        </div>
+                        <span className="text-sm text-gray-800">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Center Card (Active) */}
+            <div key={`center-${currentSlide}`} className="transition-all duration-700 ease-in-out transform animate-fadeIn">
+              <div className="bg-white rounded-2xl border-2 border-rose-400 p-6 h-[550px] shadow-2xl overflow-hidden flex flex-col">
+                <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
+                  <img
+                    src={slides[currentSlide].image}
+                    alt={slides[currentSlide].title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                    <FontAwesomeIcon icon={slides[currentSlide].icon} className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
+                    {slides[currentSlide].title}
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+                    {slides[currentSlide].description}
+                  </p>
+                  <ul className="space-y-2">
+                    {slides[currentSlide].points.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
+                        </div>
+                        <span className="text-sm text-gray-800">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Card */}
+            <div key={`right-${currentSlide}`} className="hidden md:block opacity-60 transition-all duration-700 ease-in-out transform hover:scale-105 animate-fadeIn">
+              <div className="bg-white rounded-2xl border border-rose-200 p-6 h-[550px] shadow-lg overflow-hidden flex flex-col">
+                <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
+                  <img
+                    src={slides[(currentSlide + 1) % slides.length].image}
+                    alt={slides[(currentSlide + 1) % slides.length].title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                    <FontAwesomeIcon icon={slides[(currentSlide + 1) % slides.length].icon} className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
+                    {slides[(currentSlide + 1) % slides.length].title}
+                  </h3>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+                    {slides[(currentSlide + 1) % slides.length].description}
+                  </p>
+                  <ul className="space-y-2">
+                    {slides[(currentSlide + 1) % slides.length].points.map((point, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
+                        </div>
+                        <span className="text-sm text-gray-800">{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
 
+          {/* Dots */}
           <div className="flex justify-center gap-2 mt-8">
             {slides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${index === currentSlide
-                  ? 'w-8 bg-rose-500'
-                  : 'w-2 bg-rose-200 hover:bg-rose-300'
+                className={`rounded-full transition-all ${index === currentSlide
+                  ? 'w-8 h-2 bg-rose-500'
+                  : 'w-2 h-2 bg-rose-200 hover:bg-rose-300'
                   }`}
-                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
         </div>
       </div>
+
+      {/* Smooth Animation Styles */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .animate-fadeIn {
+            animation: fadeIn 0.7s ease-in-out;
+          }
+        `
+      }} />
     </section>
   );
 }

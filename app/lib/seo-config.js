@@ -15,8 +15,8 @@ export const SEO_CONFIG = {
     // Default meta tags
     defaultMeta: {
         title: "Tara - AI Mental Health & Wellness Companion",
-        description: "Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Chat with celebrities, track insights, and build healthy habits.",
-        keywords: "mental health, AI companion, wellness, mindfulness, emotional support, therapy, meditation, personal growth, mental wellness, AI chat, celebrity chat, mood tracking, journal, insights",
+        description: "Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Track insights and build healthy habits.",
+        keywords: "mental health, AI companion, wellness, mindfulness, emotional support, therapy, meditation, personal growth, mental wellness, AI chat, mood tracking, journal, insights",
         robots: "index, follow",
     },
 
@@ -24,15 +24,15 @@ export const SEO_CONFIG = {
     pages: {
         home: {
             title: "Tara - AI Mental Health & Wellness Companion | Emotional Support Chat",
-            description: "Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Chat with 100+ AI characters, track moods, and build healthy habits.",
-            keywords: "mental health app, AI companion, emotional wellness, mindfulness, therapy chat, mood tracking, journal app, personal growth, mental wellness, AI therapy, celebrity chat, emotional support",
+            description: "Transform your mental wellness journey with Tara - your AI-powered companion for mindfulness, emotional support, and personal growth. Chat with AI characters, track moods, and build healthy habits.",
+            keywords: "mental health app, AI companion, emotional wellness, mindfulness, therapy chat, mood tracking, journal app, personal growth, mental wellness, AI therapy, emotional support",
             path: "/",
         },
 
         chatlist: {
-            title: "AI Chat & Celebrity Conversations | Mental Health Support - Tara",
-            description: "Connect with 100+ AI characters and celebrities for emotional support, motivation, and guidance. Start meaningful conversations that support your mental wellness journey.",
-            keywords: "AI chat, celebrity chat, emotional support chat, mental health conversations, AI therapy, virtual companions, emotional wellness chat",
+            title: "AI Chat & Conversations | Mental Health Support - Tara",
+            description: "Connect with AI characters for emotional support, motivation, and guidance. Start meaningful conversations that support your mental wellness journey.",
+            keywords: "AI chat, emotional support chat, mental health conversations, AI therapy, virtual companions, emotional wellness chat",
             path: "/chatlist",
         },
 

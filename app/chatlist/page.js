@@ -104,13 +104,11 @@ export default function ChatListPage() {
   const [message, setMessage] = useState("");
   const [showAdd, setShowAdd] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [showAllCelebrities, setShowAllCelebrities] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
-  const [isAddingCelebrity, setIsAddingCelebrity] = useState(false);
   // Store messages per chat ID
   const [chatMessages, setChatMessages] = useState({});
 
@@ -869,97 +867,17 @@ export default function ChatListPage() {
     }
   };
 
-  const addCelebrityToChat = async (celebrity) => {
-    if (!user?.uid) {
-      alert('Please log in to chat with celebrities.');
-      return;
-    }
-
-    // Prevent double clicks
-    if (isAddingCelebrity) {
-      return;
-    }
-
-    const newChatId = `celebrity-${celebrity.id}`;
-
-    // Check if celebrity is already in chat list
-    const existingChat = chats.find(chat => chat.id === newChatId);
-    if (existingChat) {
-      setActiveId(existingChat.id);
-      setShowAllCelebrities(false);
-      return;
-    }
-
-    setIsAddingCelebrity(true);
-    try {
-      // Add celebrity to database
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: user.uid,
-          name: celebrity.name,
-          avatar: `/celebrities/${celebrity.image_url}`,
-          type: 'celebrity',
-          role: 'Celebrity',
-          celebrityRole: celebrity.role || `You are ${celebrity.name.replace(' AI', '')}. Talk exactly like this celebrity with their unique style, mannerisms, and personality.`,
-          celebrityId: newChatId
-        })
-      });
-
-      const data = await response.json();
-
-      if (data.success || data.alreadyExists) {
-        const chatUser = data.chatUser || data.chatUser;
-
-        const newChat = {
-          id: chatUser.id,
-          name: chatUser.name,
-          last: "Ready to chat with you!",
-          unread: 0,
-          avatar: chatUser.avatar,
-          role: chatUser.role,
-          type: chatUser.type
-        };
-
-        // Initialize welcome message
-        const welcomeMessage = {
-          id: Date.now(),
-          type: 'text',
-          content: `Hello! I'm ${celebrity.name}. How can I help you today?`,
-          sender: 'them',
-          timestamp: new Date()
-        };
-
-        setChatMessages(prev => ({
-          ...prev,
-          [chatUser.id]: [welcomeMessage]
-        }));
-
-        // Save welcome message to DB
-        await saveMessageToDB(chatUser.id, welcomeMessage.content, 'them', 'text');
-
-        setChats(prev => [...prev, newChat]);
-        setActiveId(chatUser.id);
-        setShowAllCelebrities(false);
-      }
-    } catch (error) {
-      console.error('Failed to add celebrity:', error);
-      alert('Failed to add celebrity. Please try again.');
-    } finally {
-      setIsAddingCelebrity(false);
-    }
-  };
+  // Celebrity feature temporarily disabled
 
   return (
     <>
       <Head>
-        <title>AI Chat - Talk to 100+ AI Characters | Tara Emotional Wellness</title>
-        <meta name="description" content="Chat with 100+ AI characters for emotional support, motivation, and guidance. Get 24/7 companionship from Tara's diverse AI personalities including life coaches, therapists, and celebrities." />
-        <meta name="keywords" content="AI chat, emotional support chat, AI companion, virtual therapist, AI life coach, mental health chat, AI characters, celebrity AI chat, emotional wellness" />
+        <title>AI Chat - Talk to AI Characters | Tara Emotional Wellness</title>
+        <meta name="description" content="Chat with AI characters for emotional support, motivation, and guidance. Get 24/7 companionship from Tara's diverse AI personalities including life coaches and therapists." />
+        <meta name="keywords" content="AI chat, emotional support chat, AI companion, virtual therapist, AI life coach, mental health chat, AI characters, emotional wellness" />
         <link rel="canonical" href="https://www.tara4u.com/chatlist" />
-        <meta property="og:title" content="AI Chat - Talk to 100+ AI Characters | Tara" />
-        <meta property="og:description" content="Chat with 100+ AI characters for emotional support and guidance. Available 24/7." />
+        <meta property="og:title" content="AI Chat - Talk to AI Characters | Tara" />
+        <meta property="og:description" content="Chat with AI characters for emotional support and guidance. Available 24/7." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.tara4u.com/chatlist" />
       </Head>
@@ -1105,58 +1023,7 @@ export default function ChatListPage() {
                 ))}
               </div>
 
-              {/* Celebrities Section at Bottom */}
-              <div className="mt-4 pt-3 border-t border-rose-100">
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="text-xs font-semibold text-gray-600">Celebrities</div>
-                </div>
-
-                {/* Horizontal Celebrities List */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                  {CELEBRITIES.slice(0, 3).map((celebrity) => (
-                    <button
-                      key={celebrity.id}
-                      onClick={() => addCelebrityToChat(celebrity)}
-                      disabled={isAddingCelebrity}
-                      className="shrink-0 group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <div className="flex flex-col items-center gap-1">
-                        {/* Rounded Avatar */}
-                        <div className="w-12 h-12 bg-linear-to-br from-rose-100 to-rose-200 rounded-full flex items-center justify-center text-xl group-hover:scale-105 transition-transform border border-rose-200 overflow-hidden">
-                          <Image
-                            src={`/celebrities/${celebrity.image_url}`}
-                            alt={celebrity.name}
-                            width={48}
-                            height={48}
-                            className="w-full h-full object-cover rounded-full"
-                          />
-                        </div>
-                        {/* Name */}
-                        <div className="text-xs font-medium text-gray-700 text-center leading-tight max-w-[48px] truncate">
-                          {celebrity.name}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-
-                  {/* View More Button */}
-                  <button
-                    onClick={() => setShowAllCelebrities(true)}
-                    className="shrink-0 group cursor-pointer ml-1"
-                  >
-                    <div className="flex flex-col items-center gap-1">
-                      {/* Plus Button */}
-                      <div className="w-12 h-12 bg-linear-to-br from-rose-200 to-rose-300 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform border border-rose-300">
-                        <FontAwesomeIcon icon={faPlus} className="h-4 w-4 text-rose-600" />
-                      </div>
-                      {/* View More Text */}
-                      <div className="text-xs font-medium text-rose-600 text-center leading-tight">
-                        More
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
+              {/* Celebrity feature temporarily disabled */}
             </div>
           </aside>
 
@@ -1198,9 +1065,6 @@ export default function ChatListPage() {
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-semibold text-gray-900 flex items-center gap-2 truncate">
                         <span className="truncate">{activeChat?.name}</span>
-                        {activeChat?.type === 'celebrity' && (
-                          <span className="text-xs font-medium bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full flex-shrink-0">AI</span>
-                        )}
                         <span className="relative flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -1514,59 +1378,7 @@ export default function ChatListPage() {
           )
         }
 
-        {/* All Celebrities Modal */}
-        {showAllCelebrities && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-            <div className="w-full max-w-2xl rounded-3xl border border-rose-100 bg-white p-6 shadow-xl">
-              <div className="mb-4 flex items-center justify-between">
-                <div className="text-lg font-bold text-gray-900">Choose Celebrity</div>
-                <button
-                  onClick={() => setShowAllCelebrities(false)}
-                  className="rounded-full p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-                >
-                  <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
-                </button>
-              </div>
-
-              <p className="text-sm text-gray-600 mb-4">Select a celebrity to start chatting with them.</p>
-
-              {/* Scrollable Celebrities Grid */}
-              <div className="h-80 overflow-y-auto border border-rose-100 rounded-2xl p-4">
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-                  {CELEBRITIES.map((celebrity) => (
-                    <button
-                      key={celebrity.id}
-                      onClick={() => addCelebrityToChat(celebrity)}
-                      disabled={isAddingCelebrity}
-                      className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-50 hover:border-rose-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200">
-                        <Image
-                          src={`/celebrities/${celebrity.image_url}`}
-                          alt={celebrity.name}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <span className="font-medium text-gray-800 text-center leading-tight">{celebrity.name}</span>
-                      <span className="text-xs text-rose-600">Start Chat</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-4">
-                <button
-                  onClick={() => setShowAllCelebrities(false)}
-                  className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Celebrity feature temporarily disabled */}
 
       </div>
 
@@ -1705,7 +1517,6 @@ function ChatBubble({ who, type = 'text', content, duration }) {
 }
 
 function AddUserModal({ chats, setActiveId, setChatMessages, onClose, onCreate }) {
-  const [tab, setTab] = useState("user");
   const [name, setName] = useState("");
   const [gender, setGender] = useState("male");
   const [avatar, setAvatar] = useState(AVATARS[0]);
@@ -1726,168 +1537,80 @@ function AddUserModal({ chats, setActiveId, setChatMessages, onClose, onCreate }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4">
-      <div className={`w-full rounded-2xl sm:rounded-3xl border border-rose-100 bg-white p-4 sm:p-6 shadow-xl max-h-[90vh] overflow-y-auto
-         ${tab === "celebs" ? "max-w-5xl" : "max-w-md"}`}>
+      <div className="w-full max-w-md rounded-2xl sm:rounded-3xl border border-rose-100 bg-white p-4 sm:p-6 shadow-xl max-h-[90vh] overflow-y-auto">
         <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="text-base sm:text-lg font-bold text-gray-900">{tab === "user" ? "Add New User" : "Talk with Celebrities"}</div>
-          <div className="flex gap-1 sm:gap-2 rounded-full bg-rose-200 p-1 text-xs font-semibold text-rose-600 w-full sm:w-auto">
-            <button
-              className={`rounded-full px-2 sm:px-3 py-1 flex-1 sm:flex-none ${tab === "user" ? "bg-white shadow" : ""}`}
-              onClick={() => setTab("user")}
-              type="button"
-            >
-              Create User
-            </button>
-            <button
-              className={`rounded-full px-2 sm:px-3 py-1 flex-1 sm:flex-none ${tab === "celebs" ? "bg-white shadow" : ""}`}
-              onClick={() => setTab("celebs")}
-              type="button"
-            >
-              Celebrities
-            </button>
-          </div>
+          <div className="text-base sm:text-lg font-bold text-gray-900">Add New User</div>
         </div>
 
-        {tab === "user" ? (
-          <form onSubmit={submit} className="space-y-3 sm:space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
-                placeholder="Enter name"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Gender</label>
-              <select
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
-              >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Choose Avatar</label>
-              <div className="mt-2 grid grid-cols-5 gap-2">
-                {AVATARS.map((a) => (
-                  <button
-                    type="button"
-                    key={a}
-                    onClick={() => setAvatar(a)}
-                    className={`aspect-square w-full overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
-                      }`}
-                  >
-                    <img src={a} alt="avatar" className="h-full w-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Role</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
-              >
-                {ROLES.map((r) => (
-                  <option key={r} value={r}>{r}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex justify-end gap-2 pt-2">
-              <button
-                type="button"
-                onClick={onClose}
-                disabled={isCreating}
-                className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isCreating}
-                className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isCreating ? 'Creating...' : 'Create'}
-              </button>
-            </div>
-          </form>
-        ) : (
-          <div className="space-y-3 sm:space-y-4">
-            <p className="text-xs sm:text-sm text-gray-600">Pick a celebrity character to start chatting instantly.</p>
-            {/* Fixed height container with scroll */}
-            <div className="h-64 sm:h-80 md:h-96 overflow-y-auto border border-rose-100 rounded-2xl p-2 sm:p-3">
-              <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                {CELEBRITIES.map((person) => (
-                  <button
-                    key={person.id}
-                    type="button"
-                    onClick={() => {
-                      const id = `celebrity-${person.id}`;
-                      const newChat = {
-                        name: person.name,
-                        gender: "other",
-                        avatar: `/celebrities/${person.image_url}`,
-                        role: "Celebrity",
-                      };
-
-                      // Check if celebrity already exists
-                      const existingChat = chats.find(chat => chat.id === id);
-                      if (existingChat) {
-                        setActiveId(id);
-                        onClose();
-                        return;
-                      }
-
-                      // Initialize messages for celebrity
-                      setChatMessages(prev => ({
-                        ...prev,
-                        [id]: [
-                          {
-                            id: Date.now(),
-                            type: 'text',
-                            content: `Hello! I'm ${person.name}. How can I help you today?`,
-                            sender: 'them',
-                            timestamp: new Date()
-                          }
-                        ]
-                      }));
-
-                      onCreate({
-                        ...newChat,
-                        id
-                      });
-                    }}
-                    className="flex flex-col items-center gap-2 rounded-2xl border border-rose-100 bg-white p-3 text-sm hover:bg-rose-200"
-                  >
-                    <img
-                      src={`/celebrities/${person.image_url}`}
-                      alt={person.name}
-                      className="h-16 w-16 rounded-xl object-cover"
-                    />
-                    <span className="font-semibold text-gray-800 text-center leading-tight">{person.name}</span>
-                    <span className="text-[10px] text-rose-600">Start chat</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="flex justify-end pt-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200"
-              >
-                Close
-              </button>
+        <form onSubmit={submit} className="space-y-3 sm:space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
+              placeholder="Enter name"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Gender</label>
+            <select
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Choose Avatar</label>
+            <div className="mt-2 grid grid-cols-5 gap-2">
+              {AVATARS.map((a) => (
+                <button
+                  type="button"
+                  key={a}
+                  onClick={() => setAvatar(a)}
+                  className={`aspect-square w-full overflow-hidden rounded-xl border ${avatar === a ? "border-rose-500 ring-2 ring-rose-200" : "border-rose-100"
+                    }`}
+                >
+                  <img src={a} alt="avatar" className="h-full w-full object-cover" />
+                </button>
+              ))}
             </div>
           </div>
-        )}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-rose-200 px-4 py-2 text-sm outline-none ring-rose-100 focus:ring"
+            >
+              {ROLES.map((r) => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={isCreating}
+              className="rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isCreating}
+              className="rounded-full bg-rose-200 px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isCreating ? 'Creating...' : 'Create'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -1930,30 +1653,4 @@ const ROLES = [
   "Secret Admirer",
 ];
 
-const CELEBRITIES = [
-  { id: "shahrukh", name: "Shahrukh Khan ", image_url: "shahrukh.jpeg", role: 'You are Shahrukh Khan, King of Bollywood. Speak in YOUR charming, witty, romantic style. Match the user\'s language perfectly (English/Hindi/Hinglish). Be warm, humble, and inspiring. Use YOUR natural expressions. Share YOUR journey and philosophy. Keep responses short (1-2 sentences). Example: "Life is about spreading your arms and embracing every moment. What\'s on your mind today?"' },
-  { id: "elonmusk", name: "Elon Musk ", image_url: "elonmusk.jpeg", role: 'You are Elon Musk, tech Founder and innovator. Talk about innovation, space, AI, and future. Be direct, sometimes funny, use memes references. Say things like "First principles thinking" and be visionary but casual.' },
-  { id: "amitabh", name: "Amitabh Bachchan ", image_url: "amitabh.jpeg", role: 'You are Amitabh Bachchan, the legendary actor. Speak in YOUR dignified, respectful style with warmth. Match the user\'s language perfectly (English/Hindi/Hinglish). Use poetic expressions naturally. Share wisdom from YOUR vast experience. Be humble, inspiring, and thoughtful. Keep responses short (1-2 sentences). Example: "Zindagi mein haar-jeet toh chalti rehti hai, important hai ki hum koshish karte rahein. Aap kaisa mehsoos kar rahe hain?"' },
-  { id: "premanandji", name: "Premanand Ji Maharaj ", image_url: "premanandji.jpeg", role: 'You are Premanand Ji Maharaj, spiritual leader. Speak with devotion, share Krishna bhakti, use spiritual wisdom. Be calm, loving, and guide people towards spirituality with stories and teachings.' },
-  { id: "Rashmika", name: "Rashmika Mandanna ", image_url: "crush.jpeg", role: 'You are Rashmika Mandanna, the National Crush. Be sweet, bubbly, and charming. Talk about movies, life, and dreams. Be friendly and make people smile with your cute personality.' },
-  { id: "deepika", name: "Deepika Padukone ", image_url: "deepika.jpeg", role: 'You are Deepika Padukone, Bollywood superstar. Be elegant, confident, and inspiring. Talk about mental health awareness, fitness, and success. Be warm and motivational.' },
-  { id: "gaurgopal", name: "Gaur Gopal Das ", image_url: "gaurgopal.jpeg", role: 'You are Gaur Gopal Das, motivational speaker and monk. Share life lessons through stories, be wise, funny, and relatable. Use analogies and make complex things simple.' },
-  { id: "ambani", name: "Mukesh Ambani ", image_url: "ambani.jpeg", role: 'You are Mukesh Ambani, business leader. Speak in YOUR calm, thoughtful, and humble style. Match the user\'s language (English/Hindi/Hinglish). Talk about business vision, hard work, and growth. Be wise and respectful. Share YOUR journey and insights. Keep responses short (1-2 sentences). Example: "Success comes from thinking long-term and staying committed. What are your aspirations?"' },
-  { id: "guthi", name: "Guthi ", image_url: "guthi.jpeg", role: 'You are Guthi from Kapil Sharma Show. Be funny, use comedy, make jokes, be entertaining. Use typical Guthi style humor and expressions. Make people laugh!' },
-  { id: "aasharam", name: "Aasharam Bapu ", image_url: "aasharam.jpeg", role: 'You are a spiritual guide. Share spiritual wisdom, meditation tips, and life guidance. Be calm, peaceful, and help people find inner peace.' },
-  { id: "baburao", name: "Baburao Ganpatrao ", image_url: "baburao.jpeg", role: 'You are Baburao from Hera Pheri. Use iconic dialogues, be funny, confused but lovable. Say things like "Ye Baburao ka style hai". Be entertaining and hilarious!' },
-  { id: "pushpa", name: "Pushpa Raj ", image_url: "pushpa.jpeg", role: 'You are Pushpa Raj. Be bold, confident, and powerful. Use dialogues like "Pushpa naam sunke flower samjhe kya? Fire hai main!" Be intense and inspiring.' },
-  { id: "honeysingh", name: "Honey Singh ", image_url: "honeysingh.jpeg", role: 'You are Yo Yo Honey Singh, rapper and music star. Be cool, swag, and musical. Talk about music, party, and life. Use rap style language and be energetic!' },
-  { id: "jahanvikapoor", name: "Janhvi Kapoor ", image_url: "jahanvikapoor.jpeg", role: 'You are Janhvi Kapoor, young Bollywood actress. Be sweet, relatable, and friendly. Talk about movies, fashion, and life. Be warm and approachable.' },
-  { id: "katrina", name: "Katrina Kaif ", image_url: "katrina.jpeg", role: 'You are Katrina Kaif, Bollywood beauty. Be graceful, hardworking, and inspiring. Talk about fitness, dedication, and success. Be elegant and motivational.' },
-  { id: "modi", name: "Narendra Modi ", image_url: "modi.jpeg", role: 'You are Narendra Modi, Prime Minister. Be inspiring, talk about nation building, development, and dreams. Use phrases like "Mitron" and be motivational about India.' },
-  { id: "nora", name: "Nora Fatehi ", image_url: "nora.jpeg", role: 'You are Nora Fatehi, dancer and actress. Be energetic, talk about dance, fitness, and passion. Be inspiring about following dreams and working hard.' },
-  { id: "priyanka", name: "Priyanka Chopra ", image_url: "priyanka.jpeg", role: 'You are Priyanka Chopra, global icon. Be confident, inspiring, and worldly. Talk about breaking barriers, success, and dreams. Be empowering and bold.' },
-  { id: "ranbir", name: "Ranbir Kapoor ", image_url: "ranbir.jpeg", role: 'You are Ranbir Kapoor, versatile actor. Be cool, charming, and deep. Talk about cinema, life, and passion. Be relatable and thoughtful.' },
-  { id: "sachin", name: "Sachin Tendulkar ", image_url: "sachin.jpeg", role: 'You are Sachin Tendulkar, the Master Blaster. Speak in YOUR humble, respectful style. Use simple, genuine language. Match the user\'s language (English/Hindi/Hinglish). Talk about cricket, dedication, hard work, and staying grounded. Share YOUR experiences and wisdom. Be warm, approachable, and inspiring. Keep responses short (1-2 sentences). Example: "Cricket taught me that success comes from consistent effort. What are you working towards?"' },
-  { id: "salman", name: "Salman Khan ", image_url: "salman.jpeg", role: 'You are Salman Khan, Bhai of Bollywood. Be cool, caring, and powerful. Use "Bhai" style language, be protective and inspiring. Mix swag with heart.' },
-  { id: "shraddha", name: "Shraddha Kapoor ", image_url: "shraddha.jpeg", role: 'You are Shraddha Kapoor, sweet actress. Be cute, friendly, and relatable. Talk about movies, music, and life. Be warm and approachable.' },
-  { id: "tammanna", name: "Tamannaah Bhatia ", image_url: "tammanna.jpeg", role: 'You are Tamannaah Bhatia, South Indian superstar. Be graceful, talented, and inspiring. Talk about cinema, dance, and success. Be elegant and motivational.' },
-  { id: "trump", name: "Donald Trump ", image_url: "trump.jpeg", role: 'You are Donald Trump. Be bold, confident, and direct. Use phrases like "Tremendous", "Believe me", "Make it great". Be business-minded and assertive.' },
-  { id: "virat", name: "Virat Kohli ", image_url: "virat.jpeg", role: 'You are Virat Kohli, passionate cricketer and fitness icon. Speak in YOUR energetic, direct style. Match the user\'s language (English/Hindi/Hinglish). Talk about fitness, mental strength, dedication, and chasing excellence. Be intense but respectful. Share YOUR journey and mindset. Keep responses short (1-2 sentences). Example: "Fitness isn\'t just physical, it\'s mental strength. What\'s your goal right now?"' },
-];
+// Celebrity feature temporarily disabled
