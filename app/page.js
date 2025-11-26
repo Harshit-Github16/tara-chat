@@ -23,7 +23,7 @@ import {
   faCalendarAlt,
   faUser,
   faPaperPlane,
-
+  faNewspaper,
   faChevronDown,
   faChevronUp,
   faBullseye,
@@ -676,7 +676,7 @@ export default function Home() {
                 Real Benefits, Real Results
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                Why Choose Tara?
+                Why Choose <span className="text-rose-600">Tara</span>?
               </h2>
               <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
                 Transform your emotional wellness with features designed for real results
@@ -831,7 +831,7 @@ export default function Home() {
                 Complete Wellness Suite
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                Everything you need for emotional wellness
+                Everything you need for <span className="text-rose-600">emotional wellness</span>
               </h2>
               <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
                 Comprehensive tools designed to support your mental health journey
@@ -1007,7 +1007,7 @@ export default function Home() {
                 Everything Included
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                Your Complete Wellness Toolkit
+                Your Complete <span className="text-rose-600">Wellness Toolkit</span>
               </h2>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
                 Get access to everything you need for your emotional wellness journey - all in one place
@@ -1123,7 +1123,7 @@ export default function Home() {
                 Simple & Effective
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                How Tara works
+                How <span className="text-rose-600">Tara</span> works
               </h2>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
                 Transform your emotional wellness in just three simple steps. Our AI-powered platform makes mental health support accessible and personalized.
@@ -1210,7 +1210,7 @@ export default function Home() {
                 Live Statistics
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                Trusted by thousands
+                Trusted by <span className="text-rose-600">thousands</span>
               </h2>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
                 Join a growing community of people who have transformed their emotional wellness with Tara
@@ -1304,7 +1304,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6 mb-16">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                What our users say
+                What our <span className="text-rose-600">users</span> say
               </h2>
               <p className="mt-4 text-lg text-gray-600">
                 Real stories from people who transformed their emotional wellness with Tara
@@ -1520,7 +1520,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                Why choose Tara for your emotional wellness?
+                Why choose <span className="text-rose-600">Tara</span> for your emotional wellness?
               </h2>
               <p className="mt-4 text-lg text-gray-600">
                 We're more than just an app - we're your partner in emotional growth
@@ -1585,7 +1585,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                Frequently Asked Questions
+                Frequently Asked <span className="text-rose-600">Questions</span>
               </h2>
               <p className="mt-4 text-lg text-gray-600">
                 Everything you need to know about Tara and emotional wellness
@@ -1657,7 +1657,7 @@ export default function Home() {
                   Start Your Journey Today
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                  Ready to start your emotional wellness journey?
+                  Ready to start your <span className="text-rose-600">emotional wellness</span> journey?
                 </h2>
                 <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
                   Join thousands of users who are already improving their emotional health with Tara.
@@ -1768,7 +1768,7 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                  Get in touch
+                  Get in <span className="text-rose-600">touch</span>
                 </h2>
                 <p className="mt-4 text-lg text-gray-600">
                   Have questions about Tara? We'd love to hear from you. Send us a message or connect with us on social media.
@@ -2235,31 +2235,53 @@ function BenefitItem({ icon, title, description }) {
   );
 }
 
-function BlogCard({ id, title, excerpt, date, readTime, category }) {
+function BlogCard({ id, title, excerpt, date, readTime, category, featuredImage }) {
   return (
-    <Link href={id ? `/blog/${id}` : '/blog'} className="flex-shrink-0 w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="inline-flex items-center rounded-full bg-rose-200 px-3 py-1 text-xs font-medium text-rose-700">
-          {category}
-        </span>
-        <span className="text-xs text-gray-500">•</span>
-        <span className="text-xs text-gray-500">{readTime}</span>
-      </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-rose-600 transition-colors">
-        {title}
-      </h3>
-      <p className="text-gray-600 mb-4 leading-relaxed">{excerpt}</p>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <FontAwesomeIcon icon={faCalendarAlt} className="h-3 w-3" />
-          {date}
+    <div className="flex-shrink-0 w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white shadow-sm hover:shadow-md transition-all group">
+      {/* Featured Image */}
+      {featuredImage ? (
+        <div className="relative w-full h-48 rounded-t-2xl overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200">
+          <Image
+            src={featuredImage}
+            alt={title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         </div>
-        <div className="text-rose-600 text-sm font-medium group-hover:gap-2 flex items-center gap-1 transition-all">
-          Read more
-          <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+      ) : (
+        <div className="relative w-full h-48 rounded-t-2xl overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+          <FontAwesomeIcon icon={faNewspaper} className="h-12 w-12 text-rose-300" />
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="inline-flex items-center rounded-full bg-rose-200 px-3 py-1 text-xs font-medium text-rose-700">
+            {category}
+          </span>
+          <span className="text-xs text-gray-500">•</span>
+          <span className="text-xs text-gray-500">{readTime}</span>
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-rose-600 transition-colors line-clamp-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 mb-4 leading-relaxed line-clamp-3">{excerpt}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <FontAwesomeIcon icon={faCalendarAlt} className="h-3 w-3" />
+            {date}
+          </div>
+          <Link
+            href={id ? `/blog/${id}` : '/blog'}
+            className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-300 transition-all"
+          >
+            View More
+            <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -2612,7 +2634,7 @@ function BlogSliderSection() {
       <div className="mx-auto max-w-full px-6">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            Latest from our blog
+            Latest from our <span className="text-rose-600">blog</span>
           </h2>
           <p className="mt-4 text-lg text-gray-600">
             Expert insights and tips for better emotional wellness
@@ -2652,6 +2674,7 @@ function BlogSliderSection() {
                     date={formatDate(blog.publishDate || blog.createdAt)}
                     readTime={calculateReadTime(blog.content)}
                     category={blog.category || 'Wellness'}
+                    featuredImage={blog.featuredImage}
                   />
                 ))}
                 {/* Duplicate for seamless loop */}
@@ -2664,6 +2687,7 @@ function BlogSliderSection() {
                     date={formatDate(blog.publishDate || blog.createdAt)}
                     readTime={calculateReadTime(blog.content)}
                     category={blog.category || 'Wellness'}
+                    featuredImage={blog.featuredImage}
                   />
                 ))}
               </div>

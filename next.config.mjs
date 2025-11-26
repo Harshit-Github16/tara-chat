@@ -16,6 +16,15 @@ const nextConfig = {
     GROQ_API_KEY: process.env.GROQ_API_KEY,
     GROQ_API_KEY_INSIGHTS: process.env.GROQ_API_KEY_INSIGHTS,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ik.imagekit.io',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default withSerwist(nextConfig);
