@@ -25,7 +25,7 @@ export default function DASS21Suggestion({
         if (onTakeAssessment) {
             onTakeAssessment();
         } else {
-            router.push('/dass21');
+            router.push('/stress-check');
         }
     };
 
@@ -88,13 +88,13 @@ export default function DASS21Suggestion({
                 </div>
             )}
 
-            {/* What is DASS-21 */}
+            {/* What is Stress Check */}
             <div className="bg-white dark:bg-gray-800 rounded-lg p-3 mb-3 text-sm">
                 <p className="font-medium text-gray-900 dark:text-white mb-1">
-                    DASS-21 Assessment kya hai?
+                    Stress Level Check kya hai?
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 text-xs">
-                    Ye ek scientifically validated questionnaire hai jo aapke depression, anxiety,
+                    Ye ek simple questionnaire hai jo aapke mood, anxiety,
                     aur stress levels ko measure karti hai. Sirf 5 minute lagenge! 🌟
                 </p>
             </div>

@@ -54,7 +54,7 @@ export async function POST(request) {
         }
 
         // Create a new goal
-        // For DASS-21 goals, validation is more flexible
+        // For Stress Check goals, validation is more flexible
         if (!title) {
             return NextResponse.json({
                 error: 'Missing required field: title',
@@ -62,8 +62,8 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        // For manual goals (not from DASS-21), require why and howToAchieve
-        if (source !== 'dass21' && (!why || !howToAchieve)) {
+        // For manual goals (not from Stress Check), require why and howToAchieve
+        if (source !== 'stress-check' && source !== 'dass21' && (!why || !howToAchieve)) {
             return NextResponse.json({
                 error: 'Missing required fields: why, howToAchieve',
                 received: { why: !!why, howToAchieve: !!howToAchieve }

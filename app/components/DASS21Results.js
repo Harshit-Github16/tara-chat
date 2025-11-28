@@ -22,7 +22,7 @@ export default function DASS21Results() {
                 return;
             }
 
-            const response = await fetch("/api/dass21?limit=5", {
+            const response = await fetch("/api/stress-check?limit=5", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -33,7 +33,7 @@ export default function DASS21Results() {
                 setAssessments(data.data.assessments || []);
             }
         } catch (error) {
-            console.error("Error fetching DASS-21 assessments:", error);
+            console.error("Error fetching stress check assessments:", error);
         } finally {
             setLoading(false);
         }
@@ -41,7 +41,7 @@ export default function DASS21Results() {
 
     const getSeverityLevel = (score, category) => {
         const ranges = {
-            depression: [
+            lowmood: [
                 { max: 9, level: "Normal", color: "text-green-600", bg: "bg-green-50" },
                 { max: 13, level: "Mild", color: "text-yellow-600", bg: "bg-yellow-50" },
                 { max: 20, level: "Moderate", color: "text-orange-600", bg: "bg-orange-50" },
@@ -93,10 +93,10 @@ export default function DASS21Results() {
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">No Assessments Yet</h3>
                 <p className="text-gray-600 mb-4">
-                    Take your first DASS-21 assessment to track your mental wellness
+                    Take your first stress check to track your mental wellness
                 </p>
                 <button
-                    onClick={() => router.push("/dass21")}
+                    onClick={() => router.push("/stress-check")}
                     className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
                 >
                     Take Assessment
@@ -107,7 +107,7 @@ export default function DASS21Results() {
     }
 
     const latestAssessment = assessments[0];
-    const depressionSeverity = getSeverityLevel(latestAssessment.scores.depression, "depression");
+    const lowmoodSeverity = getSeverityLevel(latestAssessment.scores.lowmood, "lowmood");
     const anxietySeverity = getSeverityLevel(latestAssessment.scores.anxiety, "anxiety");
     const stressSeverity = getSeverityLevel(latestAssessment.scores.stress, "stress");
 
@@ -126,23 +126,23 @@ export default function DASS21Results() {
                     </div>
 
                     <div className="space-y-3">
-                        {/* Depression */}
-                        <div className={`p-4 rounded-xl ${depressionSeverity.bg} border border-gray-200`}>
+                        {/* Low Mood */}
+                        <div className={`p-4 rounded-xl ${lowmoodSeverity.bg} border border-gray-200`}>
                             <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-semibold text-gray-900">Depression</span>
-                                <span className={`text-lg font-bold ${depressionSeverity.color}`}>
-                                    {latestAssessment.scores.depression}
+                                <span className="text-sm font-semibold text-gray-900">Low Mood</span>
+                                <span className={`text-lg font-bold ${lowmoodSeverity.color}`}>
+                                    {latestAssessment.scores.lowmood}
                                 </span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="flex-1 bg-gray-200 rounded-full h-1.5">
                                     <div
-                                        className={`h-1.5 rounded-full ${depressionSeverity.color.replace('text-', 'bg-')}`}
-                                        style={{ width: `${Math.min((latestAssessment.scores.depression / 42) * 100, 100)}%` }}
+                                        className={`h-1.5 rounded-full ${lowmoodSeverity.color.replace('text-', 'bg-')}`}
+                                        style={{ width: `${Math.min((latestAssessment.scores.lowmood / 42) * 100, 100)}%` }}
                                     ></div>
                                 </div>
-                                <span className={`text-xs font-semibold ${depressionSeverity.color}`}>
-                                    {depressionSeverity.level}
+                                <span className={`text-xs font-semibold ${lowmoodSeverity.color}`}>
+                                    {lowmoodSeverity.level}
                                 </span>
                             </div>
                         </div>
@@ -202,7 +202,7 @@ export default function DASS21Results() {
                                         <span className="text-gray-600">{formatDate(assessment.completedAt)}</span>
                                         <div className="flex gap-3">
                                             <span className="text-gray-700">
-                                                D: <span className="font-semibold">{assessment.scores.depression}</span>
+                                                M: <span className="font-semibold">{assessment.scores.lowmood}</span>
                                             </span>
                                             <span className="text-gray-700">
                                                 A: <span className="font-semibold">{assessment.scores.anxiety}</span>
@@ -220,7 +220,7 @@ export default function DASS21Results() {
 
                 {/* Take New Assessment Button */}
                 <button
-                    onClick={() => router.push("/dass21")}
+                    onClick={() => router.push("/stress-check")}
                     className="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
                 >
                     Take New Assessment
@@ -230,7 +230,7 @@ export default function DASS21Results() {
                 <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
                     <p className="text-xs text-gray-700 leading-relaxed">
                         💡 Regular assessments help track your mental wellness over time.
-                        We recommend taking the DASS-21 every 2-4 weeks to monitor changes.
+                        We recommend checking your stress levels every 2-4 weeks to monitor changes.
                     </p>
                 </div>
             </div>

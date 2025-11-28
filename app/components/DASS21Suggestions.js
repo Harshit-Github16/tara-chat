@@ -47,9 +47,9 @@ export default function DASS21Suggestions({ scores }) {
                 category: getCategoryFromSuggestion(suggestion.title),
                 targetDays: 30,
                 description: suggestion.description,
-                why: `Based on DASS-21 assessment - Depression: ${scores.depression}, Anxiety: ${scores.anxiety}, Stress: ${scores.stress}`,
+                why: `Based on Stress Check assessment - Low Mood: ${scores.lowmood}, Anxiety: ${scores.anxiety}, Stress: ${scores.stress}`,
                 howToAchieve: suggestion.actions.join(", "),
-                source: "dass21",
+                source: "stress-check",
                 dassScores: scores,
                 createdAt: new Date().toISOString()
             };
@@ -100,15 +100,15 @@ export default function DASS21Suggestions({ scores }) {
         // Generate personalized suggestions based on scores
         const personalizedSuggestions = [];
 
-        // Depression suggestions
-        if (scores.depression > 9) {
-            if (scores.depression > 20) {
+        // Low Mood suggestions
+        if (scores.lowmood > 9) {
+            if (scores.lowmood > 20) {
                 personalizedSuggestions.push({
                     icon: faHeart,
                     color: "text-rose-600",
                     bg: "bg-rose-50",
                     title: "Connect with Support",
-                    description: "Your depression score indicates you may benefit from professional support. Consider talking to a mental health professional.",
+                    description: "Your mood score indicates you may benefit from professional support. Consider talking to a mental health professional.",
                     actions: ["Talk to Tara AI", "Find a therapist", "Join support groups"],
                     canAddAsGoal: true
                 });
@@ -182,7 +182,7 @@ export default function DASS21Suggestions({ scores }) {
         }
 
         // If all scores are normal
-        if (scores.depression <= 9 && scores.anxiety <= 7 && scores.stress <= 14) {
+        if (scores.lowmood <= 9 && scores.anxiety <= 7 && scores.stress <= 14) {
             personalizedSuggestions.push({
                 icon: faStar,
                 color: "text-green-600",
@@ -295,7 +295,7 @@ export default function DASS21Suggestions({ scores }) {
             ))}
 
             {/* Professional Help Notice */}
-            {(scores.depression > 20 || scores.anxiety > 14 || scores.stress > 25) && (
+            {(scores.lowmood > 20 || scores.anxiety > 14 || scores.stress > 25) && (
                 <div className="p-4 bg-red-50 rounded-xl border-2 border-red-200">
                     <div className="flex items-start gap-3">
                         <div className="text-2xl">⚠️</div>
@@ -319,7 +319,7 @@ export default function DASS21Suggestions({ scores }) {
             )}
 
             {/* Positive Reinforcement */}
-            {scores.depression <= 9 && scores.anxiety <= 7 && scores.stress <= 14 && (
+            {scores.lowmood <= 9 && scores.anxiety <= 7 && scores.stress <= 14 && (
                 <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
                     <div className="flex items-start gap-3">
                         <div className="text-2xl">🎉</div>
@@ -345,11 +345,11 @@ export default function DASS21Suggestions({ scores }) {
                         <ul className="text-sm text-gray-700 space-y-1">
                             <li className="flex items-start gap-2">
                                 <span className="text-blue-500 mt-0.5">•</span>
-                                <span>Goals created from DASS-21 are linked to your current scores</span>
+                                <span>Goals created from stress check are linked to your current scores</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-blue-500 mt-0.5">•</span>
-                                <span>Retake DASS-21 every 2-4 weeks to track progress</span>
+                                <span>Retake stress check every 2-4 weeks to track progress</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-blue-500 mt-0.5">•</span>

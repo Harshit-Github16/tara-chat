@@ -5,7 +5,7 @@ import { analyzeUserPattern } from '../../utils/patternAnalysis';
 
 /**
  * GET - Analyze user's chat and journal patterns to detect stress
- * Returns whether DASS-21 should be suggested
+ * Returns whether Stress Check should be suggested
  */
 export async function GET(request) {
     try {
@@ -60,19 +60,19 @@ export async function GET(request) {
         // Perform pattern analysis
         const analysis = analyzeUserPattern(chatHistory, journals, daysToAnalyze);
 
-        console.log('Pattern Analysis: Should suggest DASS-21:', analysis.shouldSuggestDASS21);
+        console.log('Pattern Analysis: Should suggest Stress Check:', analysis.shouldSuggestDASS21);
         console.log('Pattern Analysis: Combined stress score:', analysis.combinedStressScore);
         console.log('Pattern Analysis: Confidence:', analysis.confidence);
 
-        // Check if user has already taken DASS-21 recently (within last 7 days)
-        const recentAssessments = userData.dass21Assessments || [];
+        // Check if user has already taken Stress Check recently (within last 7 days)
+        const recentAssessments = userData.stressCheckAssessments || [];
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         const hasRecentAssessment = recentAssessments.some(assessment => {
             const assessmentDate = new Date(assessment.completedAt || assessment.createdAt);
             return assessmentDate >= sevenDaysAgo;
         });
 
-        console.log('Pattern Analysis: Has recent DASS-21:', hasRecentAssessment);
+        console.log('Pattern Analysis: Has recent Stress Check:', hasRecentAssessment);
 
         // Don't suggest if already taken recently
         const finalSuggestion = analysis.shouldSuggestDASS21 && !hasRecentAssessment;

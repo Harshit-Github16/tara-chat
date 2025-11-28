@@ -134,7 +134,7 @@ function InsightsPageContent() {
                             {/* Right Side Actions */}
                             <div className="flex items-center gap-3">
                                 <Link
-                                    href="/dass21"
+                                    href="/stress-check"
                                     className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full border border-rose-200 bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition-all"
                                 >
                                     <FontAwesomeIcon icon={faBrain} className="h-4 w-4" />
@@ -211,9 +211,9 @@ function InsightsPageContent() {
                         </ChartCard>
                     </div>
 
-                    {/* DASS-21 Assessment Results */}
+                    {/* Stress Level Check Results */}
                     <div className="mt-6">
-                        <ChartCard title="DASS-21 Assessment" icon={faClipboardList}>
+                        <ChartCard title="Stress Level Check" icon={faClipboardList}>
                             <DASS21Results />
                         </ChartCard>
                     </div>

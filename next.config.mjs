@@ -25,6 +25,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/dass21',
+        destination: '/stress-check',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withSerwist(nextConfig);

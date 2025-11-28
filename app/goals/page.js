@@ -435,7 +435,7 @@ Make each suggestion short (1-2 sentences), practical, and easy to follow.`,
                         </Link>
                         <div className="flex items-center gap-3">
                             <Link
-                                href="/dass21"
+                                href="/stress-check"
                                 className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full border border-rose-200 bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition-all"
                             >
                                 <FontAwesomeIcon icon={faBrain} className="h-4 w-4" />
