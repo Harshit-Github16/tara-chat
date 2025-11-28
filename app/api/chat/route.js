@@ -354,10 +354,10 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        if (!GROQ_API_KEY) {
-            console.error('GROQ_API_KEY not configured');
+        if (GROQ_API_KEYS.length === 0) {
+            console.error('No GROQ API keys configured');
             return NextResponse.json({
-                error: 'GROQ API key not configured'
+                error: 'GROQ API keys not configured'
             }, { status: 500 });
         }
 
