@@ -24,6 +24,46 @@ function getRandomGroqApiKey() {
     return GROQ_API_KEYS[randomIndex];
 }
 
+// Function to detect language from message
+function detectLanguage(message) {
+    if (!message) return 'english';
+
+    const lowerMessage = message.toLowerCase();
+
+    // Hindi/Devanagari script detection
+    const hindiPattern = /[\u0900-\u097F]/;
+    if (hindiPattern.test(message)) {
+        return 'hindi';
+    }
+
+    // Common Hindi/Hinglish words
+    const hindiWords = [
+        'hai', 'hoon', 'ho', 'hain', 'tha', 'thi', 'the', 'ka', 'ki', 'ke',
+        'main', 'mein', 'aap', 'tum', 'kya', 'kaise', 'kaisa', 'kaisi',
+        'nahi', 'nahin', 'haan', 'ji', 'acha', 'accha', 'theek', 'thik',
+        'bahut', 'bohot', 'kuch', 'koi', 'yaar', 'bhai', 'dost',
+        'kar', 'karo', 'karna', 'raha', 'rahi', 'rahe', 'gaya', 'gayi', 'gaye',
+        'kal', 'aaj', 'abhi', 'phir', 'wala', 'wali', 'wale'
+    ];
+
+    const words = lowerMessage.split(/\s+/);
+    const hindiWordCount = words.filter(word => hindiWords.includes(word)).length;
+
+    // If more than 30% words are Hindi/Hinglish, consider it Hinglish
+    if (hindiWordCount / words.length > 0.3) {
+        return 'hinglish';
+    }
+
+    // Check for common English patterns
+    const englishPattern = /^[a-z\s.,!?'"]+$/i;
+    if (englishPattern.test(message)) {
+        return 'english';
+    }
+
+    // Default to English if uncertain
+    return 'english';
+}
+
 // Enhanced role-based system prompts focused on emotional support
 const ROLE_PROMPTS = {
     'ai': `You are TARA - a professional, empathetic mental health companion with deep emotional intelligence. You provide therapeutic support with warmth and professionalism.
@@ -33,26 +73,31 @@ You are a trained emotional wellness companion who understands human emotions de
 
 HOW YOU COMMUNICATE:
 - Speak professionally yet warmly - like a caring therapist
-- Detect user's language (English/Hindi/Hinglish) and match it perfectly
+- CRITICAL: ALWAYS match the user's language EXACTLY - if they speak English, respond in English; if Hindi, respond in Hindi; if Hinglish, respond in Hinglish
 - Keep responses concise and meaningful (2-3 sentences maximum)
-- Use emojis sparingly and appropriately (💛, 😊, �, 💙)
-- Use professional, supportive language: "I understand", "I'm here to support you", "That sounds challenging"
+- Use emojis sparingly and appropriately (💛, 😊, 🌸, 💙)
+- Use professional, supportive language
 - Maintain therapeutic boundaries - be warm but professional
-- Never use casual slang like "yaar", "arre", "bas" - keep it professional
 - Never mention you're an AI - you're their wellness companion TARA
 
-EXAMPLES OF PROFESSIONAL RESPONSES:
-User: "Hi"
-You: "Hello! How are you feeling today? 😊"
+LANGUAGE MATCHING EXAMPLES:
+User (English): "Hi"
+You (English): "Hello! How are you feeling today? 😊"
 
-User: "I'm stressed"
-You: "I understand. Stress can be overwhelming. What's been weighing on your mind?"
+User (English): "I'm stressed"
+You (English): "I understand. Stress can be overwhelming. What's been weighing on your mind?"
 
-User: "I'm happy"
-You: "That's wonderful to hear! 💛 What brought this positive feeling?"
+User (Hindi): "Main bahut pareshan hoon"
+You (Hindi): "Main samajh sakti hoon. Pareshani bahut bhari lag sakti hai. Aapko kya pareshan kar raha hai?"
 
-User: "Nothing much"
-You: "I'm here whenever you'd like to talk. What's been on your mind lately?"
+User (Hinglish): "Yaar main bahut stressed hoon"
+You (Hinglish): "Main samajh sakti hoon. Stress bahut overwhelming ho sakta hai. Kya baat hai, kya ho raha hai?"
+
+User (English): "I'm happy"
+You (English): "That's wonderful to hear! 💛 What brought this positive feeling?"
+
+User (Hinglish): "Main happy hoon"
+You (Hinglish): "Yeh sunke bahut accha laga! 💛 Kya baat hai, kya hua jo aap itne khush hain?"
 
 YOUR THERAPEUTIC APPROACH - ACTIVE LISTENING:
 - Listen carefully to what the user shares - don't assume or guess
@@ -456,6 +501,24 @@ export async function POST(request) {
                 boringPatterns.some(pattern => msg.content.toLowerCase().includes(pattern))
             );
 
+        // Detect user's language from current message and recent history
+        const recentUserMessages = recentHistory
+            .filter(msg => msg.sender === 'user')
+            .slice(-3)
+            .map(msg => msg.content)
+            .join(' ');
+
+        const combinedText = `${recentUserMessages} ${message}`;
+        const detectedLanguage = detectLanguage(combinedText);
+        console.log('Detected language:', detectedLanguage, 'from message:', message);
+
+        // Language instruction based on detection
+        const languageInstruction = {
+            'english': '🌍 CRITICAL LANGUAGE INSTRUCTION: The user is speaking in ENGLISH. You MUST respond ONLY in ENGLISH. Do NOT use Hindi or Hinglish words. Use proper English grammar and vocabulary.',
+            'hindi': '🌍 CRITICAL LANGUAGE INSTRUCTION: The user is speaking in HINDI. You MUST respond ONLY in HINDI (Devanagari or Roman script). Do NOT use English words except technical terms.',
+            'hinglish': '🌍 CRITICAL LANGUAGE INSTRUCTION: The user is speaking in HINGLISH (mix of Hindi and English). You MUST respond in HINGLISH, mixing Hindi and English naturally like they do.'
+        };
+
         // Build context about the user
         let userContext = userDetails ? `
 User you're talking to:
@@ -467,7 +530,9 @@ User you're talking to:
 - Personality: ${userDetails.personalityTraits?.join(', ') || 'Not specified'}
 
 Use this to personalize your responses and show you remember them.
-` : '';
+
+${languageInstruction[detectedLanguage]}
+` : languageInstruction[detectedLanguage];
 
         // If conversation is boring and user has interests, prompt TARA to bring up an interest
         if (isConversationBoring && userDetails?.interests && userDetails.interests.length > 0 && chatUserId === 'tara-ai') {
