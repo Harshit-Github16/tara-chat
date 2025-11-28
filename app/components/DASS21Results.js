@@ -112,129 +112,132 @@ export default function DASS21Results() {
     const stressSeverity = getSeverityLevel(latestAssessment.scores.stress, "stress");
 
     return (
-        <div className="space-y-6">
-            {/* Latest Assessment */}
-            <div>
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Latest Assessment</h3>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <FontAwesomeIcon icon={faCalendar} className="h-4 w-4" />
-                        {formatDate(latestAssessment.completedAt)}
-                    </div>
-                </div>
-
-                <div className="space-y-3">
-                    {/* Depression */}
-                    <div className={`p-4 rounded-xl ${depressionSeverity.bg} border border-gray-200`}>
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-semibold text-gray-900">Depression</span>
-                            <span className={`text-lg font-bold ${depressionSeverity.color}`}>
-                                {latestAssessment.scores.depression}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="flex-1 bg-gray-200 rounded-full h-1.5">
-                                <div
-                                    className={`h-1.5 rounded-full ${depressionSeverity.color.replace('text-', 'bg-')}`}
-                                    style={{ width: `${Math.min((latestAssessment.scores.depression / 42) * 100, 100)}%` }}
-                                ></div>
-                            </div>
-                            <span className={`text-xs font-semibold ${depressionSeverity.color}`}>
-                                {depressionSeverity.level}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Anxiety */}
-                    <div className={`p-4 rounded-xl ${anxietySeverity.bg} border border-gray-200`}>
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-semibold text-gray-900">Anxiety</span>
-                            <span className={`text-lg font-bold ${anxietySeverity.color}`}>
-                                {latestAssessment.scores.anxiety}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="flex-1 bg-gray-200 rounded-full h-1.5">
-                                <div
-                                    className={`h-1.5 rounded-full ${anxietySeverity.color.replace('text-', 'bg-')}`}
-                                    style={{ width: `${Math.min((latestAssessment.scores.anxiety / 42) * 100, 100)}%` }}
-                                ></div>
-                            </div>
-                            <span className={`text-xs font-semibold ${anxietySeverity.color}`}>
-                                {anxietySeverity.level}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Stress */}
-                    <div className={`p-4 rounded-xl ${stressSeverity.bg} border border-gray-200`}>
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-semibold text-gray-900">Stress</span>
-                            <span className={`text-lg font-bold ${stressSeverity.color}`}>
-                                {latestAssessment.scores.stress}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="flex-1 bg-gray-200 rounded-full h-1.5">
-                                <div
-                                    className={`h-1.5 rounded-full ${stressSeverity.color.replace('text-', 'bg-')}`}
-                                    style={{ width: `${Math.min((latestAssessment.scores.stress / 42) * 100, 100)}%` }}
-                                ></div>
-                            </div>
-                            <span className={`text-xs font-semibold ${stressSeverity.color}`}>
-                                {stressSeverity.level}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Assessment History */}
-            {assessments.length > 1 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Column - Results */}
+            <div className="space-y-6">
+                {/* Latest Assessment */}
                 <div>
-                    <h4 className="text-sm font-semibold text-gray-700 mb-3">Previous Assessments</h4>
-                    <div className="space-y-2">
-                        {assessments.slice(1, 5).map((assessment, index) => (
-                            <div key={assessment.id} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-gray-600">{formatDate(assessment.completedAt)}</span>
-                                    <div className="flex gap-3">
-                                        <span className="text-gray-700">
-                                            D: <span className="font-semibold">{assessment.scores.depression}</span>
-                                        </span>
-                                        <span className="text-gray-700">
-                                            A: <span className="font-semibold">{assessment.scores.anxiety}</span>
-                                        </span>
-                                        <span className="text-gray-700">
-                                            S: <span className="font-semibold">{assessment.scores.stress}</span>
-                                        </span>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold text-gray-900">Latest Assessment</h3>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <FontAwesomeIcon icon={faCalendar} className="h-4 w-4" />
+                            {formatDate(latestAssessment.completedAt)}
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        {/* Depression */}
+                        <div className={`p-4 rounded-xl ${depressionSeverity.bg} border border-gray-200`}>
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-semibold text-gray-900">Depression</span>
+                                <span className={`text-lg font-bold ${depressionSeverity.color}`}>
+                                    {latestAssessment.scores.depression}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                                    <div
+                                        className={`h-1.5 rounded-full ${depressionSeverity.color.replace('text-', 'bg-')}`}
+                                        style={{ width: `${Math.min((latestAssessment.scores.depression / 42) * 100, 100)}%` }}
+                                    ></div>
+                                </div>
+                                <span className={`text-xs font-semibold ${depressionSeverity.color}`}>
+                                    {depressionSeverity.level}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Anxiety */}
+                        <div className={`p-4 rounded-xl ${anxietySeverity.bg} border border-gray-200`}>
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-semibold text-gray-900">Anxiety</span>
+                                <span className={`text-lg font-bold ${anxietySeverity.color}`}>
+                                    {latestAssessment.scores.anxiety}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                                    <div
+                                        className={`h-1.5 rounded-full ${anxietySeverity.color.replace('text-', 'bg-')}`}
+                                        style={{ width: `${Math.min((latestAssessment.scores.anxiety / 42) * 100, 100)}%` }}
+                                    ></div>
+                                </div>
+                                <span className={`text-xs font-semibold ${anxietySeverity.color}`}>
+                                    {anxietySeverity.level}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Stress */}
+                        <div className={`p-4 rounded-xl ${stressSeverity.bg} border border-gray-200`}>
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-semibold text-gray-900">Stress</span>
+                                <span className={`text-lg font-bold ${stressSeverity.color}`}>
+                                    {latestAssessment.scores.stress}
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                                    <div
+                                        className={`h-1.5 rounded-full ${stressSeverity.color.replace('text-', 'bg-')}`}
+                                        style={{ width: `${Math.min((latestAssessment.scores.stress / 42) * 100, 100)}%` }}
+                                    ></div>
+                                </div>
+                                <span className={`text-xs font-semibold ${stressSeverity.color}`}>
+                                    {stressSeverity.level}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Assessment History */}
+                {assessments.length > 1 && (
+                    <div>
+                        <h4 className="text-sm font-semibold text-gray-700 mb-3">Previous Assessments</h4>
+                        <div className="space-y-2">
+                            {assessments.slice(1, 5).map((assessment, index) => (
+                                <div key={assessment.id} className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-gray-600">{formatDate(assessment.completedAt)}</span>
+                                        <div className="flex gap-3">
+                                            <span className="text-gray-700">
+                                                D: <span className="font-semibold">{assessment.scores.depression}</span>
+                                            </span>
+                                            <span className="text-gray-700">
+                                                A: <span className="font-semibold">{assessment.scores.anxiety}</span>
+                                            </span>
+                                            <span className="text-gray-700">
+                                                S: <span className="font-semibold">{assessment.scores.stress}</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
+                )}
+
+                {/* Take New Assessment Button */}
+                <button
+                    onClick={() => router.push("/dass21")}
+                    className="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                >
+                    Take New Assessment
+                </button>
+
+                {/* Info */}
+                <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                    <p className="text-xs text-gray-700 leading-relaxed">
+                        💡 Regular assessments help track your mental wellness over time.
+                        We recommend taking the DASS-21 every 2-4 weeks to monitor changes.
+                    </p>
                 </div>
-            )}
-
-            {/* Take New Assessment Button */}
-            <button
-                onClick={() => router.push("/dass21")}
-                className="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
-            >
-                Take New Assessment
-            </button>
-
-            {/* Personalized Suggestions */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
-                <DASS21Suggestions scores={latestAssessment.scores} />
             </div>
 
-            {/* Info */}
-            <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
-                <p className="text-xs text-gray-700 leading-relaxed">
-                    💡 Regular assessments help track your mental wellness over time.
-                    We recommend taking the DASS-21 every 2-4 weeks to monitor changes.
-                </p>
+            {/* Right Column - Personalized Suggestions */}
+            <div>
+                <DASS21Suggestions scores={latestAssessment.scores} />
             </div>
         </div>
     );

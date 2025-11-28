@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faLightbulb,
@@ -9,18 +10,89 @@ import {
     faUsers,
     faBook,
     faSpinner,
-    faStar
+    faStar,
+    faPlus,
+    faCheck
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function DASS21Suggestions({ scores }) {
+    const router = useRouter();
+    const { user } = useAuth();
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [addingGoal, setAddingGoal] = useState({});
+    const [addedGoals, setAddedGoals] = useState({});
 
     useEffect(() => {
         if (scores) {
             generateSuggestions();
         }
     }, [scores]);
+
+    const handleAddGoal = async (suggestion, index) => {
+        if (!user) {
+            alert("Please log in to add goals");
+            return;
+        }
+
+        setAddingGoal({ ...addingGoal, [index]: true });
+
+        try {
+            const userId = user.firebaseUid || user.uid;
+
+            // Create goal from suggestion
+            const goalData = {
+                title: suggestion.title,
+                category: getCategoryFromSuggestion(suggestion.title),
+                targetDays: 30,
+                description: suggestion.description,
+                why: `Based on DASS-21 assessment - Depression: ${scores.depression}, Anxiety: ${scores.anxiety}, Stress: ${scores.stress}`,
+                howToAchieve: suggestion.actions.join(", "),
+                source: "dass21",
+                dassScores: scores,
+                createdAt: new Date().toISOString()
+            };
+
+            const response = await fetch('/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId,
+                    ...goalData
+                })
+            });
+
+            if (response.ok) {
+                setAddedGoals({ ...addedGoals, [index]: true });
+                setTimeout(() => {
+                    setAddingGoal({ ...addingGoal, [index]: false });
+                }, 1000);
+            } else {
+                throw new Error('Failed to add goal');
+            }
+        } catch (error) {
+            console.error('Error adding goal:', error);
+            alert('Failed to add goal. Please try again.');
+            setAddingGoal({ ...addingGoal, [index]: false });
+        }
+    };
+
+    const getCategoryFromSuggestion = (title) => {
+        const categoryMap = {
+            "Connect with Support": "emotional",
+            "Physical Activity": "habits",
+            "Journaling Practice": "mental",
+            "Breathing Exercises": "mindfulness",
+            "Social Connection": "emotional",
+            "Stress Management": "mental",
+            "Mindfulness & Meditation": "mindfulness",
+            "Maintain Your Wellness": "habits",
+            "Build Resilience": "personal",
+            "Educational Resources": "personal"
+        };
+        return categoryMap[title] || "mental";
+    };
 
     const generateSuggestions = async () => {
         setLoading(true);
@@ -37,7 +109,8 @@ export default function DASS21Suggestions({ scores }) {
                     bg: "bg-rose-50",
                     title: "Connect with Support",
                     description: "Your depression score indicates you may benefit from professional support. Consider talking to a mental health professional.",
-                    actions: ["Talk to Tara AI", "Find a therapist", "Join support groups"]
+                    actions: ["Talk to Tara AI", "Find a therapist", "Join support groups"],
+                    canAddAsGoal: true
                 });
             }
             personalizedSuggestions.push({
@@ -46,7 +119,8 @@ export default function DASS21Suggestions({ scores }) {
                 bg: "bg-green-50",
                 title: "Physical Activity",
                 description: "Regular exercise can significantly improve mood. Start with 15-20 minutes of walking daily.",
-                actions: ["Morning walk routine", "Yoga for beginners", "Dance therapy"]
+                actions: ["Morning walk routine", "Yoga for beginners", "Dance therapy"],
+                canAddAsGoal: true
             });
             personalizedSuggestions.push({
                 icon: faBook,
@@ -54,7 +128,8 @@ export default function DASS21Suggestions({ scores }) {
                 bg: "bg-blue-50",
                 title: "Journaling Practice",
                 description: "Writing down your thoughts can help process emotions and identify patterns.",
-                actions: ["Start daily journal", "Gratitude practice", "Mood tracking"]
+                actions: ["Start daily journal", "Gratitude practice", "Mood tracking"],
+                canAddAsGoal: true
             });
         }
 
@@ -67,7 +142,8 @@ export default function DASS21Suggestions({ scores }) {
                     bg: "bg-purple-50",
                     title: "Breathing Exercises",
                     description: "Practice deep breathing techniques to calm your nervous system and reduce anxiety symptoms.",
-                    actions: ["4-7-8 breathing", "Box breathing", "Progressive relaxation"]
+                    actions: ["4-7-8 breathing", "Box breathing", "Progressive relaxation"],
+                    canAddAsGoal: true
                 });
             }
             personalizedSuggestions.push({
@@ -76,7 +152,8 @@ export default function DASS21Suggestions({ scores }) {
                 bg: "bg-indigo-50",
                 title: "Social Connection",
                 description: "Connecting with trusted friends or family can help reduce feelings of anxiety.",
-                actions: ["Call a friend", "Join community", "Share your feelings"]
+                actions: ["Call a friend", "Join community", "Share your feelings"],
+                canAddAsGoal: true
             });
         }
 
@@ -89,7 +166,8 @@ export default function DASS21Suggestions({ scores }) {
                     bg: "bg-yellow-50",
                     title: "Stress Management",
                     description: "Your stress levels are high. Prioritize self-care and consider reducing commitments.",
-                    actions: ["Time management", "Set boundaries", "Delegate tasks"]
+                    actions: ["Time management", "Set boundaries", "Delegate tasks"],
+                    canAddAsGoal: true
                 });
             }
             personalizedSuggestions.push({
@@ -98,7 +176,8 @@ export default function DASS21Suggestions({ scores }) {
                 bg: "bg-pink-50",
                 title: "Mindfulness & Meditation",
                 description: "Regular mindfulness practice can help reduce stress and improve emotional regulation.",
-                actions: ["5-min meditation", "Mindful breathing", "Body scan"]
+                actions: ["5-min meditation", "Mindful breathing", "Body scan"],
+                canAddAsGoal: true
             });
         }
 
@@ -110,7 +189,8 @@ export default function DASS21Suggestions({ scores }) {
                 bg: "bg-green-50",
                 title: "Maintain Your Wellness",
                 description: "Great job! Your scores are in the normal range. Keep up your healthy habits.",
-                actions: ["Continue journaling", "Stay active", "Connect with others"]
+                actions: ["Continue journaling", "Stay active", "Connect with others"],
+                canAddAsGoal: true
             });
             personalizedSuggestions.push({
                 icon: faLightbulb,
@@ -118,7 +198,8 @@ export default function DASS21Suggestions({ scores }) {
                 bg: "bg-blue-50",
                 title: "Build Resilience",
                 description: "Focus on building emotional resilience to handle future challenges.",
-                actions: ["Learn new skills", "Set goals", "Practice gratitude"]
+                actions: ["Learn new skills", "Set goals", "Practice gratitude"],
+                canAddAsGoal: true
             });
         }
 
@@ -129,7 +210,8 @@ export default function DASS21Suggestions({ scores }) {
             bg: "bg-teal-50",
             title: "Educational Resources",
             description: "Learn more about mental health and wellness through our blog and resources.",
-            actions: ["Read wellness blogs", "Watch videos", "Take courses"]
+            actions: ["Read wellness blogs", "Watch videos", "Take courses"],
+            canAddAsGoal: false
         });
 
         setSuggestions(personalizedSuggestions.slice(0, 4)); // Show top 4 suggestions
@@ -162,9 +244,38 @@ export default function DASS21Suggestions({ scores }) {
                             <FontAwesomeIcon icon={suggestion.icon} className={`h-5 w-5 ${suggestion.color}`} />
                         </div>
                         <div className="flex-1">
-                            <h4 className={`font-semibold ${suggestion.color} mb-1`}>
-                                {suggestion.title}
-                            </h4>
+                            <div className="flex items-start justify-between mb-1">
+                                <h4 className={`font-semibold ${suggestion.color}`}>
+                                    {suggestion.title}
+                                </h4>
+                                {suggestion.canAddAsGoal && (
+                                    <button
+                                        onClick={() => handleAddGoal(suggestion, index)}
+                                        disabled={addingGoal[index] || addedGoals[index]}
+                                        className={`flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition-all ${addedGoals[index]
+                                            ? 'bg-green-100 text-green-700 border border-green-300'
+                                            : 'bg-white text-gray-700 border border-gray-300 hover:border-rose-400 hover:text-rose-600'
+                                            } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    >
+                                        {addingGoal[index] ? (
+                                            <>
+                                                <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                                                Adding...
+                                            </>
+                                        ) : addedGoals[index] ? (
+                                            <>
+                                                <FontAwesomeIcon icon={faCheck} />
+                                                Added
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FontAwesomeIcon icon={faPlus} />
+                                                Add as Goal
+                                            </>
+                                        )}
+                                    </button>
+                                )}
+                            </div>
                             <p className="text-sm text-gray-700 mb-3">
                                 {suggestion.description}
                             </p>
@@ -225,6 +336,40 @@ export default function DASS21Suggestions({ scores }) {
                 </div>
             )}
 
+            {/* Goal Tracking Info */}
+            <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+                <div className="flex items-start gap-3">
+                    <div className="text-2xl">📊</div>
+                    <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">How Goal Tracking Works</h4>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span>
+                                <span>Goals created from DASS-21 are linked to your current scores</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span>
+                                <span>Retake DASS-21 every 2-4 weeks to track progress</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span>
+                                <span>See how your scores improve as you work on your goals</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span>
+                                <span>Get insights on which goals are most effective for you</span>
+                            </li>
+                        </ul>
+                        <button
+                            onClick={() => router.push('/goals')}
+                            className="mt-3 text-sm font-semibold text-blue-700 hover:text-blue-800 underline"
+                        >
+                            View all goals →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             {/* Chat with Tara CTA */}
             <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl border border-rose-200">
                 <div className="flex items-center justify-between">
@@ -241,7 +386,7 @@ export default function DASS21Suggestions({ scores }) {
                     </div>
                     <button
                         onClick={() => window.location.href = '/chatlist'}
-                        className="bg-gradient-to-r from-rose-500 to-rose-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:shadow-lg transition-all"
+                        className="bg-rose-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-600 hover:shadow-lg transition-all"
                     >
                         Start Chat
                     </button>

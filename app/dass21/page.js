@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,32 +13,33 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import BottomNav from "../components/BottomNav";
 import LoginModal from "../components/LoginModal";
+import ProfileCompletionCircle from "../components/ProfileCompletionCircle";
 
 // DASS-21 Questions
 const DASS21_QUESTIONS = [
-    // Depression (1, 5, 10, 13, 16, 17, 21)
-    { id: 1, text: "I found it hard to wind down", category: "stress" },
-    { id: 2, text: "I was aware of dryness of my mouth", category: "anxiety" },
-    { id: 3, text: "I couldn't seem to experience any positive feeling at all", category: "depression" },
-    { id: 4, text: "I experienced breathing difficulty (e.g., excessively rapid breathing, breathlessness)", category: "anxiety" },
-    { id: 5, text: "I found it difficult to work up the initiative to do things", category: "depression" },
-    { id: 6, text: "I tended to over-react to situations", category: "stress" },
-    { id: 7, text: "I experienced trembling (e.g., in the hands)", category: "anxiety" },
-    { id: 8, text: "I felt that I was using a lot of nervous energy", category: "stress" },
-    { id: 9, text: "I was worried about situations in which I might panic and make a fool of myself", category: "anxiety" },
-    { id: 10, text: "I felt that I had nothing to look forward to", category: "depression" },
-    { id: 11, text: "I found myself getting agitated", category: "stress" },
-    { id: 12, text: "I found it difficult to relax", category: "stress" },
-    { id: 13, text: "I felt down-hearted and blue", category: "depression" },
-    { id: 14, text: "I was intolerant of anything that kept me from getting on with what I was doing", category: "stress" },
-    { id: 15, text: "I felt I was close to panic", category: "anxiety" },
-    { id: 16, text: "I was unable to become enthusiastic about anything", category: "depression" },
-    { id: 17, text: "I felt I wasn't worth much as a person", category: "depression" },
-    { id: 18, text: "I felt that I was rather touchy", category: "stress" },
-    { id: 19, text: "I was aware of the action of my heart in the absence of physical exertion", category: "anxiety" },
-    { id: 20, text: "I felt scared without any good reason", category: "anxiety" },
-    { id: 21, text: "I felt that life was meaningless", category: "depression" }
+    { id: 1, text: "I found it hard to calm myself down", category: "stress" },
+    { id: 2, text: "My mouth felt dry", category: "anxiety" },
+    { id: 3, text: "I could not feel any positive or good feelings", category: "depression" },
+    { id: 4, text: "I had trouble breathing (like fast or short breaths)", category: "anxiety" },
+    { id: 5, text: "I had no motivation to start doing things", category: "depression" },
+    { id: 6, text: "I reacted too strongly to small situations", category: "stress" },
+    { id: 7, text: "I felt my hands or body shaking", category: "anxiety" },
+    { id: 8, text: "I felt like I was using too much nervous energy", category: "stress" },
+    { id: 9, text: "I was worried I might panic or embarrass myself", category: "anxiety" },
+    { id: 10, text: "I felt like I had nothing to look forward to", category: "depression" },
+    { id: 11, text: "I felt easily irritated or annoyed", category: "stress" },
+    { id: 12, text: "I found it hard to relax", category: "stress" },
+    { id: 13, text: "I felt sad or low", category: "depression" },
+    { id: 14, text: "I got annoyed when something slowed me down", category: "stress" },
+    { id: 15, text: "I felt like I was close to panicking", category: "anxiety" },
+    { id: 16, text: "I couldn't feel excited about anything", category: "depression" },
+    { id: 17, text: "I felt like I was not a valuable person", category: "depression" },
+    { id: 18, text: "I felt touchy and got upset easily", category: "stress" },
+    { id: 19, text: "I could feel my heart beating fast even without activity", category: "anxiety" },
+    { id: 20, text: "I felt scared for no clear reason", category: "anxiety" },
+    { id: 21, text: "I felt like life had no meaning", category: "depression" }
 ];
+
 
 const RESPONSE_OPTIONS = [
     { value: 0, label: "Did not apply to me at all" },
@@ -191,6 +193,83 @@ export default function DASS21Page() {
         const anxietySeverity = getSeverityLevel(results.scores.anxiety, "anxiety");
         const stressSeverity = getSeverityLevel(results.scores.stress, "stress");
 
+        // Get personalized suggestions based on severity
+        const getSuggestions = () => {
+            const suggestions = [];
+
+            // Depression suggestions
+            if (results.scores.depression > 9) {
+                suggestions.push({
+                    icon: "💙",
+                    title: "Depression Support",
+                    level: depressionSeverity.level,
+                    color: depressionSeverity.color,
+                    bg: depressionSeverity.bg,
+                    tips: [
+                        "Practice daily gratitude journaling",
+                        "Engage in physical activities you enjoy",
+                        "Connect with supportive friends or family",
+                        "Consider speaking with a mental health professional"
+                    ]
+                });
+            }
+
+            // Anxiety suggestions
+            if (results.scores.anxiety > 7) {
+                suggestions.push({
+                    icon: "🌸",
+                    title: "Anxiety Management",
+                    level: anxietySeverity.level,
+                    color: anxietySeverity.color,
+                    bg: anxietySeverity.bg,
+                    tips: [
+                        "Practice deep breathing exercises (4-7-8 technique)",
+                        "Try progressive muscle relaxation",
+                        "Limit caffeine and alcohol intake",
+                        "Establish a calming bedtime routine"
+                    ]
+                });
+            }
+
+            // Stress suggestions
+            if (results.scores.stress > 14) {
+                suggestions.push({
+                    icon: "🧘",
+                    title: "Stress Reduction",
+                    level: stressSeverity.level,
+                    color: stressSeverity.color,
+                    bg: stressSeverity.bg,
+                    tips: [
+                        "Practice mindfulness meditation daily",
+                        "Set healthy boundaries in work and relationships",
+                        "Take regular breaks throughout the day",
+                        "Engage in hobbies that bring you joy"
+                    ]
+                });
+            }
+
+            // If all scores are normal
+            if (suggestions.length === 0) {
+                suggestions.push({
+                    icon: "✨",
+                    title: "Maintain Your Wellness",
+                    level: "Normal",
+                    color: "text-green-600",
+                    bg: "bg-green-50",
+                    tips: [
+                        "Continue your healthy habits",
+                        "Stay connected with loved ones",
+                        "Keep up with regular exercise",
+                        "Practice self-care regularly"
+                    ]
+                });
+            }
+
+            return suggestions;
+        };
+
+        const suggestions = getSuggestions();
+
         return (
             <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-100">
                 <LoginModal
@@ -202,119 +281,210 @@ export default function DASS21Page() {
 
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-                        <button
-                            onClick={() => router.push("/insights")}
-                            className="flex items-center gap-2 text-rose-600 hover:text-rose-700"
-                        >
-                            <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
-                            <span className="font-medium">Back to Insights</span>
-                        </button>
+                        <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                            <img
+                                src="/taralogo.jpg"
+                                alt="Tara Logo"
+                                className="h-8 w-8 rounded-full object-cover"
+                            />
+                            <span className="text-lg font-semibold text-rose-600">Tara4u</span>
+                        </Link>
+                        <Link href="/profile" className="relative">
+                            <ProfileCompletionCircle />
+                        </Link>
                     </div>
                 </header>
 
-                <div className="mx-auto max-w-4xl px-4 py-8">
-                    <div className="bg-white rounded-3xl border border-rose-100 p-8 shadow-lg">
-                        <div className="text-center mb-8">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-                                <FontAwesomeIcon icon={faCheckCircle} className="h-8 w-8 text-green-600" />
-                            </div>
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">Assessment Complete!</h1>
-                            <p className="text-gray-600">Here are your DASS-21 results</p>
+                <div className="mx-auto max-w-7xl px-4 py-8">
+                    {/* Header */}
+                    <div className="text-center mb-8">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                            <FontAwesomeIcon icon={faCheckCircle} className="h-8 w-8 text-green-600" />
                         </div>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Assessment Complete!</h1>
+                        <p className="text-gray-600">Here are your DASS-21 results and personalized recommendations</p>
+                    </div>
 
+                    {/* Two Column Layout */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Left Column - Results */}
                         <div className="space-y-6">
-                            {/* Depression Score */}
-                            <div className={`p-6 rounded-2xl ${depressionSeverity.bg} border border-gray-200`}>
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-lg font-semibold text-gray-900">Depression</h3>
-                                    <span className={`text-2xl font-bold ${depressionSeverity.color}`}>
-                                        {results.scores.depression}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                        <div
-                                            className={`h-2 rounded-full ${depressionSeverity.color.replace('text-', 'bg-')}`}
-                                            style={{ width: `${Math.min((results.scores.depression / 42) * 100, 100)}%` }}
-                                        ></div>
+                            <div className="bg-white rounded-3xl border border-rose-100 p-6 shadow-lg">
+                                <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                    📊 Your Scores
+                                </h2>
+
+                                <div className="space-y-6">
+                                    {/* Depression Score */}
+                                    <div className={`p-6 rounded-2xl ${depressionSeverity.bg} border border-gray-200`}>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="text-lg font-semibold text-gray-900">Depression</h3>
+                                            <span className={`text-2xl font-bold ${depressionSeverity.color}`}>
+                                                {results.scores.depression}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                                <div
+                                                    className={`h-2 rounded-full ${depressionSeverity.color.replace('text-', 'bg-')}`}
+                                                    style={{ width: `${Math.min((results.scores.depression / 42) * 100, 100)}%` }}
+                                                ></div>
+                                            </div>
+                                            <span className={`text-sm font-semibold ${depressionSeverity.color}`}>
+                                                {depressionSeverity.level}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <span className={`text-sm font-semibold ${depressionSeverity.color}`}>
-                                        {depressionSeverity.level}
-                                    </span>
+
+                                    {/* Anxiety Score */}
+                                    <div className={`p-6 rounded-2xl ${anxietySeverity.bg} border border-gray-200`}>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="text-lg font-semibold text-gray-900">Anxiety</h3>
+                                            <span className={`text-2xl font-bold ${anxietySeverity.color}`}>
+                                                {results.scores.anxiety}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                                <div
+                                                    className={`h-2 rounded-full ${anxietySeverity.color.replace('text-', 'bg-')}`}
+                                                    style={{ width: `${Math.min((results.scores.anxiety / 42) * 100, 100)}%` }}
+                                                ></div>
+                                            </div>
+                                            <span className={`text-sm font-semibold ${anxietySeverity.color}`}>
+                                                {anxietySeverity.level}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Stress Score */}
+                                    <div className={`p-6 rounded-2xl ${stressSeverity.bg} border border-gray-200`}>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <h3 className="text-lg font-semibold text-gray-900">Stress</h3>
+                                            <span className={`text-2xl font-bold ${stressSeverity.color}`}>
+                                                {results.scores.stress}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex-1 bg-gray-200 rounded-full h-2">
+                                                <div
+                                                    className={`h-2 rounded-full ${stressSeverity.color.replace('text-', 'bg-')}`}
+                                                    style={{ width: `${Math.min((results.scores.stress / 42) * 100, 100)}%` }}
+                                                ></div>
+                                            </div>
+                                            <span className={`text-sm font-semibold ${stressSeverity.color}`}>
+                                                {stressSeverity.level}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                                    <p className="text-xs text-gray-700 leading-relaxed">
+                                        <strong>Note:</strong> The DASS-21 is a screening tool, not a clinical diagnosis.
+                                        If you're concerned about your mental health, please consult a healthcare professional.
+                                    </p>
                                 </div>
                             </div>
 
-                            {/* Anxiety Score */}
-                            <div className={`p-6 rounded-2xl ${anxietySeverity.bg} border border-gray-200`}>
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-lg font-semibold text-gray-900">Anxiety</h3>
-                                    <span className={`text-2xl font-bold ${anxietySeverity.color}`}>
-                                        {results.scores.anxiety}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                        <div
-                                            className={`h-2 rounded-full ${anxietySeverity.color.replace('text-', 'bg-')}`}
-                                            style={{ width: `${Math.min((results.scores.anxiety / 42) * 100, 100)}%` }}
-                                        ></div>
-                                    </div>
-                                    <span className={`text-sm font-semibold ${anxietySeverity.color}`}>
-                                        {anxietySeverity.level}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Stress Score */}
-                            <div className={`p-6 rounded-2xl ${stressSeverity.bg} border border-gray-200`}>
-                                <div className="flex items-center justify-between mb-2">
-                                    <h3 className="text-lg font-semibold text-gray-900">Stress</h3>
-                                    <span className={`text-2xl font-bold ${stressSeverity.color}`}>
-                                        {results.scores.stress}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                                        <div
-                                            className={`h-2 rounded-full ${stressSeverity.color.replace('text-', 'bg-')}`}
-                                            style={{ width: `${Math.min((results.scores.stress / 42) * 100, 100)}%` }}
-                                        ></div>
-                                    </div>
-                                    <span className={`text-sm font-semibold ${stressSeverity.color}`}>
-                                        {stressSeverity.level}
-                                    </span>
-                                </div>
+                            {/* Action Buttons */}
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => router.push("/insights")}
+                                    className="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
+                                >
+                                    View in Insights
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setShowResults(false);
+                                        setCurrentQuestion(0);
+                                        setAnswers({});
+                                        setResults(null);
+                                    }}
+                                    className="flex-1 bg-white text-rose-600 px-6 py-3 rounded-full font-semibold border-2 border-rose-200 hover:bg-rose-50 transition-all"
+                                >
+                                    Take Again
+                                </button>
                             </div>
                         </div>
 
-                        <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-200">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">📊 What do these scores mean?</h3>
-                            <p className="text-sm text-gray-700 leading-relaxed">
-                                The DASS-21 measures three related negative emotional states: Depression, Anxiety, and Stress.
-                                Your results are now saved in your Insights page where you can track changes over time.
-                                Remember, this is a screening tool and not a clinical diagnosis. If you're concerned about your
-                                mental health, please consult with a healthcare professional.
-                            </p>
-                        </div>
+                        {/* Right Column - Suggestions */}
+                        <div className="space-y-6">
+                            <div className="bg-white rounded-3xl border border-rose-100 p-6 shadow-lg">
+                                <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                                    💡 Personalized Recommendations
+                                </h2>
 
-                        <div className="mt-8 flex gap-4">
-                            <button
-                                onClick={() => router.push("/insights")}
-                                className="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all"
-                            >
-                                View in Insights
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setShowResults(false);
-                                    setCurrentQuestion(0);
-                                    setAnswers({});
-                                    setResults(null);
-                                }}
-                                className="flex-1 bg-white text-rose-600 px-6 py-3 rounded-full font-semibold border-2 border-rose-200 hover:bg-rose-50 transition-all"
-                            >
-                                Take Again
-                            </button>
+                                <div className="space-y-4">
+                                    {suggestions.map((suggestion, index) => (
+                                        <div key={index} className={`p-5 rounded-2xl ${suggestion.bg} border border-gray-200`}>
+                                            <div className="flex items-start gap-3 mb-3">
+                                                <span className="text-2xl">{suggestion.icon}</span>
+                                                <div className="flex-1">
+                                                    <h3 className="text-lg font-semibold text-gray-900">{suggestion.title}</h3>
+                                                    <span className={`text-sm font-medium ${suggestion.color}`}>
+                                                        {suggestion.level} Level
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <ul className="space-y-2">
+                                                {suggestion.tips.map((tip, tipIndex) => (
+                                                    <li key={tipIndex} className="flex items-start gap-2 text-sm text-gray-700">
+                                                        <span className="text-rose-500 mt-1">•</span>
+                                                        <span>{tip}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Professional Help Section */}
+                                {(results.scores.depression > 20 || results.scores.anxiety > 14 || results.scores.stress > 25) && (
+                                    <div className="mt-6 p-5 bg-red-50 rounded-2xl border-2 border-red-200">
+                                        <div className="flex items-start gap-3">
+                                            <span className="text-2xl">⚠️</span>
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                                                    Consider Professional Support
+                                                </h3>
+                                                <p className="text-sm text-gray-700 mb-3">
+                                                    Your scores indicate moderate to severe levels. We strongly recommend
+                                                    speaking with a mental health professional who can provide personalized care.
+                                                </p>
+                                                <button
+                                                    onClick={() => router.push("/contact")}
+                                                    className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition-all"
+                                                >
+                                                    Get Help Now
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Talk to Tara */}
+                                <div className="mt-6 p-5 bg-gradient-to-br from-rose-50 to-purple-50 rounded-2xl border border-rose-200">
+                                    <div className="flex items-start gap-3">
+                                        <span className="text-2xl">💬</span>
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                                                Talk to Tara
+                                            </h3>
+                                            <p className="text-sm text-gray-700 mb-3">
+                                                I'm here to listen and support you. Let's talk about how you're feeling.
+                                            </p>
+                                            <button
+                                                onClick={() => router.push("/chatlist")}
+                                                className="bg-gradient-to-r from-rose-500 to-rose-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:shadow-lg transition-all"
+                                            >
+                                                Start Chat
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -335,86 +505,113 @@ export default function DASS21Page() {
 
             <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/80 backdrop-blur">
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-                    <button
-                        onClick={() => router.back()}
-                        className="flex items-center gap-2 text-rose-600 hover:text-rose-700"
-                    >
-                        <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />
-                        <span className="font-medium">Back</span>
-                    </button>
-                    <div className="flex items-center gap-2">
-                        <FontAwesomeIcon icon={faClipboardList} className="h-5 w-5 text-rose-600" />
-                        <span className="text-lg font-semibold text-rose-600">DASS-21</span>
-                    </div>
+                    <Link href="/chatlist" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                        <img
+                            src="/taralogo.jpg"
+                            alt="Tara Logo"
+                            className="h-8 w-8 rounded-full object-cover"
+                        />
+                        <span className="text-lg font-semibold text-rose-600">Tara4u</span>
+                    </Link>
+                    <Link href="/profile" className="relative">
+                        <ProfileCompletionCircle />
+                    </Link>
                 </div>
             </header>
 
-            <div className="mx-auto max-w-4xl px-4 py-8">
-                {/* Progress Bar */}
-                <div className="mb-8">
-                    <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-600">
-                            Question {currentQuestion + 1} of {DASS21_QUESTIONS.length}
-                        </span>
-                        <span className="text-sm font-medium text-rose-600">{progress}% Complete</span>
+            <div className="mx-auto max-w-5xl px-4 py-8">
+                {/* Enhanced Progress Section */}
+                <div className="mb-8 bg-white rounded-2xl border border-rose-100 p-6 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                {currentQuestion + 1}
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-gray-500">Question Progress</p>
+                                <p className="text-lg font-bold text-gray-900">
+                                    {currentQuestion + 1} of {DASS21_QUESTIONS.length}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <p className="text-sm font-medium text-gray-500">Completion</p>
+                            <p className="text-2xl font-bold bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-transparent">
+                                {progress}%
+                            </p>
+                        </div>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="relative w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                         <div
-                            className="bg-gradient-to-r from-rose-500 to-rose-600 h-2 rounded-full transition-all duration-300"
+                            className="absolute top-0 left-0 h-full bg-gradient-to-r from-rose-400 via-pink-500 to-purple-500 rounded-full transition-all duration-500 ease-out shadow-lg"
                             style={{ width: `${progress}%` }}
-                        ></div>
+                        >
+                            <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Question Card */}
-                <div className="bg-white rounded-3xl border border-rose-100 p-8 shadow-lg mb-6">
+                {/* Enhanced Question Card */}
+                <div className="bg-gradient-to-br from-white to-rose-50/30 rounded-3xl border-2 border-rose-100 p-8 shadow-xl mb-6 transform transition-all duration-300 hover:shadow-2xl">
                     <div className="mb-8">
-                        <div className="inline-block bg-rose-100 text-rose-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                            {currentQ.category.charAt(0).toUpperCase() + currentQ.category.slice(1)}
+                        {/* Question Number Badge */}
+                        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 shadow-md">
+                            <span className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                                {currentQuestion + 1}
+                            </span>
+                            Question {currentQuestion + 1}
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">
+
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 leading-tight">
                             {currentQ.text}
                         </h2>
-                        <p className="text-sm text-gray-600">
-                            Over the past week, to what extent did this apply to you?
-                        </p>
+                        <div className="flex items-center gap-2 text-sm text-gray-600 bg-blue-50 px-4 py-2 rounded-lg border border-blue-200">
+                            <span className="text-lg">💭</span>
+                            <p>Over the past week, to what extent did this apply to you?</p>
+                        </div>
                     </div>
 
-                    {/* Response Options */}
+                    {/* Enhanced Response Options */}
                     <div className="space-y-3">
-                        {RESPONSE_OPTIONS.map((option) => (
+                        {RESPONSE_OPTIONS.map((option, index) => (
                             <button
                                 key={option.value}
                                 onClick={() => handleAnswer(option.value)}
-                                className={`w-full p-4 rounded-xl border-2 text-left transition-all ${answers[currentQuestion] === option.value
-                                    ? "border-rose-500 bg-rose-50"
-                                    : "border-gray-200 hover:border-rose-300 hover:bg-rose-50/50"
+                                className={`group w-full p-5 rounded-2xl border-2 text-left transition-all duration-300 transform hover:scale-[1.02] ${answers[currentQuestion] === option.value
+                                    ? "border-rose-500 bg-gradient-to-r from-rose-50 to-pink-50 shadow-lg scale-[1.02]"
+                                    : "border-gray-200 hover:border-rose-300 hover:bg-gradient-to-r hover:from-rose-50/50 hover:to-pink-50/50 hover:shadow-md"
                                     }`}
+                                style={{ animationDelay: `${index * 50}ms` }}
                             >
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-4">
                                     <div
-                                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${answers[currentQuestion] === option.value
-                                            ? "border-rose-500 bg-rose-500"
-                                            : "border-gray-300"
+                                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${answers[currentQuestion] === option.value
+                                            ? "border-rose-500 bg-gradient-to-br from-rose-500 to-pink-500 shadow-md"
+                                            : "border-gray-300 group-hover:border-rose-400"
                                             }`}
                                     >
                                         {answers[currentQuestion] === option.value && (
-                                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                                            <div className="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
                                         )}
                                     </div>
-                                    <span className="font-medium text-gray-900">{option.label}</span>
+                                    <span className={`font-medium transition-colors ${answers[currentQuestion] === option.value
+                                        ? "text-rose-700"
+                                        : "text-gray-700 group-hover:text-gray-900"
+                                        }`}>
+                                        {option.label}
+                                    </span>
                                 </div>
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Navigation Buttons */}
-                <div className="flex gap-4">
+                {/* Enhanced Navigation Buttons */}
+                <div className="flex gap-4 mb-8">
                     <button
                         onClick={handlePrevious}
                         disabled={currentQuestion === 0}
-                        className="px-6 py-3 rounded-full font-semibold border-2 border-rose-200 text-rose-600 hover:bg-rose-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-8 py-4 rounded-2xl font-semibold border-2 border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
                     >
                         <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
                         Previous
@@ -424,7 +621,7 @@ export default function DASS21Page() {
                         <button
                             onClick={handleSubmit}
                             disabled={!isAnswered || isSubmitting}
-                            className="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 bg-rose-500 text-white px-8 py-4 rounded-2xl font-bold hover:bg-rose-600 hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 shadow-lg"
                         >
                             {isSubmitting ? (
                                 <>
@@ -434,7 +631,7 @@ export default function DASS21Page() {
                             ) : (
                                 <>
                                     <FontAwesomeIcon icon={faCheckCircle} className="mr-2" />
-                                    Submit Assessment
+                                    Submit Assessment 🎯
                                 </>
                             )}
                         </button>
@@ -442,26 +639,33 @@ export default function DASS21Page() {
                         <button
                             onClick={handleNext}
                             disabled={!isAnswered}
-                            className="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 bg-rose-500 text-white px-8 py-4 rounded-2xl font-bold hover:bg-rose-600 hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95 shadow-lg"
                         >
-                            Next
+                            Next Question
                             <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
                         </button>
                     )}
                 </div>
 
-                {/* Info Box */}
-                <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-200">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">ℹ️ About DASS-21</h3>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                        The DASS-21 is a scientifically validated assessment that measures Depression, Anxiety, and Stress.
-                        It takes about 5 minutes to complete. Your responses are confidential and will help you track your
-                        mental wellness over time.
-                    </p>
+                {/* Enhanced Info Box */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200 p-6 shadow-md">
+                    <div className="flex items-start gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
+                            ℹ️
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">About DASS-21 Assessment</h3>
+                            <p className="text-sm text-gray-700 leading-relaxed">
+                                The DASS-21 is a scientifically validated assessment that measures Depression, Anxiety, and Stress.
+                                It takes about 5 minutes to complete. Your responses are confidential and will help you track your
+                                mental wellness over time. 🧠💙
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <BottomNav activePage="dass21" />
-        </div>
+        </div >
     );
 }

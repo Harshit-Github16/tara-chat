@@ -25,7 +25,7 @@ export async function POST(request) {
             }, { status: 400 });
         }
 
-        const { title, category, targetDays, description, why, howToAchieve } = body;
+        const { title, category, targetDays, description, why, howToAchieve, source, dassScores } = body;
 
         // Get authorization header
         const authHeader = request.headers.get('authorization');
@@ -54,14 +54,23 @@ export async function POST(request) {
         }
 
         // Create a new goal
-        if (!title || !why || !howToAchieve) {
+        // For DASS-21 goals, validation is more flexible
+        if (!title) {
             return NextResponse.json({
-                error: 'Missing required fields: title, why, howToAchieve',
-                received: { title: !!title, why: !!why, howToAchieve: !!howToAchieve }
+                error: 'Missing required field: title',
+                received: { title: !!title }
             }, { status: 400 });
         }
 
-        return await createGoal(userId, { title, category, targetDays, description, why, howToAchieve });
+        // For manual goals (not from DASS-21), require why and howToAchieve
+        if (source !== 'dass21' && (!why || !howToAchieve)) {
+            return NextResponse.json({
+                error: 'Missing required fields: why, howToAchieve',
+                received: { why: !!why, howToAchieve: !!howToAchieve }
+            }, { status: 400 });
+        }
+
+        return await createGoal(userId, { title, category, targetDays, description, why, howToAchieve, source, dassScores });
 
     } catch (error) {
         console.error('Goals API POST Error:', error);
@@ -75,7 +84,7 @@ export async function POST(request) {
 // Helper function to create a new goal
 async function createGoal(userId, goalData) {
     try {
-        const { title, category, targetDays, description, why, howToAchieve } = goalData;
+        const { title, category, targetDays, description, why, howToAchieve, source, dassScores } = goalData;
 
         const client = await clientPromise;
         const db = client.db('tara');
@@ -94,7 +103,11 @@ async function createGoal(userId, goalData) {
             checkIns: [],
             completed: false,
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+            // DASS-21 specific fields
+            source: source || 'manual', // 'dass21' or 'manual'
+            dassScores: dassScores || null, // Initial DASS-21 scores if created from assessment
+            dassHistory: dassScores ? [{ scores: dassScores, date: new Date() }] : [] // Track score changes over time
         };
 
         // Add goal to user's goals array

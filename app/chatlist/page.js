@@ -25,6 +25,7 @@ import {
   faNewspaper,
   faBullseye,
   faTrash,
+  faBrain,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import BottomNav from "../components/BottomNav";
@@ -910,10 +911,19 @@ export default function ChatListPage() {
               <span className="text-base sm:text-lg font-semibold text-rose-600">Tara4u</span>
             </div>
 
-            {/* Profile Icon with Completion Circle */}
-            <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100 transition-colors">
-              <ProfileCompletionCircle size="md" showPercentage={false} />
-            </Link>
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dass21"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full border border-rose-200 bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition-all"
+              >
+                <FontAwesomeIcon icon={faBrain} className="h-4 w-4" />
+                Check Stress Level
+              </Link>
+              <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100 transition-colors">
+                <ProfileCompletionCircle size="md" showPercentage={false} />
+              </Link>
+            </div>
           </div>
         </header>
 

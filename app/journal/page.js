@@ -4,7 +4,7 @@ import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper, faBullseye, faWandSparkles } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faPen, faChartLine, faBookOpen, faComments, faUser, faNewspaper, faBullseye, faWandSparkles, faBrain } from "@fortawesome/free-solid-svg-icons";
 import LoginModal from "../components/LoginModal";
 import { useAuth } from "../contexts/AuthContext";
 import { api } from "../../lib/api";
@@ -144,10 +144,19 @@ export default function JournalPage() {
               <span className="text-lg font-semibold text-rose-600">Tara4u</span>
             </Link>
 
-            {/* Profile Icon with Completion Circle */}
-            <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100 transition-colors">
-              <ProfileCompletionCircle size="md" showPercentage={false} />
-            </Link>
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dass21"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full border border-rose-200 bg-rose-50 text-rose-600 text-sm font-semibold hover:bg-rose-100 transition-all"
+              >
+                <FontAwesomeIcon icon={faBrain} className="h-4 w-4" />
+                Check Stress Level
+              </Link>
+              <Link href="/profile" className="rounded-full p-2 hover:bg-rose-100 transition-colors">
+                <ProfileCompletionCircle size="md" showPercentage={false} />
+              </Link>
+            </div>
 
           </div>
         </header>
