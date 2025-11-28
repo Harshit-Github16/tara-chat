@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { analyzeUserPattern } from '../../utils/patternAnalysis';
 
 // Multiple Groq API keys for load balancing and rate limit management
 const GROQ_API_KEYS = [
@@ -689,11 +690,57 @@ ${responseLabel}:`;
         console.log('Chat response generated successfully');
         console.log('Returning response with', skipChatHistory ? chatHistory.length : chatHistory.length + 2, 'total messages');
 
+        // Analyze user pattern for DASS-21 suggestion (only for TARA AI)
+        let patternAnalysis = null;
+        let shouldSuggestDASS21 = false;
+
+        if (chatUserId === 'tara-ai' && !skipChatHistory) {
+            try {
+                console.log('Analyzing user pattern for DASS-21 suggestion...');
+
+                // Get updated chat history including new messages
+                const updatedChatHistory = [...chatHistory, userMessage, aiMessage];
+                const journals = userData.journals || [];
+
+                // Analyze pattern
+                const analysis = analyzeUserPattern(updatedChatHistory, journals, 3);
+
+                // Check if user has taken DASS-21 recently (within last 7 days)
+                const recentAssessments = userData.dass21Assessments || [];
+                const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                const hasRecentAssessment = recentAssessments.some(assessment => {
+                    const assessmentDate = new Date(assessment.completedAt || assessment.createdAt);
+                    return assessmentDate >= sevenDaysAgo;
+                });
+
+                shouldSuggestDASS21 = analysis.shouldSuggestDASS21 && !hasRecentAssessment;
+
+                if (shouldSuggestDASS21) {
+                    console.log('Pattern analysis suggests DASS-21:', {
+                        stressScore: analysis.combinedStressScore,
+                        consecutiveDays: analysis.chatAnalysis.consecutiveStressedDays,
+                        confidence: analysis.confidence
+                    });
+                }
+
+                patternAnalysis = {
+                    shouldSuggest: shouldSuggestDASS21,
+                    stressScore: analysis.combinedStressScore,
+                    confidence: analysis.confidence,
+                    consecutiveStressedDays: analysis.chatAnalysis.consecutiveStressedDays
+                };
+            } catch (error) {
+                console.error('Error analyzing pattern:', error);
+                // Don't fail the chat if pattern analysis fails
+            }
+        }
+
         const responseData = {
             success: true,
             userMessage,
             aiMessage,
-            chatHistory: skipChatHistory ? chatHistory : [...chatHistory, userMessage, aiMessage]
+            chatHistory: skipChatHistory ? chatHistory : [...chatHistory, userMessage, aiMessage],
+            ...(patternAnalysis && { patternAnalysis })
         };
 
         console.log('Response data:', JSON.stringify(responseData, null, 2));
