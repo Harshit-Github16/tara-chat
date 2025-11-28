@@ -2,8 +2,26 @@ import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
+// Multiple Groq API keys for load balancing and rate limit management
+const GROQ_API_KEYS = [
+    process.env.GROQ_API_KEY,
+    process.env.GROQ_API_KEY_INSIGHTS,
+    process.env.GROQ_API_KEY_2,
+    process.env.GROQ_API_KEY_3,
+    process.env.GROQ_API_KEY_4,
+].filter(Boolean); // Remove undefined keys
+
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+// Function to get a random API key from the pool
+function getRandomGroqApiKey() {
+    if (GROQ_API_KEYS.length === 0) {
+        throw new Error('No Groq API keys configured');
+    }
+    const randomIndex = Math.floor(Math.random() * GROQ_API_KEYS.length);
+    console.log(`Using Groq API key #${randomIndex + 1} of ${GROQ_API_KEYS.length}`);
+    return GROQ_API_KEYS[randomIndex];
+}
 
 // Enhanced role-based system prompts focused on emotional support
 const ROLE_PROMPTS = {
@@ -506,10 +524,14 @@ ${responseLabel}:`;
         console.log('Groq API payload:', JSON.stringify(groqPayload, null, 2));
 
         console.log('Sending request to Groq API...');
+
+        // Get a random API key for load balancing
+        const selectedApiKey = getRandomGroqApiKey();
+
         const groqResponse = await fetch(GROQ_API_URL, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${GROQ_API_KEY}`,
+                'Authorization': `Bearer ${selectedApiKey}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(groqPayload),

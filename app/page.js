@@ -1587,7 +1587,7 @@ export default function Home() {
                           Can't find what you're looking for? Our support team is here to help you 24/7.
                         </p>
                         <Link
-                          href="#contact"
+                          href="/contact"
                           className=" btn-shine inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
                         >
                           Contact Support

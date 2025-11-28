@@ -7,7 +7,8 @@ import {
     faNewspaper,
     faChartLine,
     faBullseye,
-    faUserShield
+    faUserShield,
+    faClipboardList
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -37,9 +38,10 @@ export default function BottomNav({ activePage }) {
 
     return (
         <nav className="sticky bottom-0 z-10 border-t border-rose-100 bg-white/90 backdrop-blur">
-            <div className={`mx-auto grid max-w-7xl ${isAdmin ? 'grid-cols-6' : 'grid-cols-5'} px-2 py-2 text-xs text-gray-600 sm:text-sm`}>
+            <div className={`mx-auto grid max-w-7xl ${isAdmin ? 'grid-cols-7' : 'grid-cols-6'} px-2 py-2 text-xs text-gray-600 sm:text-sm`}>
                 <NavLink href="/journal" icon={faBookOpen} label="Journal" active={activePage === "journal"} />
                 <NavLink href="/chatlist" icon={faComments} label="Chats" active={activePage === "chatlist"} />
+                <NavLink href="/dass21" icon={faClipboardList} label="DASS-21" active={activePage === "dass21"} />
                 <NavLink href="/blog" icon={faNewspaper} label="Blog" active={activePage === "blog"} />
                 <NavLink href="/insights" icon={faChartLine} label="Insights" active={activePage === "insights"} />
                 <NavLink href="/goals" icon={faBullseye} label="Goals" active={activePage === "goals"} />

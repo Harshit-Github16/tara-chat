@@ -15,16 +15,27 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
     const { user, loading, checkAuth } = useAuth();
     const [currentStep, setCurrentStep] = useState(1);
     const [saving, setSaving] = useState(false);
+
+    // Fixed 8 life areas for all users
+    const FIXED_LIFE_AREAS = [
+        "Financial Growth",
+        "Family",
+        "Health",
+        "Personal Growth",
+        "Love & Relationships",
+        "Career",
+        "Social Life",
+        "Spirituality"
+    ];
+
     const [formData, setFormData] = useState({
         name: "", nickname: "", gender: "", ageRange: "", profession: "",
-        interests: [], personalityTraits: [], lifeAreas: []
+        interests: [], personalityTraits: [], lifeAreas: FIXED_LIFE_AREAS
     });
     const [showAddInterest, setShowAddInterest] = useState(false);
     const [showAddTrait, setShowAddTrait] = useState(false);
     const [newInterest, setNewInterest] = useState("");
     const [newTrait, setNewTrait] = useState("");
-    const [showAddLifeArea, setShowAddLifeArea] = useState(false);
-    const [newLifeArea, setNewLifeArea] = useState("");
 
     useEffect(() => {
         if (user && !loading) {
@@ -37,7 +48,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                 profession: user.profession || "",
                 interests: user.interests || [],
                 personalityTraits: user.personalityTraits || [],
-                lifeAreas: user.lifeAreas || []
+                lifeAreas: user.lifeAreas || FIXED_LIFE_AREAS
             }));
         }
     }, [user, loading]);
@@ -46,7 +57,6 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
     const interestOptions = ["Reading", "Music", "Sports", "Travel", "Cooking", "Photography", "Gaming", "Art", "Technology", "Fitness", "Movies", "Nature", "Fashion", "Science", "History", "Meditation"];
     const personalityOptions = ["Introverted", "Extroverted", "Creative", "Analytical", "Empathetic", "Optimistic", "Adventurous", "Calm", "Energetic", "Thoughtful", "Ambitious", "Caring"];
-    const lifeAreaOptions = ["Financial Growth", "Family", "Health", "Personal Growth", "Love & Relationships", "Career", "Social Life", "Spirituality"];
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -56,10 +66,6 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         setFormData(prev => {
             const currentArray = prev[field];
             const isRemoving = currentArray.includes(value);
-            if (field === 'lifeAreas' && !isRemoving && currentArray.length >= 8) {
-                alert('You can select maximum 8 life areas');
-                return prev;
-            }
             return {
                 ...prev,
                 [field]: isRemoving ? currentArray.filter(item => item !== value) : [...currentArray, value]
@@ -83,21 +89,19 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         }
     };
 
-    const handleAddCustomLifeArea = () => {
-        if (newLifeArea.trim() && !formData.lifeAreas.includes(newLifeArea.trim())) {
-            setFormData(prev => ({ ...prev, lifeAreas: [...prev.lifeAreas, newLifeArea.trim()] }));
-            setNewLifeArea("");
-            setShowAddLifeArea(false);
-        }
-    };
-
     const handleNext = async () => {
-        if (currentStep < 4) {
+        if (currentStep < 3) {
             setCurrentStep(currentStep + 1);
         } else {
             setSaving(true);
             try {
-                const response = await api.post('/api/onboarding', formData);
+                // Ensure fixed life areas are always included
+                const dataToSave = {
+                    ...formData,
+                    lifeAreas: FIXED_LIFE_AREAS
+                };
+
+                const response = await api.post('/api/onboarding', dataToSave);
                 if (response.ok) {
                     await checkAuth();
 
@@ -133,7 +137,6 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
             case 1: return formData.name && formData.nickname && formData.gender && formData.ageRange;
             case 2: return formData.profession;
             case 3: return formData.interests.length > 0 && formData.personalityTraits.length > 0;
-            case 4: return formData.lifeAreas.length >= 4 && formData.lifeAreas.length <= 8;
             default: return false;
         }
     };
@@ -154,17 +157,17 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             <Image src="/taralogo.jpg" alt="Tara Logo" width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
                             <span className="text-2xl font-bold text-rose-600">Tara</span>
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Let's get to know you better</h1>
-                        <p className="text-gray-600">Help us personalize your emotional wellness journey</p>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Tara! 👋</h1>
+                        <p className="text-gray-600">Let's set up your profile to personalize your wellness journey</p>
                     </div>
 
                     <div className="mb-8">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Step {currentStep} of 4</span>
-                            <span className="text-sm text-gray-500">{Math.round((currentStep / 4) * 100)}% Complete</span>
+                            <span className="text-sm font-medium text-gray-600">Step {currentStep} of 3</span>
+                            <span className="text-sm text-gray-500">{Math.round((currentStep / 3) * 100)}% Complete</span>
                         </div>
                         <div className="w-full bg-rose-100 rounded-full h-2">
-                            <div className="bg-rose-500 h-2 rounded-full transition-all duration-300" style={{ width: `${(currentStep / 4) * 100}%` }}></div>
+                            <div className="bg-rose-500 h-2 rounded-full transition-all duration-300" style={{ width: `${(currentStep / 3) * 100}%` }}></div>
                         </div>
                     </div>
 
@@ -315,47 +318,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         )}
 
 
-                        {currentStep === 4 && (
-                            <div className="space-y-6">
-                                <div className="text-center mb-6">
-                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
-                                        <FontAwesomeIcon icon={faChartPie} className="h-8 w-8 text-rose-600" />
-                                    </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Life Areas That Matter</h2>
-                                    <p className="text-gray-600">Select areas important for your mental & emotional health</p>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-4">
-                                        <FontAwesomeIcon icon={faChartPie} className="h-4 w-4 mr-2 text-rose-500" />
-                                        Select Your Focus Areas (Minimum 4, Maximum 8)
-                                        <span className="ml-2 text-xs text-rose-600 font-semibold">{formData.lifeAreas.length}/8 selected</span>
-                                    </label>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        {lifeAreaOptions.map((area) => (
-                                            <button key={area} type="button" onClick={() => handleArrayToggle('lifeAreas', area)} className={`px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left ${formData.lifeAreas.includes(area) ? 'bg-rose-200 text-rose-600 border-rose-200 shadow-md' : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'}`}>
-                                                {area}
-                                            </button>
-                                        ))}
-                                        {formData.lifeAreas.filter(a => !lifeAreaOptions.includes(a)).map((area) => (
-                                            <button key={area} type="button" onClick={() => handleArrayToggle('lifeAreas', area)} className="px-6 py-4 rounded-lg border text-sm font-medium transition-all text-left bg-rose-200 text-rose-600 border-rose-200 shadow-md">
-                                                {area}
-                                            </button>
-                                        ))}
-                                        {!showAddLifeArea ? (
-                                            <button type="button" onClick={() => setShowAddLifeArea(true)} className="px-6 py-4 rounded-lg border-2 border-dashed border-rose-300 text-rose-600 text-sm font-medium hover:bg-rose-50 transition-all">
-                                                + Add Other
-                                            </button>
-                                        ) : (
-                                            <div className="col-span-1 md:col-span-2 flex gap-2">
-                                                <input type="text" value={newLifeArea} onChange={(e) => setNewLifeArea(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAddCustomLifeArea()} placeholder="Type your life area..." className="flex-1 px-4 py-2 border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-200" autoFocus />
-                                                <button type="button" onClick={handleAddCustomLifeArea} className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors">Add</button>
-                                                <button type="button" onClick={() => { setShowAddLifeArea(false); setNewLifeArea(""); }} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">Cancel</button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+
 
                         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
                             <button onClick={handleBack} disabled={currentStep === 1} className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${currentStep === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
@@ -367,7 +330,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                         Saving...
                                     </>
-                                ) : currentStep === 4 ? (
+                                ) : currentStep === 3 ? (
                                     <>
                                         <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />Complete Setup
                                     </>

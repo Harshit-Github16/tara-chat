@@ -14,6 +14,7 @@ import EmotionalWheel from "../components/EmotionalWheel";
 import EmotionalFlowerChart from "../components/EmotionalFlowerChart";
 import LifeAreaSuggestions from "../components/LifeAreaSuggestions";
 import MoodTriggers from "../components/MoodTriggers";
+import DASS21Results from "../components/DASS21Results";
 import {
     faChartLine,
     faUser,
@@ -25,6 +26,7 @@ import {
     faClock,
     faNewspaper,
     faBolt,
+    faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 
 function InsightsPageContent() {
@@ -197,6 +199,13 @@ function InsightsPageContent() {
                         {/* AI-Generated Suggestions - ACTIVE */}
                         <ChartCard title="Improvement Suggestions" icon={faNewspaper}>
                             <LifeAreaSuggestions />
+                        </ChartCard>
+                    </div>
+
+                    {/* DASS-21 Assessment Results */}
+                    <div className="mt-6">
+                        <ChartCard title="DASS-21 Assessment" icon={faClipboardList}>
+                            <DASS21Results />
                         </ChartCard>
                     </div>
 
