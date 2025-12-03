@@ -13,7 +13,7 @@ import {
 export default function OnboardingModal({ isOpen, onClose, onComplete }) {
     const router = useRouter();
     const { user, loading, checkAuth } = useAuth();
-    const [currentStep, setCurrentStep] = useState(1);
+    const [currentStep, setCurrentStep] = useState(0);
     const [saving, setSaving] = useState(false);
 
     // Fixed 8 life areas for all users
@@ -28,7 +28,23 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         "Spirituality"
     ];
 
+    // Reasons for using Tara
+    const REASONS_FOR_USING = [
+        "Feeling stressed or anxious",
+        "Need someone to talk to",
+        "Want to improve mental health",
+        "Looking for emotional support",
+        "Dealing with depression or low mood",
+        "Managing work-life balance",
+        "Relationship issues",
+        "Personal growth and self-improvement",
+        "Sleep problems",
+        "Loneliness",
+        "Just curious to try"
+    ];
+
     const [formData, setFormData] = useState({
+        reasonForUsing: "",
         name: "", nickname: "", gender: "", ageRange: "", profession: "",
         interests: [], personalityTraits: [], lifeAreas: FIXED_LIFE_AREAS
     });
@@ -41,6 +57,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         if (user && !loading) {
             setFormData(prev => ({
                 ...prev,
+                reasonForUsing: user.reasonForUsing || "",
                 name: user.name || "",
                 nickname: user.nickname || user.name?.split(' ')[0] || "",
                 gender: user.gender || "",
@@ -129,11 +146,12 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
     };
 
     const handleBack = () => {
-        if (currentStep > 1) setCurrentStep(currentStep - 1);
+        if (currentStep > 0) setCurrentStep(currentStep - 1);
     };
 
     const isStepValid = () => {
         switch (currentStep) {
+            case 0: return formData.reasonForUsing !== "";
             case 1: return formData.name && formData.nickname && formData.gender && formData.ageRange;
             case 2: return formData.profession;
             case 3: return formData.interests.length > 0 && formData.personalityTraits.length > 0;
@@ -163,15 +181,51 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
                     <div className="mb-8">
                         <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Step {currentStep} of 3</span>
-                            <span className="text-sm text-gray-500">{Math.round((currentStep / 3) * 100)}% Complete</span>
+                            <span className="text-sm font-medium text-gray-600">Step {currentStep + 1} of 4</span>
+                            <span className="text-sm text-gray-500">{Math.round(((currentStep + 1) / 4) * 100)}% Complete</span>
                         </div>
                         <div className="w-full bg-rose-100 rounded-full h-2">
-                            <div className="bg-rose-500 h-2 rounded-full transition-all duration-300" style={{ width: `${(currentStep / 3) * 100}%` }}></div>
+                            <div className="bg-rose-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentStep + 1) / 4) * 100}%` }}></div>
                         </div>
                     </div>
 
                     <div className="bg-white rounded-2xl border border-rose-100 shadow-lg p-8">
+                        {currentStep === 0 && (
+                            <div className="space-y-6">
+                                <div className="text-center mb-6">
+                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
+                                        <FontAwesomeIcon icon={faHeart} className="h-8 w-8 text-rose-600" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">What brings you here today?</h2>
+                                    <p className="text-gray-600">Help us understand how we can support you better</p>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        <FontAwesomeIcon icon={faHeart} className="h-4 w-4 mr-2 text-rose-500" />
+                                        Select your primary reason
+                                    </label>
+                                    <select
+                                        value={formData.reasonForUsing}
+                                        onChange={(e) => handleInputChange('reasonForUsing', e.target.value)}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-colors outline-none text-gray-700"
+                                    >
+                                        <option value="">Choose what describes you best...</option>
+                                        {REASONS_FOR_USING.map((reason) => (
+                                            <option key={reason} value={reason}>{reason}</option>
+                                        ))}
+                                    </select>
+                                    {formData.reasonForUsing && (
+                                        <div className="mt-4 p-4 bg-rose-50 rounded-lg border border-rose-200">
+                                            <p className="text-sm text-gray-700">
+                                                <FontAwesomeIcon icon={faCheck} className="h-4 w-4 mr-2 text-rose-600" />
+                                                Great! We'll personalize your experience to help you with <span className="font-semibold text-rose-600">{formData.reasonForUsing.toLowerCase()}</span>
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {currentStep === 1 && (
                             <div className="space-y-6">
                                 <div className="text-center mb-6">
@@ -321,7 +375,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
 
                         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
-                            <button onClick={handleBack} disabled={currentStep === 1} className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${currentStep === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
+                            <button onClick={handleBack} disabled={currentStep === 0} className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${currentStep === 0 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
                                 <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />Back
                             </button>
                             <button onClick={handleNext} disabled={!isStepValid() || saving} className={`inline-flex items-center gap-2 px-8 py-3 rounded-lg font-semibold transition-all ${isStepValid() && !saving ? 'bg-rose-500 text-white hover:bg-rose-600 shadow-lg' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>

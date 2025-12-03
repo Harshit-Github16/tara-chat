@@ -28,6 +28,7 @@ import {
   faChevronUp,
   faBullseye,
   faClock,
+  faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
@@ -279,6 +280,13 @@ export default function Home() {
                     <FontAwesomeIcon icon={faChartLine} className="h-4 w-4" />
                     Insights
                   </Link>
+                  <Link
+                    href="/stress-check"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faClipboardList} className="h-4 w-4" />
+                    Stress Check
+                  </Link>
                 </div>
               )}
             </div>
@@ -397,6 +405,14 @@ export default function Home() {
                     >
                       <FontAwesomeIcon icon={faChartLine} className="h-4 w-4" />
                       Insights
+                    </Link>
+                    <Link
+                      href="/stress-check"
+                      className="flex items-center gap-3 py-2 text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      <FontAwesomeIcon icon={faClipboardList} className="h-4 w-4" />
+                      Stress Check
                     </Link>
                   </div>
                 )}
@@ -796,7 +812,7 @@ export default function Home() {
 
           <div className="relative mx-auto max-w-[1600px] px-6 lg:px-12">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 px-5 py-2 text-sm font-semibold text-blue-700 mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-5 py-2 text-sm font-semibold text-rose-700 mb-6">
                 <FontAwesomeIcon icon={faHeart} className="h-4 w-4" />
                 Complete Wellness Suite
               </div>
@@ -934,7 +950,32 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* Feature 6 - Cross Platform */}
+              {/* Feature 6 - Stress Level Assessment */}
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faClipboardList} className="h-7 w-7 text-rose-600" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Stress Level Assessment</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Take a comprehensive assessment to understand your stress, anxiety, and mood levels with personalized recommendations.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">21-question assessment</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Detailed insights</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Personalized tips</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Feature 7 - Cross Platform */}
               <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
                   <FontAwesomeIcon icon={faMobile} className="h-7 w-7 text-rose-600" />
@@ -972,7 +1013,7 @@ export default function Home() {
 
           <div className="mx-auto max-w-[1600px] px-6 lg:px-12 relative">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-100 to-blue-100 px-5 py-2 text-sm font-semibold text-purple-700 mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-5 py-2 text-sm font-semibold text-rose-700 mb-6">
                 <FontAwesomeIcon icon={faStar} className="h-4 w-4" />
                 Everything Included
               </div>
@@ -1077,6 +1118,129 @@ export default function Home() {
             </div>
 
 
+          </div>
+        </section>
+
+        {/* Stress Level Assessment Section */}
+        <section className="py-20 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-rose-50/50 relative overflow-hidden">
+          {/* Background decorations */}
+          <div className="absolute top-10 right-10 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 left-10 w-72 h-72 bg-purple-200/20 rounded-full blur-3xl"></div>
+
+          <div className="mx-auto max-w-7xl px-6 lg:px-12 relative">
+            {/* Centered Badge Only */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-5 py-2 text-sm font-semibold text-rose-700">
+                <FontAwesomeIcon icon={faClipboardList} className="h-4 w-4" />
+                Mental Health Assessment
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left Column - Content */}
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-6">
+                  Check Your <span className="text-rose-600">Stress Levels</span>
+                </h2>
+                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                  Take our comprehensive 21-question assessment to understand your current stress, anxiety, and mood levels. Get personalized insights and recommendations based on your results.
+                </p>
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                      <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Scientifically Validated</h3>
+                      <p className="text-sm text-gray-600">Based on the DASS-21 (Depression, Anxiety and Stress Scale)</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                      <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Detailed Insights</h3>
+                      <p className="text-sm text-gray-600">Get scores for stress, anxiety, and low mood with severity levels</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
+                      <FontAwesomeIcon icon={faHeart} className="h-5 w-5 text-rose-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 mb-1">Personalized Recommendations</h3>
+                      <p className="text-sm text-gray-600">Receive tailored tips and strategies to improve your mental wellness</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Link
+                  href="/stress-check"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all btn-shine"
+                >
+                  Take Assessment Now
+                  <FontAwesomeIcon icon={faArrowRight} className="h-5 w-5" />
+                </Link>
+
+                <p className="mt-4 text-sm text-gray-500">
+                  ⏱️ Takes only 5 minutes • 100% Private & Confidential
+                </p>
+              </div>
+
+              {/* Right Column - Visual */}
+              <div className="relative">
+                <div className="bg-white rounded-3xl border-2 border-rose-100 p-8 shadow-2xl relative overflow-hidden">
+
+
+                  {/* Assessment Preview */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-bold text-gray-900">Stress Assessment</h3>
+                      <span className="text-sm font-semibold text-rose-600">Question 1/21</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+                      <div className="bg-gradient-to-r from-rose-400 to-rose-600 h-2 rounded-full" style={{ width: '15%' }}></div>
+                    </div>
+                  </div>
+
+                  {/* Sample Question */}
+                  <div className="bg-gradient-to-br from-rose-50 to-purple-50 rounded-2xl p-6 mb-6">
+                    <p className="text-gray-900 font-medium mb-4">
+                      "I found it hard to calm myself down"
+                    </p>
+                    <div className="space-y-3">
+                      {['Not at all', 'Sometimes', 'Often', 'Most of the time'].map((option, index) => (
+                        <div
+                          key={index}
+                          className="bg-white rounded-xl p-3 border-2 border-gray-200 hover:border-rose-300 transition-colors cursor-pointer"
+                        >
+                          <span className="text-sm text-gray-700">{option}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Results Preview */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="bg-green-50 rounded-xl p-3 border border-green-200">
+                      <div className="text-xs text-gray-600 mb-1">Stress</div>
+                      <div className="text-lg font-bold text-green-600">Normal</div>
+                    </div>
+                    <div className="bg-yellow-50 rounded-xl p-3 border border-yellow-200">
+                      <div className="text-xs text-gray-600 mb-1">Anxiety</div>
+                      <div className="text-lg font-bold text-yellow-600">Mild</div>
+                    </div>
+                    <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
+                      <div className="text-xs text-gray-600 mb-1">Mood</div>
+                      <div className="text-lg font-bold text-blue-600">Good</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -2402,18 +2566,7 @@ function WhoCanUseTaraCarousel() {
         "Find clarity and direction"
       ]
     },
-    {
-      title: "Traders & Entrepreneurs",
-      icon: faBullseye,
-      color: "rose",
-      image: "/slider/business.jpg",
-      description: "High-stakes decisions and financial pressure are exhausting. Tara helps you stay emotionally balanced and mentally clear.",
-      points: [
-        "Handle financial stress and losses",
-        "Make clear, confident decisions",
-        "Stay emotionally balanced"
-      ]
-    },
+
     {
       title: "Parents",
       icon: faHeart,

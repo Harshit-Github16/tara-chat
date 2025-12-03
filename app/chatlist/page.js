@@ -112,6 +112,17 @@ export default function ChatListPage() {
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   // Store messages per chat ID
   const [chatMessages, setChatMessages] = useState({});
+  // Track if older chats are shown
+  const [showOlderChats, setShowOlderChats] = useState(false);
+  // Store full chat history
+  const [fullChatHistory, setFullChatHistory] = useState({});
+  // Track if mood greeting was sent
+  const [moodGreetingSent, setMoodGreetingSent] = useState(false);
+
+  // Reset showOlderChats when switching chats
+  useEffect(() => {
+    setShowOlderChats(false);
+  }, [activeId]);
 
   // Ref for messages container to enable auto-scroll
   const messagesEndRef = useRef(null);
@@ -121,10 +132,37 @@ export default function ChatListPage() {
   const taraChat = TaraChat({
     userId: user?.uid,
     onMessagesUpdate: (messages) => {
-      setChatMessages(prev => ({
+      console.log('TaraChat onMessagesUpdate called with', messages.length, 'messages');
+
+      // Store full history
+      setFullChatHistory(prev => ({
         ...prev,
         "tara-ai": messages
       }));
+
+      // If older chats are shown, display all messages
+      // Otherwise, only show new messages (don't clear mood greeting)
+      if (showOlderChats) {
+        setChatMessages(prev => ({
+          ...prev,
+          "tara-ai": messages
+        }));
+      } else {
+        // Don't override if we already have messages (like mood greeting)
+        setChatMessages(prev => {
+          const currentMessages = prev["tara-ai"] || [];
+          if (currentMessages.length > 0) {
+            console.log('Keeping existing messages (mood greeting):', currentMessages.length);
+            return prev;
+          }
+          // Start fresh (empty)
+          return {
+            ...prev,
+            "tara-ai": []
+          };
+        });
+      }
+
       // Update last message in chat list
       if (messages.length > 0) {
         const lastMessage = messages[messages.length - 1];
@@ -149,12 +187,29 @@ export default function ChatListPage() {
     }
   }, [user?.uid, hasInitialized]);
 
-  // Load chat history when user is available
+  // Load chat history when user is available (but don't show by default)
+  // Wait a bit to let mood greeting load first
   useEffect(() => {
     if (user?.uid && activeId === "tara-ai") {
-      taraChat.loadChatHistory();
+      // Delay loading history to let mood greeting show first
+      const timer = setTimeout(() => {
+        taraChat.loadChatHistory();
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [user?.uid]);
+
+  // Handle showing older chats
+  const handleShowOlderChats = () => {
+    setShowOlderChats(true);
+    // Show full history
+    if (fullChatHistory["tara-ai"]) {
+      setChatMessages(prev => ({
+        ...prev,
+        "tara-ai": fullChatHistory["tara-ai"]
+      }));
+    }
+  };
 
   // Send automatic mood-based greeting when user comes from mood selection
   useEffect(() => {
@@ -166,27 +221,32 @@ export default function ChatListPage() {
       const fromMood = urlParams.get('fromMood');
       const moodDataParam = urlParams.get('moodData');
 
+      console.log('Mood greeting check:', { fromMood, moodDataParam, activeId });
+
       if (fromMood === 'true' && moodDataParam) {
         try {
           const moodData = JSON.parse(decodeURIComponent(moodDataParam));
+          console.log('Parsed mood data:', moodData);
 
-          // Generate mood-based greeting message
+          // Generate mood-based greeting message (Hinglish style)
           const moodGreetings = {
-            calm: `Namaste! 😌 I can sense you're feeling calm today. That's wonderful! Calmness is like a gentle river - peaceful and steady. What's helping you maintain this beautiful state of mind?`,
-            happy: `Hey there! 😊 I can see you're radiating happiness today! That's absolutely amazing! Your positive energy is contagious. What's making your heart so light and joyful?`,
-            grateful: `Hello dear friend! 🙏 You're feeling grateful today - that's such a beautiful emotion! Gratitude opens the door to abundance. What blessings are you counting today?`,
-            motivated: `Hi champion! 💪 I can feel your motivation from here! That fire in your belly is going to take you places. What exciting goals are you chasing today?`,
-            healing: `Hello dear one. 🌱 I see you're in a healing phase. That takes real courage and strength. Remember, healing isn't linear - it's okay to take your time. How can I support you on this journey?`,
-            lost: `Hey friend, I'm here with you. 🤔 I notice you're feeling a bit lost right now. You know what? Even the greatest explorers felt lost before they found their way. Want to talk about what's on your mind?`,
-            lonely: `Hi there, dear friend. 😔 I can sense you're feeling lonely. Please know that I'm here to listen and keep you company. You're not alone in this. What's been weighing on your heart?`,
-            sad: `Hello my friend. 😢 I see you're carrying some sadness today. It's completely okay to feel this way - your emotions are valid. I'm here for you. Would you like to share what's making you feel down?`,
-            stressed: `Hey there! 😰 I can see you're feeling stressed right now. Let's take a deep breath together... inhale... exhale. Now, let's work through this one step at a time. What's causing you stress?`,
-            anxious: `Hi friend. 😟 I notice you're feeling anxious. First, let's ground ourselves - take a slow, deep breath with me. Remember, anxiety is just your mind trying to protect you. What's worrying you right now?`,
-            overwhelmed: `Hello dear. 😵 You're feeling overwhelmed - that's a heavy load to carry. Let's break things down into smaller, manageable pieces together. What's weighing most heavily on you right now?`,
-            angry: `Hey there. 😠 I can sense you're feeling angry. That's completely valid - anger is a natural emotion. Sometimes we need to feel it to heal it. Want to talk about what's frustrating you?`
+            calm: `Namaste! 😌 Main dekh sakti hoon aap aaj calm feel kar rahe hain. That's wonderful! Calmness ek gentle river ki tarah hai - peaceful aur steady. Kya cheez aapko is beautiful state mein maintain karne mein help kar rahi hai?`,
+            happy: `Hey there! 😊 Main dekh sakti hoon aap aaj happiness se radiate kar rahe hain! That's absolutely amazing! Aapki positive energy contagious hai. Kya baat hai jo aapke heart ko itna light aur joyful bana rahi hai?`,
+            grateful: `Hello dear friend! 🙏 Aap aaj grateful feel kar rahe hain - that's such a beautiful emotion! Gratitude abundance ka door kholta hai. Aaj aap kaunse blessings count kar rahe hain?`,
+            motivated: `Hi champion! 💪 Main aapki motivation yahan se feel kar sakti hoon! Aapki belly mein jo fire hai wo aapko places tak le jayegi. Aaj aap kaunse exciting goals chase kar rahe hain?`,
+            healing: `Hello dear one. 🌱 Main dekh sakti hoon aap healing phase mein hain. That takes real courage aur strength. Remember, healing linear nahi hota - apna time lena okay hai. Main aapki is journey mein kaise support kar sakti hoon?`,
+            lost: `Hey friend, main yahin hoon aapke saath. 🤔 Main notice kar rahi hoon aap thoda lost feel kar rahe hain right now. You know what? Even greatest explorers bhi lost feel karte the before they found their way. Aapke mind mein kya chal raha hai, baat karni hai?`,
+            lonely: `Hi there, dear friend. 😔 Main sense kar sakti hoon aap lonely feel kar rahe hain. Please know ki main yahin hoon sunne ke liye aur aapko company dene ke liye. You're not alone in this. Aapke heart pe kya bhari hai?`,
+            sad: `Hello my friend. 😢 Main dekh sakti hoon aaj aap sadness carry kar rahe hain. It's completely okay to feel this way - aapke emotions valid hain. Main yahin hoon aapke liye. Kya aap share karna chahenge ki kya aapko down feel kara raha hai?`,
+            stressed: `Hey there! 😰 Main dekh sakti hoon aap abhi stressed feel kar rahe hain. Let's take a deep breath together... inhale... exhale. Ab, let's work through this one step at a time. Kya aapko stress de raha hai?`,
+            anxious: `Hi friend. 😟 Main notice kar rahi hoon aap anxious feel kar rahe hain. First, let's ground ourselves - mere saath ek slow, deep breath lo. Remember, anxiety sirf aapka mind aapko protect karne ki koshish kar raha hai. Abhi aapko kya worry kar raha hai?`,
+            overwhelmed: `Hello dear. 😵 Aap overwhelmed feel kar rahe hain - that's a heavy load to carry. Chalo saath mein things ko smaller, manageable pieces mein break down karte hain. Abhi aap pe sabse zyada kya bhari hai?`,
+            angry: `Hey there. 😠 Main sense kar sakti hoon aap angry feel kar rahe hain. That's completely valid - anger ek natural emotion hai. Sometimes we need to feel it to heal it. Kya baat hai jo aapko frustrate kar rahi hai?`
           };
 
-          const greetingMessage = moodGreetings[moodData.mood] || `Hello! I see you're feeling ${moodData.mood} today. How can I support you?`;
+          const greetingMessage = moodGreetings[moodData.mood] || `Hello! Main dekh sakti hoon aap aaj ${moodData.mood} feel kar rahe hain. Main aapko kaise support kar sakti hoon?`;
+
+          console.log('Sending mood greeting:', greetingMessage);
 
           // Add Tara's greeting message directly to the chat (from Tara to user)
           const taraGreeting = {
@@ -197,11 +257,21 @@ export default function ChatListPage() {
             type: 'text'
           };
 
+          // Mark that mood greeting was sent
+          setMoodGreetingSent(true);
+
           // Update messages immediately
           setChatMessages(prev => ({
             ...prev,
-            "tara-ai": [...(prev["tara-ai"] || []), taraGreeting]
+            "tara-ai": [taraGreeting]
           }));
+
+          // Update last message in chat list
+          setChats(prev => prev.map(chat =>
+            chat.id === "tara-ai"
+              ? { ...chat, last: greetingMessage.substring(0, 50) + "..." }
+              : chat
+          ));
 
           // Save to database
           try {
@@ -216,6 +286,7 @@ export default function ChatListPage() {
                 type: 'text'
               })
             });
+            console.log('Mood greeting saved to DB');
           } catch (error) {
             console.error('Failed to save mood greeting to DB:', error);
           }
@@ -228,11 +299,11 @@ export default function ChatListPage() {
       }
     };
 
-    // Only run once when component mounts and user is available
-    if (user?.uid && activeId === "tara-ai") {
+    // Run when user is available and we're on TARA chat
+    if (user?.uid) {
       sendMoodGreeting();
     }
-  }, [user?.uid, activeId]);
+  }, [user?.uid]);
 
   // Load conversations when switching to any chat user (except TARA which uses its own system)
   useEffect(() => {
@@ -328,7 +399,9 @@ export default function ChatListPage() {
   };
 
   // Get messages for current active chat
-  const messages = chatMessages[activeId] || [];
+  // For TARA AI: only show messages if showOlderChats is true, otherwise show empty (welcome screen)
+  const allMessages = chatMessages[activeId] || [];
+  const messages = (activeId === "tara-ai" && !showOlderChats) ? [] : allMessages;
   const activeChat = useMemo(() => chats.find((c) => c.id === activeId), [chats, activeId]);
 
   // Auto-scroll to bottom when messages change
@@ -765,6 +838,7 @@ export default function ChatListPage() {
     // If chatting with TARA AI, use the TARA chat component
     if (activeId === "tara-ai" && user?.uid) {
       setIsSendingMessage(true);
+
       try {
         await taraChat.sendMessage(suggestedText, {
           name: user.name,
@@ -1119,13 +1193,37 @@ export default function ChatListPage() {
                         className="w-16 h-16 rounded-full object-cover mb-4"
                       />
                       <h3 className="text-lg font-semibold text-gray-800 mb-2">Welcome to TARA AI</h3>
-                      <p className="text-gray-600 text-sm max-w-sm">
+                      <p className="text-gray-600 text-sm max-w-sm mb-4">
                         Hi! I'm TARA, your AI companion. I'm here to support your mental wellness journey.
                         Start a conversation by typing a message below.
                       </p>
+
+                      {/* Show "See Older Chats" button if there are old messages */}
+                      {!showOlderChats && fullChatHistory["tara-ai"] && fullChatHistory["tara-ai"].length > 0 && (
+                        <button
+                          onClick={handleShowOlderChats}
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-600 rounded-full text-sm font-semibold hover:bg-rose-200 transition-all"
+                        >
+                          <FontAwesomeIcon icon={faComments} className="h-4 w-4" />
+                          See Older Chats ({fullChatHistory["tara-ai"].length})
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <>
+                      {/* Show "Hide Older Chats" button at the top if older chats are visible - STICKY */}
+                      {showOlderChats && fullChatHistory["tara-ai"] && fullChatHistory["tara-ai"].length > 0 && (
+                        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-3 flex justify-center mb-4 shadow-sm">
+                          <button
+                            onClick={() => setShowOlderChats(false)}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm font-semibold hover:bg-gray-200 transition-all shadow-sm"
+                          >
+                            <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
+                            Hide Older Messages
+                          </button>
+                        </div>
+                      )}
+
                       {messages.map((msg) => (
                         <ChatBubble
                           key={msg.id}
