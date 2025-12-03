@@ -15,6 +15,7 @@ import EmotionalFlowerChart from "../components/EmotionalFlowerChart";
 import LifeAreaSuggestions from "../components/LifeAreaSuggestions";
 import MoodTriggers from "../components/MoodTriggers";
 import DASS21Results from "../components/DASS21Results";
+import ReflectionRadar from "../components/ReflectionRadar";
 import {
     faChartLine,
     faUser,
@@ -201,13 +202,13 @@ function InsightsPageContent() {
                     {/* Life Area Insights */}
                     <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Support Reflection Radar - ACTIVE */}
-                        <ChartCard title="Support Reflection Radar" icon={faBrain}>
-                            <EmotionalWheel />
+                        <ChartCard title="Reflection Radar" icon={faBullseye}>
+                            <ReflectionRadar moodData={moodData} userId={user?.uid} />
                         </ChartCard>
 
                         {/* AI-Generated Suggestions - ACTIVE */}
                         <ChartCard title="Improvement Suggestions" icon={faNewspaper}>
-                            <LifeAreaSuggestions />
+                            <LifeAreaSuggestions userId={user?.uid} />
                         </ChartCard>
                     </div>
 

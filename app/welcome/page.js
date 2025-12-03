@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
+import { useOnboardingCheck } from '../hooks/useOnboardingCheck';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faBookOpen, faChartLine, faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +13,7 @@ import confetti from 'canvas-confetti';
 export default function WelcomePage() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const { checking } = useOnboardingCheck();
   const [showMoodCheckIn, setShowMoodCheckIn] = useState(true);
   const [moodSaved, setMoodSaved] = useState(false);
 
@@ -69,7 +71,7 @@ export default function WelcomePage() {
     }, 1000);
   };
 
-  if (loading) {
+  if (loading || checking) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
         <div className="text-center">

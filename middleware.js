@@ -12,10 +12,12 @@ export function middleware(request) {
     '/about',
     '/contact',
     '/blog',
+    '/onboarding',
     '/api/auth/login',
     '/api/auth/register',
     '/api/auth/google',
     '/api/auth/firebase-login',
+    '/api/onboarding',
   ];
 
   // Public asset paths

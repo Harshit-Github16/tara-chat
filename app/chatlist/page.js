@@ -26,6 +26,7 @@ import {
   faBullseye,
   faTrash,
   faBrain,
+  faHistory,
 } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import BottomNav from "../components/BottomNav";
@@ -112,56 +113,42 @@ export default function ChatListPage() {
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   // Store messages per chat ID
   const [chatMessages, setChatMessages] = useState({});
-  // Track if older chats are shown
-  const [showOlderChats, setShowOlderChats] = useState(false);
-  // Store full chat history
-  const [fullChatHistory, setFullChatHistory] = useState({});
   // Track if mood greeting was sent
   const [moodGreetingSent, setMoodGreetingSent] = useState(false);
+  // Track session start time (when user logged in/opened chat)
+  const [sessionStartTime, setSessionStartTime] = useState(null);
+  // Track if older messages are shown
+  const [showOlderMessages, setShowOlderMessages] = useState(false);
 
-  // Reset showOlderChats when switching chats
-  useEffect(() => {
-    setShowOlderChats(false);
-  }, [activeId]);
+
 
   // Ref for messages container to enable auto-scroll
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
   // Initialize TaraChat component
+  // Set session start time when component mounts
+  useEffect(() => {
+    if (user?.uid && !sessionStartTime) {
+      setSessionStartTime(new Date());
+    }
+  }, [user?.uid]);
+
+  // Reset showOlderMessages when switching chats
+  useEffect(() => {
+    setShowOlderMessages(false);
+  }, [activeId]);
+
   const taraChat = TaraChat({
     userId: user?.uid,
     onMessagesUpdate: (messages) => {
       console.log('TaraChat onMessagesUpdate called with', messages.length, 'messages');
 
-      // Store full history
-      setFullChatHistory(prev => ({
+      // Simply update chat messages with all messages
+      setChatMessages(prev => ({
         ...prev,
         "tara-ai": messages
       }));
-
-      // If older chats are shown, display all messages
-      // Otherwise, only show new messages (don't clear mood greeting)
-      if (showOlderChats) {
-        setChatMessages(prev => ({
-          ...prev,
-          "tara-ai": messages
-        }));
-      } else {
-        // Don't override if we already have messages (like mood greeting)
-        setChatMessages(prev => {
-          const currentMessages = prev["tara-ai"] || [];
-          if (currentMessages.length > 0) {
-            console.log('Keeping existing messages (mood greeting):', currentMessages.length);
-            return prev;
-          }
-          // Start fresh (empty)
-          return {
-            ...prev,
-            "tara-ai": []
-          };
-        });
-      }
 
       // Update last message in chat list
       if (messages.length > 0) {
@@ -199,17 +186,7 @@ export default function ChatListPage() {
     }
   }, [user?.uid]);
 
-  // Handle showing older chats
-  const handleShowOlderChats = () => {
-    setShowOlderChats(true);
-    // Show full history
-    if (fullChatHistory["tara-ai"]) {
-      setChatMessages(prev => ({
-        ...prev,
-        "tara-ai": fullChatHistory["tara-ai"]
-      }));
-    }
-  };
+
 
   // Send automatic mood-based greeting when user comes from mood selection
   useEffect(() => {
@@ -399,9 +376,20 @@ export default function ChatListPage() {
   };
 
   // Get messages for current active chat
-  // For TARA AI: only show messages if showOlderChats is true, otherwise show empty (welcome screen)
   const allMessages = chatMessages[activeId] || [];
-  const messages = (activeId === "tara-ai" && !showOlderChats) ? [] : allMessages;
+
+  // Filter messages based on session start time (only for TARA AI)
+  let messages = allMessages;
+  let olderMessagesCount = 0;
+
+  if (activeId === "tara-ai" && sessionStartTime && !showOlderMessages) {
+    // Show only messages from current session (after login)
+    messages = allMessages.filter(msg => {
+      const msgTime = msg.timestamp ? new Date(msg.timestamp) : new Date();
+      return msgTime >= sessionStartTime;
+    });
+    olderMessagesCount = allMessages.length - messages.length;
+  }
   const activeChat = useMemo(() => chats.find((c) => c.id === activeId), [chats, activeId]);
 
   // Auto-scroll to bottom when messages change
@@ -1198,24 +1186,28 @@ export default function ChatListPage() {
                         Start a conversation by typing a message below.
                       </p>
 
-                      {/* Show "See Older Chats" button if there are old messages */}
-                      {!showOlderChats && fullChatHistory["tara-ai"] && fullChatHistory["tara-ai"].length > 0 && (
-                        <button
-                          onClick={handleShowOlderChats}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-600 rounded-full text-sm font-semibold hover:bg-rose-200 transition-all"
-                        >
-                          <FontAwesomeIcon icon={faComments} className="h-4 w-4" />
-                          See Older Chats ({fullChatHistory["tara-ai"].length})
-                        </button>
-                      )}
+
                     </div>
                   ) : (
                     <>
-                      {/* Show "Hide Older Chats" button at the top if older chats are visible - STICKY */}
-                      {showOlderChats && fullChatHistory["tara-ai"] && fullChatHistory["tara-ai"].length > 0 && (
+                      {/* Show "See Older Messages" button if there are older messages and they're hidden */}
+                      {activeId === "tara-ai" && !showOlderMessages && olderMessagesCount > 0 && (
+                        <div className="flex justify-center mb-4">
+                          <button
+                            onClick={() => setShowOlderMessages(true)}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-rose-100 text-rose-600 rounded-full text-sm font-semibold hover:bg-rose-200 transition-all shadow-sm"
+                          >
+                            <FontAwesomeIcon icon={faHistory} className="h-4 w-4" />
+                            See Older Messages ({olderMessagesCount})
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Show "Hide Older Messages" button if older messages are visible */}
+                      {activeId === "tara-ai" && showOlderMessages && olderMessagesCount > 0 && (
                         <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-3 flex justify-center mb-4 shadow-sm">
                           <button
-                            onClick={() => setShowOlderChats(false)}
+                            onClick={() => setShowOlderMessages(false)}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-sm font-semibold hover:bg-gray-200 transition-all shadow-sm"
                           >
                             <FontAwesomeIcon icon={faTimes} className="h-4 w-4" />
@@ -1224,9 +1216,9 @@ export default function ChatListPage() {
                         </div>
                       )}
 
-                      {messages.map((msg) => (
+                      {messages.map((msg, index) => (
                         <ChatBubble
-                          key={msg.id}
+                          key={`${msg.id}-${index}`}
                           who={msg.sender}
                           type={msg.type}
                           content={msg.content}

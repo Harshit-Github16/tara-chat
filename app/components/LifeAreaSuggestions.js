@@ -3,33 +3,147 @@ import { useState, useEffect } from "react";
 import { api } from "../../lib/api";
 import { useInsights } from "../contexts/InsightsContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLightbulb, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faLightbulb, faSpinner, faBrain } from "@fortawesome/free-solid-svg-icons";
 
-export default function LifeAreaSuggestions() {
+export default function LifeAreaSuggestions({ userId }) {
     const { quizResults: contextQuizResults, loading: contextLoading } = useInsights();
     const [suggestions, setSuggestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [hasQuizData, setHasQuizData] = useState(false);
+    const [reflectionRadarData, setReflectionRadarData] = useState(null);
+    const [generatingSuggestions, setGeneratingSuggestions] = useState(false);
 
+    // Load reflection radar data
     useEffect(() => {
-        if (contextQuizResults) {
-            const quizResultsData = contextQuizResults.quizResults || {};
-            const lifeAreas = contextQuizResults.lifeAreas || [];
+        const loadReflectionRadar = async () => {
+            if (!userId) {
+                setLoading(false);
+                return;
+            }
 
-            // Check if user has completed any quizzes
-            if (Object.keys(quizResultsData).length > 0) {
-                setHasQuizData(true);
-                // Generate AI suggestions based on quiz results
-                generateSuggestions(quizResultsData, lifeAreas);
-            } else {
+            try {
+                const response = await fetch(`/api/reflection-radar?userId=${userId}`);
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    setReflectionRadarData(data.data);
+                    setHasQuizData(true);
+                } else {
+                    setHasQuizData(false);
+                }
+            } catch (error) {
+                console.error('Error loading reflection radar:', error);
                 setHasQuizData(false);
+            } finally {
                 setLoading(false);
             }
-        } else if (!contextLoading) {
-            setHasQuizData(false);
-            setLoading(false);
+        };
+
+        loadReflectionRadar();
+    }, [userId]);
+
+    const generateAISuggestions = async () => {
+        if (!reflectionRadarData || !reflectionRadarData.scores) {
+            return;
         }
-    }, [contextQuizResults, contextLoading]);
+
+        setGeneratingSuggestions(true);
+
+        try {
+            const response = await fetch('/api/suggestions/reflection-radar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId,
+                    scores: reflectionRadarData.scores
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setSuggestions(data.suggestions || []);
+            } else {
+                // Fallback to default suggestions
+                setSuggestions(generateDefaultSuggestionsFromScores(reflectionRadarData.scores));
+            }
+        } catch (error) {
+            console.error('Error generating AI suggestions:', error);
+            setSuggestions(generateDefaultSuggestionsFromScores(reflectionRadarData.scores));
+        } finally {
+            setGeneratingSuggestions(false);
+        }
+    };
+
+    const generateDefaultSuggestionsFromScores = (scores) => {
+        const suggestions = [];
+
+        // Find top 3 emotions that need attention (highest scores for negative emotions or lowest for positive)
+        const emotionInsights = [
+            { emotion: 'joy', score: scores.joy, isPositive: true },
+            { emotion: 'trust', score: scores.trust, isPositive: true },
+            { emotion: 'fear', score: scores.fear, isPositive: false },
+            { emotion: 'surprise', score: scores.surprise, isPositive: true },
+            { emotion: 'sadness', score: scores.sadness, isPositive: false },
+            { emotion: 'disgust', score: scores.disgust, isPositive: false },
+            { emotion: 'anger', score: scores.anger, isPositive: false },
+            { emotion: 'anticipation', score: scores.anticipation, isPositive: true }
+        ];
+
+        // Sort to find emotions needing attention
+        const needsAttention = emotionInsights
+            .filter(e => (!e.isPositive && e.score > 40) || (e.isPositive && e.score < 40))
+            .sort((a, b) => {
+                if (!a.isPositive && !b.isPositive) return b.score - a.score;
+                if (a.isPositive && b.isPositive) return a.score - b.score;
+                return !a.isPositive ? -1 : 1;
+            })
+            .slice(0, 3);
+
+        needsAttention.forEach(({ emotion, score }) => {
+            suggestions.push(...getEmotionSuggestions(emotion, score));
+        });
+
+        return suggestions.slice(0, 6); // Return top 6 suggestions
+    };
+
+    const getEmotionSuggestions = (emotion, score) => {
+        const suggestionMap = {
+            joy: [
+                { icon: '😊', title: 'Practice Gratitude', description: 'Write down 3 things you\'re grateful for each day to boost joy' },
+                { icon: '🎨', title: 'Engage in Hobbies', description: 'Spend time doing activities that bring you happiness' }
+            ],
+            trust: [
+                { icon: '🤝', title: 'Build Connections', description: 'Strengthen relationships through open communication' },
+                { icon: '💬', title: 'Share Vulnerably', description: 'Practice opening up to trusted friends or family' }
+            ],
+            fear: [
+                { icon: '🧘', title: 'Mindfulness Practice', description: 'Try 10-minute daily meditation to reduce anxiety' },
+                { icon: '📝', title: 'Face Your Fears', description: 'Write down your worries and challenge negative thoughts' }
+            ],
+            surprise: [
+                { icon: '🎯', title: 'Try New Things', description: 'Step out of your comfort zone with small experiments' },
+                { icon: '🌟', title: 'Stay Curious', description: 'Embrace unexpected moments as learning opportunities' }
+            ],
+            sadness: [
+                { icon: '💙', title: 'Reach Out', description: 'Connect with a friend or therapist to talk about your feelings' },
+                { icon: '🌅', title: 'Self-Care Routine', description: 'Establish daily rituals that nurture your well-being' }
+            ],
+            disgust: [
+                { icon: '🌱', title: 'Set Boundaries', description: 'Learn to say no to things that don\'t serve you' },
+                { icon: '🧹', title: 'Declutter', description: 'Remove negative influences from your environment' }
+            ],
+            anger: [
+                { icon: '🏃', title: 'Physical Release', description: 'Exercise or engage in physical activity to release tension' },
+                { icon: '✍️', title: 'Express Safely', description: 'Journal your feelings or talk to someone you trust' }
+            ],
+            anticipation: [
+                { icon: '📅', title: 'Plan Ahead', description: 'Set exciting goals and create action plans' },
+                { icon: '🎉', title: 'Create Events', description: 'Schedule activities you can look forward to' }
+            ]
+        };
+
+        return suggestionMap[emotion] || [];
+    };
 
     const generateSuggestions = async (quizResults, lifeAreas) => {
         try {
@@ -125,11 +239,36 @@ export default function LifeAreaSuggestions() {
             <div className="text-center py-8 px-4">
                 <div className="text-4xl mb-3">📊</div>
                 <div className="text-base font-semibold text-gray-700 mb-2">
-                    Complete Life Area Assessments
+                    Complete Reflection Radar Assessment
                 </div>
                 <div className="text-sm text-gray-500">
-                    Take the Support Reflection Radar quiz to get personalized improvement suggestions
+                    Take the Reflection Radar quiz to get personalized improvement suggestions
                 </div>
+            </div>
+        );
+    }
+
+    if (suggestions.length === 0) {
+        return (
+            <div className="text-center py-8 px-4">
+                <button
+                    onClick={generateAISuggestions}
+                    disabled={generatingSuggestions}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-rose-600 text-white rounded-full font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                >
+                    {generatingSuggestions ? (
+                        <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            Generating...
+                        </>
+                    ) : (
+                        <>
+                            <FontAwesomeIcon icon={faBrain} className="h-5 w-5" />
+                            Generate AI Suggestions
+                        </>
+                    )}
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Based on your Reflection Radar assessment</p>
             </div>
         );
     }

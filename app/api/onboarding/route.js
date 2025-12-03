@@ -36,7 +36,12 @@ export async function POST(request) {
             profession,
             interests,
             personalityTraits,
-            lifeAreas
+            lifeAreas,
+            // Emotional onboarding fields
+            currentMood,
+            personalityAnswers,
+            supportPreference,
+            archetype
         } = body;
 
         // Validate required fields
@@ -57,6 +62,11 @@ export async function POST(request) {
             interests: interests || [],
             personalityTraits: personalityTraits || [],
             lifeAreas: lifeAreas || [],
+            // Emotional onboarding fields
+            currentMood: currentMood || null,
+            personalityAnswers: personalityAnswers || [],
+            supportPreference: supportPreference || null,
+            archetype: archetype || null,
             isOnboardingComplete: true,
             updatedAt: new Date()
         };
