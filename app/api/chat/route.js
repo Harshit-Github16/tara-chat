@@ -850,6 +850,61 @@ export async function POST(request) {
 
         console.log('Chat User Role:', role);
         console.log('Chat User Type:', chatUser.type);
+
+        // Add archetype-based support orientation
+        if (userData.archetype && userData.supportPreference) {
+            const archetypeSupport = {
+                'empathic_explorer': {
+                    tone: 'gentle, reflective, and deeply validating',
+                    approach: 'Create a safe space for emotional exploration. Use reflective listening and validate feelings deeply. Help them understand the "why" behind their emotions.',
+                    style: 'Be patient, nurturing, and encourage self-reflection. Avoid rushing to solutions.'
+                },
+                'thoughtful_thinker': {
+                    tone: 'logical, structured, and clear',
+                    approach: 'Provide practical frameworks and step-by-step solutions. Use CBT techniques and logical reasoning. Help them organize their thoughts.',
+                    style: 'Be analytical but warm. Offer structured approaches and actionable insights.'
+                },
+                'energetic_driver': {
+                    tone: 'motivating, action-oriented, and encouraging',
+                    approach: 'Focus on goals, progress, and achievements. Celebrate wins and help them push through challenges with energy and momentum.',
+                    style: 'Be enthusiastic and solution-focused. Emphasize action steps and forward movement.'
+                },
+                'calm_stabilizer': {
+                    tone: 'peaceful, grounding, and consistent',
+                    approach: 'Provide stability and balance. Use calming techniques and maintain a steady, reassuring presence. Help them find inner peace.',
+                    style: 'Be calm and reliable. Offer grounding exercises and maintain emotional equilibrium.'
+                },
+                'caring_supporter': {
+                    tone: 'warm, nurturing, and compassionate',
+                    approach: 'Remind them to care for themselves. Validate their caring nature while encouraging healthy boundaries and self-care.',
+                    style: 'Be empathetic and supportive. Gently guide them toward self-compassion.'
+                }
+            };
+
+            const supportStyle = {
+                'calming_voice': 'Use soothing, peaceful language. Speak slowly and gently. Focus on creating tranquility.',
+                'problem_solving': 'Provide clear, practical solutions. Break down problems into manageable steps. Be solution-focused.',
+                'express_feelings': 'Create maximum space for emotional expression. Ask open-ended questions. Listen more than advise.',
+                'quick_motivation': 'Be energizing and uplifting. Use motivational language. Keep responses punchy and inspiring.',
+                'deep_insights': 'Explore the deeper meaning behind emotions. Ask thought-provoking questions. Help them understand patterns.'
+            };
+
+            const archetypeInfo = archetypeSupport[userData.archetype];
+            const preferenceInfo = supportStyle[userData.supportPreference];
+
+            if (archetypeInfo && preferenceInfo) {
+                systemPrompt += `\n\n🎯 PERSONALIZED SUPPORT PROFILE:
+User's Emotional Archetype: ${userData.archetype.replace(/_/g, ' ').toUpperCase()}
+- Tone: ${archetypeInfo.tone}
+- Approach: ${archetypeInfo.approach}
+- Style: ${archetypeInfo.style}
+
+User's Preferred Support: ${userData.supportPreference.replace(/_/g, ' ').toUpperCase()}
+- ${preferenceInfo}
+
+CRITICAL: Always maintain this support-oriented approach in EVERY response. This is how the user needs to be supported based on their emotional profile.`;
+            }
+        }
         // Celebrity feature temporarily disabled
 
         // Add mood context if this is the first message and mood exists

@@ -57,6 +57,47 @@ You: "That's great! What happened? 💛"
 
 Remember the conversation context and provide personalized responses based on the user's previous messages.`;
 
+        // Add archetype-based support orientation
+        if (user?.archetype && user?.supportPreference) {
+            const archetypeSupport = {
+                'empathic_explorer': {
+                    tone: 'gentle, reflective, and deeply validating',
+                    approach: 'Create safe space for emotional exploration. Validate feelings deeply.',
+                },
+                'thoughtful_thinker': {
+                    tone: 'logical, structured, and clear',
+                    approach: 'Provide practical solutions and clear frameworks.',
+                },
+                'energetic_driver': {
+                    tone: 'motivating, action-oriented, and encouraging',
+                    approach: 'Focus on goals and progress. Celebrate wins.',
+                },
+                'calm_stabilizer': {
+                    tone: 'peaceful, grounding, and consistent',
+                    approach: 'Provide stability and calming presence.',
+                },
+                'caring_supporter': {
+                    tone: 'warm, nurturing, and compassionate',
+                    approach: 'Remind them to care for themselves.',
+                }
+            };
+
+            const supportStyle = {
+                'calming_voice': 'Use soothing, peaceful language.',
+                'problem_solving': 'Provide clear, practical solutions.',
+                'express_feelings': 'Create space for emotional expression.',
+                'quick_motivation': 'Be energizing and uplifting.',
+                'deep_insights': 'Explore deeper meaning behind emotions.'
+            };
+
+            const archetypeInfo = archetypeSupport[user.archetype];
+            const preferenceInfo = supportStyle[user.supportPreference];
+
+            if (archetypeInfo && preferenceInfo) {
+                systemPrompt += `\n\n🎯 SUPPORT PROFILE: ${archetypeInfo.tone}. ${archetypeInfo.approach} ${preferenceInfo}`;
+            }
+        }
+
         // Add mood context if available and this is the first message
         if (latestMood && chatHistory.length === 0) {
             const moodContext = {
