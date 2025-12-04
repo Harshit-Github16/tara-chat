@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server';
-import twilio from 'twilio';
 import clientPromise from '../../../../lib/mongodb';
-
-const twilioClient = twilio(
-    process.env.TWILIO_ACCOUNT_SID,
-    process.env.TWILIO_AUTH_TOKEN
-);
+import { sendWhatsAppMessage } from '../../../../lib/twilio';
 
 // Helper function to get or create user from WhatsApp number
 async function getOrCreateWhatsAppUser(whatsappNumber, userName) {
@@ -109,11 +104,7 @@ export async function POST(request) {
         console.log('TARA Reply:', taraReply);
 
         // Send reply via Twilio WhatsApp
-        await twilioClient.messages.create({
-            from: process.env.TWILIO_WHATSAPP_NUMBER,
-            to: from,
-            body: taraReply
-        });
+        await sendWhatsAppMessage(from, taraReply);
 
         console.log('Reply sent successfully');
 
