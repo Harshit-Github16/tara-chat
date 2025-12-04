@@ -43,3 +43,16 @@ next-env.d.ts
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+
+# WhatsApp Bot
+/whatsapp-bot/.wwebjs_auth
+/whatsapp-bot/.wwebjs_cache
+/whatsapp-bot/node_modules
+whatsapp-bot/**/*.log
+whatsapp-bot/**/*.ldb
+whatsapp-bot/**/CURRENT
+whatsapp-bot/**/LOCK
+whatsapp-bot/**/LOG
+whatsapp-bot/**/MANIFEST-*
+whatsapp-bot/**/index.txt
+whatsapp-bot/**/*_0.log

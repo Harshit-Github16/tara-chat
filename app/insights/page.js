@@ -203,7 +203,7 @@ function InsightsPageContent() {
                     <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Support Reflection Radar - ACTIVE */}
                         <ChartCard title="Reflection Radar" icon={faBullseye}>
-                            <ReflectionRadar moodData={moodData} userId={user?.uid} />
+                            <ReflectionRadar userId={user?.uid} />
                         </ChartCard>
 
                         {/* AI-Generated Suggestions - ACTIVE */}

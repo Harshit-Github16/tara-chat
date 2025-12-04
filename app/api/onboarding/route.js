@@ -37,6 +37,8 @@ export async function POST(request) {
             interests,
             personalityTraits,
             lifeAreas,
+            reasonForUsing,
+            aboutMe,
             // Emotional onboarding fields
             currentMood,
             personalityAnswers,
@@ -62,6 +64,8 @@ export async function POST(request) {
             interests: interests || [],
             personalityTraits: personalityTraits || [],
             lifeAreas: lifeAreas || [],
+            reasonForUsing: reasonForUsing || [],
+            bio: aboutMe || '', // Save aboutMe as bio
             // Emotional onboarding fields
             currentMood: currentMood || null,
             personalityAnswers: personalityAnswers || [],

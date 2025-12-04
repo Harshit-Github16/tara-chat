@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullseye, faArrowRight, faArrowLeft, faCheck } from "@fortawesome/free-solid-svg-icons";
 
-export default function ReflectionRadar({ moodData, userId }) {
+export default function ReflectionRadar({ userId }) {
     const canvasRef = useRef(null);
     const [showQuiz, setShowQuiz] = useState(false);
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -12,147 +12,118 @@ export default function ReflectionRadar({ moodData, userId }) {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
-    // Questions for each emotion (3 questions each)
-    const emotionQuestions = [
-        // Joy questions
-        { emotion: 'joy', text: 'How often do you feel happy or content in your daily life?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'joy', text: 'Do you find yourself smiling or laughing regularly?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'joy', text: 'How satisfied are you with your current life situation?', options: ['Not Satisfied', 'Somewhat', 'Satisfied', 'Very Satisfied'] },
+    // Questions for each life domain (3 questions each)
+    const lifeAreaQuestions = [
+        // Family questions
+        { area: 'family', text: 'I feel emotionally supported by my family.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'family', text: 'I am able to communicate openly with my family members.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'family', text: 'My family relationships feel stable and respectful.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Trust questions
-        { emotion: 'trust', text: 'Do you feel safe and secure in your relationships?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'trust', text: 'How comfortable are you relying on others for support?', options: ['Not Comfortable', 'Somewhat', 'Comfortable', 'Very Comfortable'] },
-        { emotion: 'trust', text: 'Do you feel accepted by the people around you?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
+        // Health questions
+        { area: 'health', text: 'I feel physically energetic throughout the day.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'health', text: 'I maintain healthy routines (sleep, food, hydration) most days.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'health', text: 'I recover well after stress or tiredness.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Fear questions
-        { emotion: 'fear', text: 'How often do you feel anxious or worried?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'fear', text: 'Do you experience fear about the future?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'fear', text: 'How often do you feel overwhelmed by uncertainty?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
+        // Personal Growth questions
+        { area: 'personalGrowth', text: 'I feel I am learning, improving, or evolving as a person.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'personalGrowth', text: 'I have goals that give me a sense of direction.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'personalGrowth', text: 'I take time to reflect and understand myself better.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Surprise questions
-        { emotion: 'surprise', text: 'How often do unexpected events catch you off guard?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'surprise', text: 'Do you feel excited by new experiences?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'surprise', text: 'How adaptable are you to sudden changes?', options: ['Not Adaptable', 'Somewhat', 'Adaptable', 'Very Adaptable'] },
+        // Love & Relationships questions
+        { area: 'relationships', text: 'I feel emotionally connected to my partner / close relationships.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'relationships', text: 'I am able to express my needs honestly in relationships.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'relationships', text: 'I feel valued, respected, and understood by people close to me.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Sadness questions
-        { emotion: 'sadness', text: 'How often do you feel sad or down?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'sadness', text: 'Do you experience feelings of loss or grief?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'sadness', text: 'How often do you feel lonely or isolated?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
+        // Career questions
+        { area: 'career', text: 'My work gives me a sense of purpose or progress.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'career', text: 'I feel confident in my skills and ability to handle work situations.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'career', text: 'I experience a healthy balance between work and personal life.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Disgust questions
-        { emotion: 'disgust', text: 'How often do you feel repulsed by certain situations?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'disgust', text: 'Do you experience strong aversion to things around you?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'disgust', text: 'How often do you feel the need to reject or avoid things?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
+        // Social Life questions
+        { area: 'socialLife', text: 'I have people I can talk to or meet when I need connection.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'socialLife', text: 'I feel a sense of belonging within my social circle.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'socialLife', text: 'I enjoy the quality of my interactions with friends or peers.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Anger questions
-        { emotion: 'anger', text: 'How often do you feel frustrated or irritated?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'anger', text: 'Do you experience anger towards people or situations?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'anger', text: 'How often do you feel the urge to express your anger?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
+        // Spirituality / Inner Peace questions
+        { area: 'spirituality', text: 'I feel connected to something greater (purpose, values, faith, nature).', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'spirituality', text: 'I take moments to slow down, breathe, or be mindful.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'spirituality', text: 'I often feel inner peace or grounding.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
 
-        // Anticipation questions
-        { emotion: 'anticipation', text: 'How often do you look forward to future events?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'anticipation', text: 'Do you feel excited about upcoming opportunities?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] },
-        { emotion: 'anticipation', text: 'How often do you plan ahead with enthusiasm?', options: ['Rarely', 'Sometimes', 'Often', 'Very Often'] }
+        // Financial Growth / Stability questions
+        { area: 'financial', text: 'I feel in control of my money and financial decisions.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'financial', text: 'I am able to manage expenses without constant stress.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'financial', text: 'I am making progress toward my financial goals.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] }
     ];
 
-    // Calculate emotion scores from mood data (Plutchik's 8 basic emotions)
-    const calculateEmotionScores = () => {
-        if (!moodData || !moodData.moodByDate) {
-            return {
-                joy: 0,
-                trust: 0,
-                fear: 0,
-                surprise: 0,
-                sadness: 0,
-                disgust: 0,
-                anger: 0,
-                anticipation: 0
-            };
-        }
-
-        const moods = Object.values(moodData.moodByDate);
-        const totalEntries = moods.length;
-
-        if (totalEntries === 0) {
-            return {
-                joy: 0,
-                trust: 0,
-                fear: 0,
-                surprise: 0,
-                sadness: 0,
-                disgust: 0,
-                anger: 0,
-                anticipation: 0
-            };
-        }
-
-        // Map moods to Plutchik's 8 basic emotions
-        const emotionMapping = {
-            joy: ['happy', 'excited', 'grateful'],
-            trust: ['calm', 'grateful'],
-            fear: ['anxious', 'stressed'],
-            surprise: ['excited', 'confused'],
-            sadness: ['sad', 'tired', 'lonely'],
-            disgust: ['angry', 'frustrated'],
-            anger: ['angry', 'stressed'],
-            anticipation: ['excited', 'anxious']
+    // Calculate default scores (all 0 if no quiz data)
+    const calculateDefaultScores = () => {
+        return {
+            family: 0,
+            health: 0,
+            personalGrowth: 0,
+            relationships: 0,
+            career: 0,
+            socialLife: 0,
+            spirituality: 0,
+            financial: 0
         };
-
-        // Calculate percentage for each emotion
-        const scores = {};
-        Object.keys(emotionMapping).forEach(emotion => {
-            const relatedMoods = emotionMapping[emotion];
-            const count = moods.filter(m => relatedMoods.includes(m)).length;
-            scores[emotion] = Math.round((count / totalEntries) * 100);
-        });
-
-        // Normalize scores to make them more visible (minimum 20% for any tracked emotion)
-        Object.keys(scores).forEach(emotion => {
-            if (scores[emotion] > 0 && scores[emotion] < 20) {
-                scores[emotion] = 20;
-            }
-        });
-
-        return scores;
     };
 
-    // Calculate scores from quiz if available, otherwise from mood data
+    // Calculate scores from quiz if available, otherwise default to 0
     const calculateQuizScores = () => {
         if (!quizAnswers || Object.keys(quizAnswers).length === 0) return null;
 
-        const emotionScores = {
-            joy: 0, trust: 0, fear: 0, surprise: 0,
-            sadness: 0, disgust: 0, anger: 0, anticipation: 0
+        const areaScores = {
+            family: 0,
+            health: 0,
+            personalGrowth: 0,
+            relationships: 0,
+            career: 0,
+            socialLife: 0,
+            spirituality: 0,
+            financial: 0
         };
 
-        // Calculate average score for each emotion
-        emotionQuestions.forEach((q, index) => {
-            const answer = quizAnswers[index];
-            if (answer !== undefined) {
-                const score = (answer / 3) * 100; // Convert 0-3 to 0-100
-                emotionScores[q.emotion] += score;
+        // Calculate average score for each life area
+        lifeAreaQuestions.forEach((q, index) => {
+            const answers = quizAnswers[index];
+            if (answers && answers.length > 0) {
+                // Calculate average of all selected options
+                const avgAnswer = answers.reduce((sum, ans) => sum + ans, 0) / answers.length;
+                const score = (avgAnswer / 3) * 100; // Convert 0-3 to 0-100
+                areaScores[q.area] += score;
             }
         });
 
-        // Average the scores (3 questions per emotion)
-        Object.keys(emotionScores).forEach(emotion => {
-            emotionScores[emotion] = Math.round(emotionScores[emotion] / 3);
+        // Average the scores (3 questions per area)
+        Object.keys(areaScores).forEach(area => {
+            areaScores[area] = Math.round(areaScores[area] / 3);
         });
 
-        return emotionScores;
+        return areaScores;
     };
 
-    const scores = quizScores || calculateEmotionScores();
+    const scores = quizScores || calculateDefaultScores();
 
     const handleAnswer = (answerIndex) => {
-        setQuizAnswers(prev => ({
-            ...prev,
-            [currentQuestion]: answerIndex
-        }));
+        setQuizAnswers(prev => {
+            const currentAnswers = prev[currentQuestion] || [];
+
+            // Toggle selection - if already selected, remove it; otherwise add it
+            const isSelected = currentAnswers.includes(answerIndex);
+            const newAnswers = isSelected
+                ? currentAnswers.filter(idx => idx !== answerIndex)
+                : [...currentAnswers, answerIndex];
+
+            return {
+                ...prev,
+                [currentQuestion]: newAnswers
+            };
+        });
     };
 
     const handleNext = async () => {
-        if (currentQuestion < emotionQuestions.length - 1) {
+        if (currentQuestion < lifeAreaQuestions.length - 1) {
             setCurrentQuestion(currentQuestion + 1);
         } else {
             // Quiz complete - calculate scores and save
@@ -249,17 +220,17 @@ export default function ReflectionRadar({ moodData, userId }) {
             ctx.stroke();
         }
 
-        // Draw axes - Plutchik's 8 basic emotions
-        const labels = ['Joy', 'Trust', 'Fear', 'Surprise', 'Sadness', 'Disgust', 'Anger', 'Anticipation'];
+        // Draw axes - 8 life domains
+        const labels = ['Family', 'Health', 'Personal Growth', 'Relationships', 'Career', 'Social Life', 'Spirituality', 'Financial'];
         const values = [
-            scores.joy,
-            scores.trust,
-            scores.fear,
-            scores.surprise,
-            scores.sadness,
-            scores.disgust,
-            scores.anger,
-            scores.anticipation
+            scores.family,
+            scores.health,
+            scores.personalGrowth,
+            scores.relationships,
+            scores.career,
+            scores.socialLife,
+            scores.spirituality,
+            scores.financial
         ];
 
         const angleStep = (2 * Math.PI) / labels.length;
@@ -338,7 +309,7 @@ export default function ReflectionRadar({ moodData, userId }) {
                 </div>
                 <div>
                     <h2 className="text-xl font-bold text-gray-900">Reflection Radar</h2>
-                    <p className="text-sm text-gray-600">Your emotional intelligence dimensions</p>
+                    <p className="text-sm text-gray-600">Your life balance across 8 key domains</p>
                 </div>
             </div> */}
 
@@ -356,18 +327,21 @@ export default function ReflectionRadar({ moodData, userId }) {
                 {/* Scores List */}
                 <div className="flex-1 space-y-3 w-full">
                     {[
-                        { label: 'Joy', value: scores.joy, desc: 'Happiness and contentment', color: 'from-yellow-400 to-yellow-600' },
-                        { label: 'Trust', value: scores.trust, desc: 'Acceptance and calm', color: 'from-green-400 to-green-600' },
-                        { label: 'Fear', value: scores.fear, desc: 'Anxiety and worry', color: 'from-purple-400 to-purple-600' },
-                        { label: 'Surprise', value: scores.surprise, desc: 'Unexpected emotions', color: 'from-blue-400 to-blue-600' },
-                        { label: 'Sadness', value: scores.sadness, desc: 'Low mood and grief', color: 'from-indigo-400 to-indigo-600' },
-                        { label: 'Disgust', value: scores.disgust, desc: 'Aversion and rejection', color: 'from-pink-400 to-pink-600' },
-                        { label: 'Anger', value: scores.anger, desc: 'Frustration and rage', color: 'from-red-400 to-red-600' },
-                        { label: 'Anticipation', value: scores.anticipation, desc: 'Expectation and interest', color: 'from-orange-400 to-orange-600' }
+                        { label: 'Family', value: scores.family, desc: 'Emotional support and communication', color: 'from-blue-400 to-blue-600', icon: '👨‍👩‍👧‍👦' },
+                        { label: 'Health', value: scores.health, desc: 'Physical energy and wellness', color: 'from-green-400 to-green-600', icon: '💪' },
+                        { label: 'Personal Growth', value: scores.personalGrowth, desc: 'Learning and self-improvement', color: 'from-purple-400 to-purple-600', icon: '🌱' },
+                        { label: 'Relationships', value: scores.relationships, desc: 'Love and emotional connection', color: 'from-pink-400 to-pink-600', icon: '❤️' },
+                        { label: 'Career', value: scores.career, desc: 'Purpose and work-life balance', color: 'from-indigo-400 to-indigo-600', icon: '💼' },
+                        { label: 'Social Life', value: scores.socialLife, desc: 'Belonging and friendships', color: 'from-yellow-400 to-yellow-600', icon: '🤝' },
+                        { label: 'Spirituality', value: scores.spirituality, desc: 'Inner peace and mindfulness', color: 'from-teal-400 to-teal-600', icon: '🧘' },
+                        { label: 'Financial', value: scores.financial, desc: 'Money management and stability', color: 'from-emerald-400 to-emerald-600', icon: '💰' }
                     ].map((item, index) => (
                         <div key={index} className="space-y-1">
                             <div className="flex items-center justify-between">
-                                <span className="text-sm font-semibold text-gray-700">{item.label}</span>
+                                <span className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                    <span>{item.icon}</span>
+                                    {item.label}
+                                </span>
                                 <span className="text-sm font-bold text-rose-600">{item.value}%</span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -386,11 +360,12 @@ export default function ReflectionRadar({ moodData, userId }) {
             <div className="mt-6 p-4 bg-rose-50 rounded-xl border border-rose-200">
                 <p className="text-sm text-gray-700">
                     <span className="font-semibold">💡 Insight:</span> {
-                        scores.joy >= 50 ? "You're experiencing high levels of joy! Keep nurturing positive emotions." :
-                            scores.sadness >= 50 ? "You're experiencing sadness. Remember, it's okay to feel this way. Consider talking to someone." :
-                                scores.fear >= 50 ? "You're experiencing fear or anxiety. Try grounding techniques and reach out for support." :
-                                    scores.anger >= 50 ? "You're experiencing anger. Take deep breaths and find healthy outlets." :
-                                        "Your emotions are balanced. Keep tracking to understand your patterns better."
+                        !quizScores ? "Take the assessment to get personalized insights about your life balance." :
+                            scores.health >= 70 && scores.relationships >= 70 ? "Great balance in health and relationships! Keep nurturing these areas." :
+                                scores.career < 40 ? "Your career satisfaction could use attention. Consider what changes might bring more fulfillment." :
+                                    scores.financial < 40 ? "Financial stress can impact wellbeing. Small steps toward financial goals can help." :
+                                        scores.spirituality < 40 ? "Inner peace matters. Try adding mindfulness or reflection to your routine." :
+                                            "You're doing well! Focus on areas below 50% for the most impact."
                     }
                 </p>
             </div>
@@ -429,7 +404,7 @@ export default function ReflectionRadar({ moodData, userId }) {
                             {/* Header */}
                             <div className="mb-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-2xl font-bold text-gray-900">Emotion Assessment</h3>
+                                    <h3 className="text-2xl font-bold text-gray-900">Life Balance Assessment</h3>
                                     <button
                                         onClick={() => setShowQuiz(false)}
                                         className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -440,42 +415,57 @@ export default function ReflectionRadar({ moodData, userId }) {
                                     </button>
                                 </div>
                                 <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                                    <span>Question {currentQuestion + 1} of {emotionQuestions.length}</span>
-                                    <span>{Math.round(((currentQuestion + 1) / emotionQuestions.length) * 100)}% Complete</span>
+                                    <span>Question {currentQuestion + 1} of {lifeAreaQuestions.length}</span>
+                                    <span>{Math.round(((currentQuestion + 1) / lifeAreaQuestions.length) * 100)}% Complete</span>
                                 </div>
                                 <div className="w-full bg-gray-200 rounded-full h-2">
                                     <div
                                         className="bg-gradient-to-r from-rose-400 to-rose-600 h-2 rounded-full transition-all duration-300"
-                                        style={{ width: `${((currentQuestion + 1) / emotionQuestions.length) * 100}%` }}
+                                        style={{ width: `${((currentQuestion + 1) / lifeAreaQuestions.length) * 100}%` }}
                                     />
                                 </div>
                             </div>
 
                             {/* Question */}
                             <div className="mb-8">
-                                <h4 className="text-xl font-semibold text-gray-900 mb-6">
-                                    {emotionQuestions[currentQuestion].text}
+                                <h4 className="text-xl font-semibold text-gray-900 mb-4">
+                                    {lifeAreaQuestions[currentQuestion].text}
                                 </h4>
+                                <div className="flex items-center justify-between mb-6">
+                                    <p className="text-sm text-gray-500">
+                                        💡 Select all that apply to you
+                                    </p>
+                                    {quizAnswers[currentQuestion] && quizAnswers[currentQuestion].length > 0 && (
+                                        <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full">
+                                            {quizAnswers[currentQuestion].length} selected
+                                        </span>
+                                    )}
+                                </div>
 
-                                {/* Options */}
-                                <div className="space-y-3">
-                                    {emotionQuestions[currentQuestion].options.map((option, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleAnswer(index)}
-                                            className={`w-full text-left px-6 py-4 rounded-xl border-2 transition-all ${quizAnswers[currentQuestion] === index
-                                                ? 'border-rose-500 bg-rose-50 text-rose-700'
-                                                : 'border-gray-200 hover:border-rose-300 hover:bg-rose-50/50'
-                                                }`}
-                                        >
-                                            <div className="flex items-center justify-between">
-                                                <span className="font-medium">{option}</span>
-                                                {quizAnswers[currentQuestion] === index && (
-                                                    <FontAwesomeIcon icon={faCheck} className="h-5 w-5 text-rose-600" />
-                                                )}
-                                            </div>
-                                        </button>
-                                    ))}
+                                {/* Options as Tags/Chips */}
+                                <div className="flex flex-wrap gap-3">
+                                    {lifeAreaQuestions[currentQuestion].options.map((option, index) => {
+                                        const currentAnswers = quizAnswers[currentQuestion] || [];
+                                        const isSelected = currentAnswers.includes(index);
+
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleAnswer(index)}
+                                                className={`px-6 py-3 rounded-full border-2 font-medium transition-all transform hover:scale-105 ${isSelected
+                                                    ? 'border-rose-500 bg-rose-500 text-white shadow-lg'
+                                                    : 'border-gray-300 bg-white text-gray-700 hover:border-rose-400 hover:bg-rose-50'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    {isSelected && (
+                                                        <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />
+                                                    )}
+                                                    <span>{option}</span>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
 
@@ -495,14 +485,14 @@ export default function ReflectionRadar({ moodData, userId }) {
 
                                 <button
                                     onClick={handleNext}
-                                    disabled={quizAnswers[currentQuestion] === undefined}
-                                    className={`inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all ${quizAnswers[currentQuestion] !== undefined
+                                    disabled={!quizAnswers[currentQuestion] || quizAnswers[currentQuestion].length === 0}
+                                    className={`inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all ${quizAnswers[currentQuestion] && quizAnswers[currentQuestion].length > 0
                                         ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white hover:shadow-lg'
                                         : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                         }`}
                                 >
-                                    {currentQuestion === emotionQuestions.length - 1 ? 'Complete' : 'Next'}
-                                    <FontAwesomeIcon icon={currentQuestion === emotionQuestions.length - 1 ? faCheck : faArrowRight} className="h-4 w-4" />
+                                    {currentQuestion === lifeAreaQuestions.length - 1 ? 'Complete' : 'Next'}
+                                    <FontAwesomeIcon icon={currentQuestion === lifeAreaQuestions.length - 1 ? faCheck : faArrowRight} className="h-4 w-4" />
                                 </button>
                             </div>
                         </div>

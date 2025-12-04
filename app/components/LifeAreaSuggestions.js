@@ -77,72 +77,68 @@ export default function LifeAreaSuggestions({ userId }) {
     const generateDefaultSuggestionsFromScores = (scores) => {
         const suggestions = [];
 
-        // Find top 3 emotions that need attention (highest scores for negative emotions or lowest for positive)
-        const emotionInsights = [
-            { emotion: 'joy', score: scores.joy, isPositive: true },
-            { emotion: 'trust', score: scores.trust, isPositive: true },
-            { emotion: 'fear', score: scores.fear, isPositive: false },
-            { emotion: 'surprise', score: scores.surprise, isPositive: true },
-            { emotion: 'sadness', score: scores.sadness, isPositive: false },
-            { emotion: 'disgust', score: scores.disgust, isPositive: false },
-            { emotion: 'anger', score: scores.anger, isPositive: false },
-            { emotion: 'anticipation', score: scores.anticipation, isPositive: true }
+        // Find top 3 life areas that need attention (lowest scores)
+        const areaInsights = [
+            { area: 'family', score: scores.family || 0 },
+            { area: 'health', score: scores.health || 0 },
+            { area: 'personalGrowth', score: scores.personalGrowth || 0 },
+            { area: 'relationships', score: scores.relationships || 0 },
+            { area: 'career', score: scores.career || 0 },
+            { area: 'socialLife', score: scores.socialLife || 0 },
+            { area: 'spirituality', score: scores.spirituality || 0 },
+            { area: 'financial', score: scores.financial || 0 }
         ];
 
-        // Sort to find emotions needing attention
-        const needsAttention = emotionInsights
-            .filter(e => (!e.isPositive && e.score > 40) || (e.isPositive && e.score < 40))
-            .sort((a, b) => {
-                if (!a.isPositive && !b.isPositive) return b.score - a.score;
-                if (a.isPositive && b.isPositive) return a.score - b.score;
-                return !a.isPositive ? -1 : 1;
-            })
+        // Sort to find areas needing attention (lowest scores first)
+        const needsAttention = areaInsights
+            .filter(a => a.score < 60)
+            .sort((a, b) => a.score - b.score)
             .slice(0, 3);
 
-        needsAttention.forEach(({ emotion, score }) => {
-            suggestions.push(...getEmotionSuggestions(emotion, score));
+        needsAttention.forEach(({ area, score }) => {
+            suggestions.push(...getAreaSuggestions(area, score));
         });
 
         return suggestions.slice(0, 6); // Return top 6 suggestions
     };
 
-    const getEmotionSuggestions = (emotion, score) => {
+    const getAreaSuggestions = (area, score) => {
         const suggestionMap = {
-            joy: [
-                { icon: '😊', title: 'Practice Gratitude', description: 'Write down 3 things you\'re grateful for each day to boost joy' },
-                { icon: '🎨', title: 'Engage in Hobbies', description: 'Spend time doing activities that bring you happiness' }
+            family: [
+                { icon: '👨‍👩‍👧‍👦', title: 'Family Time', description: 'Schedule regular quality time with family members without distractions' },
+                { icon: '💬', title: 'Open Communication', description: 'Practice active listening and share your feelings openly' }
             ],
-            trust: [
-                { icon: '🤝', title: 'Build Connections', description: 'Strengthen relationships through open communication' },
-                { icon: '💬', title: 'Share Vulnerably', description: 'Practice opening up to trusted friends or family' }
+            health: [
+                { icon: '🏃', title: 'Daily Movement', description: 'Aim for 30 minutes of physical activity each day' },
+                { icon: '😴', title: 'Sleep Routine', description: 'Maintain consistent sleep schedule of 7-8 hours' }
             ],
-            fear: [
-                { icon: '🧘', title: 'Mindfulness Practice', description: 'Try 10-minute daily meditation to reduce anxiety' },
-                { icon: '📝', title: 'Face Your Fears', description: 'Write down your worries and challenge negative thoughts' }
+            personalGrowth: [
+                { icon: '📖', title: 'Daily Learning', description: 'Read or learn something new for 20 minutes daily' },
+                { icon: '🎯', title: 'Set Goals', description: 'Define clear personal development goals for the next 3 months' }
             ],
-            surprise: [
-                { icon: '🎯', title: 'Try New Things', description: 'Step out of your comfort zone with small experiments' },
-                { icon: '🌟', title: 'Stay Curious', description: 'Embrace unexpected moments as learning opportunities' }
+            relationships: [
+                { icon: '❤️', title: 'Express Love', description: 'Show appreciation and affection to your loved ones daily' },
+                { icon: '🤝', title: 'Quality Connection', description: 'Have meaningful conversations without digital distractions' }
             ],
-            sadness: [
-                { icon: '💙', title: 'Reach Out', description: 'Connect with a friend or therapist to talk about your feelings' },
-                { icon: '🌅', title: 'Self-Care Routine', description: 'Establish daily rituals that nurture your well-being' }
+            career: [
+                { icon: '💼', title: 'Skill Development', description: 'Invest 30 minutes daily in learning skills relevant to your career' },
+                { icon: '⚖️', title: 'Work-Life Balance', description: 'Set clear boundaries between work and personal time' }
             ],
-            disgust: [
-                { icon: '🌱', title: 'Set Boundaries', description: 'Learn to say no to things that don\'t serve you' },
-                { icon: '🧹', title: 'Declutter', description: 'Remove negative influences from your environment' }
+            socialLife: [
+                { icon: '🎉', title: 'Social Activities', description: 'Join a club or group aligned with your interests' },
+                { icon: '☕', title: 'Regular Meetups', description: 'Schedule weekly coffee or lunch with friends' }
             ],
-            anger: [
-                { icon: '🏃', title: 'Physical Release', description: 'Exercise or engage in physical activity to release tension' },
-                { icon: '✍️', title: 'Express Safely', description: 'Journal your feelings or talk to someone you trust' }
+            spirituality: [
+                { icon: '🧘', title: 'Mindfulness Practice', description: 'Start with 5-10 minute daily meditation or breathing exercises' },
+                { icon: '🌿', title: 'Connect with Nature', description: 'Spend time outdoors to feel grounded and peaceful' }
             ],
-            anticipation: [
-                { icon: '📅', title: 'Plan Ahead', description: 'Set exciting goals and create action plans' },
-                { icon: '🎉', title: 'Create Events', description: 'Schedule activities you can look forward to' }
+            financial: [
+                { icon: '💰', title: 'Budget Planning', description: 'Track expenses and create a realistic monthly budget' },
+                { icon: '📊', title: 'Emergency Fund', description: 'Save at least 10% of income for unexpected expenses' }
             ]
         };
 
-        return suggestionMap[emotion] || [];
+        return suggestionMap[area] || [];
     };
 
     const generateSuggestions = async (quizResults, lifeAreas) => {
