@@ -793,12 +793,26 @@ export async function POST(request) {
         const collection = db.collection('users');
 
         // Get user document and find the specific chat user
-        const userData = await collection.findOne({ firebaseUid: userId });
+        let userData = await collection.findOne({ firebaseUid: userId });
 
+        // Auto-create user if not found (for WhatsApp users)
         if (!userData) {
-            return NextResponse.json({
-                error: 'User not found'
-            }, { status: 404 });
+            console.log('Auto-creating user for WhatsApp:', userId);
+
+            const newUser = {
+                firebaseUid: userId,
+                name: userDetails?.name || 'WhatsApp User',
+                email: `${userId}@whatsapp.temp`,
+                createdAt: new Date(),
+                lastUpdated: new Date(),
+                chatUsers: [],
+                moods: [],
+                journals: [],
+                source: 'whatsapp' // Mark as WhatsApp user
+            };
+
+            await collection.insertOne(newUser);
+            userData = newUser;
         }
 
         let chatUser = userData.chatUsers?.find(u => u.id === chatUserId);
