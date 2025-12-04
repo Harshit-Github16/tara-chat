@@ -4,7 +4,7 @@
  */
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.tara4u.com';
-const TEST_NUMBER = process.argv[2] || 'whatsapp:+919928005564';
+const TEST_NUMBER = process.argv[2] || 'whatsapp:+917976696076';
 
 console.log('🧪 Complete WhatsApp Integration Test\n');
 console.log('Base URL:', BASE_URL);
