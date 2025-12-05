@@ -538,13 +538,6 @@ export default function BlogPostPage() {
                                                     <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
                                                     Twitter
                                                 </button>
-                                                <button
-                                                    onClick={() => handleShare('linkedin')}
-                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
-                                                >
-                                                    <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
-                                                    LinkedIn
-                                                </button>
                                             </div>
                                         )}
                                     </div>

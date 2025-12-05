@@ -32,14 +32,13 @@ export default function StructuredData() {
                     "height": 512
                 },
                 "sameAs": [
-                    "https://twitter.com/tara4u",
-                    "https://facebook.com/tara4u",
+                    "https://x.com/HelloTara4u",
+                    "https://www.facebook.com/profile.php?id=61584786025622",
                     "https://www.instagram.com/hello.tara4u/",
-                    "https://linkedin.com/company/tara4u"
+                    "https://www.youtube.com/@Tara4uu"
                 ],
                 "contactPoint": {
                     "@type": "ContactPoint",
-                    "telephone": "+91-9876543210",
                     "contactType": "Customer Service",
                     "email": "hello@tara4u.com",
                     "areaServed": "IN",

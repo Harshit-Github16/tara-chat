@@ -86,10 +86,10 @@ export const SEO_CONFIG = {
             "height": 200
         },
         "sameAs": [
-            "https://twitter.com/tara",
-            "https://facebook.com/tara",
+            "https://x.com/HelloTara4u",
+            "https://www.facebook.com/profile.php?id=61584786025622",
             "https://www.instagram.com/hello.tara4u/",
-            "https://linkedin.com/company/tara"
+            "https://www.youtube.com/@Tara4uu"
         ],
         "contactPoint": {
             "@type": "ContactPoint",
@@ -135,11 +135,11 @@ export const SEO_CONFIG = {
 
     // Social media links
     socialMedia: {
-        twitter: "https://twitter.com/tara",
-        facebook: "https://facebook.com/tara",
+        twitter: "https://x.com/HelloTara4u",
+        facebook: "https://www.facebook.com/profile.php?id=61584786025622",
         instagram: "https://www.instagram.com/hello.tara4u/",
-        linkedin: "https://linkedin.com/company/tara",
-        youtube: "https://youtube.com/tara"
+        youtube: "https://www.youtube.com/@Tara4uu",
+        whatsapp: "https://whatsapp.com/channel/0029Vb6njfE72WTr5KGZbu3F"
     }
 };
 

@@ -659,7 +659,7 @@ export default function Home() {
                 Real Benefits, Real Results
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 px-4">
-                Why Choose <span className="text-rose-600">Tara</span>?
+                Why <span className="text-rose-600">Tara AI</span> Chatbot?
               </h2>
               <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                 {/* Transform your emotional wellness with features designed for real results */}
@@ -2023,7 +2023,7 @@ export default function Home() {
                   <div className="p-6 rounded-xl bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-100">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect with us</h3>
                     <div className="flex flex-wrap gap-3">
-                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                      <a href="https://x.com/HelloTara4u" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
                         <FontAwesomeIcon icon={faXTwitter} className="h-5 w-5 text-gray-700" />
                         <span className="text-sm font-medium text-gray-700">Twitter</span>
                       </a>
@@ -2031,13 +2031,17 @@ export default function Home() {
                         <FontAwesomeIcon icon={faInstagram} className="h-5 w-5 text-pink-600" />
                         <span className="text-sm font-medium text-gray-700">Instagram</span>
                       </a>
-                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
-                        <FontAwesomeIcon icon={faLinkedin} className="h-5 w-5 text-blue-600" />
-                        <span className="text-sm font-medium text-gray-700">LinkedIn</span>
-                      </a>
-                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                      <a href="https://www.facebook.com/profile.php?id=61584786025622" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
                         <FontAwesomeIcon icon={faFacebook} className="h-5 w-5 text-blue-700" />
                         <span className="text-sm font-medium text-gray-700">Facebook</span>
+                      </a>
+                      <a href="https://www.youtube.com/@Tara4uu" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                        <FontAwesomeIcon icon={faYoutube} className="h-5 w-5 text-red-600" />
+                        <span className="text-sm font-medium text-gray-700">YouTube</span>
+                      </a>
+                      <a href="https://whatsapp.com/channel/0029Vb6njfE72WTr5KGZbu3F" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                        <FontAwesomeIcon icon={faWhatsapp} className="h-5 w-5 text-green-600" />
+                        <span className="text-sm font-medium text-gray-700">WhatsApp</span>
                       </a>
                     </div>
                   </div>
@@ -2091,11 +2095,11 @@ export default function Home() {
                 Your personal emotional Well being companion.
               </p>
               <div className="flex space-x-3">
-                <LightSocialLink icon={faTwitter} href="#" />
-                <LightSocialLink icon={faLinkedin} href="#" />
+                <LightSocialLink icon={faXTwitter} href="https://x.com/HelloTara4u" />
                 <LightSocialLink icon={faInstagram} href="https://www.instagram.com/hello.tara4u/" />
-                <LightSocialLink icon={faFacebook} href="#" />
-                <LightSocialLink icon={faWhatsapp} href="#" />
+                <LightSocialLink icon={faFacebook} href="https://www.facebook.com/profile.php?id=61584786025622" />
+                <LightSocialLink icon={faYoutube} href="https://www.youtube.com/@Tara4uu" />
+                <LightSocialLink icon={faWhatsapp} href="https://whatsapp.com/channel/0029Vb6njfE72WTr5KGZbu3F" />
               </div>
             </div>
 
@@ -2738,7 +2742,7 @@ function WhoCanUseTaraCarousel() {
             Anyone and Anytime
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 sm:mb-4 px-4">
-            Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
+            Who Can Talk to <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
             Whatever you're facing, Depression, Anxiety, Stress or just need someone to talk to - Tara is here to support you

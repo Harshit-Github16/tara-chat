@@ -27,9 +27,10 @@ export default function SEO({
             "height": 200
         },
         "sameAs": [
-            "https://twitter.com/tara",
-            "https://facebook.com/tara",
-            "https://www.instagram.com/hello.tara4u/"
+            "https://x.com/HelloTara4u",
+            "https://www.facebook.com/profile.php?id=61584786025622",
+            "https://www.instagram.com/hello.tara4u/",
+            "https://www.youtube.com/@Tara4uu"
         ],
         "contactPoint": {
             "@type": "ContactPoint",
