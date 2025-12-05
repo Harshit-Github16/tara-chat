@@ -113,7 +113,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
         { id: 'deep_insights', icon: '🔮', title: 'Deep emotional insights', description: 'Understanding the why behind emotions' }
     ];
 
-    const sliderLabels = ['🌑', '🌘', '🌗', '🌖', '🌕'];
+    const sliderLabels = ['😔', '😐', '🙂', '😊', '😄'];
 
     // Calculate archetype based on answers
     const calculateArchetype = () => {
@@ -332,55 +332,55 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
-                <button onClick={onClose} className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
-                    <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-gray-600" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm">
+            <div className="relative w-full max-w-[96vw] sm:max-w-lg lg:max-w-2xl bg-white rounded-xl sm:rounded-3xl shadow-2xl max-h-[96vh] sm:max-h-[90vh] overflow-y-auto">
+                <button onClick={onClose} className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 w-7 h-7 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                    <FontAwesomeIcon icon={faTimes} className="h-3.5 w-3.5 sm:h-5 sm:w-5 text-gray-600" />
                 </button>
 
-                <div className="p-8">
-                    <div className="text-center mb-8">
-                        <div className="flex items-center justify-center gap-3 mb-6">
-                            <Image src="/taralogo.jpg" alt="Tara Logo" width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
-                            <span className="text-2xl font-bold text-rose-600">Tara</span>
+                <div className="p-3 sm:p-6 lg:p-8">
+                    <div className="text-center mb-3 sm:mb-6">
+                        <div className="flex items-center justify-center gap-1.5 sm:gap-3 mb-2 sm:mb-4">
+                            <Image src="/taralogo.jpg" alt="Tara Logo" width={32} height={32} className="h-8 w-8 sm:h-12 sm:w-12 rounded-full object-cover" />
+                            <span className="text-lg sm:text-2xl font-bold text-rose-600">Tara</span>
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Tara! 👋</h1>
-                        <p className="text-gray-600">Let's set up your profile to personalize your wellness journey</p>
+                        <h1 className="text-lg sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">Welcome to Tara! 👋</h1>
+                        <p className="text-xs sm:text-base text-gray-600 hidden sm:block">Let's set up your profile to personalize your wellness journey</p>
                     </div>
 
-                    <div className="mb-8">
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-sm font-medium text-gray-600">Step {currentStep + 1} of 6</span>
-                            <span className="text-sm text-gray-500">{Math.round(((currentStep + 1) / 6) * 100)}% Complete</span>
+                    <div className="mb-3 sm:mb-6">
+                        <div className="flex items-center justify-between mb-1.5">
+                            <span className="text-xs font-medium text-gray-600">Step {currentStep + 1} of 6</span>
+                            <span className="text-xs text-gray-500">{Math.round(((currentStep + 1) / 6) * 100)}% Complete</span>
                         </div>
-                        <div className="w-full bg-rose-100 rounded-full h-2">
-                            <div className="bg-rose-500 h-2 rounded-full transition-all duration-300" style={{ width: `${((currentStep + 1) / 6) * 100}%` }}></div>
+                        <div className="w-full bg-rose-100 rounded-full h-1.5 sm:h-2">
+                            <div className="bg-rose-500 h-1.5 sm:h-2 rounded-full transition-all duration-300" style={{ width: `${((currentStep + 1) / 6) * 100}%` }}></div>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl border border-rose-100 shadow-lg p-8">
+                    <div className="bg-white rounded-lg sm:rounded-2xl border border-rose-100 shadow-lg p-3 sm:p-6 lg:p-8">
                         {currentStep === 0 && (
-                            <div className="space-y-6">
-                                <div className="text-center mb-6">
-                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
-                                        <FontAwesomeIcon icon={faHeart} className="h-8 w-8 text-rose-600" />
+                            <div className="space-y-3 sm:space-y-6">
+                                <div className="text-center mb-3 sm:mb-6">
+                                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-16 sm:h-16 bg-rose-100 rounded-full mb-2 sm:mb-4">
+                                        <FontAwesomeIcon icon={faHeart} className="h-5 w-5 sm:h-8 sm:w-8 text-rose-600" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">What brings you here today?</h2>
-                                    <p className="text-gray-600">Help us understand how we can support you better</p>
+                                    <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">What brings you here today?</h2>
+                                    <p className="text-xs sm:text-base text-gray-600 hidden sm:block">Help us understand how we can support you better</p>
                                 </div>
                                 <div>
-                                    <div className="flex items-center justify-between mb-4">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            <FontAwesomeIcon icon={faHeart} className="h-4 w-4 mr-2 text-rose-500" />
+                                    <div className="flex items-center justify-between mb-2 sm:mb-4">
+                                        <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-rose-500" />
                                             Select all that apply
                                         </label>
                                         {formData.reasonForUsing.length > 0 && (
-                                            <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full">
+                                            <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full">
                                                 {formData.reasonForUsing.length} selected
                                             </span>
                                         )}
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
                                         {REASONS_FOR_USING.map((reason) => {
                                             const isSelected = formData.reasonForUsing.includes(reason);
                                             return (
@@ -388,7 +388,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                     key={reason}
                                                     type="button"
                                                     onClick={() => handleArrayToggle('reasonForUsing', reason)}
-                                                    className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all text-left ${isSelected
+                                                    className={`px-2.5 py-2 sm:px-4 sm:py-3 rounded-lg border-2 text-xs sm:text-sm font-medium transition-all text-left ${isSelected
                                                         ? 'bg-rose-500 text-white border-rose-500 shadow-lg'
                                                         : 'bg-white text-gray-700 border-gray-300 hover:border-rose-400 hover:bg-rose-50'
                                                         }`}
@@ -396,7 +396,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                                     <div className="flex items-center justify-between">
                                                         <span>{reason}</span>
                                                         {isSelected && (
-                                                            <FontAwesomeIcon icon={faCheck} className="h-4 w-4 ml-2" />
+                                                            <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 ml-1 sm:ml-2" />
                                                         )}
                                                     </div>
                                                 </button>
@@ -404,17 +404,22 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         })}
                                     </div>
                                     {formData.reasonForUsing.length > 0 && (
-                                        <div className="mt-4 p-4 bg-rose-50 rounded-lg border border-rose-200">
-                                            <p className="text-sm text-gray-700">
-                                                <FontAwesomeIcon icon={faCheck} className="h-4 w-4 mr-2 text-rose-600" />
-                                                Great! We'll personalize your experience to help you with:
+                                        <div className="mt-2 sm:mt-4 p-2.5 sm:p-4 bg-rose-50 rounded-lg border border-rose-200">
+                                            <p className="text-xs sm:text-sm text-gray-700">
+                                                <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 text-rose-600" />
+                                                Great! We'll personalize your experience
                                             </p>
-                                            <ul className="mt-2 space-y-1">
-                                                {formData.reasonForUsing.map((reason, idx) => (
-                                                    <li key={idx} className="text-sm text-rose-600 font-semibold ml-6">
+                                            <ul className="mt-1 sm:mt-2 space-y-0.5 sm:space-y-1">
+                                                {formData.reasonForUsing.slice(0, 3).map((reason, idx) => (
+                                                    <li key={idx} className="text-xs sm:text-sm text-rose-600 font-semibold ml-4 sm:ml-6">
                                                         • {reason}
                                                     </li>
                                                 ))}
+                                                {formData.reasonForUsing.length > 3 && (
+                                                    <li className="text-xs sm:text-sm text-rose-600 font-semibold ml-4 sm:ml-6">
+                                                        + {formData.reasonForUsing.length - 3} more
+                                                    </li>
+                                                )}
                                             </ul>
                                         </div>
                                     )}
@@ -423,32 +428,32 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         )}
 
                         {currentStep === 1 && (
-                            <div className="space-y-6">
-                                <div className="text-center mb-6">
-                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
-                                        <FontAwesomeIcon icon={faUser} className="h-8 w-8 text-rose-600" />
+                            <div className="space-y-2.5 sm:space-y-4">
+                                <div className="text-center mb-2 sm:mb-4">
+                                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 bg-rose-100 rounded-full mb-1.5 sm:mb-3">
+                                        <FontAwesomeIcon icon={faUser} className="h-5 w-5 sm:h-7 sm:w-7 text-rose-600" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Basic Information</h2>
-                                    <p className="text-gray-600">Tell us about yourself</p>
+                                    <h2 className="text-base sm:text-xl font-bold text-gray-900 mb-0.5 sm:mb-1">Basic Information</h2>
+                                    <p className="text-xs text-gray-600 hidden sm:block">Tell us about yourself</p>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            <FontAwesomeIcon icon={faUser} className="h-4 w-4 mr-2 text-rose-500" />Full Name
+                                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                                            <FontAwesomeIcon icon={faUser} className="h-3 w-3 mr-1 text-rose-500" />Full Name
                                         </label>
-                                        <input type="text" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-colors outline-none" placeholder="Enter your full name" />
+                                        <input type="text" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} className="w-full px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg transition-colors outline-none" placeholder="Enter your full name" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            <FontAwesomeIcon icon={faUserTag} className="h-4 w-4 mr-2 text-rose-500" />Nickname
+                                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                                            <FontAwesomeIcon icon={faUserTag} className="h-3 w-3 mr-1 text-rose-500" />Nickname
                                         </label>
-                                        <input type="text" value={formData.nickname} onChange={(e) => handleInputChange('nickname', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-colors outline-none" placeholder="What should we call you?" />
+                                        <input type="text" value={formData.nickname} onChange={(e) => handleInputChange('nickname', e.target.value)} className="w-full px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg transition-colors outline-none" placeholder="What should we call you?" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            <FontAwesomeIcon icon={faVenusMars} className="h-4 w-4 mr-2 text-rose-500" />Gender
+                                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                                            <FontAwesomeIcon icon={faVenusMars} className="h-3 w-3 mr-1 text-rose-500" />Gender
                                         </label>
-                                        <select value={formData.gender} onChange={(e) => handleInputChange('gender', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-colors outline-none">
+                                        <select value={formData.gender} onChange={(e) => handleInputChange('gender', e.target.value)} className="w-full px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg transition-colors outline-none">
                                             <option value="">Select gender</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
@@ -457,10 +462,10 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            <FontAwesomeIcon icon={faCalendarAlt} className="h-4 w-4 mr-2 text-rose-500" />Age Range
+                                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                                            <FontAwesomeIcon icon={faCalendarAlt} className="h-3 w-3 mr-1 text-rose-500" />Age Range
                                         </label>
-                                        <select value={formData.ageRange} onChange={(e) => handleInputChange('ageRange', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-colors outline-none">
+                                        <select value={formData.ageRange} onChange={(e) => handleInputChange('ageRange', e.target.value)} className="w-full px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg transition-colors outline-none">
                                             <option value="">Select age range</option>
                                             <option value="13-17">13-17</option>
                                             <option value="18-24">18-24</option>
@@ -477,19 +482,19 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
 
                         {currentStep === 2 && (
-                            <div className="space-y-6">
-                                <div className="text-center mb-6">
-                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
-                                        <FontAwesomeIcon icon={faBriefcase} className="h-8 w-8 text-rose-600" />
+                            <div className="space-y-2.5 sm:space-y-4">
+                                <div className="text-center mb-2 sm:mb-4">
+                                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 bg-rose-100 rounded-full mb-1.5 sm:mb-3">
+                                        <FontAwesomeIcon icon={faBriefcase} className="h-5 w-5 sm:h-7 sm:w-7 text-rose-600" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Professional Life</h2>
-                                    <p className="text-gray-600">What do you do for work?</p>
+                                    <h2 className="text-base sm:text-xl font-bold text-gray-900 mb-0.5 sm:mb-1">Professional Life</h2>
+                                    <p className="text-xs text-gray-600 hidden sm:block">What do you do for work?</p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        <FontAwesomeIcon icon={faBriefcase} className="h-4 w-4 mr-2 text-rose-500" />Profession
+                                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                                        <FontAwesomeIcon icon={faBriefcase} className="h-3 w-3 mr-1 text-rose-500" />Profession
                                     </label>
-                                    <select value={formData.profession} onChange={(e) => handleInputChange('profession', e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg transition-colors outline-none">
+                                    <select value={formData.profession} onChange={(e) => handleInputChange('profession', e.target.value)} className="w-full px-2.5 py-1.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm border border-gray-300 rounded-lg transition-colors outline-none">
                                         <option value="">Select your profession</option>
                                         {professions.map((profession) => (
                                             <option key={profession} value={profession}>{profession}</option>
@@ -500,38 +505,38 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         )}
 
                         {currentStep === 3 && (
-                            <div className="space-y-8">
-                                <div className="text-center mb-6">
-                                    <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-100 rounded-full mb-4">
-                                        <FontAwesomeIcon icon={faPalette} className="h-8 w-8 text-rose-600" />
+                            <div className="space-y-2.5 sm:space-y-4">
+                                <div className="text-center mb-2 sm:mb-4">
+                                    <div className="inline-flex items-center justify-center w-10 h-10 sm:w-14 sm:h-14 bg-rose-100 rounded-full mb-1.5 sm:mb-3">
+                                        <FontAwesomeIcon icon={faPalette} className="h-5 w-5 sm:h-7 sm:w-7 text-rose-600" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Your Interests</h2>
-                                    <p className="text-gray-600">Help us understand what you enjoy</p>
+                                    <h2 className="text-base sm:text-xl font-bold text-gray-900 mb-0.5 sm:mb-1">Your Interests</h2>
+                                    <p className="text-xs text-gray-600 hidden sm:block">Help us understand what you enjoy</p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-4">
-                                        <FontAwesomeIcon icon={faHeart} className="h-4 w-4 mr-2 text-rose-500" />Interests (Select multiple)
+                                    <label className="block text-xs font-medium text-gray-700 mb-1.5 sm:mb-3">
+                                        <FontAwesomeIcon icon={faHeart} className="h-3 w-3 mr-1 text-rose-500" />Interests (Select multiple)
                                     </label>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 sm:gap-3">
                                         {interestOptions.map((interest) => (
-                                            <button key={interest} type="button" onClick={() => handleArrayToggle('interests', interest)} className={`px-4 py-2 rounded-lg border text-sm font-medium transition-all ${formData.interests.includes(interest) ? 'bg-rose-200 text-rose-600 border-rose-200' : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'}`}>
+                                            <button key={interest} type="button" onClick={() => handleArrayToggle('interests', interest)} className={`px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg border text-xs font-medium transition-all ${formData.interests.includes(interest) ? 'bg-rose-200 text-rose-600 border-rose-200' : 'bg-white text-gray-700 border-gray-300 hover:border-rose-300'}`}>
                                                 {interest}
                                             </button>
                                         ))}
                                         {formData.interests.filter(i => !interestOptions.includes(i)).map((interest) => (
-                                            <button key={interest} type="button" onClick={() => handleArrayToggle('interests', interest)} className="px-4 py-2 rounded-lg border text-sm font-medium transition-all bg-rose-200 text-rose-600 border-rose-200">
+                                            <button key={interest} type="button" onClick={() => handleArrayToggle('interests', interest)} className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg border text-xs sm:text-sm font-medium transition-all bg-rose-200 text-rose-600 border-rose-200">
                                                 {interest}
                                             </button>
                                         ))}
                                         {!showAddInterest ? (
-                                            <button type="button" onClick={() => setShowAddInterest(true)} className="px-4 py-2 rounded-lg border-2 border-dashed border-rose-300 text-rose-600 text-sm font-medium hover:bg-rose-50 transition-all">
+                                            <button type="button" onClick={() => setShowAddInterest(true)} className="px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg border-2 border-dashed border-rose-300 text-rose-600 text-xs sm:text-sm font-medium hover:bg-rose-50 transition-all">
                                                 + Add More
                                             </button>
                                         ) : (
                                             <div className="col-span-2 md:col-span-4 flex gap-2">
-                                                <input type="text" value={newInterest} onChange={(e) => setNewInterest(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAddCustomInterest()} placeholder="Type your interest..." className="flex-1 px-4 py-2 border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-200" autoFocus />
-                                                <button type="button" onClick={handleAddCustomInterest} className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors">Add</button>
-                                                <button type="button" onClick={() => { setShowAddInterest(false); setNewInterest(""); }} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">Cancel</button>
+                                                <input type="text" value={newInterest} onChange={(e) => setNewInterest(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleAddCustomInterest()} placeholder="Type your interest..." className="flex-1 px-3 py-1.5 sm:px-4 sm:py-2 text-sm border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-200" autoFocus />
+                                                <button type="button" onClick={handleAddCustomInterest} className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors">Add</button>
+                                                <button type="button" onClick={() => { setShowAddInterest(false); setNewInterest(""); }} className="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">Cancel</button>
                                             </div>
                                         )}
                                     </div>
@@ -540,13 +545,13 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         )}
 
                         {currentStep === 4 && (
-                            <div className="space-y-6">
-                                <div className="mb-4">
-                                    <div className="flex justify-between text-sm text-gray-600 mb-2">
+                            <div className="space-y-2.5 sm:space-y-4">
+                                <div className="mb-2 sm:mb-4">
+                                    <div className="flex justify-between text-xs text-gray-600 mb-1.5">
                                         <span>Question {currentQuestion + 1} of {personalityQuestions.length}</span>
                                         <span>{Math.round(((currentQuestion + 1) / personalityQuestions.length) * 100)}%</span>
                                     </div>
-                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                    <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-gradient-to-r from-rose-400 to-rose-600 transition-all duration-300"
                                             style={{ width: `${((currentQuestion + 1) / personalityQuestions.length) * 100}%` }}
@@ -554,19 +559,19 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                     </div>
                                 </div>
 
-                                <div className="text-center mb-8">
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                                <div className="text-center mb-3 sm:mb-6">
+                                    <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900">
                                         {personalityQuestions[currentQuestion].text}
                                     </h3>
                                 </div>
 
-                                <div className="space-y-6">
-                                    <div className="flex justify-between items-center px-2">
+                                <div className="space-y-2.5 sm:space-y-4">
+                                    <div className="flex justify-between items-center px-0.5 sm:px-2">
                                         {sliderLabels.map((label, idx) => (
                                             <button
                                                 key={idx}
                                                 onClick={() => setCurrentAnswer(idx)}
-                                                className={`text-4xl transition-all ${currentAnswer === idx ? 'scale-125' : 'scale-100 opacity-50'
+                                                className={`text-xl sm:text-3xl lg:text-4xl transition-all ${currentAnswer === idx ? 'scale-110 sm:scale-125' : 'scale-100 opacity-50'
                                                     }`}
                                             >
                                                 {label}
@@ -580,20 +585,20 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                                         max="4"
                                         value={currentAnswer}
                                         onChange={(e) => setCurrentAnswer(parseInt(e.target.value))}
-                                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                                         style={{
                                             background: `linear-gradient(to right, #fb7185 0%, #fb7185 ${(currentAnswer / 4) * 100}%, #e5e7eb ${(currentAnswer / 4) * 100}%, #e5e7eb 100%)`
                                         }}
                                     />
 
-                                    <div className="flex justify-between text-sm text-gray-600">
+                                    <div className="flex justify-between text-xs text-gray-600">
                                         <span>Strongly Disagree</span>
                                         <span>Strongly Agree</span>
                                     </div>
 
                                     <button
                                         onClick={handlePersonalityAnswer}
-                                        className="w-full mt-4 bg-gradient-to-r from-rose-400 to-rose-600 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                                        className="w-full mt-2 sm:mt-3 bg-gradient-to-r from-rose-400 to-rose-600 text-white px-5 py-2 sm:px-8 sm:py-3 rounded-full text-xs sm:text-base font-semibold shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
                                     >
                                         {currentQuestion < personalityQuestions.length - 1 ? 'Next Question' : 'Continue'}
                                     </button>
@@ -602,33 +607,33 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                         )}
 
                         {currentStep === 5 && (
-                            <div className="space-y-6">
-                                <div className="text-center mb-6">
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">When you're upset, what helps you most?</h2>
-                                    <p className="text-gray-600">Choose the support style that resonates with you</p>
+                            <div className="space-y-2.5 sm:space-y-4">
+                                <div className="text-center mb-2 sm:mb-4">
+                                    <h2 className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900 mb-1 sm:mb-2">When you're upset, what helps you most?</h2>
+                                    <p className="text-xs text-gray-600 hidden sm:block">Choose the support style that resonates with you</p>
                                 </div>
-                                <div className="space-y-4">
+                                <div className="space-y-1.5 sm:space-y-3">
                                     {supportPreferences.map((pref) => (
                                         <button
                                             key={pref.id}
                                             onClick={() => handleSupportSelect(pref.id)}
-                                            className={`w-full p-6 rounded-2xl border-2 transition-all hover:scale-102 active:scale-98 text-left ${formData.supportPreference === pref.id
+                                            className={`w-full p-2.5 sm:p-4 lg:p-5 rounded-lg sm:rounded-2xl border-2 transition-all hover:scale-102 active:scale-98 text-left ${formData.supportPreference === pref.id
                                                 ? 'border-rose-500 bg-rose-50 shadow-lg'
                                                 : 'border-gray-200 bg-white hover:border-rose-300'
                                                 }`}
                                         >
-                                            <div className="flex items-start gap-4">
-                                                <div className="text-4xl flex-shrink-0">{pref.icon}</div>
+                                            <div className="flex items-start gap-2 sm:gap-3">
+                                                <div className="text-2xl sm:text-4xl flex-shrink-0">{pref.icon}</div>
                                                 <div className="flex-1">
-                                                    <h3 className="text-lg font-semibold text-gray-900 mb-1">{pref.title}</h3>
-                                                    <p className="text-sm text-gray-600">{pref.description}</p>
+                                                    <h3 className="text-xs sm:text-lg font-semibold text-gray-900 mb-0.5 sm:mb-1">{pref.title}</h3>
+                                                    <p className="text-xs sm:text-sm text-gray-600">{pref.description}</p>
                                                 </div>
-                                                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${formData.supportPreference === pref.id
+                                                <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${formData.supportPreference === pref.id
                                                     ? 'border-rose-500 bg-rose-500'
                                                     : 'border-gray-300'
                                                     }`}>
                                                     {formData.supportPreference === pref.id && (
-                                                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                        <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                         </svg>
                                                     )}
@@ -640,26 +645,26 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
                             </div>
                         )}
 
-                        <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
-                            <button onClick={handleBack} disabled={currentStep === 0} className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${currentStep === 0 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
-                                <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4" />Back
+                        <div className="flex items-center justify-between mt-4 sm:mt-8 pt-3 sm:pt-6 border-t border-gray-200">
+                            <button onClick={handleBack} disabled={currentStep === 0} className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-6 sm:py-3 rounded-lg text-xs sm:text-base font-medium transition-all ${currentStep === 0 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'}`}>
+                                <FontAwesomeIcon icon={faArrowLeft} className="h-3 w-3 sm:h-4 sm:w-4" />Back
                             </button>
-                            <button onClick={handleNext} disabled={!isStepValid() || saving} className={`inline-flex items-center gap-2 px-8 py-3 rounded-lg font-semibold transition-all ${isStepValid() && !saving ? 'bg-rose-500 text-white hover:bg-rose-600 shadow-lg' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+                            <button onClick={handleNext} disabled={!isStepValid() || saving} className={`inline-flex items-center gap-1.5 sm:gap-2 px-4 py-1.5 sm:px-8 sm:py-3 rounded-lg text-xs sm:text-base font-semibold transition-all ${isStepValid() && !saving ? 'bg-rose-500 text-white hover:bg-rose-600 shadow-lg' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
                                 {saving ? (
                                     <>
-                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                         Saving...
                                     </>
                                 ) : currentStep === 5 ? (
                                     <>
-                                        <FontAwesomeIcon icon={faCheck} className="h-4 w-4" />Complete Setup
+                                        <FontAwesomeIcon icon={faCheck} className="h-3 w-3 sm:h-4 sm:w-4" />Complete Setup
                                     </>
                                 ) : currentStep === 4 ? (
                                     <>Continue</>
                                 ) : (
                                     <>
                                         Next
-                                        <FontAwesomeIcon icon={faArrowRight} className="h-4 w-4" />
+                                        <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 sm:h-4 sm:w-4" />
                                     </>
                                 )}
                             </button>

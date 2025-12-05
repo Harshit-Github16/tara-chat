@@ -63,58 +63,58 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showCloseB
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/50 backdrop-blur-sm">
+            <div className="relative w-full max-w-[95vw] sm:max-w-md lg:max-w-xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
                 {/* Close Button - Only show on home page */}
                 {showCloseButton && (
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                        className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
                     >
-                        <FontAwesomeIcon icon={faTimes} className="h-5 w-5 text-gray-600" />
+                        <FontAwesomeIcon icon={faTimes} className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
                     </button>
                 )}
 
-                <div className="p-8">
+                <div className="p-5 sm:p-6 lg:p-8">
                     {/* Header */}
-                    <div className="text-center mb-8">
-                        <div className="mb-6">
+                    <div className="text-center mb-6 sm:mb-8">
+                        <div className="mb-4 sm:mb-6">
                             <Image
                                 src="/taralogo.jpg"
                                 alt="Tara Logo"
-                                width={80}
-                                height={80}
-                                className="mx-auto rounded-full shadow-2xl border-4 border-white"
+                                width={60}
+                                height={60}
+                                className="mx-auto rounded-full shadow-2xl border-4 border-white sm:w-20 sm:h-20"
                             />
                         </div>
-                        <h1 className="text-4xl font-bold text-gray-900 mb-3">
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
                             Welcome to Tara
                         </h1>
-                        <p className="text-lg text-gray-600">
+                        <p className="text-sm sm:text-base lg:text-lg text-gray-600">
                             Your AI companion for emotional wellness
                         </p>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-xl sm:rounded-2xl">
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-rose-600">10K+</div>
+                            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-rose-600">10K+</div>
                             <div className="text-xs text-gray-600">Users</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-rose-600">100+</div>
+                            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-rose-600">100+</div>
                             <div className="text-xs text-gray-600">AI Friends</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-bold text-rose-600">4.9★</div>
+                            <div className="text-lg sm:text-xl lg:text-2xl font-bold text-rose-600">4.9★</div>
                             <div className="text-xs text-gray-600">Rating</div>
                         </div>
                     </div>
 
                     <ClientOnly>
                         {error && (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-                                <p className="text-sm text-red-600 text-center">Something went wrong</p>
+                            <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-xl">
+                                <p className="text-xs sm:text-sm text-red-600 text-center">Something went wrong</p>
                             </div>
                         )}
                     </ClientOnly>
@@ -123,18 +123,18 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showCloseB
                     <button
                         onClick={handleGoogle}
                         disabled={loading}
-                        className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-rose-400 to-rose-600 border-2 border-rose-300 px-6 py-4 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full group relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-r from-rose-400 to-rose-600 border-2 border-rose-300 px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div className="relative flex items-center justify-center gap-3">
+                        <div className="relative flex items-center justify-center gap-2 sm:gap-3">
                             {loading ? (
                                 <>
-                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                     <span>Signing you in...</span>
                                 </>
                             ) : (
                                 <>
-                                    <FontAwesomeIcon icon={faGoogle} className="h-5 w-5 text-white" />
+                                    <FontAwesomeIcon icon={faGoogle} className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                                     <span>Continue with Google</span>
                                     <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         →
@@ -145,37 +145,37 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showCloseB
                     </button>
 
                     {/* Features */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-6">
-                        <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl text-center hover:bg-rose-100 transition-colors">
-                            <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-500" />
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 my-4 sm:my-6">
+                        <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-rose-50 rounded-lg sm:rounded-xl text-center hover:bg-rose-100 transition-colors">
+                            <FontAwesomeIcon icon={faHeart} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-500" />
                             <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">24/7 Emotional Support</span>
                         </div>
-                        <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl text-center hover:bg-rose-100 transition-colors">
-                            <FontAwesomeIcon icon={faUserFriends} className="h-6 w-6 text-rose-500" />
+                        <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-rose-50 rounded-lg sm:rounded-xl text-center hover:bg-rose-100 transition-colors">
+                            <FontAwesomeIcon icon={faUserFriends} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-500" />
                             <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Chat with AI Characters</span>
                         </div>
-                        <div className="flex flex-col items-center gap-2 p-4 bg-rose-50 rounded-xl text-center hover:bg-rose-100 transition-colors">
-                            <FontAwesomeIcon icon={faShield} className="h-6 w-6 text-rose-500" />
+                        <div className="flex flex-col items-center gap-1.5 sm:gap-2 p-3 sm:p-4 bg-rose-50 rounded-lg sm:rounded-xl text-center hover:bg-rose-100 transition-colors">
+                            <FontAwesomeIcon icon={faShield} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-500" />
                             <span className="text-xs sm:text-sm font-medium text-gray-700 leading-tight">Complete Privacy & Security</span>
                         </div>
                     </div>
 
                     {/* Security Cards */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
-                        <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 hover:shadow-md transition-shadow">
-                            <div className="flex items-center gap-2 text-green-700 mb-2">
-                                <FontAwesomeIcon icon={faShield} className="h-4 w-4" />
-                                <span className="text-sm font-semibold">Secure Authentication</span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-6">
+                        <div className="p-3 sm:p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg sm:rounded-xl border border-green-200 hover:shadow-md transition-shadow">
+                            <div className="flex items-center gap-2 text-green-700 mb-1.5 sm:mb-2">
+                                <FontAwesomeIcon icon={faShield} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                <span className="text-xs sm:text-sm font-semibold">Secure Authentication</span>
                             </div>
                             <p className="text-xs text-green-600 leading-relaxed">
                                 Powered by Firebase with enterprise-grade security and privacy protection.
                             </p>
                         </div>
 
-                        <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 hover:shadow-md transition-shadow">
-                            <div className="flex items-center gap-2 text-green-700 mb-2">
-                                <FontAwesomeIcon icon={faShield} className="h-4 w-4" />
-                                <span className="text-sm font-semibold">Secure & Private</span>
+                        <div className="p-3 sm:p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg sm:rounded-xl border border-green-200 hover:shadow-md transition-shadow">
+                            <div className="flex items-center gap-2 text-green-700 mb-1.5 sm:mb-2">
+                                <FontAwesomeIcon icon={faShield} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                <span className="text-xs sm:text-sm font-semibold">Secure & Private</span>
                             </div>
                             <p className="text-xs text-green-600 leading-relaxed">
                                 Your data is encrypted and never shared with third parties.

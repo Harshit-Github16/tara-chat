@@ -462,13 +462,13 @@ export default function Home() {
           <div className="absolute inset-0 bg-radial-1"></div>
           <div className="absolute inset-0 bg-radial-2"></div>
 
-          <div className="relative mx-auto max-w-[1600px] px-6 lg:px-12 py-12 lg:py-20">
-            <div className="grid grid-cols-1 items-center gap-8 lg:gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="relative mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-20">
+            <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 lg:gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               <div className="text-center lg:text-left">
                 {/* <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
                   <span className="font-bold">TARA</span> = Talk, Align, Reflect, Act
                 </div> */}
-                <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl lg:text-6xl flex flex-wrap items-baseline gap-2">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900 flex flex-wrap items-baseline gap-2 justify-center lg:justify-start">
                   <span className="text-gray-900">Feeling</span>
                   <span className="inline-block bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent">
                     {displayedText}
@@ -476,29 +476,29 @@ export default function Home() {
                     <span className="text-gray-900">?</span>
                   </span>
                 </h1>
-                <h2 className="mt-4 text-xl sm:text-2xl font-semibold text-gray-700">
+                <h2 className="mt-3 sm:mt-4 text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 px-2 sm:px-0">
                   You're stronger than you think, Your mind deserves a place to breathe
                 </h2>
-                <p className="mt-6 text-lg text-gray-600">
+                <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 px-2 sm:px-0">
                   <span className="font-semibold text-gray-900">Talk, Align, Reflect, Act.</span> Tara is your 24/7 AI companion designed to help you heal and find clarity. We hold space for your feelings, help you calm the chaos, and guide you back to emotional balance—whenever you need it.
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-4">
+                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start px-2 sm:px-0">
                   <button
                     onClick={handleTalkNowClick}
-                    className="rounded-full bg-rose-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-rose-700 transition-all hover:-translate-y-1 hover:shadow-xl"
+                    className="w-full sm:w-auto rounded-full bg-rose-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white shadow-lg hover:bg-rose-700 transition-all hover:-translate-y-1 hover:shadow-xl"
                   >
                     Start Chatting Now - It's Free
                   </button>
                   <Link
                     href="/#how-it-works"
-                    className="rounded-full bg-white px-8 py-4 text-lg font-semibold text-rose-600 shadow-md border border-rose-100 hover:bg-rose-50 transition-all"
+                    className="w-full sm:w-auto text-center rounded-full bg-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-rose-600 shadow-md border border-rose-100 hover:bg-rose-50 transition-all"
                   >
                     See How It Works
                   </Link>
                 </div>
                 {/* Quick reassurance */}
-                <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600 px-2 sm:px-0">
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-green-500"></div>
                     <span>Available 24/7</span>
@@ -645,126 +645,126 @@ export default function Home() {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-20 bg-gradient-to-br from-rose-50 via-purple-50/30 to-blue-50/30">
-          <div className="mx-auto max-w-[1600px] px-6 lg:px-12">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-purple-100 px-5 py-2 text-sm font-semibold text-rose-700 mb-6">
-                <FontAwesomeIcon icon={faStar} className="h-4 w-4" />
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-rose-50 via-purple-50/30 to-blue-50/30">
+          <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-12">
+            <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-purple-100 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-700 mb-4 sm:mb-6">
+                <FontAwesomeIcon icon={faStar} className="h-3 w-3 sm:h-4 sm:w-4" />
                 Real Benefits, Real Results
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 px-4">
                 Why Choose <span className="text-rose-600">Tara</span>?
               </h2>
-              <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                 Transform your emotional wellness with features designed for real results
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {/* Benefit 1 - Improved Emotional Stability */}
-              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-3xl border border-rose-100 p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
+              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <FontAwesomeIcon icon={faHeart} className="h-24 w-24 text-rose-500 transform rotate-12" />
+                  <FontAwesomeIcon icon={faHeart} className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-rose-500 transform rotate-12" />
                 </div>
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
-                  <FontAwesomeIcon icon={faHeart} className="h-7 w-7 text-rose-600" />
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
+                  <FontAwesomeIcon icon={faHeart} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 relative z-10">Improved Emotional Stability</h3>
-                <p className="text-gray-600 leading-relaxed relative z-10">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Improved Emotional Stability</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
                   Build resilience and maintain emotional balance through consistent support and guided reflection. Learn to navigate life's ups and downs with confidence.
                 </p>
               </div>
 
               {/* Benefit 2 - Early Detection */}
-              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-3xl border border-rose-100 p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
+              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <FontAwesomeIcon icon={faChartLine} className="h-24 w-24 text-rose-500 transform -rotate-12" />
+                  <FontAwesomeIcon icon={faChartLine} className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-rose-500 transform -rotate-12" />
                 </div>
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
-                  <FontAwesomeIcon icon={faChartLine} className="h-7 w-7 text-rose-600" />
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
+                  <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 relative z-10">Early Detection of Mental Health Risks</h3>
-                <p className="text-gray-600 leading-relaxed relative z-10">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Early Detection of Mental Health Risks</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
                   AI-powered mood tracking identifies patterns and potential concerns early, helping you take proactive steps toward better mental health.
                 </p>
               </div>
 
               {/* Benefit 3 - Reduced Stress & Anxiety */}
-              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-3xl border border-rose-100 p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
+              <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <FontAwesomeIcon icon={faComments} className="h-24 w-24 text-rose-500 transform rotate-6" />
+                  <FontAwesomeIcon icon={faComments} className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-rose-500 transform rotate-6" />
                 </div>
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
-                  <FontAwesomeIcon icon={faComments} className="h-7 w-7 text-rose-600" />
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
+                  <FontAwesomeIcon icon={faComments} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 relative z-10">Reduced Stress & Anxiety</h3>
-                <p className="text-gray-600 leading-relaxed relative z-10">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Reduced Stress & Anxiety</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
                   Express your worries in a judgment-free space. Our AI companions provide calming support and practical coping strategies whenever you need them.
                 </p>
               </div>
 
               {/* Benefit 4 - Goal Setting & Personal Growth */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
-                  <FontAwesomeIcon icon={faBullseye} className="h-7 w-7 text-rose-600" />
+              <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faBullseye} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Goal Setting & Personal Growth</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Goal Setting & Personal Growth</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Set meaningful wellness goals and track your progress. AI-powered insights help you stay motivated and celebrate every milestone.
                 </p>
               </div>
 
               {/* Benefit 5 - Purpose & Direction */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
-                  <FontAwesomeIcon icon={faArrowRight} className="h-7 w-7 text-rose-600" />
+              <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faArrowRight} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Purpose & Direction</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Purpose & Direction</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Discover clarity and meaning through guided journaling and reflection. Find your path forward with personalized insights and support.
                 </p>
               </div>
 
               {/* Benefit 6 - Privacy & Safe Space */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
-                  <FontAwesomeIcon icon={faShield} className="h-7 w-7 text-rose-600" />
+              <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faShield} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Privacy & Safe Space to Express</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Privacy & Safe Space to Express</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Your thoughts are completely private with end-to-end encryption. Express yourself freely without fear of judgment or data breaches.
                 </p>
               </div>
 
               {/* Benefit 7 - Better Sleep Quality */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
-                  <FontAwesomeIcon icon={faClock} className="h-7 w-7 text-rose-600" />
+              <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faClock} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Better Sleep Quality</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Better Sleep Quality</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Release daily stress through evening journaling and calming conversations. Clear your mind for more restful, rejuvenating sleep.
                 </p>
               </div>
 
               {/* Benefit 8 - Enhanced Self-Awareness */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
-                  <FontAwesomeIcon icon={faUser} className="h-7 w-7 text-rose-600" />
+              <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faUser} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Enhanced Self-Awareness</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Enhanced Self-Awareness</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Understand your emotions, triggers, and patterns better. Gain deep insights into what makes you feel your best and what holds you back.
                 </p>
               </div>
 
               {/* Benefit 9 - Improved Relationships */}
-              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
-                  <FontAwesomeIcon icon={faUserAstronaut} className="h-7 w-7 text-rose-600" />
+              <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faUserAstronaut} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">Improved Relationships</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Improved Relationships</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Better emotional regulation leads to healthier connections. Learn communication skills and empathy through guided conversations.
                 </p>
               </div>
@@ -778,7 +778,7 @@ export default function Home() {
         <WhoCanUseTaraCarousel />
 
         {/* Features Section */}
-        <section id="features" className="relative py-20 bg-white overflow-hidden">
+        <section id="features" className="relative py-12 sm:py-16 lg:py-20 bg-white overflow-hidden">
           {/* Animated SVG Background Elements */}
           <div className="absolute inset-0 pointer-events-none">
             {/* Floating Hearts */}
@@ -810,21 +810,21 @@ export default function Home() {
             </svg>
           </div>
 
-          <div className="relative mx-auto max-w-[1600px] px-6 lg:px-12">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-5 py-2 text-sm font-semibold text-rose-700 mb-6">
-                <FontAwesomeIcon icon={faHeart} className="h-4 w-4" />
+          <div className="relative mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-12">
+            <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-700 mb-4 sm:mb-6">
+                <FontAwesomeIcon icon={faHeart} className="h-3 w-3 sm:h-4 sm:w-4" />
                 Complete Wellness Suite
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 px-4">
                 Everything you need for <span className="text-rose-600">emotional wellness</span>
               </h2>
-              <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                 Comprehensive tools designed to support your mental health journey
               </p>
             </div>
 
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="mt-10 sm:mt-12 lg:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {/* Feature 1 - AI Emotional Chat */}
               <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
@@ -1004,115 +1004,115 @@ export default function Home() {
         </section>
 
         {/* What You Get Section */}
-        <section className="py-20 bg-gradient-to-br from-purple-50/50 via-white to-blue-50/30 relative overflow-hidden">
+        <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-purple-50/50 via-white to-blue-50/30 relative overflow-hidden">
           <div className="absolute inset-0 bg-radial-3"></div>
 
           {/* Decorative elements */}
           <div className="absolute top-20 left-10 w-32 h-32 bg-purple-200/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-200/20 rounded-full blur-3xl"></div>
 
-          <div className="mx-auto max-w-[1600px] px-6 lg:px-12 relative">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-5 py-2 text-sm font-semibold text-rose-700 mb-6">
-                <FontAwesomeIcon icon={faStar} className="h-4 w-4" />
+          <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-12 relative">
+            <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-700 mb-4 sm:mb-6">
+                <FontAwesomeIcon icon={faStar} className="h-3 w-3 sm:h-4 sm:w-4" />
                 Everything Included
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 px-4">
                 Your Complete <span className="text-rose-600">Wellness Toolkit</span>
               </h2>
-              <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                 Get access to everything you need for your emotional wellness journey - all in one place
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {/* 100+ Celebrities */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="absolute top-4 right-4">
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
                   <div className="bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                     NEW
                   </div>
                 </div>
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faUserAstronaut} className="h-6 w-6 text-rose-600" />
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faUserAstronaut} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">100+</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">AI Celebrities & Characters</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">100+</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">AI Celebrities & Characters</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Chat with your favorite personalities and get inspired by their wisdom</p>
               </div>
 
               {/* Smart Goals */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faBullseye} className="h-6 w-6 text-rose-600" />
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faBullseye} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">AI-Powered</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">Smart Goal Suggestions</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">AI-Powered</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Smart Goal Suggestions</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Get personalized wellness goals based on your mood patterns and progress</p>
               </div>
 
               {/* Mood Tracking */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-600" />
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faHeart} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">12 Moods</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">Advanced Mood Tracking</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">12 Moods</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Advanced Mood Tracking</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Track your emotional journey with 12 distinct mood states and detailed analytics</p>
               </div>
 
               {/* Journal Prompts */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faBookOpen} className="h-6 w-6 text-rose-600" />
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faBookOpen} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">Unlimited</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">AI Journal Prompts</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Unlimited</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">AI Journal Prompts</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Get personalized journaling prompts that adapt to your emotional state</p>
               </div>
 
               {/* Insights Dashboard */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 text-rose-600" />
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faChartLine} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">Real-time</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">Insights Dashboard</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Real-time</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Insights Dashboard</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Visualize your progress with beautiful charts and actionable insights</p>
               </div>
 
               {/* 24/7 Support */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faComments} className="h-6 w-6 text-rose-600" />
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faComments} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">24/7</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">Always Available</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">24/7</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Always Available</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Your AI companion is always ready to listen, anytime you need support</p>
               </div>
 
               {/* Privacy First */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faShield} className="h-6 w-6 text-rose-600" />
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faShield} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">100%</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">Private & Secure</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">100%</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Private & Secure</p>
                 <p className="text-xs text-gray-600 leading-relaxed">End-to-end encryption ensures your data stays completely private</p>
               </div>
 
               {/* Free to Start */}
-              <div className="group relative bg-white rounded-2xl border border-rose-100 p-6 hover:shadow-lg transition-all duration-300">
-                <div className="absolute top-4 right-4">
+              <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
                   <div className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                     FREE
                   </div>
                 </div>
-                <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
-                  <FontAwesomeIcon icon={faHeart} className="h-6 w-6 text-rose-600" />
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
+                  <FontAwesomeIcon icon={faHeart} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">₹0</h3>
-                <p className="text-sm font-semibold text-gray-800 mb-2">Free to Start</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">₹0</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Free to Start</p>
                 <p className="text-xs text-gray-600 leading-relaxed">Begin your wellness journey today with no credit card required</p>
               </div>
             </div>
@@ -1122,12 +1122,12 @@ export default function Home() {
         </section>
 
         {/* Stress Level Assessment Section */}
-        <section className="py-20 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-rose-50/50 relative overflow-hidden">
+        <section className="md:py-20 py-10 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-rose-50/50 relative overflow-hidden">
           {/* Background decorations */}
           <div className="absolute top-10 right-10 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 left-10 w-72 h-72 bg-purple-200/20 rounded-full blur-3xl"></div>
 
-          <div className="mx-auto max-w-7xl px-6 lg:px-12 relative">
+          <div className="mx-auto max-w-7xl md:px-6 px-3 lg:px-12 relative">
             {/* Centered Badge Only */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-100 px-5 py-2 text-sm font-semibold text-rose-700">
@@ -1192,7 +1192,7 @@ export default function Home() {
 
               {/* Right Column - Visual */}
               <div className="relative">
-                <div className="bg-white rounded-3xl border-2 border-rose-100 p-8 shadow-2xl relative overflow-hidden">
+                <div className="bg-white rounded-3xl border-2 border-rose-100 md:p-8 p-2 shadow-2xl relative overflow-hidden">
 
 
                   {/* Assessment Preview */}
@@ -1227,15 +1227,15 @@ export default function Home() {
                   <div className="grid grid-cols-3 gap-3">
                     <div className="bg-green-50 rounded-xl p-3 border border-green-200">
                       <div className="text-xs text-gray-600 mb-1">Stress</div>
-                      <div className="text-lg font-bold text-green-600">Normal</div>
+                      <div className="md:text-lg text-md font-bold text-green-600">Normal</div>
                     </div>
                     <div className="bg-yellow-50 rounded-xl p-3 border border-yellow-200">
                       <div className="text-xs text-gray-600 mb-1">Anxiety</div>
-                      <div className="text-lg font-bold text-yellow-600">Mild</div>
+                      <div className="md:text-lg text-md  font-bold text-yellow-600">Mild</div>
                     </div>
                     <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
                       <div className="text-xs text-gray-600 mb-1">Mood</div>
-                      <div className="text-lg font-bold text-blue-600">Good</div>
+                      <div className="md:text-lg text-md  font-bold text-blue-600">Good</div>
                     </div>
                   </div>
                 </div>
@@ -1408,7 +1408,7 @@ export default function Home() {
 
             {/* Social proof avatars */}
             <div className="mt-12 text-center">
-              <div className="flex justify-center items-center gap-4 mb-4">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-4">
                 <div className="flex -space-x-3">
                   {['SJ', 'MC', 'ER', 'DK', 'LT', 'AM', 'JS', 'KP'].map((initials, index) => (
                     <div
@@ -1423,7 +1423,7 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <div className="text-left">
+                <div className="text-center sm:text-left">
                   <p className="text-sm font-semibold text-gray-900">Real people, real results</p>
                   <p className="text-xs text-gray-600">Join our community today</p>
                 </div>
@@ -1726,9 +1726,9 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
               {/* Left Side - FAQ Image */}
-              <div className="relative">
+              <div className="relative hidden lg:block">
                 <div className="sticky top-8">
                   <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                     <Image
@@ -1738,6 +1738,11 @@ export default function Home() {
                       height={700}
                       className="w-full h-auto object-cover"
                       loading="lazy"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.style.background = 'linear-gradient(to bottom right, #ffe4e6, #fecdd3)';
+                        e.target.parentElement.style.minHeight = '500px';
+                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-rose-300/20 to-transparent"></div>
 
@@ -1752,7 +1757,7 @@ export default function Home() {
                         </p>
                         <Link
                           href="/contact"
-                          className=" btn-shine inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
+                          className="btn-shine inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
                         >
                           Contact Support
                           <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3" />
@@ -1770,6 +1775,25 @@ export default function Home() {
               {/* Right Side - FAQ Accordion */}
               <div>
                 <FAQAccordion faqs={COMMON_FAQS} />
+
+                {/* Mobile Contact Card */}
+                <div className="lg:hidden mt-8">
+                  <div className="bg-gradient-to-br from-rose-50 to-rose-100 rounded-2xl p-6 shadow-lg">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Need More Help?
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Can't find what you're looking for? Our support team is here to help you 24/7.
+                    </p>
+                    <Link
+                      href="/contact"
+                      className="btn-shine inline-flex items-center gap-2 bg-rose-200 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-300 transition-colors"
+                    >
+                      Contact Support
+                      <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3" />
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1783,7 +1807,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-radial-strong"></div>
           <div className="absolute inset-0 bg-radial-1"></div>
 
-          <div className="relative mx-auto max-w-5xl px-6">
+          <div className="relative mx-auto max-w-5xl md:px-6">
             <div className="rounded-3xl border border-rose-200 bg-white/80 backdrop-blur-sm p-12 shadow-2xl">
               <div className="text-center">
                 <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-6">
@@ -2355,14 +2379,14 @@ function ReviewCard({ name, role, rating, review, avatar }) {
 
 function BenefitItem({ icon, title, description }) {
   return (
-    <div className="flex gap-4">
-      <div className="flex-shrink-0">
+    <div className="flex flex-col gap-4">
+      <div className="flex-shrink-0 flex items-center gap-2">
         <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-200 text-rose-600">
           <FontAwesomeIcon icon={icon} className="h-6 w-6" />
         </span>
+        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
       </div>
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
         <p className="text-gray-600">{description}</p>
       </div>
     </div>
@@ -2371,10 +2395,10 @@ function BenefitItem({ icon, title, description }) {
 
 function BlogCard({ id, title, excerpt, date, readTime, category, featuredImage }) {
   return (
-    <div className="flex-shrink-0 w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white shadow-sm hover:shadow-md transition-all group">
+    <div className="flex-shrink-0 w-[85vw] sm:w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white shadow-sm hover:shadow-md transition-all group">
       {/* Featured Image */}
       {featuredImage ? (
-        <div className="relative w-full h-48 rounded-t-2xl overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200">
+        <div className="relative w-full h-44 sm:h-48 rounded-t-2xl overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200">
           <Image
             src={featuredImage}
             alt={title}
@@ -2383,32 +2407,32 @@ function BlogCard({ id, title, excerpt, date, readTime, category, featuredImage 
           />
         </div>
       ) : (
-        <div className="relative w-full h-48 rounded-t-2xl overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
-          <FontAwesomeIcon icon={faNewspaper} className="h-12 w-12 text-rose-300" />
+        <div className="relative w-full h-44 sm:h-48 rounded-t-2xl overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center">
+          <FontAwesomeIcon icon={faNewspaper} className="h-10 w-10 sm:h-12 sm:w-12 text-rose-300" />
         </div>
       )}
 
       {/* Content */}
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="inline-flex items-center rounded-full bg-rose-200 px-3 py-1 text-xs font-medium text-rose-700">
+      <div className="p-4 sm:p-6">
+        <div className="flex items-center gap-2 mb-3 sm:mb-4">
+          <span className="inline-flex items-center rounded-full bg-rose-200 px-2.5 sm:px-3 py-1 text-xs font-medium text-rose-700">
             {category}
           </span>
           <span className="text-xs text-gray-500">•</span>
           <span className="text-xs text-gray-500">{readTime}</span>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-rose-600 transition-colors line-clamp-2">
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 group-hover:text-rose-600 transition-colors line-clamp-2">
           {title}
         </h3>
-        <p className="text-gray-600 mb-4 leading-relaxed line-clamp-3">{excerpt}</p>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+        <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 leading-relaxed line-clamp-3">{excerpt}</p>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500">
             <FontAwesomeIcon icon={faCalendarAlt} className="h-3 w-3" />
-            {date}
+            <span className="truncate">{date}</span>
           </div>
           <Link
             href={id ? `/blog/${id}` : '/blog'}
-            className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-300 transition-all"
+            className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-rose-700 hover:bg-rose-300 transition-all whitespace-nowrap"
           >
             View More
             <FontAwesomeIcon icon={faArrowRight} className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
@@ -2527,7 +2551,20 @@ function FAQAccordion({ faqs }) {
 
 // Who Can Use Tara Carousel Component
 function WhoCanUseTaraCarousel() {
+  const router = useRouter();
+  const { user } = useAuth();
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  const handleTalkNowClick = (e) => {
+    e.preventDefault();
+    if (user && user.isOnboardingComplete) {
+      router.push('/welcome');
+    } else if (user && !user.isOnboardingComplete) {
+      router.push('/?showOnboarding=true');
+    } else {
+      router.push('/?openLogin=true');
+    }
+  };
 
   const slides = [
     {
@@ -2617,178 +2654,219 @@ function WhoCanUseTaraCarousel() {
     }
   ];
 
-  // Auto-slide effect
+  // Calculate cards per view based on screen size
+  const [cardsPerView, setCardsPerView] = useState(1); // Start with 1 to avoid hydration mismatch
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
+    setIsClient(true);
+
+    const getCardsPerView = () => {
+      if (window.innerWidth >= 1024) return 3; // Desktop: 3 cards
+      if (window.innerWidth >= 768) return 2; // Tablet: 2 cards
+      return 1; // Mobile: 1 card
+    };
+
+    setCardsPerView(getCardsPerView());
+
+    const handleResize = () => {
+      setCardsPerView(getCardsPerView());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // For infinite loop, we need to know total slides
+  const totalSlides = slides.length;
+  const maxSlide = Math.max(0, totalSlides - cardsPerView);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => {
+      const next = prev + 1;
+      // Loop back to start when reaching the end
+      if (next > maxSlide) {
+        return 0;
+      }
+      return next;
+    });
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => {
+      const previous = prev - 1;
+      // Loop to end when going before start
+      if (previous < 0) {
+        return maxSlide;
+      }
+      return previous;
+    });
+  };
+
+  // Touch/Swipe handlers for mobile
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swiped left
+      nextSlide();
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swiped right
+      prevSlide();
+    }
+  };
+
+  // Auto-slide effect - only run on client side
+  useEffect(() => {
+    if (!isClient) return;
+
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4000); // Change slide every 4 seconds
+      nextSlide();
+    }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [currentSlide, isClient]);
 
   return (
-    <section className="relative py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-x-hidden">
+    <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-white via-rose-50/30 to-white overflow-hidden">
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-200 blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-pink-200 blur-3xl"></div>
       </div>
 
-      <div className="relative mx-auto px-6 lg:px-12">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-5 py-2 text-sm font-semibold text-rose-600 mb-6">
-            <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
+        <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-600 mb-4 sm:mb-6">
+            <FontAwesomeIcon icon={faUser} className="h-3 w-3 sm:h-4 sm:w-4" />
             For Everyone, Everywhere
           </div>
-          <h2 className="text-4xl font-extrabold text-gray-900 sm:text-5xl mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 sm:mb-4 px-4">
             Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
             Whether you're managing a home, building a career, or navigating life's challenges — Tara is here for you
           </p>
         </div>
 
-        <div className="relative mx-auto px-4">
-          {/* Left Arrow */}
+        {/* Slider Container */}
+        <div className="relative mx-auto max-w-6xl">
+          {/* Desktop Navigation Arrows - Hidden on Mobile */}
           <button
-            onClick={() => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white border-2 border-rose-300 shadow-lg hover:bg-rose-50 hover:scale-110 transition-all flex items-center justify-center"
+            onClick={prevSlide}
+            className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-20 h-12 w-12 rounded-full bg-white border-2 border-rose-300 shadow-lg hover:bg-rose-50 hover:scale-110 transition-all items-center justify-center group"
             aria-label="Previous slide"
           >
-            <FontAwesomeIcon icon={faChevronDown} className="h-5 w-5 text-rose-600 rotate-90" />
+            <FontAwesomeIcon icon={faChevronDown} className="h-5 w-5 text-rose-600 rotate-90 group-hover:text-rose-700" />
           </button>
 
-          {/* Right Arrow */}
           <button
-            onClick={() => setCurrentSlide((prev) => (prev + 1) % slides.length)}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white border-2 border-rose-300 shadow-lg hover:bg-rose-50 hover:scale-110 transition-all flex items-center justify-center"
+            onClick={nextSlide}
+            className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-20 h-12 w-12 rounded-full bg-white border-2 border-rose-300 shadow-lg hover:bg-rose-50 hover:scale-110 transition-all items-center justify-center group"
             aria-label="Next slide"
           >
-            <FontAwesomeIcon icon={faChevronDown} className="h-5 w-5 text-rose-600 -rotate-90" />
+            <FontAwesomeIcon icon={faChevronDown} className="h-5 w-5 text-rose-600 -rotate-90 group-hover:text-rose-700" />
           </button>
 
-          {/* 3 Cards Container */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-12">
-            {/* Left Card */}
-            <div key={`left-${currentSlide}`} className="hidden md:block opacity-60 transition-all duration-700 ease-in-out transform hover:scale-105 animate-fadeIn">
-              <div className="bg-white rounded-2xl border border-rose-200 p-6 h-[550px] shadow-lg overflow-hidden flex flex-col">
-                <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
-                  <img
-                    src={slides[(currentSlide - 1 + slides.length) % slides.length].image}
-                    alt={slides[(currentSlide - 1 + slides.length) % slides.length].title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-3 mb-3 flex-shrink-0">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
-                    <FontAwesomeIcon icon={slides[(currentSlide - 1 + slides.length) % slides.length].icon} className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
-                    {slides[(currentSlide - 1 + slides.length) % slides.length].title}
-                  </h3>
-                </div>
-                <div className="flex-1 overflow-y-auto">
-                  <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                    {slides[(currentSlide - 1 + slides.length) % slides.length].description}
-                  </p>
-                  <ul className="space-y-2">
-                    {slides[(currentSlide - 1 + slides.length) % slides.length].points.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="text-sm text-gray-800">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
+          {/* Cards Display - 3 Cards on Desktop */}
+          <div
+            className="relative overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              className="flex transition-transform duration-700 ease-in-out"
+              style={{
+                transform: `translateX(-${currentSlide * (100 / cardsPerView)}%)`,
+              }}
+            >
+              {slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-2 sm:px-3"
+                >
+                  <div className="bg-gradient-to-br from-white to-rose-50/30 rounded-2xl border-2 border-rose-300 hover:border-rose-500 p-4 sm:p-5 lg:p-6 h-[580px] sm:h-[600px] lg:h-[620px] shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col">
+                    <div className="relative h-48 sm:h-56 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
+                      <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+                      <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+                        <FontAwesomeIcon icon={slide.icon} className="h-6 w-6 text-white" />
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 line-clamp-2">
+                        {slide.title}
+                      </h3>
+                    </div>
+                    <div className="flex-1 overflow-y-auto">
+                      <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+                        {slide.description}
+                      </p>
+                      <ul className="space-y-2 mb-6">
+                        {slide.points.map((point, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
+                            </div>
+                            <span className="text-sm text-gray-800">{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-            {/* Center Card (Active) */}
-            <div key={`center-${currentSlide}`} className="transition-all duration-700 ease-in-out transform animate-fadeIn">
-              <div className="bg-white rounded-2xl border-2 border-rose-400 p-6 h-[550px] shadow-2xl overflow-hidden flex flex-col">
-                <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
-                  <img
-                    src={slides[currentSlide].image}
-                    alt={slides[currentSlide].title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-3 mb-3 flex-shrink-0">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
-                    <FontAwesomeIcon icon={slides[currentSlide].icon} className="h-6 w-6 text-white" />
+                    {/* Read More Button */}
+                    <button
+                      onClick={handleTalkNowClick}
+                      className="mt-auto w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-rose-50 to-rose-100 hover:from-rose-100 hover:to-rose-200 rounded-xl border border-rose-200 transition-all duration-300 group"
+                    >
+                      <span className="text-sm font-semibold text-rose-700">Start Your Journey</span>
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        className="h-4 w-4 text-rose-600 transition-transform group-hover:translate-x-1"
+                      />
+                    </button>
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
-                    {slides[currentSlide].title}
-                  </h3>
                 </div>
-                <div className="flex-1 overflow-y-auto">
-                  <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                    {slides[currentSlide].description}
-                  </p>
-                  <ul className="space-y-2">
-                    {slides[currentSlide].points.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="text-sm text-gray-800">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Card */}
-            <div key={`right-${currentSlide}`} className="hidden md:block opacity-60 transition-all duration-700 ease-in-out transform hover:scale-105 animate-fadeIn">
-              <div className="bg-white rounded-2xl border border-rose-200 p-6 h-[550px] shadow-lg overflow-hidden flex flex-col">
-                <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
-                  <img
-                    src={slides[(currentSlide + 1) % slides.length].image}
-                    alt={slides[(currentSlide + 1) % slides.length].title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-3 mb-3 flex-shrink-0">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
-                    <FontAwesomeIcon icon={slides[(currentSlide + 1) % slides.length].icon} className="h-6 w-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
-                    {slides[(currentSlide + 1) % slides.length].title}
-                  </h3>
-                </div>
-                <div className="flex-1 overflow-y-auto">
-                  <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                    {slides[(currentSlide + 1) % slides.length].description}
-                  </p>
-                  <ul className="space-y-2">
-                    {slides[(currentSlide + 1) % slides.length].points.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
-                        </div>
-                        <span className="text-sm text-gray-800">{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* Dots */}
-          <div className="flex justify-center gap-2 mt-8">
-            {slides.map((_, index) => (
+          {/* Dots Indicator */}
+          <div className="flex justify-center gap-2 mt-6 sm:mt-8">
+            {Array.from({ length: maxSlide + 1 }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`rounded-full transition-all ${index === currentSlide
-                  ? 'w-8 h-2 bg-rose-500'
-                  : 'w-2 h-2 bg-rose-200 hover:bg-rose-300'
+                className={`rounded-full transition-all duration-300 ${index === currentSlide
+                  ? 'w-8 h-2.5 bg-gradient-to-r from-rose-500 to-rose-600 shadow-md'
+                  : 'w-2.5 h-2.5 bg-rose-200 hover:bg-rose-300'
                   }`}
+                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
+          </div>
+
+          {/* Swipe Hint for Mobile */}
+          <div className="lg:hidden text-center mt-4">
+            <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
+              <span>←</span>
+              <span>Swipe to explore</span>
+              <span>→</span>
+            </p>
           </div>
         </div>
       </div>
@@ -2810,11 +2888,102 @@ function WhoCanUseTaraCarousel() {
           .animate-fadeIn {
             animation: fadeIn 0.7s ease-in-out;
           }
+
+          /* Smooth scrolling for mobile touch */
+          @media (max-width: 1023px) {
+            .overflow-hidden {
+              overflow-x: auto;
+              scroll-snap-type: x mandatory;
+              -webkit-overflow-scrolling: touch;
+              scrollbar-width: none;
+            }
+            
+            .overflow-hidden::-webkit-scrollbar {
+              display: none;
+            }
+          }
         `
       }} />
     </section>
   );
 }
+
+// Blog Slider Section Component with API
+// function BlogSliderSection() {
+//   const [blogs, setBlogs] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     fetchBlogs();
+//   }, []);
+
+//   const fetchBlogs = async () => {
+//     try {
+//       setLoading(true);
+//       const response = await fetch('/api/admin/blogs');
+//       const data = await response.json();
+
+//       if (data.success && data.data) {
+//         // Get latest 4 blogs
+//         setBlogs(data.data.slice(0, 4));
+//       }
+//     } catch (error) {
+//       console.error('Failed to fetch blogs:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const formatDate = (dateString) => {
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+//   };
+
+//   const calculateReadTime = (content) => {
+//     if (!content) return '5 min read';
+//     const wordsPerMinute = 200;
+//     const wordCount = content.split(/\s+/).length;
+//     const minutes = Math.ceil(wordCount / wordsPerMinute);
+//     return `${minutes} min read`;
+//   };
+
+//   return (
+//     <div className="hidden">
+//       <div className="bg-white rounded-2xl border border-rose-200 p-6 h-[550px] shadow-lg overflow-hidden flex flex-col">
+//         <div className="relative h-60 rounded-xl overflow-hidden bg-rose-100 mb-4 flex-shrink-0">
+//           <img
+//             src={slides[(currentSlide - 1 + slides.length) % slides.length].image}
+//             alt={slides[(currentSlide - 1 + slides.length) % slides.length].title}
+//             className="w-full h-full object-cover"
+//           />
+//         </div>
+//         <div className="flex items-center gap-3 mb-3 flex-shrink-0">
+//           <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center shadow-lg">
+//             <FontAwesomeIcon icon={slides[(currentSlide - 1 + slides.length) % slides.length].icon} className="h-6 w-6 text-white" />
+//           </div>
+//           <h3 className="text-lg font-bold text-gray-900 line-clamp-2">
+//             {slides[(currentSlide - 1 + slides.length) % slides.length].title}
+//           </h3>
+//         </div>
+//         <div className="flex-1 overflow-y-auto">
+//           <p className="text-sm text-gray-700 mb-4 leading-relaxed">
+//             {slides[(currentSlide - 1 + slides.length) % slides.length].description}
+//           </p>
+//           <ul className="space-y-2">
+//             {slides[(currentSlide - 1 + slides.length) % slides.length].points.map((point, idx) => (
+//               <li key={idx} className="flex items-start gap-2">
+//                 <div className="h-5 w-5 rounded-full bg-rose-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+//                   <FontAwesomeIcon icon={faCheck} className="h-3 w-3 text-white" />
+//                 </div>
+//                 <span className="text-sm text-gray-800">{point}</span>
+//               </li>
+//             ))}
+//           </ul>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 // Blog Slider Section Component with API
 function BlogSliderSection() {
