@@ -56,7 +56,22 @@ export default function Home() {
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Chat animation states
+  const [visibleMessages, setVisibleMessages] = useState([]);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [typingText, setTypingText] = useState('');
+  const [isTypingMessage, setIsTypingMessage] = useState(false);
+
   const moods = ['Sad', 'Low', 'Stressed', 'Anxious', 'Overwhelmed', 'Pressure at work', 'Financial pressure', 'Need someone to talk to', 'Social pressure', 'Lonely', 'Tired', 'Confused'];
+
+  // Chat messages for animation
+  const chatMessages = [
+    { type: 'user', text: 'Hi', delay: 500, time: '2:30 PM' },
+    { type: 'ai', text: 'Hello, How are you feeling today?', delay: 1000, time: '2:30 PM' },
+    { type: 'user', text: 'A bit low due to stress', delay: 1500, time: '2:31 PM' },
+    { type: 'ai', text: 'What happened? Please tell me if anything bothering you lately? I am here for you', delay: 2000, time: '2:31 PM' },
+    { type: 'user', text: 'I have been facing many challenges and due to that I am unable to sleep. I am thinking about those issues day and night', delay: 2500, time: '2:32 PM' },
+  ];
 
   // Cleanup dropdown timeout on unmount
   useEffect(() => {
@@ -93,6 +108,64 @@ export default function Home() {
 
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, currentMoodIndex, moods]);
+
+  // Chat messages animation
+  useEffect(() => {
+    let timeoutId;
+    let intervalId;
+
+    const animateMessages = async () => {
+      // Reset if we've shown all messages
+      if (currentMessageIndex >= chatMessages.length) {
+        timeoutId = setTimeout(() => {
+          setVisibleMessages([]);
+          setCurrentMessageIndex(0);
+          setTypingText('');
+          setIsTypingMessage(false);
+        }, 3000);
+        return;
+      }
+
+      const currentMessage = chatMessages[currentMessageIndex];
+
+      // Wait for the delay before showing this message
+      await new Promise(resolve => {
+        timeoutId = setTimeout(resolve, currentMessage.delay);
+      });
+
+      if (currentMessage.type === 'user') {
+        // User messages appear instantly
+        setVisibleMessages(prev => [...prev, currentMessage]);
+        setCurrentMessageIndex(prev => prev + 1);
+      } else {
+        // AI messages type character by character
+        setIsTypingMessage(true);
+
+        // Type the message
+        for (let i = 0; i <= currentMessage.text.length; i++) {
+          await new Promise(resolve => {
+            timeoutId = setTimeout(() => {
+              setTypingText(currentMessage.text.substring(0, i));
+              resolve();
+            }, 30);
+          });
+        }
+
+        // Message fully typed, add to visible messages
+        setVisibleMessages(prev => [...prev, currentMessage]);
+        setTypingText('');
+        setIsTypingMessage(false);
+        setCurrentMessageIndex(prev => prev + 1);
+      }
+    };
+
+    animateMessages();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [currentMessageIndex]);
 
   // Handle PWA install prompt
   useEffect(() => {
@@ -496,12 +569,6 @@ export default function Home() {
                   >
                     Start Chatting Now - It's Free
                   </button>
-                  <Link
-                    href="/#how-it-works"
-                    className="w-full sm:w-auto text-center rounded-full bg-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold text-rose-600 shadow-md border border-rose-100 hover:bg-rose-50 transition-all"
-                  >
-                    See How It Works
-                  </Link>
                 </div>
                 {/* Quick reassurance */}
                 <div className="mt-4 sm:mt-6 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 text-xs sm:text-sm text-gray-600 px-2 sm:px-0">
@@ -548,65 +615,63 @@ export default function Home() {
 
                       {/* Chat Messages */}
                       <div className="p-3 md:p-4 space-y-3 md:space-y-4 bg-rose-50/30 h-[calc(100%-120px)] md:h-[calc(100%-140px)] overflow-y-auto">
-                        {/* User Message 1 */}
-                        <div className="flex gap-1.5 md:gap-2 items-start justify-end">
-                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
-                            <p className="text-xs md:text-sm text-gray-800">Hi</p>
-                            <span className="text-[10px] md:text-xs text-gray-600 mt-1 block text-right">Just now</span>
-                          </div>
-                        </div>
+                        {visibleMessages.map((message, index) => (
+                          message.type === 'user' ? (
+                            // User Message
+                            <div key={index} className="flex gap-1.5 md:gap-2 items-start justify-end animate-fadeIn">
+                              <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                                <div className="flex items-end gap-2">
+                                  <p className="text-xs md:text-sm text-gray-800 flex-1">{message.text}</p>
+                                  <span className="text-[9px] md:text-[10px] text-gray-600 whitespace-nowrap self-end pb-0.5">{message.time}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            // AI Message
+                            <div key={index} className="flex gap-1.5 md:gap-2 items-start animate-fadeIn">
+                              <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                                <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                              </div>
+                              <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                                <div className="flex items-end gap-2">
+                                  <p className="text-xs md:text-sm text-gray-800 flex-1">{message.text}</p>
+                                  <span className="text-[9px] md:text-[10px] text-gray-400 whitespace-nowrap self-end pb-0.5">{message.time}</span>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        ))}
 
-                        {/* AI Message 1 */}
-                        <div className="flex gap-1.5 md:gap-2 items-start">
-                          <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
-                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
-                          </div>
-                          <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
-                            <p className="text-xs md:text-sm text-gray-800">Hello, How are you feeling today?</p>
-                            <span className="text-[10px] md:text-xs text-gray-400 mt-1 block">Just now</span>
-                          </div>
-                        </div>
-
-                        {/* User Message 2 */}
-                        <div className="flex gap-1.5 md:gap-2 items-start justify-end">
-                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
-                            <p className="text-xs md:text-sm text-gray-800">A bit low due to stress</p>
-                            <span className="text-[10px] md:text-xs text-gray-600 mt-1 block text-right">Just now</span>
-                          </div>
-                        </div>
-
-                        {/* AI Message 2 */}
-                        <div className="flex gap-1.5 md:gap-2 items-start">
-                          <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
-                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
-                          </div>
-                          <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
-                            <p className="text-xs md:text-sm text-gray-800">What happened? Please tell me if anything bothering you lately? I am here for you</p>
-                            <span className="text-[10px] md:text-xs text-gray-400 mt-1 block">Just now</span>
-                          </div>
-                        </div>
-
-                        {/* User Message 3 */}
-                        <div className="flex gap-1.5 md:gap-2 items-start justify-end">
-                          <div className="bg-rose-200 rounded-2xl rounded-tr-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
-                            <p className="text-xs md:text-sm text-gray-800">I have been facing many challenges and due to that I am unable to sleep. I am thinking about those issues day and night</p>
-                            <span className="text-[10px] md:text-xs text-gray-600 mt-1 block text-right">Just now</span>
-                          </div>
-                        </div>
-
-                        {/* Typing Indicator */}
-                        <div className="flex gap-1.5 md:gap-2 items-start">
-                          <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
-                            <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
-                          </div>
-                          <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-1.5 md:py-2 shadow-sm">
-                            <div className="flex gap-1">
-                              <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                              <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                              <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                        {/* Typing Message (AI typing in progress) */}
+                        {isTypingMessage && typingText && (
+                          <div className="flex gap-1.5 md:gap-2 items-start animate-fadeIn">
+                            <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                              <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                            </div>
+                            <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-2 md:py-3 shadow-sm max-w-[75%]">
+                              <p className="text-xs md:text-sm text-gray-800">
+                                {typingText}
+                                <span className="inline-block w-0.5 h-3 md:h-4 bg-rose-500 ml-0.5 animate-blink"></span>
+                              </p>
                             </div>
                           </div>
-                        </div>
+                        )}
+
+                        {/* Typing Indicator (before AI starts typing) */}
+                        {isTypingMessage && !typingText && (
+                          <div className="flex gap-1.5 md:gap-2 items-start animate-fadeIn">
+                            <div className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center flex-shrink-0">
+                              <FontAwesomeIcon icon={faHeart} className="h-3 w-3 md:h-4 md:w-4 text-white" />
+                            </div>
+                            <div className="bg-white rounded-2xl rounded-tl-sm px-3 md:px-4 py-1.5 md:py-2 shadow-sm">
+                              <div className="flex gap-1">
+                                <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       {/* Input Area */}

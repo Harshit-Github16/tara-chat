@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import StructuredData from './components/StructuredData';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import { Analytics } from "@vercel/analytics/react";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700", "800"],
@@ -146,6 +147,7 @@ export default function RootLayout({ children }) {
             <ThemeProvider>
               {children}
               <PWAInstallPrompt />
+              <Analytics />
             </ThemeProvider>
           </AuthProvider>
         </ErrorBoundary>
