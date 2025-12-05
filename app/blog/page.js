@@ -455,7 +455,7 @@ export default function BlogsPage() {
                             <FontAwesomeIcon icon={faNewspaper} className="h-8 w-8 text-rose-500" />
                             <h1 className="text-4xl font-bold text-gray-800">Wellness Blog</h1>
                         </div>
-                        <p className="text-gray-600 text-lg max-w-7xl mx-auto">
+                        <p className="text-gray-600 md:text-lg max-w-7xl mx-auto">
                             Discover insights, tips, and stories to support your mental wellness journey.
                             Expert advice from leading professionals in psychology, neuroscience, and wellness.
                         </p>
@@ -492,19 +492,21 @@ export default function BlogsPage() {
                         </div>
 
                         {/* Categories */}
-                        <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                            {CATEGORIES.map((category) => (
-                                <button
-                                    key={category}
-                                    onClick={() => setSelectedCategory(category)}
-                                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${selectedCategory === category
-                                        ? 'bg-rose-200 text-rose-600'
-                                        : 'bg-rose-50 text-gray-600 border border-rose-200 hover:bg-rose-100'
-                                        }`}
-                                >
-                                    {category}
-                                </button>
-                            ))}
+                        <div className="mt-4 -mx-4 sm:mx-0">
+                            <div className="flex gap-2 overflow-x-auto pb-2 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
+                                {CATEGORIES.map((category) => (
+                                    <button
+                                        key={category}
+                                        onClick={() => setSelectedCategory(category)}
+                                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors snap-start flex-shrink-0 ${selectedCategory === category
+                                            ? 'bg-rose-200 text-rose-600 shadow-sm'
+                                            : 'bg-rose-50 text-gray-600 border border-rose-200 hover:bg-rose-100'
+                                            }`}
+                                    >
+                                        {category}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
 

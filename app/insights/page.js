@@ -34,7 +34,6 @@ function InsightsPageContent() {
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
     const { moodData, loading } = useInsights();
-    const [selectedPeriod, setSelectedPeriod] = useState("week");
     const [checkInDates, setCheckInDates] = useState([]);
 
     const [streak, setStreak] = useState(0);
@@ -108,30 +107,6 @@ function InsightsPageContent() {
                             <span className="text-lg font-semibold text-rose-600">Tara4u</span>
                         </Link>
                         <div className="flex items-center gap-3">
-                            <div className="flex gap-2 rounded-full bg-rose-50 p-1 text-xs font-medium">
-                                <button
-                                    onClick={() => setSelectedPeriod("week")}
-                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "week" ? "bg-white shadow text-rose-600" : "text-gray-600"
-                                        }`}
-                                >
-                                    Week
-                                </button>
-                                <button
-                                    onClick={() => setSelectedPeriod("month")}
-                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "month" ? "bg-white shadow text-rose-600" : "text-gray-600"
-                                        }`}
-                                >
-                                    Month
-                                </button>
-                                <button
-                                    onClick={() => setSelectedPeriod("year")}
-                                    className={`rounded-full px-3 py-1 ${selectedPeriod === "year" ? "bg-white shadow text-rose-600" : "text-gray-600"
-                                        }`}
-                                >
-                                    Year
-                                </button>
-                            </div>
-
                             {/* Right Side Actions */}
                             <div className="flex items-center gap-3">
                                 <Link

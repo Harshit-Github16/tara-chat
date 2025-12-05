@@ -957,13 +957,13 @@ export default function ChatListPage() {
         <header className="sticky top-0 z-20 border-b border-rose-100 bg-white/80 backdrop-blur-md">
           <div className="mx-auto flex  items-center justify-between px-3 sm:px-4 ">
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Mobile Menu Button */}
-              <button
+              {/* Mobile Menu Button - TEMPORARILY HIDDEN */}
+              {/* <button
                 onClick={() => setShowMobileSidebar(true)}
                 className="md:hidden rounded-lg p-2 text-rose-600 hover:bg-rose-100 transition-colors"
               >
                 <FontAwesomeIcon icon={faBars} className="h-5 w-5" />
-              </button>
+              </button> */}
 
               <img
                 src="/taralogo.jpg"
@@ -990,23 +990,22 @@ export default function ChatListPage() {
         </header>
 
         <div className="mx-auto flex w-full  2xl:w-full flex-1 relative gap-0 md:gap-3 md:px-3">
-          {/* Mobile Sidebar Overlay */}
-          {showMobileSidebar && (
+          {/* Mobile Sidebar Overlay - TEMPORARILY HIDDEN */}
+          {/* {showMobileSidebar && (
             <div
               className="fixed inset-0 bg-black/50 z-40 md:hidden"
               onClick={() => setShowMobileSidebar(false)}
             />
-          )}
+          )} */}
 
-          {/* Sidebar */}
-          <aside className={`
+          {/* Sidebar - TEMPORARILY HIDDEN */}
+          {/* <aside className={`
             fixed md:relative top-0 left-0 h-screen md:h-[calc(100vh-64px-56px)] w-72 sm:w-80 md:w-80 lg:w-96
             transform transition-transform duration-300 ease-in-out z-50 md:z-auto
             md:transform-none
             ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
           `}>
             <div className="h-full border-r border-rose-100 bg-white p-3 shadow-xl md:shadow-sm overflow-y-auto">
-              {/* Header with Close Button (Mobile) and Add User Button */}
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-sm font-semibold text-gray-700">Chats</span>
                 <div className="flex items-center gap-2">
@@ -1033,7 +1032,7 @@ export default function ChatListPage() {
                     <button
                       onClick={() => {
                         setActiveId(c.id);
-                        setShowMobileSidebar(false); // Close mobile sidebar when chat is selected
+                        setShowMobileSidebar(false);
                       }}
                       className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${c.id === activeId
                         ? "border-rose-200 bg-rose-100 text-rose-600"
@@ -1041,7 +1040,6 @@ export default function ChatListPage() {
                         }`}
                     >
                       <div className="flex items-center gap-3">
-                        {/* Avatar */}
                         <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-rose-200 flex items-center justify-center flex-shrink-0">
                           {c.avatar ? (
                             <img
@@ -1053,8 +1051,6 @@ export default function ChatListPage() {
                             <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-600" />
                           )}
                         </div>
-
-                        {/* Chat Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-2">
                             <span className="font-medium truncate">{c.name}</span>
@@ -1064,7 +1060,6 @@ export default function ChatListPage() {
                                   {c.unread}
                                 </span>
                               )}
-                              {/* Delete button - only show for non-TARA chats */}
                               {c.id !== 'tara-ai' && (
                                 <div
                                   onClick={(e) => {
@@ -1094,10 +1089,8 @@ export default function ChatListPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Celebrity feature temporarily disabled */}
             </div>
-          </aside>
+          </aside> */}
 
           {/* Chat view */}
           <section className="flex-1 w-full md:w-auto">
@@ -1328,7 +1321,7 @@ export default function ChatListPage() {
 
                       {/* Emoji Grid with Scroll */}
                       <div className="h-40 sm:h-48 overflow-y-auto p-2 sm:p-3">
-                        <div className="grid grid-cols-8 sm:grid-cols-10 md:grid-cols-12 gap-1">
+                        <div className="grid grid-cols-10 sm:grid-cols-8 md:grid-cols-30 gap-1">
                           {EMOJIS.map((emoji, index) => (
                             <button
                               key={index}

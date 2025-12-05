@@ -2295,21 +2295,21 @@ function StatCard({ number, label }) {
 
 function EnhancedStatCard({ number, label, description, icon, trend }) {
   return (
-    <div className="group relative">
-      <div className="rounded-2xl border border-rose-100 bg-white p-6 shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1">
+    <div className="group relative h-full">
+      <div className="h-full rounded-2xl border border-rose-100 bg-white p-4 sm:p-6 shadow-sm hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 flex flex-col">
         {/* Icon */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition-transform duration-300">
-            <FontAwesomeIcon icon={icon} className="h-6 w-6" />
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-br from-rose-50 to-rose-100 flex items-center justify-center text-rose-600 group-hover:scale-110 transition-transform duration-300">
+            <FontAwesomeIcon icon={icon} className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
-          <div className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
+          <div className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full whitespace-nowrap">
             {trend}
           </div>
         </div>
 
         {/* Stats */}
-        <div className="text-center">
-          <div className="text-3xl font-bold text-gray-900 mb-1 group-hover:text-rose-600 transition-colors">
+        <div className="text-center flex-1 flex flex-col justify-center">
+          <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 group-hover:text-rose-600 transition-colors">
             {number}
           </div>
           <div className="text-sm font-semibold text-gray-900 mb-1">{label}</div>

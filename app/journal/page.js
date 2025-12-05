@@ -162,25 +162,27 @@ export default function JournalPage() {
         </header>
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-            <div className="text-base font-semibold text-gray-800">Your Journal</div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={autoGenerateToday}
-                disabled={generating}
-                className="inline-flex items-center gap-2 rounded-full border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <FontAwesomeIcon icon={faWandSparkles} className={generating ? 'animate-spin' : ''} />
-                {generating ? 'Generating...' : 'AI Generate Today'}
-              </button>
-              <button
-                onClick={() => { setEditing(null); setShowModal(true); }}
-                className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
-              >
-                <FontAwesomeIcon icon={faPlus} /> Create Journal
-              </button>
+          {!loading && groups.length > 0 && (
+            <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-2">
+              <div className="text-lg sm:text-base font-semibold text-gray-800">Your Journal</div>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+                <button
+                  onClick={autoGenerateToday}
+                  disabled={generating}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-rose-200 px-4 py-2.5 sm:py-2 text-sm font-semibold text-rose-600 hover:bg-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <FontAwesomeIcon icon={faWandSparkles} className={generating ? 'animate-spin' : ''} />
+                  <span className="whitespace-nowrap">{generating ? 'Generating...' : 'AI Generate Today'}</span>
+                </button>
+                <button
+                  onClick={() => { setEditing(null); setShowModal(true); }}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-rose-200 px-4 py-2.5 sm:py-2 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
+                >
+                  <FontAwesomeIcon icon={faPlus} /> <span className="whitespace-nowrap">Create Journal</span>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
           {loading ? (
             <div className="text-center py-12 text-gray-500">Loading journals...</div>
           ) : groups.length === 0 ? (
@@ -324,15 +326,15 @@ export default function JournalPage() {
 
 function EmptyState({ onNew, onGenerate }) {
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center">
-      <div className="text-6xl mb-2">📝</div>
-      <div className="text-xl font-semibold text-gray-800">Start your journal journey</div>
-      <p className="max-w-md text-sm text-gray-600">Let AI create daily reflections from your chats, or write your own thoughts manually.</p>
-      <div className="flex gap-3">
-        <button onClick={onGenerate} className="rounded-full border-2 border-rose-300 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-50 shadow-sm">
+    <div className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center px-4">
+      <div className="text-5xl sm:text-6xl mb-2">📝</div>
+      <div className="text-lg sm:text-xl font-semibold text-gray-800">Start your journal journey</div>
+      <p className="max-w-md text-sm sm:text-base text-gray-600 px-4">Let AI create daily reflections from your chats, or write your own thoughts manually.</p>
+      <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto px-4 sm:px-0">
+        <button onClick={onGenerate} className="w-full sm:w-auto rounded-full border-2 border-rose-300 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-50 shadow-sm whitespace-nowrap">
           <FontAwesomeIcon icon={faWandSparkles} /> AI Generate
         </button>
-        <button onClick={onNew} className="rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm">
+        <button onClick={onNew} className="w-full sm:w-auto rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm whitespace-nowrap">
           <FontAwesomeIcon icon={faPlus} /> Write Manually
         </button>
       </div>

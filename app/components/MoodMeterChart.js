@@ -35,7 +35,7 @@ export function calculateAverageMoodScore(moodData) {
 }
 
 export default function MoodMeterChart({ moodData = [], loading }) {
-    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     // Updated mood emoji mapping
     const moodEmojis = {
