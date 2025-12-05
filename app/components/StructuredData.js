@@ -27,10 +27,11 @@ export default function StructuredData() {
                 "url": "https://www.tara4u.com",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://www.tara4u.com/taralogo.jpg",
+                    "url": "https://www.tara4u.com/icon.png",
                     "width": 512,
                     "height": 512
                 },
+                "image": "https://www.tara4u.com/icon.png",
                 "sameAs": [
                     "https://x.com/HelloTara4u",
                     "https://www.facebook.com/profile.php?id=61584786025622",

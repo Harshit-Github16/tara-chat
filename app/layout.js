@@ -41,17 +41,16 @@ export const metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: [
-      { url: 'https://ik.imagekit.io/exerovn5q/32x32px%20logo%20(1).png', sizes: '32x32', type: 'image/png' },
-      { url: 'https://ik.imagekit.io/exerovn5q/32x32px%20logo%20(1).png', sizes: '16x16', type: 'image/png' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
     ],
     apple: [
-      { url: '/taralogo.jpg', sizes: '180x180', type: 'image/jpeg' },
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
     other: [
       {
         rel: 'apple-touch-icon-precomposed',
-        url: '/taralogo.jpg',
+        url: '/apple-icon.png',
       },
     ],
   },
@@ -101,6 +100,12 @@ export default function RootLayout({ children }) {
       <head>
         <StructuredData />
 
+        {/* Favicon and Icons */}
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+
         {/* PWA Meta Tags */}
         <meta name="application-name" content="Tara4u" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -108,6 +113,8 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="Tara4u" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#f43f5e" />
+        <meta name="msapplication-TileColor" content="#f43f5e" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
         <link rel="manifest" href="/manifest.json" />
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-R6HNEYQSP3"></script>
