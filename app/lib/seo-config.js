@@ -88,7 +88,7 @@ export const SEO_CONFIG = {
         "sameAs": [
             "https://twitter.com/tara",
             "https://facebook.com/tara",
-            "https://instagram.com/tara",
+            "https://www.instagram.com/hello.tara4u/",
             "https://linkedin.com/company/tara"
         ],
         "contactPoint": {
@@ -137,7 +137,7 @@ export const SEO_CONFIG = {
     socialMedia: {
         twitter: "https://twitter.com/tara",
         facebook: "https://facebook.com/tara",
-        instagram: "https://instagram.com/tara",
+        instagram: "https://www.instagram.com/hello.tara4u/",
         linkedin: "https://linkedin.com/company/tara",
         youtube: "https://youtube.com/tara"
     }

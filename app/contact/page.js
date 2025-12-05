@@ -357,7 +357,7 @@ export default function ContactPage() {
                                 </a>
 
                                 <a
-                                    href="https://www.instagram.com/tara4u.official"
+                                    href="https://www.instagram.com/hello.tara4u/"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-center w-12 h-12 rounded-xl bg-white text-rose-600 hover:bg-rose-200 transition-all shadow-sm"

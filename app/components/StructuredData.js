@@ -34,7 +34,7 @@ export default function StructuredData() {
                 "sameAs": [
                     "https://twitter.com/tara4u",
                     "https://facebook.com/tara4u",
-                    "https://instagram.com/tara4u",
+                    "https://www.instagram.com/hello.tara4u/",
                     "https://linkedin.com/company/tara4u"
                 ],
                 "contactPoint": {

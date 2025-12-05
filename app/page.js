@@ -29,11 +29,14 @@ import {
   faBullseye,
   faClock,
   faClipboardList,
+  faBalanceScale,
+  faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
 import LoginModal from "./components/LoginModal";
 import OnboardingModal from "./components/OnboardingModal";
+import ContactForm from "./components/ContactForm";
 import { useAuth } from "./contexts/AuthContext";
 // import Footer from "./components/Footer";
 
@@ -465,17 +468,20 @@ export default function Home() {
           <div className="relative mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-12 py-8 sm:py-12 lg:py-20">
             <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 lg:gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               <div className="text-center lg:text-left">
+                {/* Hidden H1 for SEO */}
+                <h1 className="sr-only">AI Chatbot for Stress, Anxiety, Depression Signs & Mental Health Support</h1>
+
                 {/* <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
                   <span className="font-bold">TARA</span> = Talk, Align, Reflect, Act
                 </div> */}
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900 flex flex-wrap items-baseline gap-2 justify-center lg:justify-start">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900 flex flex-wrap items-baseline gap-2 justify-center lg:justify-start">
                   <span className="text-gray-900">Feeling</span>
                   <span className="inline-block bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent">
                     {displayedText}
                     <span className="animate-blink">|</span>
                     <span className="text-gray-900">?</span>
                   </span>
-                </h1>
+                </h2>
                 <p className="mt-3 sm:mt-4 text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 px-2 sm:px-0">
                   You're stronger than you think, Your mind deserves a place to breathe
                 </p>
@@ -648,7 +654,7 @@ export default function Home() {
         <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-rose-50 via-purple-50/30 to-blue-50/30">
           <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-12">
             <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-purple-100 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-700 mb-4 sm:mb-6">
+              <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-rose-100 to-rose-200 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-700 mb-4 sm:mb-6">
                 <FontAwesomeIcon icon={faStar} className="h-3 w-3 sm:h-4 sm:w-4" />
                 Real Benefits, Real Results
               </div>
@@ -1004,6 +1010,56 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
+
+              {/* Feature 8 - Life Balance Assessment */}
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faBalanceScale} className="h-7 w-7 text-rose-600" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">Life Balance Assessment</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Evaluate different areas of your life to identify imbalances and get guidance on creating harmony.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Work-life balance</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Relationship health</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Personal growth</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Feature 9 - AI Recommendations for Improvement */}
+              <div className="group relative bg-white rounded-3xl border border-rose-100 p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="h-14 w-14 rounded-2xl bg-rose-100 flex items-center justify-center mb-6 group-hover:bg-rose-200 transition-colors">
+                  <FontAwesomeIcon icon={faLightbulb} className="h-7 w-7 text-rose-600" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">AI Recommendations for Improvement</h3>
+                <p className="text-gray-600 leading-relaxed mb-6">
+                  Get personalized, actionable suggestions based on your emotional patterns and wellness goals.
+                </p>
+                <ul className="space-y-2">
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Custom action plans</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Coping strategies</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-700">
+                    <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-rose-500" />
+                    <span className="text-sm">Progress tracking</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -1033,7 +1089,7 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-              {/* 100+ Celebrities */}
+              {/* Wellness Assessment */}
               <div className="group relative bg-white rounded-xl sm:rounded-2xl border border-rose-100 p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
                 <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
                   <div className="bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -1041,11 +1097,11 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl bg-rose-100 flex items-center justify-center mb-3 sm:mb-4">
-                  <FontAwesomeIcon icon={faUserAstronaut} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
+                  <FontAwesomeIcon icon={faClipboardList} className="h-5 w-5 sm:h-6 sm:w-6 text-rose-600" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">100+</h3>
-                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">AI Celebrities & Characters</p>
-                <p className="text-xs text-gray-600 leading-relaxed">Chat with your favorite personalities and get inspired by their wisdom</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Complete</h3>
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 mb-1 sm:mb-2">Wellness Assessment</p>
+                <p className="text-xs text-gray-600 leading-relaxed">Comprehensive evaluation of your mental health, stress levels, and emotional well-being</p>
               </div>
 
               {/* Smart Goals */}
@@ -1372,9 +1428,9 @@ export default function Home() {
                 />
                 <EnhancedStatCard
                   number="100+"
-                  label="AI Characters"
-                  description="Unique personalities"
-                  icon={faUserAstronaut}
+                  label="Stress Level Tests"
+                  description="Completed daily"
+                  icon={faClipboardList}
                   trend="New weekly"
                 />
                 <EnhancedStatCard
@@ -1971,7 +2027,7 @@ export default function Home() {
                         <FontAwesomeIcon icon={faXTwitter} className="h-5 w-5 text-gray-700" />
                         <span className="text-sm font-medium text-gray-700">Twitter</span>
                       </a>
-                      <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
+                      <a href="https://www.instagram.com/hello.tara4u/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-rose-200 hover:bg-rose-50 transition-colors">
                         <FontAwesomeIcon icon={faInstagram} className="h-5 w-5 text-pink-600" />
                         <span className="text-sm font-medium text-gray-700">Instagram</span>
                       </a>
@@ -2007,91 +2063,7 @@ export default function Home() {
               </div>
 
               <div className="rounded-2xl border border-rose-100 bg-white p-8 shadow-lg">
-                <form
-                  action="mailto:hello@tara4u.com"
-                  method="POST"
-                  encType="text/plain"
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                        First name
-                      </label>
-                      <input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
-                        placeholder="John"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                        Last name
-                      </label>
-                      <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
-                        placeholder="Doe"
-                      // required
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
-                      placeholder="john@example.com"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
-                      placeholder="How can we help?"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={4}
-                      className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
-                      placeholder="Tell us more about your question or feedback..."
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className=" btn-shine w-full inline-flex items-center justify-center gap-2 rounded-lg bg-rose-200 px-6 py-3 text-base font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
-                  >
-                    <FontAwesomeIcon icon={faPaperPlane} className="h-4 w-4" />
-                    Send Message
-                  </button>
-                </form>
+                <ContactForm />
               </div>
             </div>
           </div>
@@ -2121,7 +2093,7 @@ export default function Home() {
               <div className="flex space-x-3">
                 <LightSocialLink icon={faTwitter} href="#" />
                 <LightSocialLink icon={faLinkedin} href="#" />
-                <LightSocialLink icon={faInstagram} href="#" />
+                <LightSocialLink icon={faInstagram} href="https://www.instagram.com/hello.tara4u/" />
                 <LightSocialLink icon={faFacebook} href="#" />
                 <LightSocialLink icon={faWhatsapp} href="#" />
               </div>
@@ -2763,7 +2735,7 @@ function WhoCanUseTaraCarousel() {
         <div className="text-center mb-10 sm:mb-12 lg:mb-16">
           <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 sm:px-5 py-2 text-xs sm:text-sm font-semibold text-rose-600 mb-4 sm:mb-6">
             <FontAwesomeIcon icon={faUser} className="h-3 w-3 sm:h-4 sm:w-4" />
-            For Everyone, Everywhere
+            Anyone and Anytime
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 sm:mb-4 px-4">
             Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?

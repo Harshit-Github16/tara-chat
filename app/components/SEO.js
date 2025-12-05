@@ -29,7 +29,7 @@ export default function SEO({
         "sameAs": [
             "https://twitter.com/tara",
             "https://facebook.com/tara",
-            "https://instagram.com/tara"
+            "https://www.instagram.com/hello.tara4u/"
         ],
         "contactPoint": {
             "@type": "ContactPoint",
