@@ -1409,7 +1409,7 @@ export default function Home() {
                 Live Statistics
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                Trusted by <span className="text-rose-600">thousands</span>
+                Trusted by <span className="text-rose-600">thousands</span> of Clients
               </h2>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
                 {/* Join a growing community of people who have transformed their emotional wellness with Tara */}
