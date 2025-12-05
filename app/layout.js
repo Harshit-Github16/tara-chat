@@ -16,10 +16,10 @@ const poppins = Poppins({
 export const metadata = {
   metadataBase: new URL('https://www.tara4u.com'),
   title: {
-    default: "Tara4u - Your AI Mental Health & Wellness Companion | Emotional Support 24/7",
+    default: "AI Chatbot for Stress, Anxiety, Depression Signs & Mental Health Support | Tara4u",
     template: "%s | Tara4u - Mental Wellness Companion"
   },
-  description: "Your AI mental health companion. Get 24/7 emotional support, chat with 100+ AI characters, track moods, and journal thoughts. Free to start.",
+  description: "Talk to Tara4u, an AI chatbot designed for mental health support, stress relief, depression signs, burnout and anxiety help. Start chatting now.",
   keywords: ["mental health app", "AI therapy", "emotional wellness", "mindfulness app", "mental health support", "AI companion", "mood tracker", "journal app", "therapy chat", "emotional support", "mental wellness", "AI counseling", "stress relief", "anxiety help", "depression support", "tara4u", "tara 4u", "mental health india", "Tara", "AI friend"],
   authors: [{ name: "Tara4u Team", url: "https://www.tara4u.com" }],
   creator: "Tara4u Team",
@@ -60,8 +60,8 @@ export const metadata = {
     locale: "en_US",
     url: "https://www.tara4u.com",
     siteName: "Tara4u - Mental Wellness Companion",
-    title: "Tara4u - Your AI Mental Health & Wellness Companion | 24/7 Emotional Support",
-    description: "Your AI mental health companion. 24/7 emotional support, 100+ AI characters, mood tracking, and journaling. Free to start.",
+    title: "AI Chatbot for Stress, Anxiety, Depression Signs & Mental Health Support | Tara4u",
+    description: "Talk to Tara4u, an AI chatbot designed for mental health support, stress relief, depression signs, burnout and anxiety help. Start chatting now.",
     images: [
       {
         url: "https://www.tara4u.com/taralogo.jpg",
@@ -73,8 +73,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tara4u - Your AI Mental Health & Wellness Companion",
-    description: "24/7 AI emotional support. Chat with 100+ characters, track moods, journal thoughts. Free to start.",
+    title: "AI Chatbot for Stress, Anxiety, Depression Signs & Mental Health Support | Tara4u",
+    description: "Talk to Tara4u, an AI chatbot designed for mental health support, stress relief, depression signs, burnout and anxiety help. Start chatting now.",
     images: ["https://www.tara4u.com/taralogo.jpg"],
     creator: "@tara4u",
     site: "@tara4u",

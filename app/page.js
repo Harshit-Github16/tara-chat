@@ -476,9 +476,9 @@ export default function Home() {
                     <span className="text-gray-900">?</span>
                   </span>
                 </h1>
-                <h2 className="mt-3 sm:mt-4 text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 px-2 sm:px-0">
+                <p className="mt-3 sm:mt-4 text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 px-2 sm:px-0">
                   You're stronger than you think, Your mind deserves a place to breathe
-                </h2>
+                </p>
                 <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 px-2 sm:px-0">
                   <span className="font-semibold text-gray-900">Talk, Align, Reflect, Act.</span> Tara is your 24/7 AI companion designed to help you heal and find clarity. We hold space for your feelings, help you calm the chaos, and guide you back to emotional balance—whenever you need it.
                 </p>
@@ -656,7 +656,9 @@ export default function Home() {
                 Why Choose <span className="text-rose-600">Tara</span>?
               </h2>
               <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-                Transform your emotional wellness with features designed for real results
+                {/* Transform your emotional wellness with features designed for real results */}
+                Your AI emotional companion for mental health support
+
               </p>
             </div>
 
@@ -669,7 +671,10 @@ export default function Home() {
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
                   <FontAwesomeIcon icon={faHeart} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Improved Emotional Stability</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">
+                  Emotional Health Support
+                  {/* Improved Emotional Stability */}
+                </h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
                   Build resilience and maintain emotional balance through consistent support and guided reflection. Learn to navigate life's ups and downs with confidence.
                 </p>
@@ -683,13 +688,13 @@ export default function Home() {
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
                   <FontAwesomeIcon icon={faChartLine} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Early Detection of Mental Health Risks</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Mental Health & Depression Signs</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
                   AI-powered mood tracking identifies patterns and potential concerns early, helping you take proactive steps toward better mental health.
                 </p>
               </div>
 
-              {/* Benefit 3 - Reduced Stress & Anxiety */}
+              {/* Benefit 3 - Stress Relief & Anxiety Support */}
               <div className="group relative bg-gradient-to-br from-white to-rose-50/50 rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-rose-100/50">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                   <FontAwesomeIcon icon={faComments} className="h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 text-rose-500 transform rotate-6" />
@@ -697,29 +702,29 @@ export default function Home() {
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors relative z-10">
                   <FontAwesomeIcon icon={faComments} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Reduced Stress & Anxiety</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3 relative z-10">Stress Relief & Anxiety Support</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed relative z-10">
                   Express your worries in a judgment-free space. Our AI companions provide calming support and practical coping strategies whenever you need them.
                 </p>
               </div>
 
-              {/* Benefit 4 - Goal Setting & Personal Growth */}
+              {/* Benefit 4 - Personal Growth & Wellness Goal */}
               <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
                   <FontAwesomeIcon icon={faBullseye} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Goal Setting & Personal Growth</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Personal Growth & Wellness Goal</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Set meaningful wellness goals and track your progress. AI-powered insights help you stay motivated and celebrate every milestone.
                 </p>
               </div>
 
-              {/* Benefit 5 - Purpose & Direction */}
+              {/* Benefit 5 -  Purpose, Clarity & Direction */}
               <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
                   <FontAwesomeIcon icon={faArrowRight} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Purpose & Direction</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3"> Purpose, Clarity & Direction</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Discover clarity and meaning through guided journaling and reflection. Find your path forward with personalized insights and support.
                 </p>
@@ -730,7 +735,7 @@ export default function Home() {
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
                   <FontAwesomeIcon icon={faShield} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Privacy & Safe Space to Express</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Private & Safe</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Your thoughts are completely private with end-to-end encryption. Express yourself freely without fear of judgment or data breaches.
                 </p>
@@ -747,23 +752,23 @@ export default function Home() {
                 </p>
               </div>
 
-              {/* Benefit 8 - Enhanced Self-Awareness */}
+              {/* Benefit 8 - Emotional Awareness */}
               <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
                   <FontAwesomeIcon icon={faUser} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Enhanced Self-Awareness</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Emotional Awareness</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Understand your emotions, triggers, and patterns better. Gain deep insights into what makes you feel your best and what holds you back.
                 </p>
               </div>
 
-              {/* Benefit 9 - Improved Relationships */}
+              {/* Benefit 9 - Better Emotional Connections */}
               <div className="group relative bg-white rounded-2xl sm:rounded-3xl border border-rose-100 p-5 sm:p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-rose-100 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-rose-200 transition-colors">
                   <FontAwesomeIcon icon={faUserAstronaut} className="h-6 w-6 sm:h-7 sm:w-7 text-rose-600" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Improved Relationships</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Better Emotional Connections</h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Better emotional regulation leads to healthier connections. Learn communication skills and empathy through guided conversations.
                 </p>
@@ -774,7 +779,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Who Can Use Tara Section - Auto Sliding Carousel */}
+        {/* Who Can Talk to Tara Section - Auto Sliding Carousel */}
         <WhoCanUseTaraCarousel />
 
         {/* Features Section */}
@@ -820,7 +825,7 @@ export default function Home() {
                 Everything you need for <span className="text-rose-600">emotional wellness</span>
               </h2>
               <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-                Comprehensive tools designed to support your mental health journey
+                No matter what you're feeling, Tara is here to support you.
               </p>
             </div>
 
@@ -1018,10 +1023,12 @@ export default function Home() {
                 Everything Included
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 px-4">
-                Your Complete <span className="text-rose-600">Wellness Toolkit</span>
+                A Toolkit Designed for Your <span className="text-rose-600">Peace of Mind
+                </span>
               </h2>
               <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-                Get access to everything you need for your emotional wellness journey - all in one place
+                {/* Get access to everything you need for your emotional wellness journey - all in one place */}
+                Find all the support you need for stress, anxiety, and emotional health, together in one place.
               </p>
             </div>
 
@@ -1257,10 +1264,12 @@ export default function Home() {
                 Simple & Effective
               </div>
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
-                How <span className="text-rose-600">Tara</span> works
+                How <span className="text-rose-600">Tara</span> Helps You
               </h2>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
-                Transform your emotional wellness in just three simple steps. Our AI-powered platform makes mental health support accessible and personalized.
+                {/* Transform your emotional wellness in just three simple steps. Our AI-powered platform makes mental health support accessible and personalized. */}      In just three easy steps, Tara helps you manage depression, stress, anxiety, and support your overall mental health
+
+
               </p>
             </div>
 
@@ -1347,7 +1356,8 @@ export default function Home() {
                 Trusted by <span className="text-rose-600">thousands</span>
               </h2>
               <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
-                Join a growing community of people who have transformed their emotional wellness with Tara
+                {/* Join a growing community of people who have transformed their emotional wellness with Tara */}
+                Join a community that uses Tara to manage stress, anxiety, depression, and improve their mental health
               </p>
             </div>
 
@@ -1438,10 +1448,12 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6 mb-16">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                What our <span className="text-rose-600">users</span> say
+                Tara4u <span className="text-rose-600">Reviews</span> and Testimonials
               </h2>
               <p className="mt-4 text-lg text-gray-600">
-                Real stories from people who transformed their emotional wellness with Tara
+                {/* Real stories from people who transformed their emotional wellness with Tara */}
+                Read real reviews of people who tested our Tara4u for themselves!
+                Free online Ai Friend for those who need it.
               </p>
             </div>
           </div>
@@ -1654,7 +1666,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-6">
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                Why choose <span className="text-rose-600">Tara</span> for your emotional wellness?
+                Why <span className="text-rose-600">Tara AI Chatbot?</span> for your emotional wellness?
               </h2>
               <p className="mt-4 text-lg text-gray-600">
                 We're more than just an app - we're your partner in emotional growth
@@ -1722,7 +1734,9 @@ export default function Home() {
                 Frequently Asked <span className="text-rose-600">Questions</span>
               </h2>
               <p className="mt-4 text-lg text-gray-600">
-                Everything you need to know about Tara and emotional wellness
+                {/* Everything you need to know about Tara and emotional wellness */}
+                Questions on your mind? Don't worry we have the answers!
+
               </p>
             </div>
 
@@ -2549,7 +2563,7 @@ function FAQAccordion({ faqs }) {
   );
 }
 
-// Who Can Use Tara Carousel Component
+// Who Can Talk to Tara Carousel Component
 function WhoCanUseTaraCarousel() {
   const router = useRouter();
   const { user } = useAuth();
@@ -2755,7 +2769,7 @@ function WhoCanUseTaraCarousel() {
             Who Can Use <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">Tara</span>?
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
-            Whether you're managing a home, building a career, or navigating life's challenges — Tara is here for you
+            Whatever you're facing, Depression, Anxiety, Stress or just need someone to talk to - Tara is here to support you
           </p>
         </div>
 
