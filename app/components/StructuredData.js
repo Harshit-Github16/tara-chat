@@ -23,15 +23,22 @@ export default function StructuredData() {
             {
                 "@type": "Organization",
                 "@id": "https://www.tara4u.com/#organization",
-                "name": "Tara",
+                "name": "Tara4u",
+                "alternateName": "Tara",
                 "url": "https://www.tara4u.com",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://www.tara4u.com/icon.png",
+                    "url": "https://www.tara4u.com/icon-512x512.png",
+                    "width": 512,
+                    "height": 512,
+                    "caption": "Tara4u - AI Mental Health Companion Logo"
+                },
+                "image": {
+                    "@type": "ImageObject",
+                    "url": "https://www.tara4u.com/icon-512x512.png",
                     "width": 512,
                     "height": 512
                 },
-                "image": "https://www.tara4u.com/icon.png",
                 "sameAs": [
                     "https://x.com/HelloTara4u",
                     "https://www.facebook.com/profile.php?id=61584786025622",
