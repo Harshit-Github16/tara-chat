@@ -153,18 +153,29 @@ export default function ProfilePage() {
     const handleSave = async () => {
         setSaving(true);
         try {
+            console.log('Saving profile with data:', editData);
+
             // Update profile in database
             const response = await api.post('/api/onboarding', editData);
 
             if (response.ok) {
                 const data = await response.json();
-                setUserProfile(editData);
-                setIsEditing(false);
                 console.log('Profile updated successfully:', data);
+
+                // Update local state with saved data
+                setUserProfile(editData);
+
+                // Update AuthContext user data
+                if (data.user) {
+                    await updateUser(data.user);
+                }
+
+                setIsEditing(false);
+                alert('Profile updated successfully!');
             } else {
                 const errorData = await response.json();
                 console.error('Failed to update profile:', errorData);
-                alert('Failed to update profile. Please try again.');
+                alert(`Failed to update profile: ${errorData.error || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -444,87 +455,44 @@ export default function ProfilePage() {
                             </div>
                         </div>
 
-                        {/* Interests & Personality */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Interests */}
-                            <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                    <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-rose-400" />
-                                    Interests
-                                </h3>
-                                {isEditing ? (
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {interestOptions.map((interest) => (
-                                            <button
+                        {/* Interests */}
+                        <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                                <FontAwesomeIcon icon={faHeart} className="h-4 w-4 text-rose-400" />
+                                Interests
+                            </h3>
+                            {isEditing ? (
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    {interestOptions.map((interest) => (
+                                        <button
+                                            key={interest}
+                                            type="button"
+                                            onClick={() => handleArrayToggle('interests', interest)}
+                                            className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${editData.interests?.includes(interest)
+                                                ? 'bg-rose-50 text-rose-600 border-rose-200'
+                                                : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
+                                                }`}
+                                        >
+                                            {interest}
+                                        </button>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex flex-wrap gap-2">
+                                    {userProfile.interests?.length > 0 ? (
+                                        userProfile.interests.map((interest) => (
+                                            <span
                                                 key={interest}
-                                                type="button"
-                                                onClick={() => handleArrayToggle('interests', interest)}
-                                                className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${editData.interests?.includes(interest)
-                                                    ? 'bg-rose-50 text-rose-600 border-rose-200'
-                                                    : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
-                                                    }`}
+                                                className="px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-sm font-medium border border-rose-100"
                                             >
                                                 {interest}
-                                            </button>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-wrap gap-2">
-                                        {userProfile.interests?.length > 0 ? (
-                                            userProfile.interests.map((interest) => (
-                                                <span
-                                                    key={interest}
-                                                    className="px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-sm font-medium border border-rose-100"
-                                                >
-                                                    {interest}
-                                                </span>
-                                            ))
-                                        ) : (
-                                            <span className="text-gray-400 italic text-sm">No interests added</span>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Personality Traits */}
-                            <div className="rounded-2xl border border-rose-100 bg-white shadow-sm p-6">
-                                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                    <FontAwesomeIcon icon={faPalette} className="h-4 w-4 text-rose-400" />
-                                    Personality
-                                </h3>
-                                {isEditing ? (
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {personalityOptions.map((trait) => (
-                                            <button
-                                                key={trait}
-                                                type="button"
-                                                onClick={() => handleArrayToggle('personalityTraits', trait)}
-                                                className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${editData.personalityTraits?.includes(trait)
-                                                    ? 'bg-rose-50 text-rose-600 border-rose-200'
-                                                    : 'bg-white text-gray-500 border-rose-100 hover:border-rose-200'
-                                                    }`}
-                                            >
-                                                {trait}
-                                            </button>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="flex flex-wrap gap-2">
-                                        {userProfile.personalityTraits?.length > 0 ? (
-                                            userProfile.personalityTraits.map((trait) => (
-                                                <span
-                                                    key={trait}
-                                                    className="px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-sm font-medium border border-rose-100"
-                                                >
-                                                    {trait}
-                                                </span>
-                                            ))
-                                        ) : (
-                                            <span className="text-gray-400 italic text-sm">No traits added</span>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="text-gray-400 italic text-sm">No interests added</span>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
 
