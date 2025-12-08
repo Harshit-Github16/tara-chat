@@ -601,9 +601,6 @@ export default function Home() {
                     <div className="relative bg-white rounded-[2rem] md:rounded-[2.5rem] overflow-hidden h-[520px] sm:h-[580px] md:h-[620px] lg:h-[650px]">
                       {/* Chat Header */}
                       <div className="bg-rose-200 px-3 md:px-4 py-3 md:py-4 flex items-center gap-2 md:gap-3 shadow-sm">
-                        <div className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-white flex items-center justify-center">
-                          <FontAwesomeIcon icon={faHeart} className="h-4 w-4 md:h-5 md:w-5 text-rose-500" />
-                        </div>
                         <div className="flex-1">
                           <div className="text-gray-800 font-semibold text-xs md:text-sm">Emotional Support</div>
                           <div className="text-gray-600 text-[10px] md:text-xs flex items-center gap-1">

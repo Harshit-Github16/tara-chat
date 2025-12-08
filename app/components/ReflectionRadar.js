@@ -15,44 +15,44 @@ export default function ReflectionRadar({ userId }) {
     // Questions for each life domain (3 questions each)
     const lifeAreaQuestions = [
         // Family questions
-        { area: 'family', text: 'I feel emotionally supported by my family.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'family', text: 'I am able to communicate openly with my family members.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'family', text: 'My family relationships feel stable and respectful.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'family', text: 'I feel emotionally supported by my family.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'family', text: 'I am able to communicate openly with my family members.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'family', text: 'My family relationships feel stable and respectful.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Health questions
-        { area: 'health', text: 'I feel physically energetic throughout the day.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'health', text: 'I maintain healthy routines (sleep, food, hydration) most days.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'health', text: 'I recover well after stress or tiredness.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'health', text: 'I feel physically energetic throughout the day.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'health', text: 'I maintain healthy routines (sleep, food, hydration) most days.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'health', text: 'I recover well after stress or tiredness.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Personal Growth questions
-        { area: 'personalGrowth', text: 'I feel I am learning, improving, or evolving as a person.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'personalGrowth', text: 'I have goals that give me a sense of direction.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'personalGrowth', text: 'I take time to reflect and understand myself better.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'personalGrowth', text: 'I feel I am learning, improving, or evolving as a person.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'personalGrowth', text: 'I have goals that give me a sense of direction.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'personalGrowth', text: 'I take time to reflect and understand myself better.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Love & Relationships questions
-        { area: 'relationships', text: 'I feel emotionally connected to my partner / close relationships.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'relationships', text: 'I am able to express my needs honestly in relationships.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'relationships', text: 'I feel valued, respected, and understood by people close to me.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'relationships', text: 'I feel emotionally connected to my partner / close relationships.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'relationships', text: 'I am able to express my needs honestly in relationships.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'relationships', text: 'I feel valued, respected, and understood by people close to me.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Career questions
-        { area: 'career', text: 'My work gives me a sense of purpose or progress.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'career', text: 'I feel confident in my skills and ability to handle work situations.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'career', text: 'I experience a healthy balance between work and personal life.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'career', text: 'My work gives me a sense of purpose or progress.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'career', text: 'I feel confident in my skills and ability to handle work situations.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'career', text: 'I experience a healthy balance between work and personal life.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Social Life questions
-        { area: 'socialLife', text: 'I have people I can talk to or meet when I need connection.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'socialLife', text: 'I feel a sense of belonging within my social circle.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'socialLife', text: 'I enjoy the quality of my interactions with friends or peers.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'socialLife', text: 'I have people I can talk to or meet when I need connection.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'socialLife', text: 'I feel a sense of belonging within my social circle.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'socialLife', text: 'I enjoy the quality of my interactions with friends or peers.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Spirituality / Inner Peace questions
-        { area: 'spirituality', text: 'I feel connected to something greater (purpose, values, faith, nature).', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'spirituality', text: 'I take moments to slow down, breathe, or be mindful.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'spirituality', text: 'I often feel inner peace or grounding.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
+        { area: 'spirituality', text: 'I feel connected to something greater (purpose, values, faith, nature).', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'spirituality', text: 'I take moments to slow down, breathe, or be mindful.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'spirituality', text: 'I often feel inner peace or grounding.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
 
         // Financial Growth / Stability questions
-        { area: 'financial', text: 'I feel in control of my money and financial decisions.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'financial', text: 'I am able to manage expenses without constant stress.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] },
-        { area: 'financial', text: 'I am making progress toward my financial goals.', options: ['Strongly Disagree', 'Disagree', 'Agree', 'Strongly Agree'] }
+        { area: 'financial', text: 'I feel in control of my money and financial decisions.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'financial', text: 'I am able to manage expenses without constant stress.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] },
+        { area: 'financial', text: 'I am making progress toward my financial goals.', options: ['Strongly Agree', 'Agree', 'Disagree', 'Strongly Disagree'] }
     ];
 
     // Calculate default scores (all 0 if no quiz data)
@@ -86,11 +86,10 @@ export default function ReflectionRadar({ userId }) {
 
         // Calculate average score for each life area
         lifeAreaQuestions.forEach((q, index) => {
-            const answers = quizAnswers[index];
-            if (answers && answers.length > 0) {
-                // Calculate average of all selected options
-                const avgAnswer = answers.reduce((sum, ans) => sum + ans, 0) / answers.length;
-                const score = (avgAnswer / 3) * 100; // Convert 0-3 to 0-100
+            const answer = quizAnswers[index];
+            if (answer !== undefined && answer !== null) {
+                // Convert answer index to score (Strongly Agree=0->3, Agree=1->2, Disagree=2->1, Strongly Disagree=3->0)
+                const score = ((3 - answer) / 3) * 100; // Convert to 0-100
                 areaScores[q.area] += score;
             }
         });
@@ -106,20 +105,10 @@ export default function ReflectionRadar({ userId }) {
     const scores = quizScores || calculateDefaultScores();
 
     const handleAnswer = (answerIndex) => {
-        setQuizAnswers(prev => {
-            const currentAnswers = prev[currentQuestion] || [];
-
-            // Toggle selection - if already selected, remove it; otherwise add it
-            const isSelected = currentAnswers.includes(answerIndex);
-            const newAnswers = isSelected
-                ? currentAnswers.filter(idx => idx !== answerIndex)
-                : [...currentAnswers, answerIndex];
-
-            return {
-                ...prev,
-                [currentQuestion]: newAnswers
-            };
-        });
+        setQuizAnswers(prev => ({
+            ...prev,
+            [currentQuestion]: answerIndex
+        }));
     };
 
     const handleNext = async () => {
@@ -433,11 +422,11 @@ export default function ReflectionRadar({ userId }) {
                                 </h4>
                                 <div className="flex items-center justify-between mb-6">
                                     <p className="text-sm text-gray-500">
-                                        💡 Select all that apply to you
+                                        💡 Select one option
                                     </p>
-                                    {quizAnswers[currentQuestion] && quizAnswers[currentQuestion].length > 0 && (
+                                    {quizAnswers[currentQuestion] !== undefined && (
                                         <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full">
-                                            {quizAnswers[currentQuestion].length} selected
+                                            1 selected
                                         </span>
                                     )}
                                 </div>
@@ -445,8 +434,7 @@ export default function ReflectionRadar({ userId }) {
                                 {/* Options as Tags/Chips */}
                                 <div className="flex flex-wrap gap-3">
                                     {lifeAreaQuestions[currentQuestion].options.map((option, index) => {
-                                        const currentAnswers = quizAnswers[currentQuestion] || [];
-                                        const isSelected = currentAnswers.includes(index);
+                                        const isSelected = quizAnswers[currentQuestion] === index;
 
                                         return (
                                             <button
@@ -485,8 +473,8 @@ export default function ReflectionRadar({ userId }) {
 
                                 <button
                                     onClick={handleNext}
-                                    disabled={!quizAnswers[currentQuestion] || quizAnswers[currentQuestion].length === 0}
-                                    className={`inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all ${quizAnswers[currentQuestion] && quizAnswers[currentQuestion].length > 0
+                                    disabled={quizAnswers[currentQuestion] === undefined}
+                                    className={`inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all ${quizAnswers[currentQuestion] !== undefined
                                         ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white hover:shadow-lg'
                                         : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                         }`}

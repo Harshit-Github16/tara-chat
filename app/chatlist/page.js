@@ -119,8 +119,26 @@ export default function ChatListPage() {
   const [sessionStartTime, setSessionStartTime] = useState(null);
   // Track if older messages are shown
   const [showOlderMessages, setShowOlderMessages] = useState(false);
+  // Store current session messages (mood greeting + new messages) - these should ALWAYS be visible
+  const [currentSessionMessages, setCurrentSessionMessages] = useState([]);
+  // Track which message is currently typing
+  const [typingMessageId, setTypingMessageId] = useState(null);
 
-
+  // Reset typing state after a delay (when typing animation completes)
+  useEffect(() => {
+    if (typingMessageId) {
+      // Find the message to get its content length
+      const typingMessage = currentSessionMessages.find(m => m.id === typingMessageId);
+      if (typingMessage && typingMessage.content) {
+        // Calculate typing duration (20ms per character + 500ms buffer)
+        const typingDuration = (typingMessage.content.length * 20) + 500;
+        const timer = setTimeout(() => {
+          setTypingMessageId(null);
+        }, typingDuration);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [typingMessageId, currentSessionMessages]);
 
   // Ref for messages container to enable auto-scroll
   const messagesEndRef = useRef(null);
@@ -144,11 +162,58 @@ export default function ChatListPage() {
     onMessagesUpdate: (messages) => {
       console.log('TaraChat onMessagesUpdate called with', messages.length, 'messages');
 
-      // Simply update chat messages with all messages
-      setChatMessages(prev => ({
-        ...prev,
-        "tara-ai": messages
-      }));
+      // Filter messages based on session start time
+      if (sessionStartTime) {
+        // Separate old messages (before session) and new messages (during session)
+        const oldMessages = messages.filter(msg => {
+          const msgTime = msg.timestamp ? new Date(msg.timestamp) : new Date();
+          return msgTime < sessionStartTime;
+        });
+
+        const newMessages = messages.filter(msg => {
+          const msgTime = msg.timestamp ? new Date(msg.timestamp) : new Date();
+          return msgTime >= sessionStartTime;
+        });
+
+        // Store old messages separately (for "See Older Messages")
+        setChatMessages(prev => ({
+          ...prev,
+          "tara-ai": oldMessages
+        }));
+
+        // Add new messages to current session with typing effect for Tara's messages
+        if (newMessages.length > 0) {
+          setCurrentSessionMessages(prev => {
+            // Remove any temporary messages first
+            const nonTempMessages = prev.filter(m => !m.isTemp);
+
+            // Avoid duplicates by checking IDs AND content
+            const existingIds = new Set(nonTempMessages.map(m => m.id));
+            const existingContents = new Set(nonTempMessages.map(m => `${m.sender}-${m.content}`));
+
+            const uniqueNewMessages = newMessages.filter(m => {
+              const contentKey = `${m.sender}-${m.content}`;
+              return !existingIds.has(m.id) && !existingContents.has(contentKey);
+            });
+
+            // For Tara's messages (sender: 'them'), add typing effect
+            uniqueNewMessages.forEach(msg => {
+              if (msg.sender === 'them' || msg.sender === 'ai') {
+                // Trigger typing animation for this message
+                setTypingMessageId(msg.id);
+              }
+            });
+
+            return [...nonTempMessages, ...uniqueNewMessages];
+          });
+        }
+      } else {
+        // No session start time yet, just store all messages
+        setChatMessages(prev => ({
+          ...prev,
+          "tara-ai": messages
+        }));
+      }
 
       // Update last message in chat list
       if (messages.length > 0) {
@@ -178,10 +243,17 @@ export default function ChatListPage() {
   // Wait a bit to let mood greeting load first
   useEffect(() => {
     if (user?.uid && activeId === "tara-ai") {
-      // Delay loading history to let mood greeting show first
+      // Check if coming from mood selection
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromMood = urlParams.get('fromMood');
+
+      // If coming from mood, delay loading history to let mood greeting show first
+      // Otherwise load immediately
+      const delay = fromMood === 'true' ? 1000 : 100;
+
       const timer = setTimeout(() => {
         taraChat.loadChatHistory();
-      }, 500);
+      }, delay);
       return () => clearTimeout(timer);
     }
   }, [user?.uid]);
@@ -225,23 +297,30 @@ export default function ChatListPage() {
 
           console.log('Sending mood greeting:', greetingMessage);
 
-          // Add Tara's greeting message directly to the chat (from Tara to user)
+          // IMPORTANT: Set session start time to NOW
+          const now = new Date();
+          setSessionStartTime(now);
+
+          // Ensure older messages are hidden by default
+          setShowOlderMessages(false);
+
+          // Add Tara's greeting message
           const taraGreeting = {
             id: Date.now().toString(),
             content: greetingMessage,
             sender: 'them', // Message from Tara
-            timestamp: new Date(),
+            timestamp: now,
             type: 'text'
           };
 
           // Mark that mood greeting was sent
           setMoodGreetingSent(true);
 
-          // Update messages immediately
-          setChatMessages(prev => ({
-            ...prev,
-            "tara-ai": [taraGreeting]
-          }));
+          // Add greeting to CURRENT SESSION messages (these will ALWAYS be visible)
+          setCurrentSessionMessages([taraGreeting]);
+
+          // Trigger typing effect for mood greeting
+          setTypingMessageId(taraGreeting.id);
 
           // Update last message in chat list
           setChats(prev => prev.map(chat =>
@@ -378,17 +457,23 @@ export default function ChatListPage() {
   // Get messages for current active chat
   const allMessages = chatMessages[activeId] || [];
 
-  // Filter messages based on session start time (only for TARA AI)
-  let messages = allMessages;
+  // Filter messages based on session (only for TARA AI)
+  let messages = [];
   let olderMessagesCount = 0;
 
-  if (activeId === "tara-ai" && sessionStartTime && !showOlderMessages) {
-    // Show only messages from current session (after login)
-    messages = allMessages.filter(msg => {
-      const msgTime = msg.timestamp ? new Date(msg.timestamp) : new Date();
-      return msgTime >= sessionStartTime;
-    });
-    olderMessagesCount = allMessages.length - messages.length;
+  if (activeId === "tara-ai") {
+    if (showOlderMessages) {
+      // Show ALL messages (old + current session)
+      messages = [...allMessages, ...currentSessionMessages];
+    } else {
+      // Show ONLY current session messages (mood greeting + new messages)
+      messages = currentSessionMessages;
+      // Count older messages
+      olderMessagesCount = allMessages.length;
+    }
+  } else {
+    // For other chats, show all messages
+    messages = allMessages;
   }
   const activeChat = useMemo(() => chats.find((c) => c.id === activeId), [chats, activeId]);
 
@@ -709,18 +794,18 @@ export default function ChatListPage() {
     if (activeId === "tara-ai" && user?.uid) {
       setIsSendingMessage(true);
 
-      // Show user message immediately
+      // Show user message immediately with a temporary ID
+      const tempId = `temp-${Date.now()}`;
       const tempUserMessage = {
-        id: Date.now().toString(),
+        id: tempId,
         content: messageText,
         sender: 'user',
-        timestamp: new Date()
+        timestamp: new Date(),
+        isTemp: true // Mark as temporary
       };
 
-      setChatMessages(prev => ({
-        ...prev,
-        [activeId]: [...(prev[activeId] || []), tempUserMessage]
-      }));
+      // Add to current session messages (always visible)
+      setCurrentSessionMessages(prev => [...prev, tempUserMessage]);
 
       try {
         console.log('Sending message to TARA with user details:', {
@@ -740,15 +825,15 @@ export default function ChatListPage() {
         });
 
         console.log('Message sent successfully, result:', result);
+
+        // Remove temp message after successful send (real message will come from onMessagesUpdate)
+        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
       } catch (error) {
         console.error('Failed to send message to TARA:', error);
         console.error('Error details:', error.message, error.stack);
         alert(`Failed to send message: ${error.message}`);
-        // Remove the temp message on error
-        setChatMessages(prev => ({
-          ...prev,
-          [activeId]: (prev[activeId] || []).filter(m => m.id !== tempUserMessage.id)
-        }));
+        // Remove the temp message on error from current session
+        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
       } finally {
         setIsSendingMessage(false);
       }
@@ -1216,6 +1301,8 @@ export default function ChatListPage() {
                           type={msg.type}
                           content={msg.content}
                           duration={msg.duration}
+                          messageId={msg.id}
+                          isTyping={typingMessageId === msg.id}
                         />
                       ))}
 
@@ -1552,9 +1639,35 @@ function MobileNavLink({ href, icon, label, active, disabled }) {
   );
 }
 
-function ChatBubble({ who, type = 'text', content, duration }) {
+function ChatBubble({ who, type = 'text', content, duration, messageId, isTyping }) {
   const isMe = who === "me" || who === "user";
   const [isPlaying, setIsPlaying] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [typingComplete, setTypingComplete] = useState(false);
+
+  // Typing effect for Tara's messages
+  useEffect(() => {
+    if (type === 'text' && !isMe && isTyping && !typingComplete) {
+      let currentIndex = 0;
+      setDisplayedText('');
+
+      const typingInterval = setInterval(() => {
+        if (currentIndex < content.length) {
+          setDisplayedText(content.substring(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          setTypingComplete(true);
+          clearInterval(typingInterval);
+        }
+      }, 20); // 20ms per character for smooth typing
+
+      return () => clearInterval(typingInterval);
+    } else {
+      // For user messages or when typing is disabled, show full text immediately
+      setDisplayedText(content);
+      setTypingComplete(true);
+    }
+  }, [content, isMe, isTyping, type]);
 
   const toggleAudio = () => {
     const audio = document.getElementById(`audio-${content}`);
@@ -1576,7 +1689,12 @@ function ChatBubble({ who, type = 'text', content, duration }) {
           }`}
       >
         {type === 'text' ? (
-          <span>{content}</span>
+          <span>
+            {displayedText}
+            {!typingComplete && !isMe && (
+              <span className="inline-block w-1 h-4 bg-gray-600 ml-1 animate-pulse"></span>
+            )}
+          </span>
         ) : (
           <div className="flex items-center gap-3 min-w-[200px]">
             <button

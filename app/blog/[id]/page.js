@@ -265,11 +265,24 @@ export default function BlogPostPage() {
         );
     }
 
+    // Get the canonical URL using slug
+    const canonicalUrl = `https://www.tara4u.com/blog/${post.slug || post.id}`;
+
     return (
         <>
             <Head>
                 <title>{post.title} | Tara Blog</title>
                 <meta name="description" content={post.excerpt} />
+                <link rel="canonical" href={canonicalUrl} />
+                <meta property="og:url" content={canonicalUrl} />
+                <meta property="og:title" content={post.title} />
+                <meta property="og:description" content={post.excerpt} />
+                <meta property="og:image" content={post.featuredImage || "https://www.tara4u.com/og-image.jpg"} />
+                <meta property="og:type" content="article" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={post.title} />
+                <meta name="twitter:description" content={post.excerpt} />
+                <meta name="twitter:image" content={post.featuredImage || "https://www.tara4u.com/og-image.jpg"} />
             </Head>
 
             <BlogSchema
@@ -279,7 +292,7 @@ export default function BlogPostPage() {
                 datePublished={post.publishDate}
                 dateModified={post.updatedAt || post.publishDate}
                 image={post.featuredImage || "https://www.tara4u.com/og-image.jpg"}
-                url={`https://www.tara4u.com/blog/${post.id}`}
+                url={canonicalUrl}
                 category={post.category}
                 tags={post.tags || []}
                 schemaType={post.schemaType || "BlogPosting"}
