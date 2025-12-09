@@ -20,7 +20,6 @@ export default function ProfileCompletionCircle({ size = "md", showPercentage = 
             { key: 'profession', value: user.profession },
             { key: 'bio', value: user.bio },
             { key: 'interests', value: user.interests, isArray: true },
-            { key: 'personalityTraits', value: user.personalityTraits, isArray: true },
             { key: 'gender', value: user.gender },
             { key: 'ageRange', value: user.ageRange },
         ];

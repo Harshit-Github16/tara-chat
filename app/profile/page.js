@@ -588,7 +588,6 @@ function ProfileCompletionCard({ userProfile }) {
         { key: 'profession', label: 'Profession', value: userProfile.profession },
         { key: 'bio', label: 'Bio', value: userProfile.bio },
         { key: 'interests', label: 'Interests', value: userProfile.interests, isArray: true },
-        { key: 'personalityTraits', label: 'Personality', value: userProfile.personalityTraits, isArray: true },
         { key: 'gender', label: 'Gender', value: userProfile.gender },
         { key: 'ageRange', label: 'Age Range', value: userProfile.ageRange },
     ];

@@ -1,12 +1,16 @@
 // Metadata generation for blog detail pages
 export async function generateMetadata({ params }) {
+    // Await params in Next.js 15
+    const resolvedParams = await params;
+    const blogId = resolvedParams.id;
+
     // During build time, return basic metadata
     if (process.env.NEXT_PHASE === 'phase-production-build') {
         return {
             title: 'Blog Post | Tara',
             description: 'Read our latest mental health and wellness insights.',
             alternates: {
-                canonical: `https://www.tara4u.com/blog/${params.id}`,
+                canonical: `https://www.tara4u.com/blog/${blogId}`,
             },
         };
     }
@@ -27,13 +31,14 @@ export async function generateMetadata({ params }) {
 
         if (data.success) {
             const post = data.data.find(p =>
-                p.slug === params.id ||
-                p._id === params.id ||
-                p.id === parseInt(params.id)
+                p.slug === blogId ||
+                p._id === blogId ||
+                p.id === parseInt(blogId)
             );
 
             if (post) {
-                const canonicalUrl = `https://www.tara4u.com/blog/${post.slug || post._id}`;
+                // Always use slug for canonical URL (SEO best practice)
+                const canonicalUrl = `https://www.tara4u.com/blog/${post.slug}`;
 
                 return {
                     title: `${post.title} | Tara Blog`,
@@ -87,12 +92,12 @@ export async function generateMetadata({ params }) {
         console.error('Error generating metadata:', error);
     }
 
-    // Fallback metadata
+    // Fallback metadata (if blog not found or error occurred)
     return {
         title: 'Blog Post | Tara',
         description: 'Read our latest mental health and wellness insights.',
         alternates: {
-            canonical: `https://www.tara4u.com/blog/${params.id}`,
+            canonical: `https://www.tara4u.com/blog`,
         },
     };
 }

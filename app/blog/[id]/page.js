@@ -48,10 +48,19 @@ export default function BlogPostPage() {
     const [comments, setComments] = useState([]);
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [relatedBlogs, setRelatedBlogs] = useState([]);
+    const [blogId, setBlogId] = useState(null);
 
     useEffect(() => {
-        fetchBlog();
-    }, [params.id]);
+        if (params?.id) {
+            setBlogId(params.id);
+        }
+    }, [params]);
+
+    useEffect(() => {
+        if (blogId) {
+            fetchBlog();
+        }
+    }, [blogId]);
 
     const fetchBlog = async () => {
         try {
@@ -61,9 +70,9 @@ export default function BlogPostPage() {
             if (data.success) {
                 // Find by slug or _id
                 const foundPost = data.data.find(p =>
-                    p.slug === params.id ||
-                    p._id === params.id ||
-                    p.id === parseInt(params.id)
+                    p.slug === blogId ||
+                    p._id === blogId ||
+                    p.id === parseInt(blogId)
                 );
 
                 if (foundPost) {
