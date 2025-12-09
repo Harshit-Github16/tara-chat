@@ -12,6 +12,9 @@ const poppins = Poppins({
   style: ["normal"],
   subsets: ["latin"],
   variable: "--font-sans",
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata = {
@@ -130,7 +133,11 @@ export default function RootLayout({ children }) {
         <meta name="msapplication-TileColor" content="#f43f5e" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <link rel="manifest" href="/manifest.json" />
-        {/* Google Analytics */}
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+        {/* Google Analytics - Deferred */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-R6HNEYQSP3"></script>
         <script
           dangerouslySetInnerHTML={{
@@ -138,7 +145,12 @@ export default function RootLayout({ children }) {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-R6HNEYQSP3');
+              gtag('config', 'G-R6HNEYQSP3', {
+                'send_page_view': false
+              });
+              window.addEventListener('load', function() {
+                gtag('event', 'page_view');
+              });
             `,
           }}
         />
