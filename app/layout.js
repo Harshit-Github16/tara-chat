@@ -1,10 +1,12 @@
 import { Poppins } from "next/font/google";
+import "./critical.css";
 import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import StructuredData from './components/StructuredData';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import MobileOptimizer from './components/MobileOptimizer';
 import { Analytics } from "@vercel/analytics/react";
 
 const poppins = Poppins({
@@ -135,7 +137,14 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/manifest.json" />
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://vercel.live" />
+
+        {/* Preload critical assets */}
+        <link rel="preload" href="/taralogo.avif" as="image" type="image/avif" />
+        <link rel="preload" href="/taralogo.webp" as="image" type="image/webp" />
 
         {/* Google Analytics - Deferred */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-R6HNEYQSP3"></script>
@@ -170,6 +179,7 @@ export default function RootLayout({ children }) {
         <ErrorBoundary>
           <AuthProvider>
             <ThemeProvider>
+              <MobileOptimizer />
               {children}
               <PWAInstallPrompt />
               <Analytics />

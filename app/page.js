@@ -1,44 +1,25 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComments,
   faBookOpen,
-  faUserAstronaut,
   faHeart,
   faChartLine,
-  faShield,
-  faMobile,
-  faArrowRight,
-  faPlay,
-  faCheck,
-  faStar,
-  faQuoteLeft,
-  faEnvelope,
-  faPhone,
-  faMapMarkerAlt,
-  faCalendarAlt,
-  faUser,
-  faPaperPlane,
-  faNewspaper,
-  faChevronDown,
-  faChevronUp,
   faBullseye,
-  faClock,
   faClipboardList,
-  faBalanceScale,
-  faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
-import FAQSchema, { COMMON_FAQS } from "./components/FAQSchema";
-import LoginModal from "./components/LoginModal";
-import OnboardingModal from "./components/OnboardingModal";
-import ContactForm from "./components/ContactForm";
 import { useAuth } from "./contexts/AuthContext";
-// import Footer from "./components/Footer";
+
+// Lazy load heavy components
+const LoginModal = dynamic(() => import("./components/LoginModal"), { ssr: false });
+const OnboardingModal = dynamic(() => import("./components/OnboardingModal"), { ssr: false });
+const ContactForm = dynamic(() => import("./components/ContactForm"), { ssr: false });
+const FAQSchema = dynamic(() => import("./components/FAQSchema"), { ssr: true });
 
 export default function Home() {
   const router = useRouter();

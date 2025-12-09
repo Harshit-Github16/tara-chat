@@ -8,6 +8,7 @@ function OptimizedImage({
     height,
     priority = false,
     className = '',
+    sizes,
     ...props
 }) {
     return (
@@ -18,10 +19,11 @@ function OptimizedImage({
             height={height}
             priority={priority}
             loading={priority ? 'eager' : 'lazy'}
-            quality={priority ? 90 : 75}
+            quality={priority ? 85 : 75}
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
             className={className}
+            sizes={sizes || `(max-width: 768px) ${width}px, ${width}px`}
             {...props}
         />
     );
