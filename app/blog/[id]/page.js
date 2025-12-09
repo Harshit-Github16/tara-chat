@@ -340,7 +340,7 @@ export default function BlogPostPage() {
                         </div>
 
                         {/* Article Content */}
-                        <div className="p-8">
+                        <div className="p-4">
                             {/* Meta Info */}
                             <div className="flex flex-wrap items-center gap-4 mb-6">
                                 <span className="px-3 py-1 bg-rose-100 text-rose-600 rounded-full text-sm font-medium">
@@ -523,7 +523,7 @@ export default function BlogPostPage() {
                                         </button>
 
                                         {showShareMenu && (
-                                            <div className="absolute top-full left-0 mt-2 bg-white border border-rose-100 rounded-xl shadow-lg p-2 z-50 min-w-[150px]">
+                                            <div className="absolute top-[-80px] left-[110px] mt-2 bg-white border border-rose-100 rounded-xl shadow-lg p-2 z-50 min-w-[150px]">
                                                 <button
                                                     onClick={() => handleShare('copy')}
                                                     className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
@@ -574,12 +574,12 @@ export default function BlogPostPage() {
                                 className="w-full rounded-xl border border-rose-200 px-4 py-3 text-sm outline-none ring-rose-100 focus:ring resize-none"
                                 rows="4"
                             />
-                            <div className="flex justify-between items-center mt-3">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
                                 <p className="text-xs text-gray-500">Be respectful and constructive in your comments</p>
                                 <button
                                     type="submit"
                                     disabled={!newComment.trim()}
-                                    className="px-6 py-2 bg-rose-600 text-white rounded-full font-medium hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-rose-600 text-white rounded-full text-sm sm:text-base font-medium hover:bg-rose-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Post Comment
                                 </button>
