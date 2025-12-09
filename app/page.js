@@ -8,12 +8,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faComments,
   faBookOpen,
+  faUserAstronaut,
   faHeart,
   faChartLine,
+  faShield,
+  faMobile,
+  faArrowRight,
+  faPlay,
+  faCheck,
+  faStar,
+  faQuoteLeft,
+  faEnvelope,
+  faPhone,
+  faMapMarkerAlt,
+  faCalendarAlt,
+  faUser,
+  faPaperPlane,
+  faNewspaper,
+  faChevronDown,
+  faChevronUp,
   faBullseye,
+  faClock,
   faClipboardList,
+  faBalanceScale,
+  faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle, faApple, faTwitter, faLinkedin, faInstagram, faFacebook, faWhatsapp, faXTwitter, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "./contexts/AuthContext";
+
+import { COMMON_FAQS } from "./components/FAQSchema";
 
 // Lazy load heavy components
 const LoginModal = dynamic(() => import("./components/LoginModal"), { ssr: false });
