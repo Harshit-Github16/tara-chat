@@ -1,7 +1,5 @@
-"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BottomNav from "../../components/BottomNav";
 import BlogSchema from "../../components/BlogSchema";
@@ -28,6 +26,90 @@ import {
 
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "next/navigation";
+
+// Metadata generation for blog detail pages
+export async function generateMetadata({ params }) {
+    try {
+        // Fetch blog data
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.tara4u.com'}/api/admin/blogs`, {
+            cache: 'no-store'
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            const post = data.data.find(p =>
+                p.slug === params.id ||
+                p._id === params.id ||
+                p.id === parseInt(params.id)
+            );
+
+            if (post) {
+                const canonicalUrl = `https://www.tara4u.com/blog/${post.slug || post._id}`;
+
+                return {
+                    title: `${post.title} | Tara Blog`,
+                    description: post.excerpt,
+                    keywords: post.tags?.join(', ') || '',
+                    alternates: {
+                        canonical: canonicalUrl,
+                    },
+                    openGraph: {
+                        title: post.title,
+                        description: post.excerpt,
+                        url: canonicalUrl,
+                        siteName: 'Tara - Mental Wellness Companion',
+                        images: [
+                            {
+                                url: post.featuredImage || 'https://www.tara4u.com/og-image.jpg',
+                                width: 1200,
+                                height: 630,
+                                alt: post.title,
+                            },
+                        ],
+                        locale: 'en_US',
+                        type: 'article',
+                        publishedTime: post.publishDate,
+                        modifiedTime: post.updatedAt || post.publishDate,
+                        authors: [post.author],
+                        section: post.category,
+                        tags: post.tags || [],
+                    },
+                    twitter: {
+                        card: 'summary_large_image',
+                        title: post.title,
+                        description: post.excerpt,
+                        images: [post.featuredImage || 'https://www.tara4u.com/og-image.jpg'],
+                    },
+                    robots: {
+                        index: true,
+                        follow: true,
+                        googleBot: {
+                            index: true,
+                            follow: true,
+                            'max-video-preview': -1,
+                            'max-image-preview': 'large',
+                            'max-snippet': -1,
+                        },
+                    },
+                };
+            }
+        }
+    } catch (error) {
+        console.error('Error generating metadata:', error);
+    }
+
+    // Fallback metadata
+    return {
+        title: 'Blog Post | Tara',
+        description: 'Read our latest mental health and wellness insights.',
+        alternates: {
+            canonical: `https://www.tara4u.com/blog/${params.id}`,
+        },
+    };
+}
+
+"use client";
+
 
 
 // Function to generate random masked names
@@ -270,21 +352,6 @@ export default function BlogPostPage() {
 
     return (
         <>
-            <Head>
-                <title>{post.title} | Tara Blog</title>
-                <meta name="description" content={post.excerpt} />
-                <link rel="canonical" href={canonicalUrl} />
-                <meta property="og:url" content={canonicalUrl} />
-                <meta property="og:title" content={post.title} />
-                <meta property="og:description" content={post.excerpt} />
-                <meta property="og:image" content={post.featuredImage || "https://www.tara4u.com/og-image.jpg"} />
-                <meta property="og:type" content="article" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={post.title} />
-                <meta name="twitter:description" content={post.excerpt} />
-                <meta name="twitter:image" content={post.featuredImage || "https://www.tara4u.com/og-image.jpg"} />
-            </Head>
-
             <BlogSchema
                 title={post.title}
                 description={post.excerpt}
