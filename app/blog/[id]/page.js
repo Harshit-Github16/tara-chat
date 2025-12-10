@@ -77,21 +77,27 @@ export default function BlogPostPage() {
 
                 if (foundPost) {
                     // Use slug as primary identifier
-                    const blogId = foundPost.slug || foundPost._id;
-                    setPost({ ...foundPost, id: blogId });
+                    const blogIdToUse = foundPost.slug || foundPost._id;
+                    setPost({ ...foundPost, id: blogIdToUse });
                     setLikeCount(foundPost.likes || 0);
 
                     // Check if user has already liked this blog
+                    let userId;
                     if (user?.uid) {
-                        const userId = user.firebaseUid || user.uid;
+                        userId = user.firebaseUid || user.uid;
+                    } else {
+                        userId = localStorage.getItem('anonymousUserId');
+                    }
+
+                    if (userId) {
                         const likedBy = foundPost.likedBy || [];
                         setIsLiked(likedBy.includes(userId));
                     }
 
                     // Increment view count
-                    incrementView(blogId);
+                    incrementView(blogIdToUse);
                     // Load comments
-                    loadComments(blogId);
+                    loadComments(blogIdToUse);
 
                     // Get related blogs (same category, exclude current)
                     const related = data.data
@@ -155,19 +161,34 @@ export default function BlogPostPage() {
     }, [showShareMenu]);
 
     const handleLike = async () => {
-        if (!post?.id || !user?.uid) return;
+        if (!post?.id) return;
 
         try {
-            const userId = user.firebaseUid || user.uid;
+            // Use user ID if logged in, otherwise use a session-based ID
+            let userId;
+            if (user?.uid) {
+                userId = user.firebaseUid || user.uid;
+            } else {
+                // For anonymous users, use a browser-based ID
+                userId = localStorage.getItem('anonymousUserId');
+                if (!userId) {
+                    userId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                    localStorage.setItem('anonymousUserId', userId);
+                }
+            }
+
             const response = await fetch(`/api/blog/${post.id}/like`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId })
             });
             const data = await response.json();
+
             if (data.success) {
                 setLikeCount(data.likes);
                 setIsLiked(data.isLiked);
+            } else {
+                console.error('Like failed:', data.message);
             }
         } catch (error) {
             console.error('Error liking blog:', error);
