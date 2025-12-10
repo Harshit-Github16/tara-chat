@@ -2449,7 +2449,7 @@ function BenefitItem({ icon, title, description }) {
   );
 }
 
-function BlogCard({ id, title, excerpt, date, readTime, category, featuredImage }) {
+function BlogCard({ id, title, excerpt, date, readTime, category, featuredImage, slug }) {
   return (
     <div className="flex-shrink-0 w-[85vw] sm:w-80 lg:w-96 rounded-2xl border border-rose-100 bg-white shadow-sm hover:shadow-md transition-all group">
       {/* Featured Image */}
@@ -2487,7 +2487,7 @@ function BlogCard({ id, title, excerpt, date, readTime, category, featuredImage 
             <span className="truncate">{date}</span>
           </div>
           <Link
-            href={id ? `/blog/${id}` : '/blog'}
+            href={slug ? `/blog/${slug}` : '/blog'}
             className="inline-flex items-center gap-2 rounded-full bg-rose-200 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-rose-700 hover:bg-rose-300 transition-all whitespace-nowrap"
           >
             View More
@@ -3119,6 +3119,7 @@ function BlogSliderSection() {
                 {blogs.map((blog) => (
                   <BlogCard
                     key={blog._id}
+                    slug={blog.slug}
                     id={blog._id}
                     title={blog.title}
                     excerpt={blog.excerpt || blog.content?.substring(0, 150) + '...'}
@@ -3131,6 +3132,7 @@ function BlogSliderSection() {
                 {/* Duplicate for seamless loop */}
                 {blogs.map((blog) => (
                   <BlogCard
+                    slug={blog.slug}
                     key={`dup-${blog._id}`}
                     id={blog._id}
                     title={blog.title}
