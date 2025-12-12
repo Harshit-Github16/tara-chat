@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../contexts/AuthContext';
 import LoginModal from '../components/LoginModal';
 
-export default function LoginPage() {
+function LoginContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user, loading } = useAuth();
@@ -64,5 +64,24 @@ export default function LoginPage() {
                 showCloseButton={true}
             />
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
+                <div className="text-center">
+                    <img
+                        src="/taralogo.jpg"
+                        alt="Tara Logo"
+                        className="mx-auto h-20 w-20 rounded-full object-cover mb-4 animate-pulse"
+                    />
+                    <h1 className="text-2xl font-bold text-rose-600 mb-2">Loading...</h1>
+                </div>
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
     );
 }
