@@ -39,7 +39,7 @@ const ADMIN_EMAILS = [
 ];
 
 export default function BlogsPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [searchTerm, setSearchTerm] = useState("");
     const [sortBy, setSortBy] = useState("latest");
@@ -112,7 +112,22 @@ export default function BlogsPage() {
     return (
         <div className="flex min-h-screen flex-col bg-gradient-to-br from-rose-50 via-white to-rose-100">
             {/* Header - Show home page navbar if not logged in, simple header if logged in */}
-            {user ? (
+            {authLoading ? (
+                // Loading state - show minimal header
+                <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
+                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+                        <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                            <img
+                                src="/taralogo.jpg"
+                                alt="Tara Logo"
+                                className="h-8 w-8 rounded-full object-cover"
+                            />
+                            <span className="text-lg font-semibold text-rose-600">Tara4u</span>
+                        </Link>
+                        <div className="w-9 h-9 bg-rose-100 rounded-full animate-pulse"></div>
+                    </div>
+                </header>
+            ) : user ? (
                 // Logged in - Simple header with profile
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">

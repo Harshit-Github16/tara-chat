@@ -39,7 +39,7 @@ const generateMaskedName = () => {
 
 export default function BlogPostPage() {
     const params = useParams();
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
@@ -319,17 +319,30 @@ export default function BlogPostPage() {
                 {/* Header */}
                 <header className="sticky top-0 z-10 border-b border-rose-100 bg-white/60 backdrop-blur">
                     <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-                        <div className="flex items-center gap-3">
+                        <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                             <img
                                 src="/taralogo.jpg"
                                 alt="Tara Logo"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
                             <span className="text-lg font-semibold text-rose-600">Tara4u</span>
-                        </div>
-                        <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
-                            <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
                         </Link>
+
+                        {/* Only show profile icon if user is logged in */}
+                        {authLoading ? (
+                            <div className="w-9 h-9 bg-rose-100 rounded-full animate-pulse"></div>
+                        ) : user ? (
+                            <Link href="/profile" className="rounded-full p-2 text-rose-600 hover:bg-rose-100 transition-colors">
+                                <FontAwesomeIcon icon={faUser} className="h-5 w-5" />
+                            </Link>
+                        ) : (
+                            <Link
+                                href="/?openLogin=true"
+                                className="btn-shine rounded-full bg-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 shadow-sm hover:bg-rose-300 transition-all"
+                            >
+                                Login
+                            </Link>
+                        )}
                     </div>
                 </header>
 

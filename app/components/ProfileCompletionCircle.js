@@ -7,6 +7,11 @@ import { useMemo } from "react";
 export default function ProfileCompletionCircle({ size = "md", showPercentage = false }) {
     const { user } = useAuth();
 
+    // Don't render if no user
+    if (!user) {
+        return null;
+    }
+
     // Calculate profile completion percentage
     const completionData = useMemo(() => {
         if (!user) return { percentage: 0, completedFields: 0, totalFields: 0 };
