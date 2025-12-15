@@ -250,7 +250,29 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
     const [submitting, setSubmitting] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [showPreview, setShowPreview] = useState(false);
     const editorRef = useRef(null);
+
+    // Function to insert HTML tags at cursor position
+    const insertTag = (openTag, closeTag, defaultText = '') => {
+        const textarea = editorRef.current;
+        if (!textarea) return;
+
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end) || defaultText;
+        const newText = openTag + selectedText + closeTag;
+
+        const newValue = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+        setFormData(prev => ({ ...prev, content: newValue }));
+
+        // Set cursor position after the inserted text
+        setTimeout(() => {
+            textarea.focus();
+            const newCursorPos = start + newText.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+        }, 0);
+    };
 
     // Load editing blog data
     useEffect(() => {
@@ -599,10 +621,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                     <div className="bg-rose-50 border-b border-rose-200 p-2 flex gap-1 flex-wrap">
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('bold');
-                                            }}
+                                            onClick={() => insertTag('<strong>', '</strong>')}
                                             className="px-3 py-1 text-xs font-bold bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Bold"
                                         >
@@ -610,33 +629,16 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('italic');
-                                            }}
+                                            onClick={() => insertTag('<em>', '</em>')}
                                             className="px-3 py-1 text-xs italic bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Italic"
                                         >
                                             I
                                         </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('underline');
-                                            }}
-                                            className="px-3 py-1 text-xs underline bg-white border border-rose-200 rounded hover:bg-rose-100"
-                                            title="Underline"
-                                        >
-                                            U
-                                        </button>
                                         <div className="w-px bg-rose-200 mx-1"></div>
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('formatBlock', false, 'h2');
-                                            }}
+                                            onClick={() => insertTag('<h2>', '</h2>')}
                                             className="px-3 py-1 text-xs font-semibold bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Heading"
                                         >
@@ -644,10 +646,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('formatBlock', false, 'h3');
-                                            }}
+                                            onClick={() => insertTag('<h3>', '</h3>')}
                                             className="px-3 py-1 text-xs font-semibold bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Subheading"
                                         >
@@ -655,10 +654,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('formatBlock', false, 'p');
-                                            }}
+                                            onClick={() => insertTag('<p>', '</p>')}
                                             className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Paragraph"
                                         >
@@ -667,10 +663,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         <div className="w-px bg-rose-200 mx-1"></div>
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('insertUnorderedList');
-                                            }}
+                                            onClick={() => insertTag('<ul><li>', '</li></ul>')}
                                             className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Bullet List"
                                         >
@@ -678,10 +671,7 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => {
-                                                editorRef.current?.focus();
-                                                document.execCommand('insertOrderedList');
-                                            }}
+                                            onClick={() => insertTag('<ol><li>', '</li></ol>')}
                                             className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
                                             title="Numbered List"
                                         >
@@ -693,8 +683,8 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                             onClick={() => {
                                                 const url = prompt('Enter URL:');
                                                 if (url) {
-                                                    editorRef.current?.focus();
-                                                    document.execCommand('createLink', false, url);
+                                                    const text = prompt('Enter link text:') || url;
+                                                    insertTag(`<a href="${url}">`, `</a>`, text);
                                                 }
                                             }}
                                             className="px-3 py-1 text-xs bg-white border border-rose-200 rounded hover:bg-rose-100"
@@ -704,24 +694,34 @@ function AddBlogModal({ editingBlog, onClose, onSuccess, showSuccess, showError 
                                         </button>
                                     </div>
                                     {/* Rich Text Editor */}
-                                    <div
-                                        key={`editor-${currentStep}`}
+                                    <textarea
                                         ref={editorRef}
-                                        contentEditable
-                                        suppressContentEditableWarning
-                                        onInput={(e) => {
-                                            if (e && e.currentTarget) {
-                                                const content = e.currentTarget.innerHTML || '';
-                                                setFormData(prev => ({ ...prev, content }));
-                                            }
-                                        }}
-                                        dangerouslySetInnerHTML={{ __html: formData.content || '' }}
-                                        className="min-h-[300px] max-h-[400px] overflow-y-auto px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-200"
-                                        style={{ whiteSpace: 'pre-wrap' }}
+                                        value={formData.content || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                                        className="min-h-[300px] w-full px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-rose-200 resize-none border-0"
+                                        placeholder="Write your blog content here... Use HTML tags for formatting like <h2>Heading</h2>, <p>Paragraph</p>, <strong>Bold</strong>, <em>Italic</em>, <ul><li>List item</li></ul>"
                                     />
 
                                 </div>
-                                <p className="text-xs text-gray-500 mt-1">Use the toolbar to format your content. Supports headings, lists, bold, italic, and links.</p>
+                                <div className="flex justify-between items-center mt-1">
+                                    <p className="text-xs text-gray-500">Use the toolbar to format your content. HTML tags will be rendered properly on the blog.</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPreview(!showPreview)}
+                                        className="text-xs text-rose-600 hover:text-rose-700"
+                                    >
+                                        {showPreview ? 'Hide Preview' : 'Show Preview'}
+                                    </button>
+                                </div>
+                                {showPreview && (
+                                    <div className="mt-2 p-3 border border-rose-200 rounded-lg bg-rose-50">
+                                        <p className="text-xs font-medium text-gray-700 mb-2">Preview:</p>
+                                        <div
+                                            className="prose prose-sm max-w-none"
+                                            dangerouslySetInnerHTML={{ __html: formData.content || '<p>No content yet...</p>' }}
+                                        />
+                                    </div>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
