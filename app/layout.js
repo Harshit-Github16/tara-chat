@@ -7,6 +7,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import StructuredData from './components/StructuredData';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import MobileOptimizer from './components/MobileOptimizer';
+import ExitIntent from './components/ExitIntent';
 import { Analytics } from "@vercel/analytics/react";
 
 const poppins = Poppins({
@@ -182,6 +183,7 @@ export default function RootLayout({ children }) {
               <MobileOptimizer />
               {children}
               <PWAInstallPrompt />
+              <ExitIntent />
               <Analytics />
             </ThemeProvider>
           </AuthProvider>
