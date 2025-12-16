@@ -10,6 +10,7 @@ export function InsightsProvider({ children }) {
     const [moodData, setMoodData] = useState(null);
     const [userData, setUserData] = useState(null);
     const [quizResults, setQuizResults] = useState(null);
+    const [insightsStats, setInsightsStats] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [hasFetched, setHasFetched] = useState(false);
@@ -32,10 +33,11 @@ export function InsightsProvider({ children }) {
 
             // Fetch all data in parallel - single time only
             // Use insights endpoint for calculated mood data
-            const [moodInsightsResponse, userDataResponse, quizResponse] = await Promise.all([
+            const [moodInsightsResponse, userDataResponse, quizResponse, insightsStatsResponse] = await Promise.all([
                 api.get('/api/mood-mongo/insights'),
                 api.get('/api/user-data'),
-                api.get('/api/quiz/results')
+                api.get('/api/quiz/results'),
+                api.get('/api/insights/stats')
             ]);
 
             // Process mood insights data (already calculated on backend)
@@ -47,13 +49,19 @@ export function InsightsProvider({ children }) {
             // Process user data
             if (userDataResponse.ok) {
                 const userResult = await userDataResponse.json();
-                setUserData(userResult);
+                setUserData(userResult.data || userResult);
             }
 
             // Process quiz results
             if (quizResponse.ok) {
                 const quizResult = await quizResponse.json();
                 setQuizResults(quizResult);
+            }
+
+            // Process insights stats
+            if (insightsStatsResponse.ok) {
+                const statsResult = await insightsStatsResponse.json();
+                setInsightsStats(statsResult.data || {});
             }
 
         } catch (err) {
@@ -75,6 +83,7 @@ export function InsightsProvider({ children }) {
             moodData,
             userData,
             quizResults,
+            insightsStats,
             loading,
             error,
             refreshData

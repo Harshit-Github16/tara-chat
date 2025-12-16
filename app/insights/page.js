@@ -33,7 +33,7 @@ import {
 function InsightsPageContent() {
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
-    const { moodData, loading } = useInsights();
+    const { moodData, insightsStats, loading } = useInsights();
     const [checkInDates, setCheckInDates] = useState([]);
 
     const [streak, setStreak] = useState(0);
@@ -135,19 +135,15 @@ function InsightsPageContent() {
                             color="bg-orange-50 text-orange-600"
                         />
                         <MoodScoreCard moodData={moodData?.entries || []} weeklyAverage={moodData?.weeklyAverage} loading={loading} />
-                        <StatCard
-                            icon={faClock}
-                            title="Recovery Time"
-                            value="--"
-                            color="bg-blue-50 text-blue-600"
-                            disabled
+                        <RecoveryTimeCard
+                            loading={loading}
+                            recoveryTime={insightsStats?.recoveryTime || 0}
                         />
                         <StatCard
                             icon={faBullseye}
                             title="Goals Met"
-                            value="--"
+                            value={loading ? "..." : insightsStats?.goalsCompleted > 0 ? `${insightsStats.goalsCompleted} this month` : "0 this month"}
                             color="bg-green-50 text-green-600"
-                            disabled
                         />
                     </div>
 
@@ -219,6 +215,38 @@ function StatCard({ icon, title, value, color, disabled }) {
                 <div>
                     <div className="text-xs text-gray-500">{title}</div>
                     <div className="text-lg font-bold text-gray-900">{value}</div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function RecoveryTimeCard({ loading, recoveryTime }) {
+    const getRecoveryMessage = (days) => {
+        if (days === 0) return { text: "No data yet", desc: "Track moods to see recovery patterns", emoji: "📊" };
+        if (days === 1) return { text: "1 day", desc: "Very resilient! Quick recovery", emoji: "⚡" };
+        if (days <= 2) return { text: `${days} days`, desc: "Excellent resilience", emoji: "🌟" };
+        if (days <= 4) return { text: `${days} days`, desc: "Good recovery time", emoji: "💪" };
+        if (days <= 7) return { text: `${days} days`, desc: "Average recovery time", emoji: "🔄" };
+        return { text: `${days} days`, desc: "Consider wellness strategies", emoji: "🌱" };
+    };
+
+    const recovery = getRecoveryMessage(recoveryTime);
+
+    return (
+        <div className="rounded-2xl border border-rose-100 bg-white p-4 shadow-sm">
+            <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 text-xl">
+                    {recovery.emoji}
+                </span>
+                <div>
+                    <div className="text-xs text-gray-500">Recovery Time</div>
+                    <div className="text-lg font-bold text-gray-900">
+                        {loading ? "..." : recovery.text}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-1">
+                        {recovery.desc}
+                    </div>
                 </div>
             </div>
         </div>

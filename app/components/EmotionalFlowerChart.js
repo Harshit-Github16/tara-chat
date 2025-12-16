@@ -182,6 +182,26 @@ export default function EmotionalFlowerChart() {
         );
     }
 
+    // Check if there's any meaningful data
+    const hasData = Object.values(emotionData).some(value => value > 0);
+
+    if (!hasData) {
+        return (
+            <div className="text-center py-8 px-4">
+                <div className="text-4xl mb-3">🌸</div>
+                <div className="text-base font-semibold text-gray-700 mb-2">
+                    Start journaling to see your emotional patterns
+                </div>
+                <div className="text-sm text-gray-500 mb-4">
+                    Your emotional wheel will bloom as you share more about your feelings
+                </div>
+                <div className="text-xs text-gray-400">
+                    Write in your journal or chat with Tara to get insights
+                </div>
+            </div>
+        );
+    }
+
     return <FlowerChart emotionData={emotionData} />;
 }
 
