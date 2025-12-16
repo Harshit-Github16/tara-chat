@@ -43,6 +43,7 @@ export default function BlogPostPage() {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLiked, setIsLiked] = useState(false);
+    const [isLiking, setIsLiking] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [newComment, setNewComment] = useState("");
     const [comments, setComments] = useState([]);
@@ -81,18 +82,8 @@ export default function BlogPostPage() {
                     setPost({ ...foundPost, id: blogIdToUse });
                     setLikeCount(foundPost.likes || 0);
 
-                    // Check if user has already liked this blog
-                    let userId;
-                    if (user?.uid) {
-                        userId = user.firebaseUid || user.uid;
-                    } else {
-                        userId = localStorage.getItem('anonymousUserId');
-                    }
-
-                    if (userId) {
-                        const likedBy = foundPost.likedBy || [];
-                        setIsLiked(likedBy.includes(userId));
-                    }
+                    // No need to check if user has liked - they can like multiple times
+                    setIsLiked(false); // Reset like state
 
                     // Increment view count
                     incrementView(blogIdToUse);
@@ -161,9 +152,11 @@ export default function BlogPostPage() {
     }, [showShareMenu]);
 
     const handleLike = async () => {
-        if (!post?.id) return;
+        if (!post?.id || isLiking) return;
 
         try {
+            setIsLiking(true);
+
             // Use user ID if logged in, otherwise use a session-based ID
             let userId;
             if (user?.uid) {
@@ -186,12 +179,16 @@ export default function BlogPostPage() {
 
             if (data.success) {
                 setLikeCount(data.likes);
-                setIsLiked(data.isLiked);
+                // Show temporary animation
+                setIsLiked(true);
+                setTimeout(() => setIsLiked(false), 300);
             } else {
                 console.error('Like failed:', data.message);
             }
         } catch (error) {
             console.error('Error liking blog:', error);
+        } finally {
+            setIsLiking(false);
         }
     };
 
@@ -535,53 +532,64 @@ export default function BlogPostPage() {
 
                             {/* Action Buttons */}
                             <div className="flex items-center justify-between pt-6 border-t border-rose-100">
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        onClick={handleLike}
-                                        className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${isLiked
-                                            ? 'bg-rose-100 text-rose-600 scale-105'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-rose-50 hover:text-rose-600'
-                                            }`}
-                                    >
-                                        <FontAwesomeIcon icon={faHeart} className="h-4 w-4" />
-                                        <span className="font-medium">{likeCount}</span>
-                                    </button>
-
-                                    <div className="relative share-menu-container">
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-3">
                                         <button
-                                            onClick={() => setShowShareMenu(!showShareMenu)}
-                                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600 transition-colors"
+                                            onClick={handleLike}
+                                            disabled={isLiking}
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all transform hover:scale-105 ${isLiked
+                                                ? 'bg-rose-500 text-white scale-110 animate-pulse'
+                                                : isLiking
+                                                    ? 'bg-rose-200 text-rose-600 scale-105'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-rose-50 hover:text-rose-600'
+                                                } ${isLiking ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                                            title="Click to like! You can like multiple times 💕"
                                         >
-                                            <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
-                                            <span className="font-medium">Share</span>
+                                            <FontAwesomeIcon
+                                                icon={faHeart}
+                                                className={`h-4 w-4 transition-all ${isLiked ? 'animate-bounce' : ''}`}
+                                            />
+                                            <span className="font-medium">{likeCount}</span>
+                                            {isLiking && <span className="text-xs">+1</span>}
                                         </button>
 
-                                        {showShareMenu && (
-                                            <div className="absolute top-[-80px] left-[110px] mt-2 bg-white border border-rose-100 rounded-xl shadow-lg p-2 z-50 min-w-[150px]">
-                                                <button
-                                                    onClick={() => handleShare('copy')}
-                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
-                                                >
-                                                    <FontAwesomeIcon icon={faLink} className="h-4 w-4" />
-                                                    Copy Link
-                                                </button>
-                                                <button
-                                                    onClick={() => handleShare('facebook')}
-                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
-                                                >
-                                                    <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
-                                                    Facebook
-                                                </button>
-                                                <button
-                                                    onClick={() => handleShare('twitter')}
-                                                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
-                                                >
-                                                    <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
-                                                    Twitter
-                                                </button>
-                                            </div>
-                                        )}
+                                        <div className="relative share-menu-container">
+                                            <button
+                                                onClick={() => setShowShareMenu(!showShareMenu)}
+                                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 text-gray-600 hover:bg-green-50 hover:text-green-600 transition-colors"
+                                            >
+                                                <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
+                                                <span className="font-medium">Share</span>
+                                            </button>
+
+                                            {showShareMenu && (
+                                                <div className="absolute top-[-80px] left-[110px] mt-2 bg-white border border-rose-100 rounded-xl shadow-lg p-2 z-50 min-w-[150px]">
+                                                    <button
+                                                        onClick={() => handleShare('copy')}
+                                                        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
+                                                    >
+                                                        <FontAwesomeIcon icon={faLink} className="h-4 w-4" />
+                                                        Copy Link
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleShare('facebook')}
+                                                        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
+                                                    >
+                                                        <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
+                                                        Facebook
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleShare('twitter')}
+                                                        className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-700 hover:bg-rose-50 rounded-lg"
+                                                    >
+                                                        <FontAwesomeIcon icon={faShare} className="h-4 w-4" />
+                                                        Twitter
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
+                                    <p className="text-xs text-gray-500 ml-1">💡 You can like multiple times!</p>
                                 </div>
 
                                 <span className="flex items-center gap-2 text-gray-500">

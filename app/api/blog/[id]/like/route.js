@@ -56,47 +56,23 @@ export async function POST(request, context) {
             );
         }
 
-        // Check if user has already liked this blog
-        const likedBy = existingBlog.likedBy || [];
-        const hasLiked = likedBy.includes(userId);
+        // Allow unlimited likes - just increment the count
+        const result = await db.collection('blogs').updateOne(
+            query,
+            {
+                $inc: { likes: 1 },
+                $push: { likedBy: userId } // Push instead of addToSet to allow duplicates
+            }
+        );
 
-        if (hasLiked) {
-            // User already liked - unlike it
-            const result = await db.collection('blogs').updateOne(
-                query,
-                {
-                    $inc: { likes: -1 },
-                    $pull: { likedBy: userId }
-                }
-            );
+        const blog = await db.collection('blogs').findOne(query);
 
-            const blog = await db.collection('blogs').findOne(query);
-
-            return NextResponse.json({
-                success: true,
-                likes: blog.likes,
-                isLiked: false,
-                message: 'Blog unliked'
-            });
-        } else {
-            // User hasn't liked - add like
-            const result = await db.collection('blogs').updateOne(
-                query,
-                {
-                    $inc: { likes: 1 },
-                    $addToSet: { likedBy: userId }
-                }
-            );
-
-            const blog = await db.collection('blogs').findOne(query);
-
-            return NextResponse.json({
-                success: true,
-                likes: blog.likes,
-                isLiked: true,
-                message: 'Blog liked'
-            });
-        }
+        return NextResponse.json({
+            success: true,
+            likes: blog.likes,
+            isLiked: true,
+            message: 'Blog liked'
+        });
     } catch (error) {
         console.error('Like blog error:', error);
         return NextResponse.json(
