@@ -6,16 +6,29 @@ import { faHeart, faTimes } from '@fortawesome/free-solid-svg-icons';
 export default function ExitIntent() {
     const [showExitIntent, setShowExitIntent] = useState(false);
     const [hasShownBefore, setHasShownBefore] = useState(false);
+    const [isClient, setIsClient] = useState(false);
+
+    // Only run on client side
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     useEffect(() => {
-        // Check if exit intent was already shown in this session
-        const exitIntentShown = sessionStorage.getItem('exitIntentShown');
-        if (exitIntentShown) {
-            setHasShownBefore(true);
-            return;
+        // Only run if we're on the client
+        if (!isClient) return;
+
+        // Check if already shown in this session
+        try {
+            const exitIntentShown = sessionStorage.getItem('exitIntentShown');
+            if (exitIntentShown) {
+                setHasShownBefore(true);
+                return;
+            }
+        } catch (e) {
+            // Ignore sessionStorage errors
         }
 
-        // Don't show on certain pages where it might be intrusive
+        // Don't show on certain pages
         const currentPath = window.location.pathname;
         const excludedPaths = ['/chatlist', '/chat/', '/admin'];
         const shouldExclude = excludedPaths.some(path => currentPath.includes(path));
@@ -27,13 +40,16 @@ export default function ExitIntent() {
         let mouseLeaveTimer;
 
         const handleMouseLeave = (e) => {
-            // Only trigger if mouse is moving towards the top of the screen (exit intent)
+            // Only trigger if mouse is moving towards the top of the screen
             if (e.clientY <= 0 && !hasShownBefore && !showExitIntent) {
                 mouseLeaveTimer = setTimeout(() => {
                     setShowExitIntent(true);
                     setHasShownBefore(true);
-                    // Mark as shown in session storage
-                    sessionStorage.setItem('exitIntentShown', 'true');
+                    try {
+                        sessionStorage.setItem('exitIntentShown', 'true');
+                    } catch (e) {
+                        // Ignore sessionStorage errors
+                    }
                 }, 100);
             }
         };
@@ -56,7 +72,7 @@ export default function ExitIntent() {
                 clearTimeout(mouseLeaveTimer);
             }
         };
-    }, [hasShownBefore, showExitIntent]);
+    }, [isClient, hasShownBefore, showExitIntent]);
 
     const handleClose = () => {
         setShowExitIntent(false);
@@ -64,7 +80,6 @@ export default function ExitIntent() {
 
     const handleStayAndChat = () => {
         setShowExitIntent(false);
-        // Redirect to chat
         window.location.href = '/chatlist';
     };
 
@@ -95,7 +110,8 @@ export default function ExitIntent() {
 
     const randomMessage = messages[Math.floor(Math.random() * messages.length)];
 
-    if (!showExitIntent) return null;
+    // Don't render anything on server or if not showing
+    if (!isClient || !showExitIntent) return null;
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">

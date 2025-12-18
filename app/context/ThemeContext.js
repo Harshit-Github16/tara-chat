@@ -97,20 +97,23 @@ export function ThemeProvider({ children }) {
 
     useEffect(() => {
         setMounted(true);
-        // Load theme from localStorage
-        const savedTheme = localStorage.getItem('tara-theme');
-        if (savedTheme && themes[savedTheme]) {
-            setCurrentTheme(savedTheme);
-            applyTheme(savedTheme);
-        } else {
-            // Apply default rose theme on first load
-            applyTheme('rose');
+        // Only access localStorage in the browser
+        if (typeof window !== 'undefined') {
+            // Load theme from localStorage
+            const savedTheme = localStorage.getItem('tara-theme');
+            if (savedTheme && themes[savedTheme]) {
+                setCurrentTheme(savedTheme);
+                applyTheme(savedTheme);
+            } else {
+                // Apply default rose theme on first load
+                applyTheme('rose');
+            }
         }
     }, []);
 
     const applyTheme = (themeName) => {
         const theme = themes[themeName];
-        if (!theme) return;
+        if (!theme || typeof window === 'undefined') return;
 
         const root = document.documentElement;
         const colors = theme.colors;
@@ -150,7 +153,10 @@ export function ThemeProvider({ children }) {
         if (themes[themeName]) {
             setCurrentTheme(themeName);
             applyTheme(themeName);
-            localStorage.setItem('tara-theme', themeName);
+            // Only access localStorage in the browser
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('tara-theme', themeName);
+            }
         }
     };
 
