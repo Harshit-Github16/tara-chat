@@ -102,9 +102,9 @@ export default async function BlogPostPage({ params }) {
                 p.id === parseInt(params.id)
             );
 
-            if (!post) {
-                notFound(); // This will return a proper 404 status
-            }
+            // if (!post) {
+            //     notFound(); // This will return a proper 404 status
+            // }
         }
     } catch (error) {
         console.error('Error checking blog post:', error);
