@@ -94,7 +94,7 @@ export default function ExitIntent() {
         setShowExitIntent(false);
         // Use Next.js router instead of window.location for better performance
         if (typeof window !== 'undefined') {
-            window.location.href = '/chatlist';
+            window.location.href = '/welcome';
         }
     }, []);
 
