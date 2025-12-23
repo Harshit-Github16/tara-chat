@@ -555,7 +555,7 @@ export default function Home() {
                   <span className="text-gray-900">Feeling</span>
                   <span className="inline-block bg-gradient-to-r from-rose-500 to-rose-600 bg-clip-text text-transparent">
                     {displayedText}
-                    <span className="animate-blink">|</span>
+                    {/* <span className="animate-blink">|</span> */}
                     <span className="text-gray-900">?</span>
                   </span>
                 </h2>

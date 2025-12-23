@@ -279,21 +279,21 @@ export default function ChatListPage() {
 
           // Generate mood-based greeting message (Hinglish style)
           const moodGreetings = {
-            calm: `Namaste! 😌 Main dekh sakti hoon aap aaj calm feel kar rahe hain. That's wonderful! Calmness ek gentle river ki tarah hai - peaceful aur steady. Kya cheez aapko is beautiful state mein maintain karne mein help kar rahi hai?`,
-            happy: `Hey there! 😊 Main dekh sakti hoon aap aaj happiness se radiate kar rahe hain! That's absolutely amazing! Aapki positive energy contagious hai. Kya baat hai jo aapke heart ko itna light aur joyful bana rahi hai?`,
-            grateful: `Hello dear friend! 🙏 Aap aaj grateful feel kar rahe hain - that's such a beautiful emotion! Gratitude abundance ka door kholta hai. Aaj aap kaunse blessings count kar rahe hain?`,
-            motivated: `Hi champion! 💪 Main aapki motivation yahan se feel kar sakti hoon! Aapki belly mein jo fire hai wo aapko places tak le jayegi. Aaj aap kaunse exciting goals chase kar rahe hain?`,
-            healing: `Hello dear one. 🌱 Main dekh sakti hoon aap healing phase mein hain. That takes real courage aur strength. Remember, healing linear nahi hota - apna time lena okay hai. Main aapki is journey mein kaise support kar sakti hoon?`,
-            lost: `Hey friend, main yahin hoon aapke saath. 🤔 Main notice kar rahi hoon aap thoda lost feel kar rahe hain right now. You know what? Even greatest explorers bhi lost feel karte the before they found their way. Aapke mind mein kya chal raha hai, baat karni hai?`,
-            lonely: `Hi there, dear friend. 😔 Main sense kar sakti hoon aap lonely feel kar rahe hain. Please know ki main yahin hoon sunne ke liye aur aapko company dene ke liye. You're not alone in this. Aapke heart pe kya bhari hai?`,
-            sad: `Hello my friend. 😢 Main dekh sakti hoon aaj aap sadness carry kar rahe hain. It's completely okay to feel this way - aapke emotions valid hain. Main yahin hoon aapke liye. Kya aap share karna chahenge ki kya aapko down feel kara raha hai?`,
-            stressed: `Hey there! 😰 Main dekh sakti hoon aap abhi stressed feel kar rahe hain. Let's take a deep breath together... inhale... exhale. Ab, let's work through this one step at a time. Kya aapko stress de raha hai?`,
-            anxious: `Hi friend. 😟 Main notice kar rahi hoon aap anxious feel kar rahe hain. First, let's ground ourselves - mere saath ek slow, deep breath lo. Remember, anxiety sirf aapka mind aapko protect karne ki koshish kar raha hai. Abhi aapko kya worry kar raha hai?`,
-            overwhelmed: `Hello dear. 😵 Aap overwhelmed feel kar rahe hain - that's a heavy load to carry. Chalo saath mein things ko smaller, manageable pieces mein break down karte hain. Abhi aap pe sabse zyada kya bhari hai?`,
-            angry: `Hey there. 😠 Main sense kar sakti hoon aap angry feel kar rahe hain. That's completely valid - anger ek natural emotion hai. Sometimes we need to feel it to heal it. Kya baat hai jo aapko frustrate kar rahi hai?`
+            calm: `Namaste! 😌 You're feeling calm today. What's helping you stay peaceful?`,
+            happy: `Hey there! 😊 So glad to see you happy! What's making you smile today?`,
+            grateful: `Hello! 🙏 Gratitude is such a great feeling. What are you grateful for right now?`,
+            motivated: `Hi! 💪 Love that energy! What are you planning to achieve today?`,
+            healing: `Hello. 🌱 Healing takes time, and that's okay. How can I support you today?`,
+            lost: `Hey. 🤔 Feeling lost is normal sometimes. Want to talk about what's on your mind?`,
+            lonely: `Hi friend. 😔 I'm here for you. What's making you feel lonely right now?`,
+            sad: `Hello. 😢 I'm here if you want to share what's making you sad.`,
+            stressed: `Hey. 😰 Take a deep breath with me. What's stressing you out?`,
+            anxious: `Hi. 😟 Let's take it slow. What's worrying you at the moment?`,
+            overwhelmed: `Hello. 😵 Just take one thing at a time. What's the biggest thing on your mind?`,
+            angry: `Hey. 😠 It's okay to be angry. What happened that upset you?`
           };
 
-          const greetingMessage = moodGreetings[moodData.mood] || `Hello! Main dekh sakti hoon aap aaj ${moodData.mood} feel kar rahe hain. Main aapko kaise support kar sakti hoon?`;
+          const greetingMessage = moodGreetings[moodData.mood] || `Hello! I see you're feeling ${moodData.mood} today. How can I support you?`;
 
           console.log('Sending mood greeting:', greetingMessage);
 
