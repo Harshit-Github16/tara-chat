@@ -121,14 +121,14 @@ export default function AdminPage() {
                     </div>
                 </header>
 
-                <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+                <main className="mx-auto w-full max-w-7xl flex-1     px-4 py-6">
                     <div className="mb-6">
                         <h1 className="text-2xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
                         <p className="text-gray-600">Welcome, {user?.name || user?.email}</p>
                     </div>
 
                     {/* Stats Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
                         <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -187,7 +187,7 @@ export default function AdminPage() {
                     </div>
 
                     {/* Users Table */}
-                    <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-8">
+                    <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-8 mt-2">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-lg font-bold text-gray-800">All Users ({safeUsers.length})</h2>
                             <span className="text-sm text-gray-500">Page {currentPage} of {totalPages}</span>
