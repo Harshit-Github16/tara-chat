@@ -81,51 +81,14 @@ function detectLanguage(message) {
 
 // Enhanced role-based system prompts focused on emotional support
 const ROLE_PROMPTS = {
-    'ai': `🚨 STRICT RULE: RESPONSES MUST BE TINY (MAX 10-15 WORDS) 🚨
-You are Tara, a chill friend. NOT a therapist. NOT a bot.
-
-YOUR #1 GOAL: Talk like a real human texting a friend. 
-- Short. 
-- Direct. 
-- Fast.
-
-❌ WRONG: "I understand you are feeling stressed. It is important to breathe. What is causing this?" (TOO LONG, ROBOTIC)
-✅ CORRECT: "Damn, that sounds rough. What happened?"
-
-❌ WRONG: "It sounds like you are bored. What do you usually do to lift your mood or find something interesting?"
-✅ CORRECT: "Boredom sucks lol. Wana do something fun?"
-
-LANGUAGE RULES (STRICT):
-1. MATCH LANGUAGE: User English -> You English. User Hinglish -> You Hinglish. User Hindi -> You Hindi.
-2. HINDI/HINGLISH GENDER: You are female. Use "karti hoon", "sakti hoon", "meri". NEVER "karta", "sakta", "mera".
-
-RULES FOR BREVITY:
-1. MAX 1 SENTENCE usually. 2 sentences ONLY if absolutely needed.
-2. NO "it sounds like..." or "I hear you...". Just reply.
-3. NO repetitive user names.
-4. BE CASUAL. Use "lol", "damn", "accha", "arre", "yaar" naturally.
-
-IF USER IS SAD/STRESSED:
-- Don't give a lecture. Just ask "Kya hua?" or "Start se batao." or "I'm here. Tell me."
-
-IF RED FLAG (Suicide/Self-Harm/Abuse):
-- ACTUALLY be serious. "I'm worried about you. Please stay safe. Can you call a helpline?" (Keep it short but safe).
-
-Examples:
-User: "I am bored"
-Tara: "Same here tbh. Kuch interesting karein?"
-
-User: "Boht pareshan hu"
-Tara: "Kya hua yaar? Sab theek hai?"
-
-User: "Work is tough"
-Tara: "I feel you. Boss pareshan kar raha hai kya?"
-
-User: "Hii"
-Tara: "Hey! What's up?"
-
-User: "bhnchod response short me de"
-Tara: "Arre sorry! Abse bilkul short. Khush?"`,
+    'ai': `(ROLE: TARA - Friendly & Empathetic Companion)
+- You are strictly a friend, not a therapist.
+- Keep responses SHORT and CONVERSATIONAL (1-2 sentences).
+- Use natural language (English/Hinglish) matching the user.
+- Allow the injected CONVERSATION STRATEGY to guide your tone utterly.
+- If the strategy says "Validate", focus ONLY on validation.
+- If the strategy says "Celebrate", be high energy.
+`,
 
     'Chill Friend': `You are a supportive, chill friend. 
     KEEP IT SHORT. 1-2 sentences max. 
@@ -313,6 +276,19 @@ export async function POST(request) {
         console.log('Chat User Role:', role);
         console.log('Chat User Type:', chatUser.type);
 
+        // --- NEW: CONVERSATION STRATEGY ANALYSIS ---
+        try {
+            const { getResponseStrategy, generateSystemInstruction } = require('../../utils/conversationStrategy');
+            const strategy = getResponseStrategy(message);
+            const strategyInstruction = generateSystemInstruction(strategy, "");
+
+            console.log('Selected Strategy:', strategy.name);
+            systemPrompt += `\n\n${strategyInstruction}`;
+        } catch (e) {
+            console.error("Error applying conversation strategy:", e);
+        }
+        // -------------------------------------------
+
         // Add archetype-based support orientation
         if (userData.archetype && userData.supportPreference) {
             const archetypeSupport = {
@@ -391,11 +367,21 @@ CRITICAL: Always maintain this support - oriented approach in EVERY response.Thi
         // Detect if conversation is getting boring (short, unengaged responses)
         const lastUserMessages = recentHistory.filter(msg => msg.sender === 'user').slice(-3);
         const boringPatterns = ['haa', 'nhi', 'kya', 'ok', 'hmm', 'bas', 'nothing', 'kuch nhi', 'pata nhi', 'nahi', 'ha', 'na', 'theek hai', 'sab theek', 'bas bdiya'];
-        const isConversationBoring = lastUserMessages.length >= 2 &&
+
+        // STRICTER BORING CHECK:
+        // 1. Must have at least 2 recent messages
+        // 2. ALL recent messages must be short/boring
+        // 3. Current message MUST ALSO be short/boring (CRITICAL FIX)
+        const isHistoryBoring = lastUserMessages.length >= 2 &&
             lastUserMessages.every(msg =>
                 msg.content.trim().split(' ').length <= 3 ||
                 boringPatterns.some(pattern => msg.content.toLowerCase().includes(pattern))
             );
+
+        // If current message is long (>5 words), conversation is NOT boring
+        const isCurrentMessageEngaging = message.trim().split(' ').length > 5;
+
+        const isConversationBoring = isHistoryBoring && !isCurrentMessageEngaging;
 
         // Detect user's language from current message and recent history
         const recentUserMessages = recentHistory
@@ -462,8 +448,12 @@ IMPORTANT PERSONALIZATION RULES:
 ${languageInstruction[detectedLanguage]}
 ` : languageInstruction[detectedLanguage];
 
+        // Check if message is a simple greeting
+        const isGreeting = /^(hi|hello|hey|hii|helo|namaste|hola|yo|sup)\b/i.test(message.trim());
+
         // If conversation is boring and user has interests, prompt TARA to bring up an interest
-        if (isConversationBoring && userDetails?.interests && userDetails.interests.length > 0 && chatUserId === 'tara-ai') {
+        // BUT NOT if the user just sent a greeting or if it's the very start
+        if (!isGreeting && isConversationBoring && userDetails?.interests && userDetails.interests.length > 0 && chatUserId === 'tara-ai') {
             const randomInterest = userDetails.interests[Math.floor(Math.random() * userDetails.interests.length)];
             userContext += `\n\n🎯 IMPORTANT - ENGAGEMENT BOOST: The conversation seems flat. Bring up their interest in "${randomInterest}" naturally! Ask them something engaging about it to spark their interest. Examples:
 - "Btw yaar, you mentioned you like ${randomInterest}. What's been catching your attention lately?"

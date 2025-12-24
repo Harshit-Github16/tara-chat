@@ -162,9 +162,9 @@ export default function ChatListPage() {
 
       // Only generate if last message is from AI/them and we haven't already generated for this ID
       if ((lastMsg.sender === 'them' || lastMsg.sender === 'ai') && !msgIdProcessedRef.current.has(lastMsg.id)) {
-        // Debounce to avoid double calls
         if (loadingSuggestions) return;
 
+        console.log('Fetching suggestions for message:', lastMsg.id);
         setLoadingSuggestions(true);
         // Mark as processed immediately
         msgIdProcessedRef.current.add(lastMsg.id);
@@ -1446,17 +1446,25 @@ export default function ChatListPage() {
 
                 {/* Suggested Messages */}
                 {/* Suggested Messages */}
-                {aiSuggestions.length > 0 && (
-                  <div className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide">
-                    {aiSuggestions.map((suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => sendSuggestedMessage(suggestion)}
-                        className="whitespace-nowrap rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-100 transition-colors shadow-sm"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
+                {(aiSuggestions.length > 0 || loadingSuggestions) && (
+                  <div className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide min-h-[36px]">
+                    {loadingSuggestions && aiSuggestions.length === 0 ? (
+                      <div className="flex items-center gap-1 px-2">
+                        <div className="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce"></div>
+                        <div className="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                        <div className="w-1.5 h-1.5 bg-rose-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      </div>
+                    ) : (
+                      aiSuggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          onClick={() => sendSuggestedMessage(suggestion)}
+                          className="whitespace-nowrap rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-100 transition-colors shadow-sm"
+                        >
+                          {suggestion}
+                        </button>
+                      ))
+                    )}
                   </div>
                 )}
 
