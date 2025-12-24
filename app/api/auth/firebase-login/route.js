@@ -47,7 +47,8 @@ export async function POST(request) {
                 email: mongoUser.email,
                 name: mongoUser.name,
                 avatar: mongoUser.avatar,
-                isOnboardingComplete: mongoUser.isOnboardingComplete
+                isOnboardingComplete: mongoUser.isOnboardingComplete,
+                userPassword: mongoUser.userPassword // Needed for secure access check
             },
             isNewUser
         });

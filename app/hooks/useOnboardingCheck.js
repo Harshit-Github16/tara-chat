@@ -18,8 +18,8 @@ export function useOnboardingCheck() {
                 return;
             }
 
-            // Skip check if already on onboarding page
-            if (pathname === '/onboarding') {
+            // Skip check if already on onboarding page or welcome page
+            if (pathname === '/onboarding' || pathname === '/welcome') {
                 setChecking(false);
                 return;
             }

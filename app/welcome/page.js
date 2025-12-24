@@ -12,17 +12,44 @@ import confetti from 'canvas-confetti';
 
 export default function WelcomePage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, updateUser } = useAuth();
+
   const { checking } = useOnboardingCheck();
   const [showMoodCheckIn, setShowMoodCheckIn] = useState(true);
   const [moodSaved, setMoodSaved] = useState(false);
 
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordMode, setPasswordMode] = useState('set'); // 'set' or 'verify'
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [isPasswordVerified, setIsPasswordVerified] = useState(false);
+
   useEffect(() => {
+    console.log('WelcomePage Effect:', { loading, user: !!user, hasPassword: !!user?.userPassword, isPasswordVerified, showPasswordModal });
+
     if (!loading && !user) {
-      // User is not logged in, redirect to login
       router.replace('/login');
+    } else if (!loading && user) {
+      // Check password status
+      if (user.userPassword) {
+        console.log('User has password, checking verification status...');
+        // User has password => Verify mode
+        if (!isPasswordVerified) {
+          console.log('Password not verified, showing Verify modal');
+          setPasswordMode('verify');
+          setShowPasswordModal(true);
+        }
+      } else {
+        // User has NO password => Set mode
+        // Only show if not already verified (which handles the interim state after setting password)
+        if (!isPasswordVerified) {
+          console.log('User has NO password, showing Set modal');
+          setPasswordMode('set');
+          setShowPasswordModal(true);
+        }
+      }
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, isPasswordVerified, showPasswordModal]);
 
   // Confetti effect on page load
   useEffect(() => {
@@ -69,6 +96,65 @@ export default function WelcomePage() {
       }));
       router.push(`/chatlist?fromMood=true&moodData=${moodData}`);
     }, 1000);
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+
+    if (!passwordInput.trim()) {
+      setPasswordError('Password cannot be empty');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('authToken');
+      if (passwordMode === 'set') {
+        // Set Password API
+        const res = await fetch('/api/auth/set-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ userId: user.firebaseUid, userPassword: passwordInput })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          // Update local state first to prevent useEffect race condition
+          setIsPasswordVerified(true);
+          setShowPasswordModal(false);
+
+          // Update local user context to reflect password is set
+          await updateUser({ ...user, userPassword: passwordInput });
+        } else {
+          setPasswordError(data.error || 'Failed to set password');
+        }
+
+      } else {
+        // Verify Password API
+        const res = await fetch('/api/auth/verify-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ userId: user.firebaseUid, password: passwordInput })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          setShowPasswordModal(false);
+          setIsPasswordVerified(true);
+        } else {
+          setPasswordError('Incorrect password');
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setPasswordError('Something went wrong. Please try again.');
+    }
   };
 
   if (loading || checking) {
@@ -199,6 +285,56 @@ export default function WelcomePage() {
           animation: fade-in 0.3s ease-out;
         }
       `}</style>
+
+      {/* Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-fade-in">
+            <div className="text-center mb-6">
+              <div className="h-16 w-16 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                {passwordMode === 'set' ? '🔐' : '🛡️'}
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {passwordMode === 'set' ? 'Set Login Password' : 'Enter Password'}
+              </h2>
+              <p className="text-gray-500 mt-2 text-sm">
+                {passwordMode === 'set'
+                  ? 'Create a password to secure your personal space.'
+                  : 'Please verify your identity to continue.'}
+              </p>
+            </div>
+
+            <form onSubmit={handlePasswordSubmit}>
+              <div className="mb-4">
+                <input
+                  type="password"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  placeholder={passwordMode === 'set' ? "Create a secure password" : "Enter your password"}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all text-center text-lg"
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-red-500 text-xs mt-2 text-center font-medium">{passwordError}</p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold py-3.5 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all active:scale-95"
+              >
+                {passwordMode === 'set' ? 'Set Password & Continue' : 'Unlock Access'}
+              </button>
+
+              {passwordMode === 'verify' && (
+                <p className="text-center mt-4 text-xs text-gray-400">
+                  Forgot password? Reset in Profile later.
+                </p>
+              )}
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

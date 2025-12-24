@@ -52,7 +52,9 @@ export async function GET(request) {
                 personalityTraits: user.personalityTraits,
                 // Timestamps
                 createdAt: user.createdAt,
-                lastLoginAt: user.lastLoginAt
+                lastLoginAt: user.lastLoginAt,
+                // Include userPassword for secure access check
+                userPassword: user.userPassword
             }
         });
 
