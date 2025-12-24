@@ -82,7 +82,7 @@ export default function ManageBlogsPage() {
     if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
         return null;
     }
-
+    console.log("blogsblogsblogsblogs", blogs)
     return (
         <ProtectedRoute>
             <ToastContainer toasts={toasts} removeToast={removeToast} />
@@ -167,7 +167,7 @@ export default function ManageBlogsPage() {
                                                 <td className="px-4 py-4">
                                                     <div className="flex items-center justify-center gap-2">
                                                         <Link
-                                                            href={`/blog/${blog._id}`}
+                                                            href={`/blog/${blog.slug}`}
                                                             className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
                                                         >
                                                             <FontAwesomeIcon icon={faEye} />
