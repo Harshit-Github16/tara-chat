@@ -482,8 +482,16 @@ export default function BlogPageClient() {
                                                     <p className="text-gray-600 mb-4 line-clamp-2">{post.excerpt}</p>
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-2">
-                                                            <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center">
-                                                                <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-500" />
+                                                            <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center overflow-hidden">
+                                                                {post.author && post.author.toLowerCase().includes('ruchika') ? (
+                                                                    <img
+                                                                        src="https://ik.imagekit.io/exerovn5q/author1.jpeg"
+                                                                        alt={post.author}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-500" />
+                                                                )}
                                                             </div>
                                                             <div>
                                                                 <p className="text-sm font-medium text-gray-800">{post.author}</p>
@@ -573,8 +581,16 @@ export default function BlogPageClient() {
                                                             <p className="text-gray-600 mb-4 line-clamp-2">{post.excerpt}</p>
                                                             <div className="flex items-center justify-between">
                                                                 <div className="flex items-center gap-2">
-                                                                    <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center">
-                                                                        <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-500" />
+                                                                    <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center overflow-hidden">
+                                                                        {post.author && post.author.toLowerCase().includes('ruchika') ? (
+                                                                            <img
+                                                                                src="https://ik.imagekit.io/exerovn5q/author1.jpeg"
+                                                                                alt={post.author}
+                                                                                className="w-full h-full object-cover"
+                                                                            />
+                                                                        ) : (
+                                                                            <FontAwesomeIcon icon={faUser} className="h-4 w-4 text-rose-500" />
+                                                                        )}
                                                                     </div>
                                                                     <div>
                                                                         <p className="text-sm font-medium text-gray-800">{post.author}</p>
