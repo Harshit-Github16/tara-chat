@@ -140,6 +140,70 @@ export default function ChatListPage() {
     }
   }, [typingMessageId, currentSessionMessages]);
 
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+
+  // Fetch AI suggestions when the last message is from the AI
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      // Determine current messages based on activeId
+      let currentMsgs = [];
+      if (activeId === "tara-ai") {
+        currentMsgs = showOlderMessages
+          ? [...(chatMessages["tara-ai"] || []), ...currentSessionMessages]
+          : currentSessionMessages;
+      } else {
+        currentMsgs = chatMessages[activeId] || [];
+      }
+
+      if (currentMsgs.length === 0) return;
+
+      const lastMsg = currentMsgs[currentMsgs.length - 1];
+
+      // Only generate if last message is from AI/them and we haven't already generated for this ID
+      if ((lastMsg.sender === 'them' || lastMsg.sender === 'ai') && !msgIdProcessedRef.current.has(lastMsg.id)) {
+        // Debounce to avoid double calls
+        if (loadingSuggestions) return;
+
+        setLoadingSuggestions(true);
+        // Mark as processed immediately
+        msgIdProcessedRef.current.add(lastMsg.id);
+
+        try {
+          const response = await fetch('/api/chat/suggestions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messages: currentMsgs.slice(-5), // Send last 5 messages context
+              userDetails: {
+                name: user?.name,
+                interests: user?.interests
+              }
+            })
+          });
+
+          const data = await response.json();
+          if (data.suggestions) {
+            setAiSuggestions(data.suggestions);
+          }
+        } catch (error) {
+          console.error("Failed to fetch suggestions:", error);
+        } finally {
+          setLoadingSuggestions(false);
+        }
+      } else if (lastMsg.sender === 'user') {
+        // Clear suggestions if user replied
+        setAiSuggestions([]);
+      }
+    };
+
+    // Add a small delay to ensure message processing is complete
+    const timeout = setTimeout(fetchSuggestions, 500);
+    return () => clearTimeout(timeout);
+  }, [chatMessages, currentSessionMessages, activeId, showOlderMessages]);
+
+  const msgIdProcessedRef = useRef(new Set());
+
   // Ref for messages container to enable auto-scroll
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
@@ -1381,9 +1445,18 @@ export default function ChatListPage() {
                 )}
 
                 {/* Suggested Messages */}
-                {messages.length <= 3 && (
-                  <div className="hidden">
-                    {/* Commented out for now */}
+                {/* Suggested Messages */}
+                {aiSuggestions.length > 0 && (
+                  <div className="px-4 pb-2 flex gap-2 overflow-x-auto scrollbar-hide">
+                    {aiSuggestions.map((suggestion, index) => (
+                      <button
+                        key={index}
+                        onClick={() => sendSuggestedMessage(suggestion)}
+                        className="whitespace-nowrap rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-100 transition-colors shadow-sm"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
                   </div>
                 )}
 
