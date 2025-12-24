@@ -398,9 +398,13 @@ export default function BlogPostClient() {
                             <div className="flex items-center gap-4 mb-8 pb-6 border-b border-rose-100">
                                 <Link
                                     href={`/author/${post.author.toLowerCase().replace(/\s+/g, '-')}`}
-                                    className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center hover:bg-rose-200 transition-colors"
+                                    className="w-16 h-16 bg-rose-100 rounded-full flex items-center justify-center hover:bg-rose-200 transition-colors overflow-hidden"
                                 >
-                                    <FontAwesomeIcon icon={faUser} className="h-8 w-8 text-rose-500" />
+                                    <img
+                                        src="https://ik.imagekit.io/exerovn5q/author1.jpeg"
+                                        alt={post.author}
+                                        className="w-full h-full object-cover"
+                                    />
                                 </Link>
                                 <div className="flex-1">
                                     <Link

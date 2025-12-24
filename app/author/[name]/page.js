@@ -117,8 +117,12 @@ export default function AuthorPage({ params }) {
                     <div className="flex flex-col md:flex-row gap-6 items-start">
                         {/* Author Avatar */}
                         <div className="flex-shrink-0">
-                            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center">
-                                <FontAwesomeIcon icon={faUser} className="h-16 w-16 text-rose-500" />
+                            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center overflow-hidden">
+                                <img
+                                    src="https://ik.imagekit.io/exerovn5q/author1.jpeg"
+                                    alt={author.name}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                         </div>
 
