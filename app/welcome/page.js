@@ -103,7 +103,7 @@ export default function WelcomePage() {
     setPasswordError('');
 
     if (!passwordInput.trim()) {
-      setPasswordError('Password cannot be empty');
+      setPasswordError('Safe word cannot be empty');
       return;
     }
 
@@ -129,7 +129,7 @@ export default function WelcomePage() {
           // Update local user context to reflect password is set
           await updateUser({ ...user, userPassword: passwordInput });
         } else {
-          setPasswordError(data.error || 'Failed to set password');
+          setPasswordError(data.error || 'Failed to set safe word');
         }
 
       } else {
@@ -148,7 +148,7 @@ export default function WelcomePage() {
           setShowPasswordModal(false);
           setIsPasswordVerified(true);
         } else {
-          setPasswordError('Incorrect password');
+          setPasswordError('Incorrect safe word');
         }
       }
     } catch (err) {
@@ -295,11 +295,11 @@ export default function WelcomePage() {
                 {passwordMode === 'set' ? '🔐' : '🛡️'}
               </div>
               <h2 className="text-2xl font-bold text-gray-900">
-                {passwordMode === 'set' ? 'Set Login Password' : 'Enter Password'}
+                {passwordMode === 'set' ? 'Set Your Safe Word' : 'Enter Your Safe Word'}
               </h2>
               <p className="text-gray-500 mt-2 text-sm">
                 {passwordMode === 'set'
-                  ? 'Create a password to secure your personal space.'
+                  ? 'Create a safe word to secure your personal space.'
                   : 'Please verify your identity to continue.'}
               </p>
             </div>
@@ -310,7 +310,7 @@ export default function WelcomePage() {
                   type="password"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  placeholder={passwordMode === 'set' ? "Create a secure password" : "Enter your password"}
+                  placeholder={passwordMode === 'set' ? "Create a safe word" : "Enter your safe word"}
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all text-center text-lg"
                   autoFocus
                 />
@@ -323,12 +323,12 @@ export default function WelcomePage() {
                 type="submit"
                 className="w-full bg-gradient-to-r from-rose-500 to-rose-600 text-white font-bold py-3.5 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all active:scale-95"
               >
-                {passwordMode === 'set' ? 'Set Password & Continue' : 'Unlock Access'}
+                {passwordMode === 'set' ? 'Set Safe Word & Continue' : 'Unlock Access'}
               </button>
 
               {passwordMode === 'verify' && (
                 <p className="text-center mt-4 text-xs text-gray-400">
-                  Forgot password? Reset in Profile later.
+                  Forgot safe word? Reset in Profile later.
                 </p>
               )}
             </form>
