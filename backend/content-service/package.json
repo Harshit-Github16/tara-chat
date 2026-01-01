@@ -1,0 +1,13 @@
+{
+    "name": "content-service",
+    "version": "1.0.0",
+    "description": "Content Microservice for TARA (Blog, Contact)",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    },
+    "dependencies": {
+        "imagekit": "^6.0.0"
+    }
+}

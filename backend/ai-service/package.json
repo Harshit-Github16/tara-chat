@@ -1,0 +1,10 @@
+{
+    "name": "ai-service",
+    "version": "1.0.0",
+    "description": "AI Service for Tara",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    }
+}

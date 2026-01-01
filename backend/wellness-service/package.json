@@ -1,0 +1,10 @@
+{
+    "name": "wellness-service",
+    "version": "1.0.0",
+    "description": "Wellness Microservice for TARA (Journal, Mood, Goals)",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    }
+}

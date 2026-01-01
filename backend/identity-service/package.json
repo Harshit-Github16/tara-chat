@@ -1,0 +1,10 @@
+{
+    "name": "identity-service",
+    "version": "1.0.0",
+    "description": "Identity Microservice for TARA (Auth, User Profile)",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    }
+}
