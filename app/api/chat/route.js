@@ -14,14 +14,14 @@ const GROQ_API_KEYS = [
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-// Function to get a random API key from the pool
-function getRandomGroqApiKey() {
-    if (GROQ_API_KEYS.length === 0) {
-        throw new Error('No Groq API keys configured');
+// Function to shuffle an array (Fisher-Yates)
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    const randomIndex = Math.floor(Math.random() * GROQ_API_KEYS.length);
-    console.log(`Using Groq API key #${randomIndex + 1} of ${GROQ_API_KEYS.length}`);
-    return GROQ_API_KEYS[randomIndex];
+    return shuffled;
 }
 
 // Function to detect language from message
@@ -509,29 +509,60 @@ ${responseLabel}:`;
         console.log('Calling Groq API with model:', groqPayload.model);
         console.log('Groq API payload:', JSON.stringify(groqPayload, null, 2));
 
-        console.log('Sending request to Groq API...');
+        console.log('Sending request to Groq API with retry mechanism...');
 
-        // Get a random API key for load balancing
-        const selectedApiKey = getRandomGroqApiKey();
+        // Shuffle API keys to distribute load, then try them one by one
+        const shuffledKeys = shuffleArray(GROQ_API_KEYS);
+        let groqResponse = null;
+        let selectedApiKey = null;
+        let lastError = null;
 
-        const groqResponse = await fetch(GROQ_API_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${selectedApiKey}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(groqPayload),
-        });
+        for (let i = 0; i < shuffledKeys.length; i++) {
+            selectedApiKey = shuffledKeys[i];
+            const originalIndex = GROQ_API_KEYS.indexOf(selectedApiKey);
+            console.log(`Attempt ${i + 1}/${shuffledKeys.length}: Using Groq API key original index #${originalIndex + 1}`);
 
-        console.log('Groq API response status:', groqResponse.status);
+            try {
+                groqResponse = await fetch(GROQ_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${selectedApiKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(groqPayload),
+                });
 
-        if (!groqResponse.ok) {
-            const errorText = await groqResponse.text();
-            console.error('Groq API error response:', errorText);
-            console.error('Groq API status:', groqResponse.status);
+                console.log(`Groq API response status (Key #${originalIndex + 1}):`, groqResponse.status);
+
+                if (groqResponse.ok) {
+                    console.log(`Success with Key #${originalIndex + 1}`);
+                    break;
+                } else {
+                    const errorText = await groqResponse.text();
+                    lastError = { status: groqResponse.status, text: errorText };
+                    console.error(`Key #${originalIndex + 1} failed:`, errorText);
+
+                    // If it's a 401 (Unauthorized) or 429 (Too Many Requests), definitely try next key
+                    // If it's 5xx, also worth trying next key
+                    if (groqResponse.status === 401 || groqResponse.status === 429 || groqResponse.status >= 500) {
+                        continue;
+                    } else {
+                        // For other client errors (400, 404, etc.), it might be a payload issue, but we still try next key just in case
+                        continue;
+                    }
+                }
+            } catch (error) {
+                console.error(`Fetch error with Key #${originalIndex + 1}:`, error.message);
+                lastError = { status: 'FETCH_ERROR', text: error.message };
+                continue;
+            }
+        }
+
+        if (!groqResponse || !groqResponse.ok) {
+            console.error('All GROQ API keys failed. Last error:', lastError);
 
             // Return a fallback response instead of throwing error
-            console.log('Using fallback response due to Groq API error');
+            console.log('Using fallback response due to all Groq API keys failure');
             const aiReply = "I'm here to listen. Tell me more about what's on your mind. 💛";
 
             const userMessage = {

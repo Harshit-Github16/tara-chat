@@ -251,14 +251,11 @@ export default function ChatListPage() {
             // Remove any temporary messages first
             const nonTempMessages = prev.filter(m => !m.isTemp);
 
-            // Avoid duplicates by checking IDs AND content
+            // Avoid duplicates by checking IDs ONLY
+            // Content-based deduplication was hiding valid identical responses (e.g., for '?' or '<<')
             const existingIds = new Set(nonTempMessages.map(m => m.id));
-            const existingContents = new Set(nonTempMessages.map(m => `${m.sender}-${m.content}`));
 
-            const uniqueNewMessages = newMessages.filter(m => {
-              const contentKey = `${m.sender}-${m.content}`;
-              return !existingIds.has(m.id) && !existingContents.has(contentKey);
-            });
+            const uniqueNewMessages = newMessages.filter(m => !existingIds.has(m.id));
 
             // For Tara's messages (sender: 'them'), add typing effect
             uniqueNewMessages.forEach(msg => {
