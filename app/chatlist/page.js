@@ -664,9 +664,11 @@ export default function ChatListPage() {
       } else {
         const response = await fetch('/api/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          },
           body: JSON.stringify({
-            userId: user.firebaseUid || user.uid,
             chatUserId: activeId,
             message: transcribedText,
             userDetails: {
@@ -926,9 +928,11 @@ export default function ChatListPage() {
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          },
           body: JSON.stringify({
-            userId: user.firebaseUid || user.uid,
             chatUserId: activeId,
             message: messageText,
             userDetails: {
@@ -1001,9 +1005,11 @@ export default function ChatListPage() {
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          },
           body: JSON.stringify({
-            userId: user.firebaseUid || user.uid,
             chatUserId: activeId,
             message: suggestedText,
             userDetails: {

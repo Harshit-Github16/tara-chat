@@ -2,14 +2,32 @@ import { NextResponse } from 'next/server';
 import clientPromise from '../../../../lib/mongodb';
 import { verifyToken } from '../../../../lib/jwt';
 
+export async function OPTIONS(request) {
+    return new Response(null, {
+        status: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+    });
+}
+
 export async function GET(request) {
     try {
+        // Add CORS headers
+        const headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        };
+
         // Verify JWT token and admin access
         const decoded = await verifyToken(request);
         if (!decoded) {
             return NextResponse.json({
                 error: 'Authentication required'
-            }, { status: 401 });
+            }, { status: 401, headers });
         }
 
         // Check if user is admin
@@ -25,7 +43,7 @@ export async function GET(request) {
         if (!adminUser) {
             return NextResponse.json({
                 error: 'Admin access required'
-            }, { status: 403 });
+            }, { status: 403, headers });
         }
 
         const url = new URL(request.url);
@@ -198,12 +216,12 @@ export async function GET(request) {
                 pageStats: sortedPageStats,
                 actionStats
             }
-        });
+        }, { headers });
 
     } catch (error) {
         console.error('Admin analytics error:', error);
         return NextResponse.json({
             error: 'Failed to fetch analytics data'
-        }, { status: 500 });
+        }, { status: 500, headers });
     }
 }

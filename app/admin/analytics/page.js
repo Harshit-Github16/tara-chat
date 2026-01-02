@@ -138,6 +138,33 @@ export default function AdminAnalytics() {
                         >
                             Create Test Data
                         </button>
+
+                        {/* Admin Access Check Button */}
+                        <button
+                            onClick={async () => {
+                                try {
+                                    const response = await fetch('/api/admin/check-access', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                                        }
+                                    });
+                                    const data = await response.json();
+                                    if (response.ok) {
+                                        alert(`Admin access: ${data.message}`);
+                                        window.location.reload();
+                                    } else {
+                                        alert(`Error: ${data.error}`);
+                                    }
+                                } catch (error) {
+                                    console.error('Admin check error:', error);
+                                    alert('Error checking admin access');
+                                }
+                            }}
+                            className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-medium"
+                        >
+                            Fix Admin Access
+                        </button>
                     </div>
                 </div>
 

@@ -261,9 +261,11 @@ export default function GoalsPage() {
         try {
             const response = await fetch('/api/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                },
                 body: JSON.stringify({
-                    userId: user.firebaseUid || user.uid,
                     chatUserId: 'tara-ai',
                     message: `I have a goal: "${goal.title}"
 
