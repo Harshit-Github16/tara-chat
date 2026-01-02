@@ -178,30 +178,15 @@ const ROLE_PROMPTS = {
 export async function POST(request) {
     try {
         console.log('=== CHAT API CALLED ===');
-
-        // Import JWT verification
-        const { verifyToken } = await import('../../../lib/jwt');
-
-        // Verify JWT token
-        const decoded = await verifyToken(request);
-        if (!decoded) {
-            return NextResponse.json({
-                error: 'Authentication required'
-            }, { status: 401 });
-        }
-
         const body = await request.json();
         console.log('Request body:', JSON.stringify(body, null, 2));
 
-        const { chatUserId, message, userDetails, isGoalSuggestion, skipChatHistory } = body;
-
-        // Use userId from JWT token instead of request body
-        const userId = decoded.userId;
+        const { userId, chatUserId, message, userDetails, isGoalSuggestion, skipChatHistory } = body;
 
         if (!userId || !chatUserId || !message) {
             console.error('Missing required fields:', { userId, chatUserId, message });
             return NextResponse.json({
-                error: 'Chat User ID and message are required'
+                error: 'User ID, Chat User ID, and message are required'
             }, { status: 400 });
         }
 
@@ -221,12 +206,24 @@ export async function POST(request) {
         // Get user document and find the specific chat user
         let userData = await collection.findOne({ firebaseUid: userId });
 
-        // User should exist since they're authenticated - if not, it's an error
+        // Auto-create user if not found (for WhatsApp users)
         if (!userData) {
-            console.error('Authenticated user not found in database:', userId);
-            return NextResponse.json({
-                error: 'User not found. Please complete registration.'
-            }, { status: 404 });
+            console.log('Auto-creating user for WhatsApp:', userId);
+
+            const newUser = {
+                firebaseUid: userId,
+                name: userDetails?.name || 'WhatsApp User',
+                email: `${userId} @whatsapp.temp`,
+                createdAt: new Date(),
+                lastUpdated: new Date(),
+                chatUsers: [],
+                moods: [],
+                journals: [],
+                source: 'whatsapp' // Mark as WhatsApp user
+            };
+
+            await collection.insertOne(newUser);
+            userData = newUser;
         }
 
         let chatUser = userData.chatUsers?.find(u => u.id === chatUserId);

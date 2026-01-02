@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 const ADMIN_EMAILS = [
     "harshit0150@gmail.com",
     "hello.tara4u@gmail.com",
-    "ruchika.dave91@gmail.com",
-    "disha.nowawave@gmail.com"
+    "ruchika.dave91@gmail.com"
 ];
 
 export default function AdminCheckPage() {

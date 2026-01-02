@@ -15,8 +15,7 @@ import BottomNav from "../components/BottomNav";
 const ADMIN_EMAILS = [
     "harshit0150@gmail.com",
     "hello.tara4u@gmail.com",
-    "ruchika.dave91@gmail.com",
-    "disha.nowawave@gmail.com"
+    "ruchika.dave91@gmail.com"
 ];
 
 export default function AdminPage() {
@@ -29,26 +28,7 @@ export default function AdminPage() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortBy, setSortBy] = useState('joinDate'); // 'timeSpent', 'sessions', 'joinDate', 'name'
-    const [sortOrder, setSortOrder] = useState('desc'); // 'asc', 'desc'
     const usersPerPage = 10;
-
-    // Helper function to format time
-    const formatTime = (milliseconds) => {
-        if (!milliseconds || milliseconds === 0) return '0m';
-
-        const seconds = Math.floor(milliseconds / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-
-        if (hours > 0) {
-            return `${hours}h ${minutes % 60}m`;
-        } else if (minutes > 0) {
-            return `${minutes}m`;
-        } else {
-            return `${seconds}s`;
-        }
-    };
 
     const fetchStats = async () => {
         try {
@@ -70,45 +50,7 @@ export default function AdminPage() {
             const data = await response.json();
             console.log('Fetched Users:', data); // Debugging
             if (data.success && Array.isArray(data.data)) {
-                // Fetch analytics data for each user
-                const usersWithAnalytics = await Promise.all(
-                    data.data.map(async (user) => {
-                        try {
-                            const analyticsResponse = await fetch(`/api/admin/user-analytics/${user.firebaseUid}`, {
-                                headers: {
-                                    'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-                                }
-                            });
-                            console.log(`Analytics response for ${user.name}:`, analyticsResponse.status);
-                            if (analyticsResponse.ok) {
-                                const analyticsData = await analyticsResponse.json();
-                                console.log(`Analytics data for ${user.name}:`, analyticsData);
-                                return {
-                                    ...user,
-                                    analytics: analyticsData.success ? analyticsData.data : {
-                                        totalTimeSpent: 0,
-                                        sessionCount: 0,
-                                        lastActive: null
-                                    }
-                                };
-                            } else {
-                                const errorText = await analyticsResponse.text();
-                                console.error(`Failed to fetch analytics for ${user.name}:`, errorText);
-                            }
-                        } catch (error) {
-                            console.error('Error fetching analytics for user:', user.firebaseUid, error);
-                        }
-                        return {
-                            ...user,
-                            analytics: {
-                                totalTimeSpent: 0,
-                                sessionCount: 0,
-                                lastActive: null
-                            }
-                        };
-                    })
-                );
-                setUsers(usersWithAnalytics);
+                setUsers(data.data);
             } else {
                 console.error('Users data is not an array:', data);
                 setUsers([]);
@@ -137,53 +79,10 @@ export default function AdminPage() {
 
     // Pagination Logic
     const safeUsers = Array.isArray(users) ? users : [];
-
-    // Sort users based on selected criteria
-    const sortedUsers = [...safeUsers].sort((a, b) => {
-        let aValue, bValue;
-
-        switch (sortBy) {
-            case 'timeSpent':
-                aValue = a.analytics?.totalTimeSpent || 0;
-                bValue = b.analytics?.totalTimeSpent || 0;
-                break;
-            case 'sessions':
-                aValue = a.analytics?.sessionCount || 0;
-                bValue = b.analytics?.sessionCount || 0;
-                break;
-            case 'joinDate':
-                aValue = new Date(a.createdAt || 0);
-                bValue = new Date(b.createdAt || 0);
-                break;
-            case 'name':
-                aValue = (a.name || '').toLowerCase();
-                bValue = (b.name || '').toLowerCase();
-                break;
-            default:
-                return 0;
-        }
-
-        if (sortOrder === 'asc') {
-            return aValue > bValue ? 1 : -1;
-        } else {
-            return aValue < bValue ? 1 : -1;
-        }
-    });
-
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(sortedUsers.length / usersPerPage);
-
-    const handleSort = (criteria) => {
-        if (sortBy === criteria) {
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-        } else {
-            setSortBy(criteria);
-            setSortOrder('desc');
-        }
-        setCurrentPage(1); // Reset to first page when sorting
-    };
+    const currentUsers = safeUsers.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(safeUsers.length / usersPerPage);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -284,69 +183,25 @@ export default function AdminPage() {
                                 </div>
                                 <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 text-gray-400 rotate-180" />
                             </Link>
-
-                            <Link
-                                href="/admin/analytics"
-                                className="flex items-center justify-between p-4 rounded-xl border border-rose-100 hover:bg-rose-50 transition-colors"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <FontAwesomeIcon icon={faChartBar} className="h-5 w-5 text-rose-600" />
-                                    <div>
-                                        <p className="font-semibold text-gray-800">User Analytics</p>
-                                        <p className="text-sm text-gray-600">View user engagement and time tracking data</p>
-                                    </div>
-                                </div>
-                                <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 text-gray-400 rotate-180" />
-                            </Link>
                         </div>
                     </div>
 
                     {/* Users Table */}
                     <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-8 mt-2">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-bold text-gray-800">All Users ({sortedUsers.length})</h2>
-                            <div className="flex items-center gap-4">
-                                <span className="text-sm text-gray-500">
-                                    Sorted by: {sortBy === 'timeSpent' ? 'Time Spent' :
-                                        sortBy === 'sessions' ? 'Sessions' :
-                                            sortBy === 'joinDate' ? 'Join Date' : 'Name'}
-                                    ({sortOrder === 'asc' ? 'Low to High' : 'High to Low'})
-                                </span>
-                                <span className="text-sm text-gray-500">Page {currentPage} of {totalPages}</span>
-                            </div>
+                            <h2 className="text-lg font-bold text-gray-800">All Users ({safeUsers.length})</h2>
+                            <span className="text-sm text-gray-500">Page {currentPage} of {totalPages}</span>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="border-b border-gray-100">
-                                        <th
-                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
-                                            onClick={() => handleSort('name')}
-                                        >
-                                            Name {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                        </th>
+                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Name</th>
                                         <th className="py-3 px-4 text-sm font-semibold text-gray-600">Email</th>
                                         <th className="py-3 px-4 text-sm font-semibold text-gray-600">Details</th>
                                         <th className="py-3 px-4 text-sm font-semibold text-gray-600">Profession</th>
-                                        <th
-                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
-                                            onClick={() => handleSort('timeSpent')}
-                                        >
-                                            Time Spent {sortBy === 'timeSpent' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                        </th>
-                                        <th
-                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
-                                            onClick={() => handleSort('sessions')}
-                                        >
-                                            Sessions {sortBy === 'sessions' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                        </th>
                                         <th className="py-3 px-4 text-sm font-semibold text-gray-600">Source</th>
-                                        <th
-                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
-                                            onClick={() => handleSort('joinDate')}
-                                        >
-                                            Joined Date {sortBy === 'joinDate' && (sortOrder === 'asc' ? '↑' : '↓')}
-                                        </th>
+                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Joined Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -363,42 +218,6 @@ export default function AdminPage() {
                                             </td>
                                             <td className="py-3 px-4 text-gray-600 text-sm">{user.profession || '-'}</td>
                                             <td className="py-3 px-4">
-                                                <div className="text-sm">
-                                                    {user.analytics ? (
-                                                        <>
-                                                            <div className="font-semibold text-rose-600">
-                                                                {formatTime(user.analytics.totalTimeSpent || 0)}
-                                                            </div>
-                                                            {user.analytics.lastActive && (
-                                                                <div className="text-xs text-gray-500">
-                                                                    Last: {new Date(user.analytics.lastActive).toLocaleDateString()}
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    ) : (
-                                                        <div className="text-xs text-gray-400">Loading...</div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="py-3 px-4">
-                                                <div className="text-sm">
-                                                    {user.analytics ? (
-                                                        <>
-                                                            <div className="font-semibold text-blue-600">
-                                                                {user.analytics.sessionCount || 0}
-                                                            </div>
-                                                            {user.analytics.sessionCount > 0 && (
-                                                                <div className="text-xs text-gray-500">
-                                                                    Avg: {formatTime((user.analytics.totalTimeSpent || 0) / user.analytics.sessionCount)}
-                                                                </div>
-                                                            )}
-                                                        </>
-                                                    ) : (
-                                                        <div className="text-xs text-gray-400">Loading...</div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                            <td className="py-3 px-4">
                                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${user.source === 'whatsapp'
                                                     ? 'bg-green-100 text-green-700'
                                                     : 'bg-blue-100 text-blue-700'
@@ -413,7 +232,7 @@ export default function AdminPage() {
                                     ))}
                                     {safeUsers.length === 0 && (
                                         <tr>
-                                            <td colSpan="8" className="py-8 text-center text-gray-500">
+                                            <td colSpan="6" className="py-8 text-center text-gray-500">
                                                 No users found
                                             </td>
                                         </tr>

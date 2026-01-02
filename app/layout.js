@@ -3,7 +3,6 @@ import "./critical.css";
 import "./globals.css";
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
-import ClientTimeTracker from './components/ClientTimeTracker';
 
 import StructuredData from './components/StructuredData';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -180,7 +179,6 @@ export default function RootLayout({ children }) {
 
         <AuthProvider>
           <ThemeProvider>
-            <ClientTimeTracker />
             <MobileOptimizer />
             {children}
             <PWAInstallPrompt />

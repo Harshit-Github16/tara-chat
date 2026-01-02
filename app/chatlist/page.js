@@ -848,14 +848,6 @@ export default function ChatListPage() {
     e.preventDefault();
     if (!message.trim() || isSendingMessage) return;
 
-    // Track chat message
-    try {
-      const { trackChatMessage } = await import('../lib/time-tracker');
-      trackChatMessage();
-    } catch (error) {
-      console.log('Time tracking not available:', error);
-    }
-
     const messageText = message.trim();
     setMessage("");
 

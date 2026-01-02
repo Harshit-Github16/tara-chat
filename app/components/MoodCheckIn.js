@@ -47,14 +47,6 @@ export default function MoodCheckIn({ onMoodSaved }) {
                 const result = await response.json();
                 setMessage('Mood saved successfully! 🎉');
 
-                // Track mood entry
-                try {
-                    const { trackMoodEntry } = await import('../lib/time-tracker');
-                    trackMoodEntry();
-                } catch (error) {
-                    console.log('Time tracking not available:', error);
-                }
-
                 // Reset form
                 setSelectedMood('');
                 setIntensity(5);
