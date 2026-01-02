@@ -198,19 +198,7 @@ export default function AdminPage() {
                                 <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 text-gray-400 rotate-180" />
                             </Link>
 
-                            <Link
-                                href="/admin/test-tracking"
-                                className="flex items-center justify-between p-4 rounded-xl border border-rose-100 hover:bg-rose-50 transition-colors"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <FontAwesomeIcon icon={faUser} className="h-5 w-5 text-rose-600" />
-                                    <div>
-                                        <p className="font-semibold text-gray-800">Test Tracking</p>
-                                        <p className="text-sm text-gray-600">Test and debug user tracking functionality</p>
-                                    </div>
-                                </div>
-                                <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 text-gray-400 rotate-180" />
-                            </Link>
+
                         </div>
                     </div>
 
