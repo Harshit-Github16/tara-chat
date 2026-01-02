@@ -296,7 +296,7 @@ function FlowerChart({ emotionData }) {
 
                 {/* Draw petals */}
                 {petals.map((petal, index) => {
-                    // Full petal background (light gray)
+                    // Full petal path
                     const fullPath = `
                         M ${centerX} ${centerY}
                         Q ${petal.fullLeftX} ${petal.fullLeftY}, ${petal.fullTipX} ${petal.fullTipY}
@@ -304,16 +304,28 @@ function FlowerChart({ emotionData }) {
                         Z
                     `;
 
-                    // Colored fill (based on data)
-                    const fillPath = `
-                        M ${centerX} ${centerY}
-                        Q ${petal.fillLeftX} ${petal.fillLeftY}, ${petal.fillTipX} ${petal.fillTipY}
-                        Q ${petal.fillRightX} ${petal.fillRightY}, ${centerX} ${centerY}
-                        Z
-                    `;
+                    // Create radial gradient for outside-in fill effect
+                    const gradientId = `gradient-${petal.name.replace(/\s+/g, '-')}-${index}`;
+                    const fillPercentage = petal.value;
+                    const stopPercentage = 100 - fillPercentage; // Invert for outside-in
 
                     return (
                         <g key={petal.name}>
+                            <defs>
+                                <radialGradient
+                                    id={gradientId}
+                                    cx="50%"
+                                    cy="50%"
+                                    r="50%"
+                                    gradientUnits="objectBoundingBox"
+                                >
+                                    <stop offset="0%" stopColor="#f3f4f6" stopOpacity="1" />
+                                    <stop offset={`${stopPercentage}%`} stopColor="#f3f4f6" stopOpacity="1" />
+                                    <stop offset={`${stopPercentage}%`} stopColor={petal.color} stopOpacity="0.8" />
+                                    <stop offset="100%" stopColor={petal.color} stopOpacity="0.8" />
+                                </radialGradient>
+                            </defs>
+
                             {/* Full petal background (light gray with light border) */}
                             <path
                                 d={fullPath}
@@ -323,26 +335,26 @@ function FlowerChart({ emotionData }) {
                                 className="transition-all duration-300"
                             />
 
-                            {/* Colored fill (only if value > 0) */}
+                            {/* Colored fill using gradient (fills from outside toward center) */}
                             {petal.value > 0 && (
                                 <path
-                                    d={fillPath}
-                                    fill={petal.color}
-                                    fillOpacity="0.8"
+                                    d={fullPath}
+                                    fill={`url(#${gradientId})`}
                                     stroke="none"
                                     className="transition-all duration-300"
                                 />
                             )}
 
-                            {/* Petal tip dot (only if value > 0) */}
-                            {petal.value > 0 && (
+                            {/* Petal tip dot (at the boundary of colored portion) */}
+                            {petal.value > 0 && petal.value < 100 && (
                                 <circle
-                                    cx={petal.fillTipX}
-                                    cy={petal.fillTipY}
+                                    cx={centerX + (maxRadius * (1 - petal.value / 100)) * Math.cos(petal.angle)}
+                                    cy={centerY + (maxRadius * (1 - petal.value / 100)) * Math.sin(petal.angle)}
                                     r="4"
                                     fill={petal.color}
                                     stroke="white"
                                     strokeWidth="2"
+                                    className="transition-all duration-300"
                                 />
                             )}
                         </g>
