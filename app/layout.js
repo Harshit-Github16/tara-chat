@@ -8,6 +8,8 @@ import StructuredData from './components/StructuredData';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import MobileOptimizer from './components/MobileOptimizer';
 import ExitIntent from './components/ExitIntent';
+import GlobalPageTracker from './components/GlobalPageTracker';
+import TrackingDebug from './components/TrackingDebug';
 import { Analytics } from "@vercel/analytics/react";
 
 const poppins = Poppins({
@@ -180,6 +182,8 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ThemeProvider>
             <MobileOptimizer />
+            <GlobalPageTracker />
+            <TrackingDebug />
             {children}
             <PWAInstallPrompt />
             <ExitIntent />
