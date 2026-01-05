@@ -86,7 +86,7 @@ const PieChart = ({ data, title }) => {
                 <span className="p-2 bg-rose-50 rounded-xl">📊</span>
                 {title}
             </h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-12">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <div className="relative w-48 h-48 group">
                     <svg className="w-full h-full transform -rotate-90 filter drop-shadow-lg" viewBox="0 0 100 100">
                         {data.map((item, index) => {
@@ -127,7 +127,7 @@ const PieChart = ({ data, title }) => {
                         const percentage = ((item.value / total) * 100).toFixed(1);
 
                         return (
-                            <div key={index} className={`flex items-center justify-between p-3 rounded-2xl ${lightColors[index % lightColors.length]} border border-transparent hover:border-white hover:shadow-md transition-all duration-300`}>
+                            <div key={index} className={`flex items-center justify-between p-3 rounded-2xl gap-2 ${lightColors[index % lightColors.length]} border border-transparent hover:border-white hover:shadow-md transition-all duration-300`}>
                                 <div className="flex items-center gap-3">
                                     <div className={`w-3 h-3 rounded-full ${colors[index % colors.length]} ring-4 ring-white shadow-sm`}></div>
                                     <p className="text-sm font-bold text-gray-700">{item.label}</p>
@@ -519,7 +519,7 @@ export default function AnalyticsPage() {
                             </div>
 
                             {/* Advanced User Demographics */}
-                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-3">
                                 <GeoStatsChart
                                     title="Top User Regions (Cities)"
                                     data={analytics.geoStats || []}
