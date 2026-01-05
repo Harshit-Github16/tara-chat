@@ -6,11 +6,40 @@ export async function GET() {
         const client = await clientPromise;
         const db = client.db('tara');
 
-        // Fetch users sorted by creation date (newest first)
-        const users = await db.collection('users')
-            .find({})
-            .sort({ createdAt: -1 })
-            .toArray();
+        // Fetch users with aggregated chat and session metrics
+        const users = await db.collection('users').aggregate([
+            {
+                $lookup: {
+                    from: 'user_sessions',
+                    localField: 'uid',
+                    foreignField: 'userId',
+                    as: 'sessions'
+                }
+            },
+            {
+                $project: {
+                    name: 1,
+                    email: 1,
+                    avatar: 1,
+                    gender: 1,
+                    ageRange: 1,
+                    profession: 1,
+                    source: 1,
+                    provider: 1,
+                    createdAt: 1,
+                    totalChats: {
+                        $reduce: {
+                            input: { $ifNull: ["$chatUsers", []] },
+                            initialValue: 0,
+                            in: { $add: ["$$value", { $size: { $ifNull: ["$$this.conversations", []] } }] }
+                        }
+                    },
+                    totalTimeSpent: { $sum: "$sessions.totalTimeSpent" },
+                    sessionCount: { $size: "$sessions" }
+                }
+            },
+            { $sort: { createdAt: -1 } }
+        ]).toArray();
 
         return NextResponse.json({
             success: true,

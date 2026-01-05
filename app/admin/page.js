@@ -28,6 +28,8 @@ export default function AdminPage() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
     const usersPerPage = 10;
 
     const fetchStats = async () => {
@@ -77,14 +79,48 @@ export default function AdminPage() {
         }
     }, [user]);
 
-    // Pagination Logic
-    const safeUsers = Array.isArray(users) ? users : [];
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const handleSort = (key) => {
+        let direction = 'desc';
+        if (sortConfig.key === key && sortConfig.direction === 'desc') {
+            direction = 'asc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    // Filter and Sort Logic
+    const filteredAndSortedUsers = Array.isArray(users) ? users
+        .filter(u => (u.name || "").toLowerCase().includes(searchQuery.toLowerCase()))
+        .sort((a, b) => {
+            if (sortConfig.key) {
+                const aVal = a[sortConfig.key] || 0;
+                const bVal = b[sortConfig.key] || 0;
+                if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+            }
+            return 0;
+        }) : [];
+
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = safeUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(safeUsers.length / usersPerPage);
+    const currentUsers = filteredAndSortedUsers.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(filteredAndSortedUsers.length / usersPerPage);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const formatTimeSpent = (ms) => {
+        if (!ms || ms < 0) return '0m';
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+
+        if (hours > 0) {
+            return `${hours}h ${minutes % 60}m`;
+        }
+        if (minutes > 0) {
+            return `${minutes}m`;
+        }
+        return `${seconds}s`;
+    };
 
     if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
         return (
@@ -204,52 +240,96 @@ export default function AdminPage() {
 
                     {/* Users Table */}
                     <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm mb-8 mt-2">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-bold text-gray-800">All Users ({safeUsers.length})</h2>
-                            <span className="text-sm text-gray-500">Page {currentPage} of {totalPages}</span>
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                            <div>
+                                <h2 className="text-lg font-bold text-gray-800">All Users Analytics ({filteredAndSortedUsers.length})</h2>
+                                <p className="text-xs text-gray-400">Page {currentPage} of {totalPages}</p>
+                            </div>
+
+                            <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                                <input
+                                    type="text"
+                                    placeholder="Search by name..."
+                                    value={searchQuery}
+                                    onChange={(e) => {
+                                        setSearchQuery(e.target.value);
+                                        setCurrentPage(1);
+                                    }}
+                                    className="pl-9 pr-4 py-2 bg-rose-50/50 border border-rose-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 w-full md:w-64"
+                                />
+                            </div>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="border-b border-gray-100">
-                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Name</th>
-                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Email</th>
-                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Details</th>
+                                        <th
+                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
+                                            onClick={() => handleSort('name')}
+                                        >
+                                            Name {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th
+                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
+                                            onClick={() => handleSort('email')}
+                                        >
+                                            Email {sortConfig.key === 'email' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th
+                                            className="py-3 px-4 text-sm font-semibold text-gray-600 text-center cursor-pointer hover:text-rose-600 transition-colors"
+                                            onClick={() => handleSort('totalChats')}
+                                        >
+                                            Chats {sortConfig.key === 'totalChats' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th
+                                            className="py-3 px-4 text-sm font-semibold text-gray-600 text-center cursor-pointer hover:text-rose-600 transition-colors"
+                                            onClick={() => handleSort('totalTimeSpent')}
+                                        >
+                                            Time Spent {sortConfig.key === 'totalTimeSpent' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
                                         <th className="py-3 px-4 text-sm font-semibold text-gray-600">Profession</th>
-                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Source</th>
-                                        <th className="py-3 px-4 text-sm font-semibold text-gray-600">Joined Date</th>
+                                        <th
+                                            className="py-3 px-4 text-sm font-semibold text-gray-600 cursor-pointer hover:text-rose-600 transition-colors"
+                                            onClick={() => handleSort('createdAt')}
+                                        >
+                                            Joined Date {sortConfig.key === 'createdAt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {currentUsers.map((user) => (
                                         <tr key={user._id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                                             <td className="py-3 px-4 text-gray-800 font-medium">{user.name || 'N/A'}</td>
-                                            <td className="py-3 px-4 text-gray-600">{user.email}</td>
                                             <td className="py-3 px-4 text-gray-600">
-                                                <div className="text-sm">
-                                                    <span className="capitalize">{user.gender || '-'}</span>
-                                                    {(user.gender && user.ageRange) && (<span> • </span>)}
-                                                    <span>{user.ageRange || '-'}</span>
+                                                <div className="text-sm font-medium">{user.email}</div>
+                                                <div className="text-[10px] text-gray-400 capitalize">
+                                                    {user.gender || '-'} • {user.ageRange || '-'} • {user.source || user.provider || 'Web'}
                                                 </div>
                                             </td>
-                                            <td className="py-3 px-4 text-gray-600 text-sm">{user.profession || '-'}</td>
-                                            <td className="py-3 px-4">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${user.source === 'whatsapp'
-                                                    ? 'bg-green-100 text-green-700'
-                                                    : 'bg-blue-100 text-blue-700'
-                                                    }`}>
-                                                    {user.source || user.provider || 'Web'}
+                                            <td className="py-3 px-4 text-center">
+                                                <span className="px-2 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold text-xs">
+                                                    {user.totalChats || 0}
                                                 </span>
                                             </td>
-                                            <td className="py-3 px-4 text-gray-500 text-sm">
+                                            <td className="py-3 px-4 text-center">
+                                                <div className="text-sm font-bold text-gray-700">
+                                                    {formatTimeSpent(user.totalTimeSpent)}
+                                                </div>
+                                                <div className="text-[10px] text-gray-400">
+                                                    Avg: {formatTimeSpent(user.totalTimeSpent / (user.sessionCount || 1))}
+                                                </div>
+                                            </td>
+                                            <td className="py-3 px-4 text-gray-600 text-sm whitespace-nowrap">{user.profession || '-'}</td>
+                                            <td className="py-3 px-4 text-gray-500 text-sm whitespace-nowrap">
                                                 {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                                             </td>
                                         </tr>
                                     ))}
-                                    {safeUsers.length === 0 && (
+                                    {currentUsers.length === 0 && (
                                         <tr>
                                             <td colSpan="6" className="py-8 text-center text-gray-500">
-                                                No users found
+                                                No users matching your search
                                             </td>
                                         </tr>
                                     )}
@@ -258,7 +338,7 @@ export default function AdminPage() {
                         </div>
 
                         {/* Pagination Controls */}
-                        {safeUsers.length > usersPerPage && (
+                        {filteredAndSortedUsers.length > usersPerPage && (
                             <div className="flex items-center justify-center gap-2 mt-6">
                                 <button
                                     onClick={() => paginate(currentPage - 1)}
