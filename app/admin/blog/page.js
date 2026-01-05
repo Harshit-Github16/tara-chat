@@ -25,12 +25,17 @@ const ADMIN_EMAILS = [
 ];
 
 export default function ManageBlogsPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingBlog, setEditingBlog] = useState(null);
+    const [isClient, setIsClient] = useState(false);
     const { toasts, removeToast, showSuccess, showError } = useToast();
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     useEffect(() => {
         if (user?.email && !ADMIN_EMAILS.includes(user.email)) {
@@ -79,6 +84,18 @@ export default function ManageBlogsPage() {
         }
     };
 
+    if (!isClient || authLoading) {
+        return (
+            <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
+                <div className="relative w-20 h-20">
+                    <div className="absolute inset-0 rounded-2xl border-4 border-rose-100 animate-pulse"></div>
+                    <div className="absolute inset-0 rounded-2xl border-t-4 border-rose-600 animate-spin"></div>
+                </div>
+                <p className="text-rose-600 font-black mt-6 tracking-widest text-xs uppercase animate-pulse">Checking Permissions...</p>
+            </div>
+        );
+    }
+
     if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
         return null;
     }
@@ -106,96 +123,82 @@ export default function ManageBlogsPage() {
                 </header>
 
                 <main className="mx-auto w-full max-w-9xl flex-1 px-4 py-6">
-                    {loading ? (
-                        <div className="text-center py-12 text-gray-500">Loading blogs...</div>
-                    ) : blogs.length === 0 ? (
-                        <div className="text-center py-12">
-                            <div className="text-6xl mb-4">📝</div>
-                            <h2 className="text-xl font-semibold text-gray-800 mb-2">No blogs yet</h2>
-                            <p className="text-gray-600 mb-4">Create your first blog post</p>
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className="rounded-full bg-rose-200 px-5 py-3 text-sm font-semibold text-rose-600 hover:bg-rose-300 shadow-sm"
-                            >
-                                <FontAwesomeIcon icon={faPlus} /> Add Blog
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="bg-white rounded-2xl border border-rose-100 shadow-sm overflow-hidden">
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead className="bg-rose-50 border-b border-rose-100">
-                                        <tr>
-                                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Title</th>
-                                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Author</th>
-                                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Category</th>
-                                            <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Date</th>
-                                            <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Stats</th>
-                                            <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Actions</th>
+
+                    <div className="bg-white rounded-2xl border border-rose-100 shadow-sm overflow-hidden">
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-rose-50 border-b border-rose-100">
+                                    <tr>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Title</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Author</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Category</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Date</th>
+                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Stats</th>
+                                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-rose-100">
+                                    {blogs.map((blog) => (
+                                        <tr key={blog._id} className="hover:bg-rose-50/50 transition-colors">
+                                            <td className="px-4 py-4">
+                                                <div className="flex items-center gap-2">
+                                                    <div>
+                                                        <p className="font-semibold text-gray-800 text-sm">{blog.title}</p>
+                                                        <p className="text-xs text-gray-500 line-clamp-1">{blog.excerpt}</p>
+                                                    </div>
+                                                    {blog.featured && (
+                                                        <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-yellow-500" />
+                                                    )}
+                                                    {blog.trending && (
+                                                        <FontAwesomeIcon icon={faFire} className="h-3 w-3 text-orange-500" />
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-700">{blog.author}</td>
+                                            <td className="px-4 py-4">
+                                                <span className="inline-block rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-600">
+                                                    {blog.category}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 py-4 text-sm text-gray-600">{blog.publishDate}</td>
+                                            <td className="px-4 py-4">
+                                                <div className="flex items-center justify-center gap-3 text-xs text-gray-600">
+                                                    <span>👁️ {blog.views}</span>
+                                                    <span>❤️ {blog.likes}</span>
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-4">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <Link
+                                                        href={`/blog/${blog.slug}`}
+                                                        className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
+                                                    >
+                                                        <FontAwesomeIcon icon={faEye} />
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => {
+                                                            setEditingBlog(blog);
+                                                            setShowModal(true);
+                                                        }}
+                                                        className="rounded-lg border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50"
+                                                    >
+                                                        <FontAwesomeIcon icon={faEdit} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(blog._id)}
+                                                        className="rounded-lg border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrash} />
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-rose-100">
-                                        {blogs.map((blog) => (
-                                            <tr key={blog._id} className="hover:bg-rose-50/50 transition-colors">
-                                                <td className="px-4 py-4">
-                                                    <div className="flex items-center gap-2">
-                                                        <div>
-                                                            <p className="font-semibold text-gray-800 text-sm">{blog.title}</p>
-                                                            <p className="text-xs text-gray-500 line-clamp-1">{blog.excerpt}</p>
-                                                        </div>
-                                                        {blog.featured && (
-                                                            <FontAwesomeIcon icon={faStar} className="h-3 w-3 text-yellow-500" />
-                                                        )}
-                                                        {blog.trending && (
-                                                            <FontAwesomeIcon icon={faFire} className="h-3 w-3 text-orange-500" />
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 py-4 text-sm text-gray-700">{blog.author}</td>
-                                                <td className="px-4 py-4">
-                                                    <span className="inline-block rounded-full bg-rose-100 px-2 py-1 text-xs font-semibold text-rose-600">
-                                                        {blog.category}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-4 text-sm text-gray-600">{blog.publishDate}</td>
-                                                <td className="px-4 py-4">
-                                                    <div className="flex items-center justify-center gap-3 text-xs text-gray-600">
-                                                        <span>👁️ {blog.views}</span>
-                                                        <span>❤️ {blog.likes}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="px-4 py-4">
-                                                    <div className="flex items-center justify-center gap-2">
-                                                        <Link
-                                                            href={`/blog/${blog.slug}`}
-                                                            className="rounded-lg border border-rose-200 px-3 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
-                                                        >
-                                                            <FontAwesomeIcon icon={faEye} />
-                                                        </Link>
-                                                        <button
-                                                            onClick={() => {
-                                                                setEditingBlog(blog);
-                                                                setShowModal(true);
-                                                            }}
-                                                            className="rounded-lg border border-blue-200 px-3 py-1 text-xs font-semibold text-blue-600 hover:bg-blue-50"
-                                                        >
-                                                            <FontAwesomeIcon icon={faEdit} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDelete(blog._id)}
-                                                            className="rounded-lg border border-red-200 px-3 py-1 text-xs font-semibold text-red-600 hover:bg-red-50"
-                                                        >
-                                                            <FontAwesomeIcon icon={faTrash} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-                    )}
+                    </div>
+
                 </main>
 
                 <BottomNav activePage="admin" />
