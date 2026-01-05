@@ -153,36 +153,65 @@ export async function GET(request) {
             { $sort: { date: 1 } }
         ]).toArray();
 
-        // Top 10 Chat Users
+        // Top 10 Chat Users - Aggregating ALL conversations across all chatUsers
         const topChatUsers = await db.collection('users').aggregate([
-            { $match: { 'chatUsers.0.conversations': { $exists: true } } },
-            {
-                $project: {
-                    name: 1,
-                    email: 1,
-                    avatar: 1,
-                    chatCount: { $size: { $ifNull: [{ $arrayElemAt: ['$chatUsers.conversations', 0] }, []] } },
-                    // In the image provided, chatUsers is an array of objects. 
-                    // chatUsers[0].conversations is the array.
-                    actualChatCount: {
-                        $size: { $ifNull: [{ $arrayElemAt: ["$chatUsers.conversations", 0] }, []] }
-                    }
-                }
-            },
-            // Correction based on user prompt: chatUsers[0].conversations length
+            { $match: { 'chatUsers.conversations': { $exists: true, $not: { $size: 0 } } } },
             {
                 $project: {
                     name: 1,
                     email: 1,
                     avatar: 1,
                     conversationCount: {
-                        $size: { $ifNull: [{ $let: { vars: { firstChatUser: { $arrayElemAt: ["$chatUsers", 0] } }, in: "$$firstChatUser.conversations" } }, []] }
+                        $reduce: {
+                            input: "$chatUsers",
+                            initialValue: 0,
+                            in: { $add: ["$$value", { $size: { $ifNull: ["$$this.conversations", []] } }] }
+                        }
                     }
                 }
             },
             { $sort: { conversationCount: -1 } },
             { $limit: 10 }
         ]).toArray();
+
+        // Geographical Analytics (Top Cities)
+        const geoStats = await db.collection('user_sessions').aggregate([
+            { $match: { startTime: { $gte: startDate }, location: { $exists: true } } },
+            { $group: { _id: '$location.city', count: { $sum: 1 } } },
+            { $project: { city: '$_id', count: 1, _id: 0 } },
+            { $sort: { count: -1 } },
+            { $limit: 8 }
+        ]).toArray();
+
+        // Device & Browser Analytics
+        const sessionMetadata = await db.collection('user_sessions').find(
+            { startTime: { $gte: startDate }, userAgent: { $exists: true, $ne: '' } },
+            { projection: { userAgent: 1 } }
+        ).toArray();
+
+        const deviceStats = { Mobile: 0, Desktop: 0, Tablet: 0 };
+        const browserStats = {};
+
+        sessionMetadata.forEach(session => {
+            const ua = session.userAgent.toLowerCase();
+
+            // Basic Device Detection
+            if (ua.includes('mobi')) {
+                if (ua.includes('tablet') || ua.includes('ipad')) deviceStats.Tablet++;
+                else deviceStats.Mobile++;
+            } else {
+                deviceStats.Desktop++;
+            }
+
+            // Basic Browser Detection
+            let browser = 'Other';
+            if (ua.includes('chrome') || ua.includes('crios')) browser = 'Chrome';
+            else if (ua.includes('safari') && !ua.includes('chrome')) browser = 'Safari';
+            else if (ua.includes('firefox') || ua.includes('fxios')) browser = 'Firefox';
+            else if (ua.includes('edge')) browser = 'Edge';
+
+            browserStats[browser] = (browserStats[browser] || 0) + 1;
+        });
 
         // Merge bounce rate data with page stats
         const pageStatsWithBounce = pageStats.map(stat => {
@@ -201,6 +230,9 @@ export async function GET(request) {
                 activeSessions,
                 dailyStats,
                 topChatUsers,
+                geoStats,
+                deviceStats: Object.entries(deviceStats).map(([label, value]) => ({ label, value })),
+                browserStats: Object.entries(browserStats).map(([label, value]) => ({ label, value })),
                 summary: {
                     totalPages: pageStats.length,
                     totalViews: pageStats.reduce((sum, p) => sum + p.totalViews, 0),

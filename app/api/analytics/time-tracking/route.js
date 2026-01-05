@@ -25,6 +25,9 @@ export async function POST(request) {
             );
         }
 
+        // Get IP address
+        const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
+
         const trackingData = {
             userId,
             sessionId,
@@ -34,14 +37,37 @@ export async function POST(request) {
             userAgent: userAgent || '',
             referrer: referrer || '',
             timeSpent: timeSpent || 0,
+            ip,
             createdAt: new Date()
         };
 
         // Insert tracking data
         await db.collection('page_tracking').insertOne(trackingData);
 
-        // Update session data
+        // Update session data with location if not already present
         if (action === 'enter') {
+            const session = await db.collection('user_sessions').findOne({ sessionId });
+            let locationData = {};
+
+            // Only fetch location if it's a new session or location is missing
+            if (!session || !session.location) {
+                try {
+                    const geoResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                    const geoData = await geoResponse.json();
+                    if (!geoData.error) {
+                        locationData = {
+                            city: geoData.city,
+                            region: geoData.region,
+                            country: geoData.country_name,
+                            lat: geoData.latitude,
+                            lon: geoData.longitude
+                        };
+                    }
+                } catch (err) {
+                    console.error('GeoIP fetch error:', err);
+                }
+            }
+
             await db.collection('user_sessions').updateOne(
                 { sessionId, userId },
                 {
@@ -49,7 +75,9 @@ export async function POST(request) {
                         lastPage: page,
                         lastActivity: new Date(),
                         userAgent: userAgent || '',
-                        referrer: referrer || ''
+                        referrer: referrer || '',
+                        ip,
+                        ...(Object.keys(locationData).length > 0 && { location: locationData })
                     },
                     $inc: { pageViews: 1 },
                     $setOnInsert: {

@@ -28,7 +28,7 @@ const TopPagesChart = ({ data, title }) => {
     const maxValue = Math.max(...data.map(d => d.value));
 
     return (
-        <div className="bg-white/80 backdrop-blur-sm rounded-[2rem] border border-rose-100/50 p-8 shadow-xl shadow-rose-100/20 hover:shadow-2xl hover:shadow-rose-100/40 transition-all duration-500">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-rose-100/50 p-8 shadow-xl shadow-rose-100/20 hover:shadow-2xl hover:shadow-rose-100/40 transition-all duration-500">
             <h3 className="text-xl font-bold text-gray-800 mb-8 flex items-center gap-3">
                 <span className="p-2 bg-rose-50 rounded-xl">🔥</span>
                 {title}
@@ -81,7 +81,7 @@ const PieChart = ({ data, title }) => {
     let currentOffset = 0;
 
     return (
-        <div className="bg-white/80 backdrop-blur-sm rounded-[2rem] border border-rose-100/50 p-8 shadow-xl shadow-rose-100/20 hover:shadow-2xl hover:shadow-rose-100/40 transition-all duration-500">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-rose-100/50 p-8 shadow-xl shadow-rose-100/20 hover:shadow-2xl hover:shadow-rose-100/40 transition-all duration-500">
             <h3 className="text-xl font-bold text-gray-800 mb-8 flex items-center gap-3">
                 <span className="p-2 bg-rose-50 rounded-xl">📊</span>
                 {title}
@@ -145,19 +145,64 @@ const PieChart = ({ data, title }) => {
     );
 };
 
+const GeoStatsChart = ({ data, title }) => {
+    const maxValue = data.length > 0 ? Math.max(...data.map(d => d.count)) : 0;
+
+    return (
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-rose-100/50 p-8 shadow-xl shadow-rose-100/20 hover:shadow-2xl hover:shadow-rose-100/40 transition-all duration-500">
+            <h3 className="text-xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                <span className="p-2 bg-rose-50 rounded-xl">🌍</span>
+                {title}
+            </h3>
+            {data.length > 0 ? (
+                <div className="space-y-5">
+                    {data.map((item, index) => {
+                        const percentage = maxValue > 0 ? ((item.count / maxValue) * 100) : 0;
+                        return (
+                            <div key={index} className="group">
+                                <div className="flex items-center justify-between mb-1.5 px-1">
+                                    <div className="flex items-center gap-3">
+                                        <span className="w-6 h-6 rounded-lg bg-gray-50 flex items-center justify-center text-[10px] font-black text-gray-400 group-hover:bg-rose-50 group-hover:text-rose-500 transition-colors">
+                                            {index + 1}
+                                        </span>
+                                        <p className="font-bold text-gray-700 text-sm group-hover:text-gray-900 transition-colors">{item.city || 'Unknown'}</p>
+                                    </div>
+                                    <span className="text-xs font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">
+                                        {item.count} users
+                                    </span>
+                                </div>
+                                <div className="w-full bg-gray-100/50 rounded-full h-2 overflow-hidden border border-gray-50">
+                                    <div
+                                        className="bg-gradient-to-r from-rose-400 to-rose-600 h-full rounded-full transition-all duration-1000 ease-out"
+                                        style={{ width: `${Math.max(percentage, 2)}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ) : (
+                <div className="text-center py-10 opacity-30">
+                    <p className="text-sm font-bold">No location footprints yet</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
 const TopChatUsers = ({ users }) => {
     return (
-        <div className="bg-gray-900 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden h-full">
-            <div className="absolute top-0 right-0 p-8 opacity-10">
-                <FontAwesomeIcon icon={faUsers} className="text-white text-9xl transform -rotate-12" />
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-rose-100/50 p-8 shadow-xl shadow-rose-100/20 hover:shadow-2xl hover:shadow-rose-100/40 transition-all duration-500 relative overflow-hidden h-full">
+            <div className="absolute top-0 right-0 p-8 opacity-5">
+                <FontAwesomeIcon icon={faUsers} className="text-rose-900 text-9xl transform -rotate-12" />
             </div>
             <div className="relative h-full flex flex-col">
                 <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                        <span className="p-2 bg-rose-500/20 rounded-xl">🤖</span>
-                        Top AI Chat Users
+                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+                        <span className="p-2 bg-rose-50 rounded-xl">🤖</span>
+                        Most Users
                     </h2>
-                    <span className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-widest border border-white/10">
+                    <span className="px-3 py-1 bg-rose-50 rounded-full text-[10px] font-black text-rose-600 uppercase tracking-widest border border-rose-100">
                         Top 10 Leaders
                     </span>
                 </div>
@@ -165,16 +210,16 @@ const TopChatUsers = ({ users }) => {
                 <div className="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
                     {users && users.length > 0 ? (
                         users.map((user, index) => (
-                            <div key={index} className="group flex items-center justify-between p-4 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                            <div key={index} className="group flex items-center justify-between p-4 rounded-2xl bg-rose-50/50 border border-rose-100/50 hover:bg-white hover:shadow-md transition-all duration-300">
                                 <div className="flex items-center gap-4">
                                     <div className="relative">
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black shadow-lg
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-black shadow-lg
                                             ${index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-600' :
                                                 index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
                                                     index === 2 ? 'bg-gradient-to-br from-orange-300 to-orange-700' :
                                                         'bg-gradient-to-br from-rose-500 to-purple-600'}`}>
                                             {user.avatar ? (
-                                                <img src={user.avatar} alt="" className="w-full h-full rounded-2xl object-cover" />
+                                                <img src={user.avatar} alt="" className="w-full h-full rounded-xl object-cover" />
                                             ) : (
                                                 (user.name || 'U').charAt(0)
                                             )}
@@ -186,23 +231,23 @@ const TopChatUsers = ({ users }) => {
                                         )}
                                     </div>
                                     <div>
-                                        <p className="font-bold text-white text-sm group-hover:text-rose-400 transition-colors truncate max-w-[120px]">
+                                        <p className="font-bold text-gray-800 text-sm group-hover:text-rose-600 transition-colors truncate max-w-[120px]">
                                             {user.name || 'Anonymous'}
                                         </p>
-                                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter truncate max-w-[120px]">
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter truncate max-w-[120px]">
                                             {user.email || 'No Email'}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-lg font-black text-white leading-none">{user.conversationCount}</p>
+                                    <p className="text-lg font-black text-gray-800 leading-none">{user.conversationCount}</p>
                                     <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest mt-1">Chats</p>
                                 </div>
                             </div>
                         ))
                     ) : (
                         <div className="text-center py-10 opacity-50">
-                            <p className="text-white text-sm">No chat data yet</p>
+                            <p className="text-gray-500 text-sm">No chat data yet</p>
                         </div>
                     )}
                 </div>
@@ -212,7 +257,7 @@ const TopChatUsers = ({ users }) => {
 };
 
 const MetricCard = ({ title, value, icon, color, subtitle, trend, gradient }) => (
-    <div className={`relative overflow-hidden bg-white rounded-3xl border border-rose-100/50 p-6 shadow-xl shadow-rose-100/10 hover:shadow-2xl hover:shadow-rose-200/30 transition-all duration-500 group cursor-default`}>
+    <div className={`relative overflow-hidden bg-white rounded-2xl border border-rose-100/50 p-6 shadow-xl shadow-rose-100/10 hover:shadow-2xl hover:shadow-rose-200/30 transition-all duration-500 group cursor-default`}>
         {/* Background Decorative Element */}
         <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full opacity-10 group-hover:scale-150 transition-transform duration-700 ${color}`}></div>
 
@@ -413,8 +458,8 @@ export default function AnalyticsPage() {
                     {loading ? (
                         <div className="flex flex-col items-center justify-center h-[60vh]">
                             <div className="relative w-20 h-20">
-                                <div className="absolute inset-0 rounded-3xl border-4 border-rose-100 animate-pulse"></div>
-                                <div className="absolute inset-0 rounded-3xl border-t-4 border-rose-600 animate-spin"></div>
+                                <div className="absolute inset-0 rounded-2xl border-4 border-rose-100 animate-pulse"></div>
+                                <div className="absolute inset-0 rounded-2xl border-t-4 border-rose-600 animate-spin"></div>
                             </div>
                             <p className="text-rose-600 font-black mt-6 tracking-widest text-xs uppercase animate-pulse">Loading Intelligence...</p>
                         </div>
@@ -456,8 +501,24 @@ export default function AnalyticsPage() {
                                 />
                             </div>
 
-                            {/* Main Charts area */}
+                            {/* Advanced User Demographics */}
                             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                                <GeoStatsChart
+                                    title="Top User Regions (Cities)"
+                                    data={analytics.geoStats || []}
+                                />
+                                <PieChart
+                                    title="Device Distribution"
+                                    data={analytics.deviceStats || []}
+                                />
+                                <PieChart
+                                    title="Browser Rankings"
+                                    data={analytics.browserStats || []}
+                                />
+                            </div>
+
+                            {/* Main Charts area */}
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                                 <div className="xl:col-span-2 space-y-8">
                                     <TopPagesChart
                                         title="Most Popular Destinations"
@@ -467,9 +528,9 @@ export default function AnalyticsPage() {
                                         }))}
                                     />
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                         <PieChart
-                                            title="User Engagement"
+                                            title="Engagement Levels"
                                             data={[
                                                 {
                                                     label: 'Power Users (>1min)',
@@ -490,7 +551,7 @@ export default function AnalyticsPage() {
                                 </div>
                                 <div className="xl:col-span-1">
                                     {/* Detailed Performance Table Adjusted for sidebar */}
-                                    <div className="bg-white/80 backdrop-blur-sm rounded-[2rem] border border-rose-100/50 shadow-xl overflow-hidden h-full flex flex-col">
+                                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-rose-100/50 shadow-xl overflow-hidden h-full flex flex-col">
                                         <div className="p-6 border-b border-gray-50">
                                             <h2 className="text-lg font-bold text-gray-800 flex items-center gap-3">
                                                 <span className="p-2 bg-rose-50 rounded-xl">📈</span>
@@ -528,78 +589,7 @@ export default function AnalyticsPage() {
                             </div>
 
                             {/* Live Sessions - Timeline View */}
-                            <div className="bg-gray-900 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-8 opacity-10">
-                                    <FontAwesomeIcon icon={faChartLine} className="text-white text-9xl transform -rotate-12" />
-                                </div>
-                                <div className="relative">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h2 className="text-xl font-bold text-white flex items-center gap-3">
-                                            <span className="relative flex h-3 w-3">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                            </span>
-                                            Live User Activity
-                                        </h2>
-                                        <span className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-widest border border-white/10">
-                                            Real-time Stream
-                                        </span>
-                                    </div>
 
-                                    {analytics.activeSessions.length > 0 ? (
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                            {analytics.activeSessions.map((session, index) => (
-                                                <div key={index} className="group relative bg-white/5 border border-white/10 p-5 rounded-3xl hover:bg-white/10 transition-all duration-500">
-                                                    <div className="flex items-start justify-between mb-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="w-10 h-10 bg-gradient-to-br from-rose-500 to-purple-600 rounded-2xl flex items-center justify-center text-white font-black text-sm shadow-lg">
-                                                                {(session.userName || session.userEmail || 'A').charAt(0).toUpperCase()}
-                                                            </div>
-                                                            <div>
-                                                                <p className="font-bold text-sm text-white truncate max-w-[120px]">
-                                                                    {session.userName || 'Incognito'}
-                                                                </p>
-                                                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">
-                                                                    {session.userEmail || 'User Session'}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <span className="text-[10px] font-black text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full">
-                                                            ACTIVE
-                                                        </span>
-                                                    </div>
-
-                                                    <div className="space-y-2 mb-4">
-                                                        <div className="flex items-center gap-2 text-xs text-gray-400 bg-black/20 p-2 rounded-xl border border-white/5">
-                                                            <FontAwesomeIcon icon={faGlobe} className="text-[10px]" />
-                                                            <span className="truncate">{formatPageName(session.lastPage)}</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-2 text-xs text-gray-400 bg-black/20 p-2 rounded-xl border border-white/5">
-                                                            <FontAwesomeIcon icon={faMobileAlt} className="text-[10px]" />
-                                                            <span>{session.pageViews} pages Viewed</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                                                        <span className="text-[10px] font-bold text-gray-500 italic">
-                                                            Session: {formatTime(session.totalTimeSpent)}
-                                                        </span>
-                                                        <span className="text-[10px] font-bold text-rose-500">
-                                                            {new Date(session.lastActivity).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-20 bg-black/20 rounded-[2rem] border border-white/5 border-dashed">
-                                            <div className="text-5xl mb-4">🌙</div>
-                                            <h3 className="text-white font-bold text-lg">System is Quiet</h3>
-                                            <p className="text-gray-500 text-sm mt-1 max-w-xs mx-auto">No active user sessions detected on the platform currently.</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-[60vh] text-center">
