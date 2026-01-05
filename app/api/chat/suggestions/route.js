@@ -10,16 +10,11 @@ const GROQ_API_KEYS = [
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-function getRandomGroqApiKey() {
-    if (GROQ_API_KEYS.length === 0) {
-        throw new Error('No Groq API keys configured');
-    }
-    const randomIndex = Math.floor(Math.random() * GROQ_API_KEYS.length);
-    return GROQ_API_KEYS[randomIndex];
-}
 
 export async function POST(request) {
     try {
+        console.log('Suggestions API - Available Keys:', GROQ_API_KEYS.length);
+
         const body = await request.json();
         const { messages, userDetails } = body;
 
@@ -36,14 +31,14 @@ export async function POST(request) {
         Based on the conversation history, suggest 3 short, natural, and relevant replies that the user might want to send next.
         - Keep them short (1-5 words).
         - Make them conversational.
-        - Vary the tone (one neutral/agreement, one question, one expressive).
+        - Vary the tone (one neutral, one question, one expressive).
         - If the language is Hindi/Hinglish, suggest in Hinglish.
         - Return ONLY the 3 suggestions separated by pipes (|), nothing else.
         Example: "Yeah totally|What about you?|That sounds fun"
         `;
 
         const groqPayload = {
-            model: 'llama-3.3-70b-versatile',
+            model: 'llama-3.1-8b-instant', // Faster and more reliable for simple tasks
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Previous conversation:\n${recentMessages}\n\nSuggest 3 replies for the User:` }
@@ -52,22 +47,46 @@ export async function POST(request) {
             max_tokens: 50,
         };
 
-        const apiKey = getRandomGroqApiKey();
-        const response = await fetch(GROQ_API_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(groqPayload),
-        });
+        // Retry mechanism with multiple keys
+        const shuffledKeys = [...GROQ_API_KEYS].sort(() => Math.random() - 0.5);
+        let lastError = null;
+        let suggestionText = "";
 
-        if (!response.ok) {
-            throw new Error('Groq API failed');
+        if (shuffledKeys.length === 0) {
+            console.error('No Groq API keys found in environment variables');
         }
 
-        const data = await response.json();
-        const suggestionText = data.choices[0]?.message?.content || "";
+        for (const apiKey of shuffledKeys) {
+            try {
+                const response = await fetch(GROQ_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(groqPayload),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    suggestionText = data.choices[0]?.message?.content || "";
+                    if (suggestionText) {
+                        console.log('Suggestions generated successfully');
+                        break;
+                    }
+                } else {
+                    lastError = await response.text();
+                    console.error('Groq key failed:', apiKey.substring(0, 5) + '...', lastError);
+                }
+            } catch (error) {
+                lastError = error.message;
+                console.error('Fetch error with key:', error.message);
+            }
+        }
+
+        if (!suggestionText) {
+            throw new Error(`All Groq keys failed or returned empty. Last error: ${lastError}`);
+        }
 
         // Split by pipe and clean up
         const suggestions = suggestionText.split('|')
@@ -78,10 +97,12 @@ export async function POST(request) {
         return NextResponse.json({ suggestions });
 
     } catch (error) {
-        console.error('Error generating suggestions:', error);
-        // Fallback suggestions
+        console.error('Suggestions API error:', error);
+        // Fallback suggests based on Tara's vibe - using unique labels to confirm deployment
         return NextResponse.json({
-            suggestions: ["Tell me more", "I understand", "What do you think?"]
+            suggestions: ["Tell me more! 😊", "I understand", "What's next?"]
+        }, {
+            headers: { 'Cache-Control': 'no-store, max-age=0' }
         });
     }
 }

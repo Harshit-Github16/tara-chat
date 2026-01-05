@@ -170,7 +170,7 @@ export default function ChatListPage() {
         msgIdProcessedRef.current.add(lastMsg.id);
 
         try {
-          const response = await fetch('/api/chat/suggestions', {
+          const response = await fetch(`/api/chat/suggestions?t=${Date.now()}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

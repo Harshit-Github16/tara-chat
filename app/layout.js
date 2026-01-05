@@ -5,11 +5,8 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 
 import StructuredData from './components/StructuredData';
-import PWAInstallPrompt from './components/PWAInstallPrompt';
-import MobileOptimizer from './components/MobileOptimizer';
-import ExitIntent from './components/ExitIntent';
-import GlobalPageTracker from './components/GlobalPageTracker';
-import TrackingDebug from './components/TrackingDebug';
+import { Suspense } from 'react';
+import ClientOnlyControls from './components/ClientOnlyControls';
 import { Analytics } from "@vercel/analytics/react";
 
 const poppins = Poppins({
@@ -181,12 +178,8 @@ export default function RootLayout({ children }) {
 
         <AuthProvider>
           <ThemeProvider>
-            <MobileOptimizer />
-            <GlobalPageTracker />
-            <TrackingDebug />
+            <ClientOnlyControls />
             {children}
-            <PWAInstallPrompt />
-            <ExitIntent />
             <Analytics />
           </ThemeProvider>
         </AuthProvider>
