@@ -27,6 +27,7 @@ export async function GET() {
                     source: 1,
                     provider: 1,
                     createdAt: 1,
+                    chatUsers: 1,
                     totalChats: {
                         $reduce: {
                             input: { $ifNull: ["$chatUsers", []] },
@@ -36,6 +37,42 @@ export async function GET() {
                     },
                     totalTimeSpent: { $sum: "$sessions.totalTimeSpent" },
                     sessionCount: { $size: "$sessions" }
+                }
+            },
+            {
+                $addFields: {
+                    uniqueChatDays: {
+                        $size: {
+                            $setUnion: {
+                                $reduce: {
+                                    input: { $ifNull: ["$chatUsers", []] },
+                                    initialValue: [],
+                                    in: {
+                                        $concatArrays: [
+                                            "$$value",
+                                            {
+                                                $map: {
+                                                    input: { $ifNull: ["$$this.conversations", []] },
+                                                    as: "conv",
+                                                    in: {
+                                                        $dateToString: {
+                                                            format: "%Y-%m-%d",
+                                                            date: { $toDate: "$$conv.timestamp" }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    chatUsers: 0  // Remove chatUsers from final output
                 }
             },
             { $sort: { createdAt: -1 } }

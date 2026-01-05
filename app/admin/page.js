@@ -19,7 +19,7 @@ const ADMIN_EMAILS = [
 ];
 
 export default function AdminPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [stats, setStats] = useState({
         totalUsers: 0,
         totalBlogs: 0,
@@ -30,6 +30,7 @@ export default function AdminPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+    const [isClient, setIsClient] = useState(false);
     const usersPerPage = 10;
 
     const fetchStats = async () => {
@@ -64,6 +65,10 @@ export default function AdminPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     useEffect(() => {
         // Check if user is admin
@@ -121,6 +126,18 @@ export default function AdminPage() {
         }
         return `${seconds}s`;
     };
+
+    if (!isClient || authLoading) {
+        return (
+            <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
+                <div className="relative w-20 h-20">
+                    <div className="absolute inset-0 rounded-2xl border-4 border-rose-100 animate-pulse"></div>
+                    <div className="absolute inset-0 rounded-2xl border-t-4 border-rose-600 animate-spin"></div>
+                </div>
+                <p className="text-rose-600 font-black mt-6 tracking-widest text-xs uppercase animate-pulse">Checking Permissions...</p>
+            </div>
+        );
+    }
 
     if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
         return (
@@ -284,6 +301,12 @@ export default function AdminPage() {
                                         </th>
                                         <th
                                             className="py-3 px-4 text-sm font-semibold text-gray-600 text-center cursor-pointer hover:text-rose-600 transition-colors"
+                                            onClick={() => handleSort('uniqueChatDays')}
+                                        >
+                                            Days {sortConfig.key === 'uniqueChatDays' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                                        </th>
+                                        <th
+                                            className="py-3 px-4 text-sm font-semibold text-gray-600 text-center cursor-pointer hover:text-rose-600 transition-colors"
                                             onClick={() => handleSort('totalTimeSpent')}
                                         >
                                             Time Spent {sortConfig.key === 'totalTimeSpent' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
@@ -313,6 +336,11 @@ export default function AdminPage() {
                                                 </span>
                                             </td>
                                             <td className="py-3 px-4 text-center">
+                                                <span className="px-2 py-1 rounded-lg bg-blue-50 text-blue-600 font-bold text-xs">
+                                                    {user.uniqueChatDays || 0}
+                                                </span>
+                                            </td>
+                                            <td className="py-3 px-4 text-center">
                                                 <div className="text-sm font-bold text-gray-700">
                                                     {formatTimeSpent(user.totalTimeSpent)}
                                                 </div>
@@ -328,7 +356,7 @@ export default function AdminPage() {
                                     ))}
                                     {currentUsers.length === 0 && (
                                         <tr>
-                                            <td colSpan="6" className="py-8 text-center text-gray-500">
+                                            <td colSpan="7" className="py-8 text-center text-gray-500">
                                                 No users matching your search
                                             </td>
                                         </tr>

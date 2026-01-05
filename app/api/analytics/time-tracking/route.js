@@ -89,7 +89,7 @@ export async function POST(request) {
                 },
                 { upsert: true }
             );
-        } else if (action === 'exit' && timeSpent) {
+        } else if ((action === 'exit' || action === 'heartbeat') && timeSpent) {
             await db.collection('user_sessions').updateOne(
                 { sessionId, userId },
                 {

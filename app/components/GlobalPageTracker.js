@@ -9,6 +9,7 @@ export default function GlobalPageTracker() {
     const [isClient, setIsClient] = useState(false);
     const lastTrackingCall = useRef({});
     const startTimeRef = useRef(null);
+    const lastHeartbeatRef = useRef(null);
 
     useEffect(() => {
         setIsClient(true);
@@ -18,6 +19,7 @@ export default function GlobalPageTracker() {
         if (!isClient || !user?.uid || !pathname) return;
 
         startTimeRef.current = Date.now();
+        lastHeartbeatRef.current = Date.now();
         let sessionId = null;
 
         // Get or create session ID
@@ -80,8 +82,13 @@ export default function GlobalPageTracker() {
         const trackPageExit = async () => {
             if (!startTimeRef.current) return;
 
+            const now = Date.now();
+            const timeSpent = now - (lastHeartbeatRef.current || startTimeRef.current);
+            lastHeartbeatRef.current = now; // Update last heartbeat to avoid double counting
+
+            if (timeSpent < 100) return; // Ignore negligible time
+
             try {
-                const timeSpent = Date.now() - startTimeRef.current;
                 await fetch('/api/analytics/time-tracking', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -90,8 +97,8 @@ export default function GlobalPageTracker() {
                         sessionId,
                         page: pathname,
                         action: 'exit',
-                        timestamp: Date.now(),
-                        timeSpent,
+                        timestamp: now,
+                        timeSpent, // Incremental time
                         userAgent: navigator.userAgent,
                         referrer: document.referrer
                     }),
@@ -106,8 +113,13 @@ export default function GlobalPageTracker() {
         const trackHeartbeat = async () => {
             if (!canTrack('heartbeat') || !startTimeRef.current) return;
 
+            const now = Date.now();
+            const timeSpent = now - (lastHeartbeatRef.current || startTimeRef.current);
+            lastHeartbeatRef.current = now;
+
+            if (timeSpent < 1000) return; // Don't track if less than 1 second
+
             try {
-                const timeSpent = Date.now() - startTimeRef.current;
                 await fetch('/api/analytics/time-tracking', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -116,8 +128,8 @@ export default function GlobalPageTracker() {
                         sessionId,
                         page: pathname,
                         action: 'heartbeat',
-                        timestamp: Date.now(),
-                        timeSpent,
+                        timestamp: now,
+                        timeSpent, // Incremental time
                         userAgent: navigator.userAgent,
                         referrer: document.referrer
                     })

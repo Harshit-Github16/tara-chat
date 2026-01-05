@@ -300,10 +300,11 @@ const MetricCard = ({ title, value, icon, color, subtitle, trend, gradient }) =>
 );
 
 export default function AnalyticsPage() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [analytics, setAnalytics] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedDays, setSelectedDays] = useState(7);
+    const [isClient, setIsClient] = useState(false);
 
     const fetchAnalytics = async () => {
         try {
@@ -319,6 +320,10 @@ export default function AnalyticsPage() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     useEffect(() => {
         if (user?.email && ADMIN_EMAILS.includes(user.email)) {
@@ -383,6 +388,18 @@ export default function AnalyticsPage() {
         // Default formatting: capitalize and replace hyphens
         return cleanPage.charAt(0).toUpperCase() + cleanPage.slice(1).replace(/-/g, ' ');
     };
+
+    if (!isClient || authLoading) {
+        return (
+            <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-100">
+                <div className="relative w-20 h-20">
+                    <div className="absolute inset-0 rounded-2xl border-4 border-rose-100 animate-pulse"></div>
+                    <div className="absolute inset-0 rounded-2xl border-t-4 border-rose-600 animate-spin"></div>
+                </div>
+                <p className="text-rose-600 font-black mt-6 tracking-widest text-xs uppercase animate-pulse">Checking Permissions...</p>
+            </div>
+        );
+    }
 
     if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
         return (
