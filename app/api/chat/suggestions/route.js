@@ -22,18 +22,30 @@ export async function POST(request) {
         const isStartingPhase = !messages || !Array.isArray(messages) || messages.length <= 3;
 
         if (isStartingPhase) {
-            // Hardcoded high-quality starting suggestions for a warm welcome
-            const startingSuggestions = [
-                "Namaste TARA! 🙏",
-                "Hi, how are you?",
-                "Help me with my mood",
-                "TARA, let's talk",
-                "I'm feeling a bit low",
-                "Suggest me something"
+            // Contextual, wellness-focused starting suggestions
+            const suggestionCategories = [
+                // Wellness & Self-Care
+                ["How can I feel better today?", "I need some motivation", "Help me relax"],
+                ["I'm feeling stressed", "Tips for better sleep?", "How to stay positive?"],
+
+                // Emotional Support
+                ["I'm feeling anxious", "Need someone to talk to", "Feeling overwhelmed"],
+                ["I'm feeling lonely", "How to handle emotions?", "I need encouragement"],
+
+                // Practical Help
+                ["Breathing exercises please", "Meditation tips?", "Self-care ideas"],
+                ["How to manage stress?", "Improve my mood", "Daily wellness tips"],
+
+                // Relationship & Social
+                ["Relationship advice needed", "How to communicate better?", "Dealing with conflicts"],
+
+                // Personal Growth
+                ["Build better habits", "Boost my confidence", "Set healthy boundaries"]
             ];
-            // Pick a random subset of 3
-            const shuffled = startingSuggestions.sort(() => Math.random() - 0.5);
-            return NextResponse.json({ suggestions: shuffled.slice(0, 3) });
+
+            // Pick a random category and return 3 suggestions
+            const randomCategory = suggestionCategories[Math.floor(Math.random() * suggestionCategories.length)];
+            return NextResponse.json({ suggestions: randomCategory });
         }
 
         // Get the last few messages for context

@@ -22,8 +22,17 @@ export default function GlobalPageTracker() {
         lastHeartbeatRef.current = Date.now();
         let sessionId = null;
 
-        // Get or create session ID
+        // Get or create session ID with version check
         try {
+            const TRACKING_VERSION = 'v2'; // Increment this when tracking logic changes
+            const currentVersion = sessionStorage.getItem('tara_tracking_version');
+
+            // Invalidate old sessions when tracking version changes
+            if (currentVersion !== TRACKING_VERSION) {
+                sessionStorage.removeItem('tara_session_id');
+                sessionStorage.setItem('tara_tracking_version', TRACKING_VERSION);
+            }
+
             sessionId = sessionStorage.getItem('tara_session_id');
             if (!sessionId) {
                 sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
