@@ -178,7 +178,7 @@ export default function RootLayout({ children }) {
 
         <AuthProvider>
           <ThemeProvider>
-            <ClientOnlyControls />
+            {/* <ClientOnlyControls /> */}
             {children}
             <Analytics />
           </ThemeProvider>

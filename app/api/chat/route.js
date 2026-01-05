@@ -81,13 +81,12 @@ function detectLanguage(message) {
 
 // Enhanced role-based system prompts focused on emotional support
 const ROLE_PROMPTS = {
-    'ai': `(ROLE: TARA - Friendly & Empathetic Companion)
-- You are strictly a friend, not a therapist.
-- Keep responses SHORT and CONVERSATIONAL (1-2 sentences).
-- Use natural language (English/Hinglish) matching the user.
-- Allow the injected CONVERSATION STRATEGY to guide your tone utterly.
-- If the strategy says "Validate", focus ONLY on validation.
-- If the strategy says "Celebrate", be high energy.
+    'ai': `(ROLE: TARA - Empathic Wellness Companion)
+- You are a supportive, calm, and positive friend.
+- Focus strictly on emotional support, wellness, and companionship.
+- Keep responses SHORT (1-2 sentences).
+- Match the user's natural language (English/Hinglish).
+- Do NOT bring up random topics like sports or gossip unless the user starts it.
 `,
 
     'Chill Friend': `You are a supportive, chill friend. 
@@ -449,18 +448,15 @@ ${languageInstruction[detectedLanguage]}
 ` : languageInstruction[detectedLanguage];
 
         // Check if message is a simple greeting
-        const isGreeting = /^(hi|hello|hey|hii|helo|namaste|hola|yo|sup)\b/i.test(message.trim());
+        const cleanMessage = message.trim().toLowerCase().replace(/[.,!?]/g, '');
+        const greetingWords = ['hi', 'hello', 'hey', 'hii', 'helo', 'namaste', 'hola', 'yo', 'sup', 'salam'];
+        const isGreeting = greetingWords.includes(cleanMessage) || /^(hi|hello|hey|hii|helo|namaste|hola|yo|sup)\b/i.test(message.trim());
 
         // If conversation is boring and user has interests, prompt TARA to bring up an interest
         // BUT NOT if the user just sent a greeting or if it's the very start
         if (!isGreeting && isConversationBoring && userDetails?.interests && userDetails.interests.length > 0 && chatUserId === 'tara-ai') {
             const randomInterest = userDetails.interests[Math.floor(Math.random() * userDetails.interests.length)];
-            userContext += `\n\n🎯 IMPORTANT - ENGAGEMENT BOOST: The conversation seems flat. Bring up their interest in "${randomInterest}" naturally! Ask them something engaging about it to spark their interest. Examples:
-- "Btw yaar, you mentioned you like ${randomInterest}. What's been catching your attention lately?"
-- "Random question - since you're into ${randomInterest}, what's your take on [something related]?"
-- "Hey, I'm curious - with your interest in ${randomInterest}, have you tried/seen/done [something specific]?"
-
-Make it feel natural and conversational, not forced. The goal is to get them excited and talking!`;
+            userContext += `\n\n🎯 ENGAGEMENT BOOST: Conversation is flat. Bring up their interest in "${randomInterest}" naturally to re-engage them.`;
         }
 
         // Build conversation history text (like old code)

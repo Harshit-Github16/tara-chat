@@ -145,6 +145,72 @@ const PieChart = ({ data, title }) => {
     );
 };
 
+const TopChatUsers = ({ users }) => {
+    return (
+        <div className="bg-gray-900 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden h-full">
+            <div className="absolute top-0 right-0 p-8 opacity-10">
+                <FontAwesomeIcon icon={faUsers} className="text-white text-9xl transform -rotate-12" />
+            </div>
+            <div className="relative h-full flex flex-col">
+                <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-xl font-bold text-white flex items-center gap-3">
+                        <span className="p-2 bg-rose-500/20 rounded-xl">🤖</span>
+                        Top AI Chat Users
+                    </h2>
+                    <span className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-widest border border-white/10">
+                        Top 10 Leaders
+                    </span>
+                </div>
+
+                <div className="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
+                    {users && users.length > 0 ? (
+                        users.map((user, index) => (
+                            <div key={index} className="group flex items-center justify-between p-4 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                                <div className="flex items-center gap-4">
+                                    <div className="relative">
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-black shadow-lg
+                                            ${index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-600' :
+                                                index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500' :
+                                                    index === 2 ? 'bg-gradient-to-br from-orange-300 to-orange-700' :
+                                                        'bg-gradient-to-br from-rose-500 to-purple-600'}`}>
+                                            {user.avatar ? (
+                                                <img src={user.avatar} alt="" className="w-full h-full rounded-2xl object-cover" />
+                                            ) : (
+                                                (user.name || 'U').charAt(0)
+                                            )}
+                                        </div>
+                                        {index < 3 && (
+                                            <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white flex items-center justify-center text-[10px] shadow-lg">
+                                                {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-white text-sm group-hover:text-rose-400 transition-colors truncate max-w-[120px]">
+                                            {user.name || 'Anonymous'}
+                                        </p>
+                                        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter truncate max-w-[120px]">
+                                            {user.email || 'No Email'}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-lg font-black text-white leading-none">{user.conversationCount}</p>
+                                    <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest mt-1">Chats</p>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="text-center py-10 opacity-50">
+                            <p className="text-white text-sm">No chat data yet</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const MetricCard = ({ title, value, icon, color, subtitle, trend, gradient }) => (
     <div className={`relative overflow-hidden bg-white rounded-3xl border border-rose-100/50 p-6 shadow-xl shadow-rose-100/10 hover:shadow-2xl hover:shadow-rose-200/30 transition-all duration-500 group cursor-default`}>
         {/* Background Decorative Element */}
@@ -292,36 +358,33 @@ export default function AnalyticsPage() {
         <ProtectedRoute>
             <div className="flex min-h-screen flex-col bg-[#FDF8F9]">
                 <header className="sticky top-0 z-50 border-b border-rose-100/50 bg-white/70 backdrop-blur-xl">
-                    <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-                        <div className="flex items-center gap-4">
-                            <Link href="/admin" className="group rounded-2xl p-3 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-all duration-300">
-                                <FontAwesomeIcon icon={faArrowLeft} className="h-5 w-5" />
+                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
+                        <div className="flex items-center gap-2 sm:gap-4">
+                            <Link href="/admin" className="group rounded-xl sm:rounded-2xl p-2 sm:p-3 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-all duration-300">
+                                <FontAwesomeIcon icon={faArrowLeft} className="h-4 w-4 sm:h-5 sm:w-5" />
                             </Link>
-                            <div className="flex items-center gap-3">
-                                <div className="relative">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                                <div className="relative shrink-0">
                                     <img
                                         src="/taralogo.jpg"
                                         alt="Tara Logo"
-                                        className="h-10 w-10 rounded-2xl object-cover shadow-md ring-2 ring-white"
+                                        className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl sm:rounded-2xl object-cover shadow-md ring-2 ring-white"
                                     />
-                                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+                                    <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"></div>
                                 </div>
-                                <div>
-                                    <h1 className="text-xl font-black text-gray-800 tracking-tight leading-none">Analytics Dashboard</h1>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Property of Tara4u</p>
-                                </div>
+
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
                             <div className="hidden sm:flex bg-rose-50/50 p-1 rounded-xl border border-rose-100">
                                 {[1, 7, 30, 90].map((d) => (
                                     <button
                                         key={d}
                                         onClick={() => setSelectedDays(d)}
                                         className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 ${selectedDays === d
-                                                ? 'bg-white text-rose-600 shadow-sm'
-                                                : 'text-gray-500 hover:text-rose-600'
+                                            ? 'bg-white text-rose-600 shadow-sm'
+                                            : 'text-gray-500 hover:text-rose-600'
                                             }`}
                                     >
                                         {d === 1 ? 'Last 24h' : `${d} Days`}
@@ -331,7 +394,7 @@ export default function AnalyticsPage() {
                             <select
                                 value={selectedDays}
                                 onChange={(e) => setSelectedDays(parseInt(e.target.value))}
-                                className="sm:hidden px-3 py-2 rounded-xl border border-rose-200 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white"
+                                className="sm:hidden px-2 py-1.5 rounded-lg border border-rose-200 text-[10px] font-bold focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white"
                             >
                                 <option value={1}>24 Hours</option>
                                 <option value={7}>7 Days</option>
@@ -343,6 +406,10 @@ export default function AnalyticsPage() {
                 </header>
 
                 <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 md:px-6">
+                    <div className="min-w-0 pb-2">
+                        <h1 className="text-[12px] sm:text-[20px] font-black text-gray-800 font-semibold leading-none truncate">Analytics Dashboard</h1>
+                        {/* <p className="text-[8px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 sm:mt-1 truncate">Tara4u Property</p> */}
+                    </div>
                     {loading ? (
                         <div className="flex flex-col items-center justify-center h-[60vh]">
                             <div className="relative w-20 h-20">
@@ -391,7 +458,7 @@ export default function AnalyticsPage() {
 
                             {/* Main Charts area */}
                             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                                <div className="xl:col-span-2">
+                                <div className="xl:col-span-2 space-y-8">
                                     <TopPagesChart
                                         title="Most Popular Destinations"
                                         data={analytics.pageStats.map(page => ({
@@ -399,85 +466,64 @@ export default function AnalyticsPage() {
                                             value: page.totalViews
                                         }))}
                                     />
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <PieChart
+                                            title="User Engagement"
+                                            data={[
+                                                {
+                                                    label: 'Power Users (>1min)',
+                                                    value: analytics.pageStats.filter(p => p.avgTimeSpent > 60000).length
+                                                },
+                                                {
+                                                    label: 'Browsers (30s-1min)',
+                                                    value: analytics.pageStats.filter(p => p.avgTimeSpent > 30000 && p.avgTimeSpent <= 60000).length
+                                                },
+                                                {
+                                                    label: 'Leavers (<30s)',
+                                                    value: analytics.pageStats.filter(p => p.avgTimeSpent <= 30000).length
+                                                }
+                                            ]}
+                                        />
+                                        <TopChatUsers users={analytics.topChatUsers} />
+                                    </div>
                                 </div>
                                 <div className="xl:col-span-1">
-                                    <PieChart
-                                        title="User Engagement"
-                                        data={[
-                                            {
-                                                label: 'Power Users (>1min)',
-                                                value: analytics.pageStats.filter(p => p.avgTimeSpent > 60000).length
-                                            },
-                                            {
-                                                label: 'Browsers (30s-1min)',
-                                                value: analytics.pageStats.filter(p => p.avgTimeSpent > 30000 && p.avgTimeSpent <= 60000).length
-                                            },
-                                            {
-                                                label: 'Leavers (<30s)',
-                                                value: analytics.pageStats.filter(p => p.avgTimeSpent <= 30000).length
-                                            }
-                                        ]}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Detailed Performance Table */}
-                            <div className="bg-white/80 backdrop-blur-sm rounded-[2rem] border border-rose-100/50 shadow-xl overflow-hidden">
-                                <div className="p-8 border-b border-gray-50 flex items-center justify-between">
-                                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
-                                        <span className="p-2 bg-rose-50 rounded-xl">📈</span>
-                                        Detailed Page Performance
-                                    </h2>
-                                </div>
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left border-collapse">
-                                        <thead>
-                                            <tr className="bg-gray-50/50">
-                                                <th className="py-5 px-8 text-[11px] font-black tracking-widest text-gray-400 uppercase">Destination Page</th>
-                                                <th className="py-5 px-8 text-[11px] font-black tracking-widest text-gray-400 uppercase">Views</th>
-                                                <th className="py-5 px-8 text-[11px] font-black tracking-widest text-gray-400 uppercase">Users</th>
-                                                <th className="py-5 px-8 text-[11px] font-black tracking-widest text-gray-400 uppercase">Dwell Time</th>
-                                                <th className="py-5 px-8 text-[11px] font-black tracking-widest text-gray-400 uppercase text-center">Efficiency</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-50">
-                                            {analytics.pageStats.map((page, index) => (
-                                                <tr key={index} className="group hover:bg-rose-50/30 transition-all duration-300">
-                                                    <td className="py-4 px-8">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-sm font-bold text-gray-800 group-hover:text-rose-600 transition-colors">
-                                                                {formatPageName(page.page)}
-                                                            </span>
-                                                            <span className="text-[10px] font-bold text-gray-400">{page.page}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 px-8">
-                                                        <span className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-black">
-                                                            {page.totalViews}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-4 px-8">
-                                                        <span className="inline-flex items-center px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-black">
-                                                            {page.uniqueUsers}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-4 px-8">
-                                                        <div className="flex items-center gap-2">
-                                                            <FontAwesomeIcon icon={faClock} className="text-gray-300 text-xs" />
-                                                            <span className="text-xs font-bold text-gray-700 font-mono italic">
-                                                                {formatTime(page.avgTimeSpent)}
-                                                            </span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-4 px-8 text-center">
-                                                        {page.avgTimeSpent > 60000 ? <span className="text-xl">🔥</span> :
-                                                            page.avgTimeSpent > 30000 ? <span className="text-xl">💎</span> :
-                                                                page.avgTimeSpent > 10000 ? <span className="text-xl">✨</span> : <span className="text-xl">🧊</span>}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    {/* Detailed Performance Table Adjusted for sidebar */}
+                                    <div className="bg-white/80 backdrop-blur-sm rounded-[2rem] border border-rose-100/50 shadow-xl overflow-hidden h-full flex flex-col">
+                                        <div className="p-6 border-b border-gray-50">
+                                            <h2 className="text-lg font-bold text-gray-800 flex items-center gap-3">
+                                                <span className="p-2 bg-rose-50 rounded-xl">📈</span>
+                                                Page Rank
+                                            </h2>
+                                        </div>
+                                        <div className="overflow-x-auto flex-1 h-[530px] overflow-y-auto custom-scrollbar">
+                                            <table className="w-full text-left border-collapse">
+                                                <thead className="sticky top-0 bg-white/95 backdrop-blur-sm z-10">
+                                                    <tr className="bg-gray-50/50">
+                                                        <th className="py-4 px-6 text-[10px] font-black tracking-widest text-gray-400 uppercase">Page</th>
+                                                        <th className="py-4 px-6 text-[10px] font-black tracking-widest text-gray-400 uppercase">Views</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-gray-50">
+                                                    {analytics.pageStats.map((page, index) => (
+                                                        <tr key={index} className="group hover:bg-rose-50/30 transition-all duration-300">
+                                                            <td className="py-3 px-6">
+                                                                <span className="text-xs font-bold text-gray-800 group-hover:text-rose-600 transition-colors truncate block max-w-[120px]">
+                                                                    {formatPageName(page.page)}
+                                                                </span>
+                                                            </td>
+                                                            <td className="py-3 px-6 text-right">
+                                                                <span className="inline-flex items-center px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-black">
+                                                                    {page.totalViews}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

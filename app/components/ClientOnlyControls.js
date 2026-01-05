@@ -22,7 +22,6 @@ export default function ClientOnlyControls() {
         <Suspense fallback={null}>
             <MobileOptimizer />
             <GlobalPageTracker />
-            <TrackingDebug />
             <PWAInstallPrompt />
             <ExitIntent />
         </Suspense>

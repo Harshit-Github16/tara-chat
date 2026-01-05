@@ -18,8 +18,22 @@ export async function POST(request) {
         const body = await request.json();
         const { messages, userDetails } = body;
 
-        if (!messages || !Array.isArray(messages) || messages.length === 0) {
-            return NextResponse.json({ suggestions: [] });
+        // If no messages or very few, we are in the starting phase
+        const isStartingPhase = !messages || !Array.isArray(messages) || messages.length <= 3;
+
+        if (isStartingPhase) {
+            // Hardcoded high-quality starting suggestions for a warm welcome
+            const startingSuggestions = [
+                "Namaste TARA! 🙏",
+                "Hi, how are you?",
+                "Help me with my mood",
+                "TARA, let's talk",
+                "I'm feeling a bit low",
+                "Suggest me something"
+            ];
+            // Pick a random subset of 3
+            const shuffled = startingSuggestions.sort(() => Math.random() - 0.5);
+            return NextResponse.json({ suggestions: shuffled.slice(0, 3) });
         }
 
         // Get the last few messages for context
@@ -27,24 +41,29 @@ export async function POST(request) {
             `${m.sender === 'user' ? (userDetails?.name || 'User') : 'TARA'}: ${m.content}`
         ).join('\n');
 
-        const systemPrompt = `You are a helpful AI assistant suggesting replies for the user. 
-        Based on the conversation history, suggest 3 short, natural, and relevant replies that the user might want to send next.
-        - Keep them short (1-5 words).
-        - Make them conversational.
-        - Vary the tone (one neutral, one question, one expressive).
-        - If the language is Hindi/Hinglish, suggest in Hinglish.
-        - Return ONLY the 3 suggestions separated by pipes (|), nothing else.
-        Example: "Yeah totally|What about you?|That sounds fun"
+        const systemPrompt = `You are TARA's intelligent assistant helping the user reply.
+        Current Phase: ${messages.length < 3 ? 'Starting/Greeting' : 'Ongoing Conversation'}
+        
+        Based on the conversation history, suggest 3 short, natural, and highly relevant replies.
+        Guidelines:
+        - Keep them 1-4 words.
+        - Style: Hinglish (Hindi + English) - mixed naturally.
+        - Context: If the user is just saying hi, suggest warm greetings.
+        - Variety: One acknowledgment, one question, one emotional expression.
+        - Avoid: Generic "I understand" or "Tell me more" unless perfectly fitting.
+        
+        Return ONLY the 3 suggestions separated by pipes (|), nothing else.
+        Example: "Theek hoon aap?|Maza nahi aa rha|Help kardo"
         `;
 
         const groqPayload = {
-            model: 'llama-3.1-8b-instant', // Faster and more reliable for simple tasks
+            model: 'llama-3.1-8b-instant',
             messages: [
                 { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Previous conversation:\n${recentMessages}\n\nSuggest 3 replies for the User:` }
+                { role: 'user', content: `Conversation Context:\n${recentMessages}\n\nSuggest 3 Best Replies for User:` }
             ],
-            temperature: 0.7,
-            max_tokens: 50,
+            temperature: 0.8,
+            max_tokens: 60,
         };
 
         // Retry mechanism with multiple keys

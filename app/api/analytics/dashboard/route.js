@@ -153,6 +153,37 @@ export async function GET(request) {
             { $sort: { date: 1 } }
         ]).toArray();
 
+        // Top 10 Chat Users
+        const topChatUsers = await db.collection('users').aggregate([
+            { $match: { 'chatUsers.0.conversations': { $exists: true } } },
+            {
+                $project: {
+                    name: 1,
+                    email: 1,
+                    avatar: 1,
+                    chatCount: { $size: { $ifNull: [{ $arrayElemAt: ['$chatUsers.conversations', 0] }, []] } },
+                    // In the image provided, chatUsers is an array of objects. 
+                    // chatUsers[0].conversations is the array.
+                    actualChatCount: {
+                        $size: { $ifNull: [{ $arrayElemAt: ["$chatUsers.conversations", 0] }, []] }
+                    }
+                }
+            },
+            // Correction based on user prompt: chatUsers[0].conversations length
+            {
+                $project: {
+                    name: 1,
+                    email: 1,
+                    avatar: 1,
+                    conversationCount: {
+                        $size: { $ifNull: [{ $let: { vars: { firstChatUser: { $arrayElemAt: ["$chatUsers", 0] } }, in: "$$firstChatUser.conversations" } }, []] }
+                    }
+                }
+            },
+            { $sort: { conversationCount: -1 } },
+            { $limit: 10 }
+        ]).toArray();
+
         // Merge bounce rate data with page stats
         const pageStatsWithBounce = pageStats.map(stat => {
             const bounceInfo = bounceData.find(b => b.page === stat.page);
@@ -169,6 +200,7 @@ export async function GET(request) {
                 userJourneys,
                 activeSessions,
                 dailyStats,
+                topChatUsers,
                 summary: {
                     totalPages: pageStats.length,
                     totalViews: pageStats.reduce((sum, p) => sum + p.totalViews, 0),
