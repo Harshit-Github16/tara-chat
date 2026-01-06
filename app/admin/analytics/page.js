@@ -207,10 +207,11 @@ const TopChatUsers = ({ users }) => {
                     </span>
                 </div>
 
-                <div className="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
+                <div className="space-y-1 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
                     {users && users.length > 0 ? (
                         users.map((user, index) => (
-                            <div key={index} className="group flex items-center justify-between p-4 rounded-2xl bg-rose-50/50 border border-rose-100/50 hover:bg-white hover:shadow-md transition-all duration-300">
+                            <div key={index} className="group flex items-center justify-between p-4 
+                            rounded-2xl bg-rose-50/50 border border-rose-100/50 hover:bg-white hover:shadow-md transition-all duration-300">
                                 <div className="flex items-center gap-4">
                                     <div className="relative">
                                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-black shadow-lg
