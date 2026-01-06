@@ -519,9 +519,9 @@ export default function StressCheckPage() {
                 </div>
             </header>
 
-            <div className="mx-auto max-w-5xl px-4 py-8">
+            <div className="mx-auto max-w-7xl px-4 py-4">
                 {/* Enhanced Progress Section */}
-                <div className="mb-8 bg-white rounded-2xl border border-rose-100 p-6 shadow-sm">
+                <div className="mb-2 bg-white rounded-2xl border border-rose-100 p-6 shadow-sm">
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-rose-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
@@ -602,7 +602,7 @@ export default function StressCheckPage() {
                 </div>
 
                 {/* Enhanced Navigation Buttons */}
-                <div className="flex gap-4 mb-8">
+                <div className="flex gap-4 mb-4">
                     <button
                         onClick={handlePrevious}
                         disabled={currentQuestion === 0}
