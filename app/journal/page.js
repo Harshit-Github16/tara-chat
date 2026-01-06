@@ -184,7 +184,16 @@ export default function JournalPage() {
             </div>
           )}
           {loading ? (
-            <div className="text-center py-12 text-gray-500">Loading journals...</div>
+            <div className="flex flex-col items-center justify-center py-24 sm:py-32">
+              <div className="relative mb-6">
+                <div className="h-20 w-20 rounded-full border-4 border-rose-100/50 border-t-rose-500 animate-spin"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faBookOpen} className="h-8 w-8 text-rose-500/50 animate-pulse" />
+                </div>
+              </div>
+              <h3 className="text-lg font-medium text-rose-600 animate-pulse">Gathering your thoughts...</h3>
+              <p className="mt-2 text-sm text-gray-500">Preparing your private journal space</p>
+            </div>
           ) : groups.length === 0 ? (
             <EmptyState onNew={() => { setEditing(null); setShowModal(true); }} onGenerate={autoGenerateToday} />
           ) : (
