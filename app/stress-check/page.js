@@ -489,6 +489,7 @@ export default function StressCheckPage() {
                     </div>
                 </div>
 
+
                 <BottomNav activePage="stress-check" />
             </div>
         );
