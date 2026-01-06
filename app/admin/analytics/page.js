@@ -484,7 +484,7 @@ export default function AnalyticsPage() {
                     ) : analytics ? (
                         <div className="space-y-10">
                             {/* Key Metrics */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                                 <MetricCard
                                     title="Total Page Views"
                                     value={analytics.summary.totalViews.toLocaleString()}
@@ -499,7 +499,15 @@ export default function AnalyticsPage() {
                                     icon={faUsers}
                                     color="bg-green-500"
                                     gradient="bg-gradient-to-br from-emerald-400 to-green-600"
-                                    subtitle="User Base"
+                                    subtitle="New & Old"
+                                />
+                                <MetricCard
+                                    title="Returning Users"
+                                    value={analytics.summary.returningUsers || 0}
+                                    icon={faChartLine}
+                                    color="bg-purple-500"
+                                    gradient="bg-gradient-to-br from-purple-400 to-indigo-600"
+                                    subtitle="Loyal User Base"
                                 />
                                 <MetricCard
                                     title="Bounce Rate"

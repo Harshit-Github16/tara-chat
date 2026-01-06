@@ -213,6 +213,19 @@ export async function GET(request) {
             browserStats[browser] = (browserStats[browser] || 0) + 1;
         });
 
+        // Calculate actual unique users and returning users more accurately
+        const activeUserIds = await db.collection('page_tracking').distinct('userId', {
+            timestamp: { $gte: startDate },
+            userId: { $ne: null }
+        });
+
+        const returningUserIds = await db.collection('page_tracking').distinct('userId', {
+            userId: { $in: activeUserIds },
+            timestamp: { $lt: startDate }
+        });
+
+        const totalViews = pageStats.reduce((sum, p) => sum + p.totalViews, 0);
+
         // Merge bounce rate data with page stats
         const pageStatsWithBounce = pageStats.map(stat => {
             const bounceInfo = bounceData.find(b => b.page === stat.page);
@@ -234,9 +247,10 @@ export async function GET(request) {
                 deviceStats: Object.entries(deviceStats).map(([label, value]) => ({ label, value })),
                 browserStats: Object.entries(browserStats).map(([label, value]) => ({ label, value })),
                 summary: {
-                    totalPages: pageStats.length,
-                    totalViews: pageStats.reduce((sum, p) => sum + p.totalViews, 0),
-                    totalUsers: [...new Set(pageStats.flatMap(p => p.uniqueUsers))].length,
+                    totalPages: pageStats.length || 0,
+                    totalViews: totalViews,
+                    totalUsers: activeUserIds.length || 0,
+                    returningUsers: returningUserIds.length || 0,
                     avgBounceRate: bounceData.length > 0
                         ? Math.round(bounceData.reduce((sum, b) => sum + b.bounceRate, 0) / bounceData.length)
                         : 0
