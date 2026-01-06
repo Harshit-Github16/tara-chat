@@ -11,89 +11,61 @@ const GROQ_API_KEYS = [
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-
 export async function POST(request) {
     try {
-        console.log('Suggestions API - Available Keys:', GROQ_API_KEYS.length);
-
         const body = await request.json();
         const { messages, userDetails } = body;
 
-        // If no messages or very few, we are in the starting phase
-        // FIXED: Only consider it starting phase if there are 0 or 1 message (User start or User+AI greeting)
-        // User requested: "start chat ki to greetings hi honi chahiye"
-        const isStartingPhase = !messages || !Array.isArray(messages) || messages.length <= 1;
-
-        if (isStartingPhase) {
-            // Contextual, wellness-focused starting suggestions
-            const suggestionCategories = [
-                // Greetings & Openers
-                ["Hi Tara! 😊", "Kaise ho?", "Need to talk"],
-                ["Hey! 👋", "Aaj ka din kaisa hai?", "Feeling a bit low"],
-                ["Hii Tara!", "Kuch share karna hai", "How are you?"]
-            ];
-
-            // Pick a random category and return 3 suggestions
-            const randomCategory = suggestionCategories[Math.floor(Math.random() * suggestionCategories.length)];
-            return NextResponse.json({ suggestions: randomCategory });
-        }
-
-        // Get the last few messages for context
-        // FIXED: User requested "suggestions last 2-3 msg ke according genrate hone chahiye"
-        const recentMessages = messages.slice(-3).map(m =>
+        // Get context from last 3-5 messages
+        const recentHistory = messages && Array.isArray(messages) ? messages.slice(-5) : [];
+        const contextText = recentHistory.map(m =>
             `${m.sender === 'user' ? (userDetails?.name || 'User') : 'TARA'}: ${m.content}`
         ).join('\n');
 
-        const detectedLanguage = detectLanguage(recentMessages);
-        console.log('Detected language for suggestions:', detectedLanguage);
+        // Detect language from context or fallback to English
+        const detectedLanguage = detectLanguage(contextText || "");
 
-        // Language-specific instructions with more idiomatic examples
+        // Language-specific style rules
         const languageInstructions = {
-            'english': `- Style: Casual, friendly English.
-        - Tone: Support friend.
-        - Examples: "How are you doing?|I'm here for you.|Tell me more!"`,
-
-            'hinglish': `- Style: Natural Hinglish (mixing Hindi/English like friends do).
-        - IMPORTANT: Avoid literal translations of English idioms. Use common urban Hinglish.
-        - Examples: "Aap kaise ho?|Sab badhiya, aap batao|Dil halka ho gaya|Maza nahi aa raha"`,
-
-            'hindi': `- Style: Conversational Hindi (Roman script).
-        - IMPORTANT: Must sound like a real person, not a translator.
-        - Examples: "Kaise ho yaar?|Theek hoon, tum batao|Kya chal raha hai?|Pareshan mat ho"`
+            'english': `Respond in natural, casual English.`,
+            'hindi': `Respond in conversational Hindi (Roman script).`,
+            'hinglish': `Respond in natural Hinglish (mixing Hindi/English). Mirror the user's style.`
         };
 
-        const systemPrompt = `You are TARA's intelligent assistant helping the user reply.
-        
-        Based on the conversation history (last 3 messages), suggest 3 short, natural, and highly relevant replies.
-        
-        CRITICAL RULES:
-        1. NATURAL FLOW: Suggestions must sound like something a real friend would say. No robotic or weirdly translated phrases.
-        2. LANGUAGE MATCH: ${languageInstructions[detectedLanguage]}
-        3. VOCABULARY MIRRORING: If user uses "bro", "yaar", etc., use them in suggestions.
-        4. VARIETY: One casual update/acknowledgment, one follow-up question, one emotional reaction.
-        5. DO NOT use: "Tumhare saath raha main" or "Dukh mat manna" - these are robotic.
-        
-        Return ONLY the 3 suggestions separated by pipes (|), nothing else.
-        `;
+        const systemPrompt = `You are TARA's intelligent reply assistant. 
+Your job is to suggest 3 natural, short, and highly relevant replies for the User to send to TARA.
+
+VIBE: "Chill Friend" - supportive, casual, and empathetic. 
+STYLE: Short (1-4 words mostly), natural, and varied.
+
+CRITICAL RULES:
+1. NO ROBOTIC TALK: Avoid phrases like "I am sad" or "Help me".
+2. LANGUAGE: ${languageInstructions[detectedLanguage]}
+3. CONTEXT: 
+   - If history is empty, suggest 3 different high-quality openers (e.g., "Hi Tara! 😊", "Need to talk", "Kaise ho?").
+   - If history exists, suggest replies that follow the current flow.
+4. VARIETY: Provide 3 distinct options (e.g., one update, one question, one emotion).
+5. NO NUMBERING: Just provide the suggestions separated by pipes (|).
+
+Examples:
+- "Hi Tara! 😊 | Kaise ho? | Need to talk"
+- "Sab badhiya! | Aap batao | Mood thora off hai"
+- "Thanks yaar | I understand | Phir kya hua?"
+
+Return ONLY the 3 suggestions separated by pipes (|).`;
 
         const groqPayload = {
-            model: 'llama-3.1-70b-versatile', // Upgraded model for better nuance
+            model: 'llama-3.3-70b-versatile',
             messages: [
                 { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Conversation Context:\n${recentMessages}\n\nSuggest 3 Best Replies for User:` }
+                { role: 'user', content: contextText ? `Conversation History:\n${contextText}\n\nSuggest 3 replies:` : "Start of conversation. Suggest 3 openers:" }
             ],
-            temperature: 0.85, // Slightly higher for more natural variety
-            max_tokens: 100,
+            temperature: 0.8,
+            max_tokens: 100
         };
 
-        // Retry mechanism with multiple keys
         const shuffledKeys = [...GROQ_API_KEYS].sort(() => Math.random() - 0.5);
-        let lastError = null;
         let suggestionText = "";
-
-        if (shuffledKeys.length === 0) {
-            console.error('No Groq API keys found in environment variables');
-        }
 
         for (const apiKey of shuffledKeys) {
             try {
@@ -109,39 +81,39 @@ export async function POST(request) {
                 if (response.ok) {
                     const data = await response.json();
                     suggestionText = data.choices[0]?.message?.content || "";
-                    if (suggestionText) {
-                        console.log('Suggestions generated successfully');
-                        break;
-                    }
-                } else {
-                    lastError = await response.text();
-                    console.error('Groq key failed:', apiKey.substring(0, 5) + '...', lastError);
+                    if (suggestionText) break;
                 }
             } catch (error) {
-                lastError = error.message;
-                console.error('Fetch error with key:', error.message);
+                console.error('Groq key failed in suggestions:', error.message);
             }
         }
 
-        if (!suggestionText) {
-            throw new Error(`All Groq keys failed or returned empty. Last error: ${lastError}`);
-        }
+        if (!suggestionText) throw new Error("All Groq keys failed");
 
-        // Split by pipe and clean up
+        // Clean and parse suggestions
         const suggestions = suggestionText.split('|')
-            .map(s => s.trim().replace(/^["']|["']$/g, '')) // Remove quotes
-            .filter(s => s.length > 0 && s.length < 50) // Basic validation
+            .map(s => s.trim()
+                .replace(/^["']|["']$/g, '')
+                .replace(/^\d+[\.\)]\s*/, '') // Remove numbers
+                .replace(/^[-•*]\s*/, '') // Remove bullets
+                .trim()
+            )
+            .filter(s => s.length > 0 && s.length < 50)
             .slice(0, 3);
+
+        // Final fallback if parsing fails
+        if (suggestions.length === 0) {
+            return NextResponse.json({
+                suggestions: ["Hi Tara! 😊", "Kaise ho?", "Need to talk"]
+            });
+        }
 
         return NextResponse.json({ suggestions });
 
     } catch (error) {
         console.error('Suggestions API error:', error);
-        // Fallback suggests based on Tara's vibe - using unique labels to confirm deployment
         return NextResponse.json({
-            suggestions: ["Tell me more! 😊", "I understand", "What's next?"]
-        }, {
-            headers: { 'Cache-Control': 'no-store, max-age=0' }
+            suggestions: ["Hi Tara! 😊", "How are you?", "Need to talk"]
         });
     }
 }
