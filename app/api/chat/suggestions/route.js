@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { detectLanguage } from '../../../utils/languageDetection';
 
 const GROQ_API_KEYS = [
     process.env.GROQ_API_KEY,
@@ -19,28 +20,17 @@ export async function POST(request) {
         const { messages, userDetails } = body;
 
         // If no messages or very few, we are in the starting phase
-        const isStartingPhase = !messages || !Array.isArray(messages) || messages.length <= 3;
+        // FIXED: Only consider it starting phase if there are 0 or 1 message (User start or User+AI greeting)
+        // User requested: "start chat ki to greetings hi honi chahiye"
+        const isStartingPhase = !messages || !Array.isArray(messages) || messages.length <= 1;
 
         if (isStartingPhase) {
             // Contextual, wellness-focused starting suggestions
             const suggestionCategories = [
-                // Wellness & Self-Care
-                ["How can I feel better today?", "I need some motivation", "Help me relax"],
-                ["I'm feeling stressed", "Tips for better sleep?", "How to stay positive?"],
-
-                // Emotional Support
-                ["I'm feeling anxious", "Need someone to talk to", "Feeling overwhelmed"],
-                ["I'm feeling lonely", "How to handle emotions?", "I need encouragement"],
-
-                // Practical Help
-                ["Breathing exercises please", "Meditation tips?", "Self-care ideas"],
-                ["How to manage stress?", "Improve my mood", "Daily wellness tips"],
-
-                // Relationship & Social
-                ["Relationship advice needed", "How to communicate better?", "Dealing with conflicts"],
-
-                // Personal Growth
-                ["Build better habits", "Boost my confidence", "Set healthy boundaries"]
+                // Greetings & Openers
+                ["Hi Tara! 😊", "Kaise ho?", "Need to talk"],
+                ["Hey! 👋", "Aaj ka din kaisa hai?", "Feeling a bit low"],
+                ["Hii Tara!", "Kuch share karna hai", "How are you?"]
             ];
 
             // Pick a random category and return 3 suggestions
@@ -49,90 +39,51 @@ export async function POST(request) {
         }
 
         // Get the last few messages for context
-        const recentMessages = messages.slice(-5).map(m =>
+        // FIXED: User requested "suggestions last 2-3 msg ke according genrate hone chahiye"
+        const recentMessages = messages.slice(-3).map(m =>
             `${m.sender === 'user' ? (userDetails?.name || 'User') : 'TARA'}: ${m.content}`
         ).join('\n');
-
-        // Detect language from recent messages
-        const detectLanguage = (text) => {
-            if (!text) return 'english';
-
-            const lowerText = text.toLowerCase();
-
-            // Hindi/Devanagari script detection
-            const hindiPattern = /[\u0900-\u097F]/;
-            if (hindiPattern.test(text)) {
-                return 'hindi';
-            }
-
-            // Common Hindi/Hinglish words
-            const hindiWords = [
-                'hai', 'hoon', 'ho', 'hain', 'tha', 'thi', 'the', 'ka', 'ki', 'ke',
-                'main', 'mein', 'aap', 'tum', 'kya', 'kaise', 'kaisa', 'kaisi',
-                'nahi', 'nahin', 'haan', 'ji', 'acha', 'accha', 'theek', 'thik',
-                'bahut', 'bohot', 'bht', 'bhut', 'kuch', 'koi', 'yaar', 'bhai', 'dost',
-                'kar', 'karo', 'karna', 'raha', 'rahi', 'rahe', 'gaya', 'gayi', 'gaye',
-                'kal', 'aaj', 'aj', 'abhi', 'phir', 'wala', 'wali', 'wale',
-                'hu', 'khush', 'khus', 'mere', 'mre', 'mera', 'meri'
-            ];
-
-            const words = lowerText.split(/\s+/).filter(w => w.length > 0);
-            const hindiWordCount = words.filter(word => hindiWords.includes(word)).length;
-
-            // If more than 20% words are Hindi/Hinglish, consider it Hinglish
-            if (hindiWordCount / words.length > 0.2) {
-                return 'hinglish';
-            }
-
-            // Check for common English patterns
-            const englishPattern = /^[a-z\s.,!?'"]+$/i;
-            if (englishPattern.test(text)) {
-                return 'english';
-            }
-
-            return 'english';
-        };
 
         const detectedLanguage = detectLanguage(recentMessages);
         console.log('Detected language for suggestions:', detectedLanguage);
 
-        // Language-specific instructions
+        // Language-specific instructions with more idiomatic examples
         const languageInstructions = {
-            'english': `- Style: ENGLISH ONLY - Use proper English words and grammar.
-        - Keep them natural, conversational English (1-4 words).
-        - Example: "How are you?|That's great!|Tell me more"`,
+            'english': `- Style: Casual, friendly English.
+        - Tone: Support friend.
+        - Examples: "How are you doing?|I'm here for you.|Tell me more!"`,
 
-            'hinglish': `- Style: Hinglish (Hindi + English) - mixed naturally.
-        - Keep them 1-4 words.
-        - Example: "Theek hoon aap?|Maza nahi aa rha|Help kardo"`,
+            'hinglish': `- Style: Natural Hinglish (mixing Hindi/English like friends do).
+        - IMPORTANT: Avoid literal translations of English idioms. Use common urban Hinglish.
+        - Examples: "Aap kaise ho?|Sab badhiya, aap batao|Dil halka ho gaya|Maza nahi aa raha"`,
 
-            'hindi': `- Style: HINDI ONLY - Use Hindi words (Devanagari or Roman script).
-        - Keep them natural, conversational Hindi (1-4 words).
-        - Example: "Kaise ho?|Bahut achha!|Aur batao"`
+            'hindi': `- Style: Conversational Hindi (Roman script).
+        - IMPORTANT: Must sound like a real person, not a translator.
+        - Examples: "Kaise ho yaar?|Theek hoon, tum batao|Kya chal raha hai?|Pareshan mat ho"`
         };
 
         const systemPrompt = `You are TARA's intelligent assistant helping the user reply.
-        Current Phase: ${messages.length < 3 ? 'Starting/Greeting' : 'Ongoing Conversation'}
         
-        Based on the conversation history, suggest 3 short, natural, and highly relevant replies.
-        Guidelines:
-        ${languageInstructions[detectedLanguage]}
-        - Context: If the user is just saying hi, suggest warm greetings.
-        - Variety: One acknowledgment, one question, one emotional expression.
-        - Avoid: Generic "I understand" or "Tell me more" unless perfectly fitting.
-        - CRITICAL: Match the language of the conversation exactly.
+        Based on the conversation history (last 3 messages), suggest 3 short, natural, and highly relevant replies.
+        
+        CRITICAL RULES:
+        1. NATURAL FLOW: Suggestions must sound like something a real friend would say. No robotic or weirdly translated phrases.
+        2. LANGUAGE MATCH: ${languageInstructions[detectedLanguage]}
+        3. VOCABULARY MIRRORING: If user uses "bro", "yaar", etc., use them in suggestions.
+        4. VARIETY: One casual update/acknowledgment, one follow-up question, one emotional reaction.
+        5. DO NOT use: "Tumhare saath raha main" or "Dukh mat manna" - these are robotic.
         
         Return ONLY the 3 suggestions separated by pipes (|), nothing else.
         `;
 
         const groqPayload = {
-            model: 'llama-3.1-8b-instant',
+            model: 'llama-3.1-70b-versatile', // Upgraded model for better nuance
             messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Conversation Context:\n${recentMessages}\n\nSuggest 3 Best Replies for User:` }
             ],
-            temperature: 0.8,
-            max_tokens: 60,
+            temperature: 0.85, // Slightly higher for more natural variety
+            max_tokens: 100,
         };
 
         // Retry mechanism with multiple keys

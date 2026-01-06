@@ -24,46 +24,53 @@ const EMOTION_KEYWORDS = {
     ],
     confusion: [
         'confused', 'lost', 'unsure', 'dont know', 'idk', 'maybe', 'help', 'stuck',
-        'samajh nahi', 'pata nahi', 'kya karu', 'uljan'
+        'samajh nahi', 'pata nahi', 'kya karu', 'uljan', 'confuse'
+    ],
+    boredom: [
+        'ok', 'hmm', 'hmmm', 'haa', 'han', 'bas', 'nothing', 'kuch nahi', 'pata nahi'
     ]
 };
 
 const STRATEGIES = {
     VALIDATION: {
         name: 'Deep Validation',
-        instruction: `STRATEGY: DEEP VALIDATION (The user feels unheard or intense emotion)
-    - Your PRIMARY GOAL is to make them feel understood.
-    - Do NOT offer solutions yet.
-    - Mirror their specific emotion (e.g., "It makes sense that you're angry because...").
-    - Use "It sounds like..." or "I hear how painful this is."`,
+        instruction: `STRATEGY: DEEP VALIDATION (User feels unheard/intense emotion)
+    - GOAL: Make them feel truly understood.
+    - Mirror their feelings naturally.
+    - Avoid robotic phrases like "I hear that you are...".
+    - Instead, say things like "That sounds incredibly tough" or "I can't imagine how hard that must be."
+    - Be a listening ear first, advice second.`
     },
     CONTAINMENT: {
         name: 'Emotional Containment',
-        instruction: `STRATEGY: EMOTIONAL CONTAINMENT (The user is overwhelmed/anxious)
-    - Your PRIMARY GOAL is to help them feel safe and grounded.
-    - Use shorter, calmer sentences.
-    - Validate the feeling ("It's okay to feel scared").
-    - Gently guide them to the present moment ("Right now, you are safe").`,
+        instruction: `STRATEGY: EMOTIONAL CONTAINMENT (User is overwhelmed/anxious)
+    - GOAL: Be a grounding force.
+    - Use calm, steady, and short sentences.
+    - Validate first: "It's totally okay to feel this way."
+    - Gently bring them to the present: "I'm right here with you. Just take a breath."`
     },
     EMPOWERMENT: {
         name: 'Gentle Empowerment',
-        instruction: `STRATEGY: GENTLE EMPOWERMENT (The user is stuck/sad but calm)
-    - Your PRIMARY GOAL is to remind them of their strength.
-    - Validate first, then look for a small win.
-    - Ask a tiny open-ended question like "What is one small thing you could do for yourself today?"`
+        instruction: `STRATEGY: GENTLE EMPOWERMENT (User is stuck/sad but calm)
+    - GOAL: Remind them of their own strength.
+    - Validate their struggle, then gently nudge forward.
+    - Ask a small, low-pressure question: "What's one tiny thing you could do for yourself right now?"
+    - Focus on small wins.`
     },
     CELEBRATION: {
         name: 'Shared Joy',
-        instruction: `STRATEGY: SHARED JOY (The user is happy/proud)
-    - MATCH their energy! (Use slightly more enthusiastic punctuation).
-    - Ask a follow-up question to let them savor the moment ("That's amazing! How did you celebrate?").`
+        instruction: `STRATEGY: SHARED JOY (User is happy/proud)
+    - GOAL: Amplify their happiness! 
+    - Match their energy with warmth and enthusiasm.
+    - "That is amazing news! I'm so happy for you! 🎉"
+    - Ask them to share more details.`
     },
     CLARIFICATION: {
         name: 'Gentle Clarification',
-        instruction: `STRATEGY: GENTLE CLARIFICATION (The user is confused/vague)
-    - Help them organize their thoughts.
-    - Ask one simple specific question.
-    - "It sounds like a lot is going on. What is the one thing bothering you the most?"`
+        instruction: `STRATEGY: GENTLE CLARIFICATION (Confused/Vague)
+    - GOAL: Help them find clarity without pressure.
+    - "It sounds like a lot is on your mind."
+    - Ask one simple question to help them focus: "What's the main thing bothering you right now?"`
     },
     CRISIS: {
         name: 'Crisis Support',
@@ -71,6 +78,14 @@ const STRATEGIES = {
     - The user seems to be in intense distress or danger.
     - Be direct, compassionate, and prioritize safety.
     - "I am hearing a lot of pain. Please know I care. Are you safe right now?"`
+    },
+    RE_ENGAGEMENT: {
+        name: 'Gentle Re-engagement',
+        instruction: `STRATEGY: GENTLE RE-ENGAGEMENT (User is giving short, unengaged responses)
+    - GOAL: Gently encourage the user to share more without being intrusive.
+    - Match their briefness but add a warm, open-ended question.
+    - Keep it natural, not robotic.
+    - Example: "I'm here if you want to talk more about that. How's everything else going?"`
     }
 };
 
@@ -124,7 +139,17 @@ export function getResponseStrategy(text, history = []) {
             return STRATEGIES.CELEBRATION;
         case 'confusion':
             return STRATEGIES.CLARIFICATION;
+        case 'boredom':
+            return STRATEGIES.RE_ENGAGEMENT;
         default:
+            // If message is very short (1-2 words) and NOT a common greeting
+            const wordCount = text.trim().split(/\s+/).length;
+            const greetings = ['hi', 'hey', 'hello', 'hii', 'helo', 'namaste', 'asalam'];
+            const isGreeting = wordCount <= 2 && greetings.some(g => text.toLowerCase().includes(g));
+
+            if (wordCount <= 2 && !isGreeting) {
+                return STRATEGIES.RE_ENGAGEMENT;
+            }
             // If neutral, check if asking a question (Advice) or just chatting (Casual)
             if (text.includes('?')) return STRATEGIES.CLARIFICATION;
             return {

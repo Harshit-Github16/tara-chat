@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { analyzeUserPattern } from '../../utils/patternAnalysis';
+import { detectLanguage } from '../../utils/languageDetection';
 
 // Multiple Groq API keys for load balancing and rate limit management
 const GROQ_API_KEYS = [
@@ -24,70 +25,16 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Function to detect language from message
-function detectLanguage(message) {
-    if (!message) return 'english';
-
-    const lowerMessage = message.toLowerCase();
-
-    // Hindi/Devanagari script detection
-    const hindiPattern = /[\u0900-\u097F]/;
-    if (hindiPattern.test(message)) {
-        return 'hindi';
-    }
-
-    // Common Hindi/Hinglish words (including common misspellings and short forms)
-    // REMOVED 'hi' because it conflicts with English greeting
-    const hindiWords = [
-        'hai', 'hoon', 'ho', 'hain', 'tha', 'thi', 'the', 'ka', 'ki', 'ke',
-        'main', 'mein', 'aap', 'tum', 'kya', 'kaise', 'kaisa', 'kaisi',
-        'nahi', 'nahin', 'haan', 'ji', 'acha', 'accha', 'theek', 'thik',
-        'bahut', 'bohot', 'bht', 'bhut', 'kuch', 'koi', 'yaar', 'bhai', 'dost',
-        'kar', 'karo', 'karna', 'raha', 'rahi', 'rahe', 'gaya', 'gayi', 'gaye',
-        'kal', 'aaj', 'aj', 'abhi', 'phir', 'wala', 'wali', 'wale',
-        'hu', 'hoon', 'khush', 'khus', 'mere', 'mre', 'mera', 'meri',
-        'tera', 'tere', 'teri', 'uska', 'uske', 'uski', 'apna', 'apne', 'apni',
-        'kya', 'kyu', 'kyun', 'kaise', 'kese', 'kaun', 'kon', 'kab', 'kaha', 'kha',
-        'se', 'ko', 'ne', 'me', 'pe', 'par', 'or', 'aur', 'ya', 'lekin', 'magar',
-        'toh', 'to', 'bhi', 'na', 'mat', 'kya', 'kuch', 'sab', 'sabhi'
-    ];
-
-    const words = lowerMessage.split(/\s+/).filter(w => w.length > 0);
-
-    // Count exact matches only
-    const hindiWordCount = words.filter(word => hindiWords.includes(word)).length;
-
-    // Strict detection logic
-    // If message is very short (1-2 words), rely on explicit hindi words ONLY if they are unambiguous
-    if (words.length <= 2) {
-        if (hindiWordCount >= 1 && !words.includes('hi')) return 'hinglish';
-        return 'english';
-    }
-
-    // If more than 20% words are Hindi/Hinglish, consider it Hinglish
-    if (hindiWordCount / words.length > 0.2) {
-        return 'hinglish';
-    }
-
-    // Check for common English patterns
-    const englishPattern = /^[a-z\s.,!?'"]+$/i;
-    if (englishPattern.test(message)) {
-        return 'english';
-    }
-
-    // Default to English if uncertain
-    return 'english';
-}
-
 // Enhanced role-based system prompts focused on emotional support
 const ROLE_PROMPTS = {
     'ai': `(ROLE: TARA - Empathic Wellness Companion)
 - You are a supportive, calm, and positive friend.
 - Focus strictly on emotional support, wellness, and companionship.
-- Keep responses SHORT (1-2 sentences).
+- Keep responses natural and concise (2-3 sentences).
 - Match the user's natural language (English/Hinglish).
 - Do NOT bring up random topics like sports or gossip unless the user starts it.
 `,
+
 
     'Chill Friend': `You are a supportive, chill friend. 
     KEEP IT SHORT. 1-2 sentences max. 
@@ -278,8 +225,13 @@ export async function POST(request) {
         // --- NEW: CONVERSATION STRATEGY ANALYSIS ---
         try {
             const { getResponseStrategy, generateSystemInstruction } = require('../../utils/conversationStrategy');
-            const strategy = getResponseStrategy(message);
-            const strategyInstruction = generateSystemInstruction(strategy, "");
+            const strategy = getResponseStrategy(message, recentHistory);
+
+            // Provide user context to the strategy instruction
+            const userContextStr = userDetails ?
+                `Name: ${userDetails.name}, Mood: ${latestMood?.mood || 'Neutral'}` : "";
+
+            const strategyInstruction = generateSystemInstruction(strategy, userContextStr);
 
             console.log('Selected Strategy:', strategy.name);
             systemPrompt += `\n\n${strategyInstruction}`;
@@ -364,23 +316,9 @@ CRITICAL: Always maintain this support - oriented approach in EVERY response.Thi
         }
 
         // Detect if conversation is getting boring (short, unengaged responses)
+        // NOT used for injecting prompts anymore to prevent "disconnected" messages, but tracked for metrics/logic if needed
         const lastUserMessages = recentHistory.filter(msg => msg.sender === 'user').slice(-3);
         const boringPatterns = ['haa', 'nhi', 'kya', 'ok', 'hmm', 'bas', 'nothing', 'kuch nhi', 'pata nhi', 'nahi', 'ha', 'na', 'theek hai', 'sab theek', 'bas bdiya'];
-
-        // STRICTER BORING CHECK:
-        // 1. Must have at least 2 recent messages
-        // 2. ALL recent messages must be short/boring
-        // 3. Current message MUST ALSO be short/boring (CRITICAL FIX)
-        const isHistoryBoring = lastUserMessages.length >= 2 &&
-            lastUserMessages.every(msg =>
-                msg.content.trim().split(' ').length <= 3 ||
-                boringPatterns.some(pattern => msg.content.toLowerCase().includes(pattern))
-            );
-
-        // If current message is long (>5 words), conversation is NOT boring
-        const isCurrentMessageEngaging = message.trim().split(' ').length > 5;
-
-        const isConversationBoring = isHistoryBoring && !isCurrentMessageEngaging;
 
         // Detect user's language from current message and recent history
         const recentUserMessages = recentHistory
@@ -411,20 +349,19 @@ Example: "Main samajh sakti hoon. Aaj ka din kaisa raha?"`,
 
             'hinglish': `🌍 CRITICAL LANGUAGE INSTRUCTION - READ THIS CAREFULLY:
 The user is speaking in HINGLISH (mix of Hindi and English). You MUST respond in HINGLISH ONLY.
-- Mix Hindi and English naturally like they do
-- Match their vocabulary and mixing style exactly
-- If they use Roman Hindi (like "mre bht khush hu"), you MUST respond in Roman Hindi
-- Do NOT respond in pure English - this is MANDATORY
-- Do NOT overuse the user's name (naam baar-baar mat lo)
+- Mix Hindi and English naturally like they do.
+- Match their vocabulary and mixing style EXACTLY. 
+- VOCABULARY MIRRORING: If the user uses specific English words for address or concepts (like "bro", "dude", "sad", "stressed"), you MUST use the same words instead of their Hindi equivalents (don't use "bhai" if they said "bro").
+- If they use Roman Hindi (like "mre bht khush hu"), you MUST respond in Roman Hindi.
+- Do NOT respond in pure English - this is MANDATORY.
+- Do NOT overuse the user's name (naam baar-baar mat lo).
 
 Examples:
-User: "mre bht khush hu aj"
-You: "Wah! Yeh sunke bahut achha laga! Kya special hua aaj jo aap itne khush ho? 😊"
+User: "bro kaise ho?"
+You: "I'm good bro! Aap kaise ho? Sab theek?"
 
-User: "hii tara"
-You: "Hii! Kaise ho? Aaj ka din kaisa chal raha hai?"
-
-REMEMBER: User is speaking Hinglish, so you MUST respond in Hinglish. Pure English responses are NOT acceptable.`
+User: "hii tara, kafi stress ho rha"
+You: "Hii! I can understand, stress handle karna mushkil hota hai. Kya hua? Share karoge?"`
         };
 
         // Build context about the user
@@ -446,18 +383,6 @@ IMPORTANT PERSONALIZATION RULES:
 
 ${languageInstruction[detectedLanguage]}
 ` : languageInstruction[detectedLanguage];
-
-        // Check if message is a simple greeting
-        const cleanMessage = message.trim().toLowerCase().replace(/[.,!?]/g, '');
-        const greetingWords = ['hi', 'hello', 'hey', 'hii', 'helo', 'namaste', 'hola', 'yo', 'sup', 'salam'];
-        const isGreeting = greetingWords.includes(cleanMessage) || /^(hi|hello|hey|hii|helo|namaste|hola|yo|sup)\b/i.test(message.trim());
-
-        // If conversation is boring and user has interests, prompt TARA to bring up an interest
-        // BUT NOT if the user just sent a greeting or if it's the very start
-        if (!isGreeting && isConversationBoring && userDetails?.interests && userDetails.interests.length > 0 && chatUserId === 'tara-ai') {
-            const randomInterest = userDetails.interests[Math.floor(Math.random() * userDetails.interests.length)];
-            userContext += `\n\n🎯 ENGAGEMENT BOOST: Conversation is flat. Bring up their interest in "${randomInterest}" naturally to re-engage them.`;
-        }
 
         // Build conversation history text (like old code)
         let historyText = "";
@@ -497,9 +422,9 @@ ${responseLabel}:`;
             model: 'llama-3.3-70b-versatile', // Using latest model
             messages: groqMessages,
             temperature: isGoalSuggestion ? 0.7 : 0.9, // More natural and varied
-            max_tokens: isGoalSuggestion ? 500 : 60, // Balanced responses - complete sentences
+            max_tokens: isGoalSuggestion ? 500 : 150, // Increased for more natural flow
             top_p: 0.95,
-            stop: ['\n\n', 'User:', 'TARA:', chatUser.name + ':'], // Max 4 items for Groq API
+            stop: ['User:', 'TARA:', chatUser.name + ':'], // Removed \n\n to allow paragraph breaks
         };
 
         console.log('Calling Groq API with model:', groqPayload.model);
@@ -717,8 +642,8 @@ ${responseLabel}:`;
                 // Analyze pattern
                 const analysis = analyzeUserPattern(updatedChatHistory, journals, 3);
 
-                // Check if user has taken DASS-21 recently (within last 7 days)
-                const recentAssessments = userData.dass21Assessments || [];
+                // Check if user has taken Stress Level Check recently (within last 7 days)
+                const recentAssessments = userData.stressCheckAssessments || userData.dass21Assessments || [];
                 const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
                 const hasRecentAssessment = recentAssessments.some(assessment => {
                     const assessmentDate = new Date(assessment.completedAt || assessment.createdAt);
@@ -728,7 +653,7 @@ ${responseLabel}:`;
                 shouldSuggestDASS21 = analysis.shouldSuggestDASS21 && !hasRecentAssessment;
 
                 if (shouldSuggestDASS21) {
-                    console.log('Pattern analysis suggests DASS-21:', {
+                    console.log('Pattern analysis suggests Stress Level Check:', {
                         stressScore: analysis.combinedStressScore,
                         consecutiveDays: analysis.chatAnalysis.consecutiveStressedDays,
                         confidence: analysis.confidence

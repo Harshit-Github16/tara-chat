@@ -165,7 +165,7 @@ export function analyzeChatPattern(chatHistory, daysToAnalyze = 3) {
     const totalStress = dailyAnalysis.reduce((sum, day) => sum + day.avgStressScore, 0);
     const averageStressScore = dailyAnalysis.length > 0 ? totalStress / dailyAnalysis.length : 0;
 
-    // Determine if DASS-21 should be suggested
+    // Determine if Stress Level Check should be suggested
     const shouldSuggestDASS21 = consecutiveStressedDays >= 2 && averageStressScore >= 2.5;
 
     return {
@@ -249,7 +249,7 @@ export function analyzeUserPattern(chatHistory, journals, daysToAnalyze = 3) {
     const combinedStressScore = (chatAnalysis.averageStressScore * 0.7) +
         (journalAnalysis.averageStressScore * 0.3);
 
-    // Should suggest DASS-21 if:
+    // Should suggest Stress Level Check if:
     // 1. Chat shows consistent stress pattern, OR
     // 2. Combined stress score is high (>3) and user has been active
     const shouldSuggestDASS21 = chatAnalysis.shouldSuggestDASS21 ||
@@ -261,7 +261,7 @@ export function analyzeUserPattern(chatHistory, journals, daysToAnalyze = 3) {
         chatAnalysis,
         journalAnalysis,
         recommendation: shouldSuggestDASS21
-            ? 'Suggest DASS-21 assessment to better understand mental health status'
+            ? 'Suggest Stress Level Check assessment to better understand mental health status'
             : 'Continue monitoring, no immediate assessment needed',
         confidence: calculateConfidence(chatAnalysis, journalAnalysis)
     };
