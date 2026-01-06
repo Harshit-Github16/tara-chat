@@ -35,8 +35,15 @@ export async function GET() {
                             in: { $add: ["$$value", { $size: { $ifNull: ["$$this.conversations", []] } }] }
                         }
                     },
-                    totalTimeSpent: { $sum: "$sessions.totalTimeSpent" },
-                    sessionCount: { $size: "$sessions" }
+                    // Fixed: Use $reduce to safely sum totalTimeSpent from sessions array
+                    totalTimeSpent: {
+                        $reduce: {
+                            input: { $ifNull: ["$sessions", []] },
+                            initialValue: 0,
+                            in: { $add: ["$$value", { $ifNull: ["$$this.totalTimeSpent", 0] }] }
+                        }
+                    },
+                    sessionCount: { $size: { $ifNull: ["$sessions", []] } }
                 }
             },
             {

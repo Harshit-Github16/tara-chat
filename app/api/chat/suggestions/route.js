@@ -53,19 +53,76 @@ export async function POST(request) {
             `${m.sender === 'user' ? (userDetails?.name || 'User') : 'TARA'}: ${m.content}`
         ).join('\n');
 
+        // Detect language from recent messages
+        const detectLanguage = (text) => {
+            if (!text) return 'english';
+
+            const lowerText = text.toLowerCase();
+
+            // Hindi/Devanagari script detection
+            const hindiPattern = /[\u0900-\u097F]/;
+            if (hindiPattern.test(text)) {
+                return 'hindi';
+            }
+
+            // Common Hindi/Hinglish words
+            const hindiWords = [
+                'hai', 'hoon', 'ho', 'hain', 'tha', 'thi', 'the', 'ka', 'ki', 'ke',
+                'main', 'mein', 'aap', 'tum', 'kya', 'kaise', 'kaisa', 'kaisi',
+                'nahi', 'nahin', 'haan', 'ji', 'acha', 'accha', 'theek', 'thik',
+                'bahut', 'bohot', 'bht', 'bhut', 'kuch', 'koi', 'yaar', 'bhai', 'dost',
+                'kar', 'karo', 'karna', 'raha', 'rahi', 'rahe', 'gaya', 'gayi', 'gaye',
+                'kal', 'aaj', 'aj', 'abhi', 'phir', 'wala', 'wali', 'wale',
+                'hu', 'khush', 'khus', 'mere', 'mre', 'mera', 'meri'
+            ];
+
+            const words = lowerText.split(/\s+/).filter(w => w.length > 0);
+            const hindiWordCount = words.filter(word => hindiWords.includes(word)).length;
+
+            // If more than 20% words are Hindi/Hinglish, consider it Hinglish
+            if (hindiWordCount / words.length > 0.2) {
+                return 'hinglish';
+            }
+
+            // Check for common English patterns
+            const englishPattern = /^[a-z\s.,!?'"]+$/i;
+            if (englishPattern.test(text)) {
+                return 'english';
+            }
+
+            return 'english';
+        };
+
+        const detectedLanguage = detectLanguage(recentMessages);
+        console.log('Detected language for suggestions:', detectedLanguage);
+
+        // Language-specific instructions
+        const languageInstructions = {
+            'english': `- Style: ENGLISH ONLY - Use proper English words and grammar.
+        - Keep them natural, conversational English (1-4 words).
+        - Example: "How are you?|That's great!|Tell me more"`,
+
+            'hinglish': `- Style: Hinglish (Hindi + English) - mixed naturally.
+        - Keep them 1-4 words.
+        - Example: "Theek hoon aap?|Maza nahi aa rha|Help kardo"`,
+
+            'hindi': `- Style: HINDI ONLY - Use Hindi words (Devanagari or Roman script).
+        - Keep them natural, conversational Hindi (1-4 words).
+        - Example: "Kaise ho?|Bahut achha!|Aur batao"`
+        };
+
         const systemPrompt = `You are TARA's intelligent assistant helping the user reply.
         Current Phase: ${messages.length < 3 ? 'Starting/Greeting' : 'Ongoing Conversation'}
         
         Based on the conversation history, suggest 3 short, natural, and highly relevant replies.
         Guidelines:
-        - Keep them 1-4 words.
-        - Style: Hinglish (Hindi + English) - mixed naturally.
+        ${languageInstructions[detectedLanguage]}
         - Context: If the user is just saying hi, suggest warm greetings.
         - Variety: One acknowledgment, one question, one emotional expression.
         - Avoid: Generic "I understand" or "Tell me more" unless perfectly fitting.
+        - CRITICAL: Match the language of the conversation exactly.
         
         Return ONLY the 3 suggestions separated by pipes (|), nothing else.
-        Example: "Theek hoon aap?|Maza nahi aa rha|Help kardo"
         `;
 
         const groqPayload = {
