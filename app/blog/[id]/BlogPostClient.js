@@ -547,7 +547,7 @@ export default function BlogPostClient() {
                                                     ? 'bg-rose-200 text-rose-600 scale-105'
                                                     : 'bg-gray-100 text-gray-600 hover:bg-rose-50 hover:text-rose-600'
                                                 } ${isLiking ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                                            title="Click to like! You can like multiple times 💕"
+                                            title=""
                                         >
                                             <FontAwesomeIcon
                                                 icon={faHeart}
@@ -593,7 +593,7 @@ export default function BlogPostClient() {
                                             )}
                                         </div>
                                     </div>
-                                    <p className="text-xs text-gray-500 ml-1">💡 You can like multiple times!</p>
+                                    {/* <p className="text-xs text-gray-500 ml-1">💡 You can like multiple times!</p> */}
                                 </div>
 
                                 <span className="flex items-center gap-2 text-gray-500">

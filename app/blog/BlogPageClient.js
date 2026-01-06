@@ -100,7 +100,7 @@ export default function BlogPageClient() {
                 return new Date(b.publishDate) - new Date(a.publishDate);
         }
     });
-
+    console.log("filteredPostsfilteredPostsfilteredPosts", filteredPosts)
     const featuredPosts = blogs.filter(post => post.featured);
     const trendingPosts = blogs.filter(post => post.trending).slice(0, 3);
 
@@ -521,7 +521,8 @@ export default function BlogPageClient() {
                         <div>
                             <h2 className="text-2xl font-bold text-gray-800 mb-6">
                                 {selectedCategory === "All" ? "Latest Articles" : `${selectedCategory} Articles`}
-                                <span className="text-sm font-normal text-gray-500 ml-2">({filteredPosts.length} articles)</span>
+                                {filteredPosts.length == 0 ? "" : <span className="text-sm font-normal text-gray-500 ml-2">
+                                    ({filteredPosts.length} articles)</span>}
                             </h2>
                             {loading ? (
                                 <div className="space-y-6">

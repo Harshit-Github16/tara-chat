@@ -546,7 +546,7 @@ export default function Home() {
             <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 lg:gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               <div className="text-center lg:text-left">
                 {/* Hidden H1 for SEO */}
-                <h1 className="sr-only">AI Chatbot for Stress, Anxiety, Depression Signs & Mental Health Support</h1>
+                <h1 className="sr-only">AI Mental Health Support – Tara4u | Stress, Anxiety, Depression Help</h1>
 
                 {/* <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-medium text-rose-700 mb-4">
                   <span className="font-bold">TARA</span> = Talk, Align, Reflect, Act

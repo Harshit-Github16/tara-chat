@@ -90,9 +90,15 @@ export default function ExitIntent() {
         setShowExitIntent(false);
     }, []);
 
+    const handleCheckStressLevel = useCallback(() => {
+        setShowExitIntent(false);
+        if (typeof window !== 'undefined') {
+            window.location.href = '/stress-check';
+        }
+    }, []);
+
     const handleStayAndChat = useCallback(() => {
         setShowExitIntent(false);
-        // Use Next.js router instead of window.location for better performance
         if (typeof window !== 'undefined') {
             window.location.href = '/welcome';
         }
@@ -203,14 +209,14 @@ export default function ExitIntent() {
                             onClick={handleStayAndChat}
                             className="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white py-3 px-6 rounded-full font-semibold hover:shadow-lg transition-all transform hover:scale-105"
                         >
-                            💬 Yes, let's chat with Tara
+                            💬 Chat with Tara now
                         </button>
 
                         <button
-                            onClick={handleClose}
-                            className="w-full bg-gray-100 text-gray-600 py-3 px-6 rounded-full font-medium hover:bg-gray-200 transition-colors"
+                            onClick={handleCheckStressLevel}
+                            className="w-full bg-white border-2 border-rose-500 text-rose-600 py-3 px-6 rounded-full font-semibold hover:bg-rose-50 hover:shadow-md transition-all transform hover:scale-105"
                         >
-                            Maybe later
+                            📊 Check Stress Level
                         </button>
                     </div>
 
