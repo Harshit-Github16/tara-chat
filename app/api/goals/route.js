@@ -112,7 +112,7 @@ async function createGoal(userId, goalData) {
 
         // Add goal to user's goals array
         const result = await collection.updateOne(
-            { firebaseUid: userId },
+            { $or: [{ firebaseUid: userId }, { userId: userId }] },
             {
                 $push: { goals: newGoal },
                 $set: { lastUpdated: new Date() }
@@ -175,7 +175,7 @@ export async function GET(request) {
         const db = client.db('tara');
         const collection = db.collection('users');
 
-        const userData = await collection.findOne({ firebaseUid: userId });
+        const userData = await collection.findOne({ $or: [{ firebaseUid: userId }, { userId: userId }] });
 
         if (!userData) {
             return NextResponse.json({

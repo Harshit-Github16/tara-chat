@@ -64,7 +64,7 @@ export async function POST(request) {
         // Add message to specific chat user's conversations
         await collection.updateOne(
             {
-                userId: userId,
+                $or: [{ firebaseUid: userId }, { userId: userId }],
                 'chatUsers.id': chatUserId
             },
             {
@@ -108,7 +108,7 @@ export async function DELETE(request) {
         // Clear conversations for specific chat user
         await collection.updateOne(
             {
-                userId: userId,
+                $or: [{ firebaseUid: userId }, { userId: userId }],
                 'chatUsers.id': chatUserId
             },
             {

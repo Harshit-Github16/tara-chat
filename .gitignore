@@ -29,7 +29,11 @@ yarn-error.log*
 .env*.local
 .env
 .env.test
+# .env.example removed from ignore to allow tracking of template
 
+
+.env.local
+.env.local.example
 # vercel
 .vercel
 

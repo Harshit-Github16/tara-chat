@@ -43,6 +43,7 @@ const LoginModal = dynamic(() => import("./components/LoginModal"), { ssr: false
 const OnboardingModal = dynamic(() => import("./components/OnboardingModal"), { ssr: false });
 const ContactForm = dynamic(() => import("./components/ContactForm"), { ssr: false });
 const FAQSchema = dynamic(() => import("./components/FAQSchema"), { ssr: true });
+const VideoModal = dynamic(() => import("./components/VideoModal"), { ssr: false });
 
 export default function Home() {
   const router = useRouter();
@@ -59,6 +60,14 @@ export default function Home() {
   const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [videos, setVideos] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Chat animation states
   const [visibleMessages, setVisibleMessages] = useState([]);
@@ -197,6 +206,25 @@ export default function Home() {
       // Clean up URL without reloading
       window.history.replaceState({}, '', '/');
     }
+  }, []);
+
+  // Fetch videos
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const response = await fetch('/api/admin/videos');
+        const data = await response.json();
+        console.log('Fetched videos:', data);
+        if (Array.isArray(data)) {
+          setVideos(data);
+        } else if (data.data && Array.isArray(data.data)) {
+          setVideos(data.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch videos:', error);
+      }
+    };
+    fetchVideos();
   }, []);
 
   // Track active section on scroll
@@ -1462,6 +1490,101 @@ export default function Home() {
           </div>
         </section>
 
+        {/* YouTube Video Section - Added below "How Tara Helps You" */}
+        {videos.length > 0 && (
+          <section className="py-20 bg-gradient-to-br from-rose-50/50 to-white overflow-hidden relative">
+            <div className="mx-auto max-w-7xl px-6 mb-12 relative z-10">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 rounded-full bg-rose-100 px-4 py-2 text-sm font-semibold text-rose-600 mb-4">
+                  <FontAwesomeIcon icon={faYoutube} className="h-4 w-4" />
+                  Expert Video Guides
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-4">
+                  Visual Guide to <span className="text-rose-600">Emotional Wellness</span>
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  Watch our curated videos to help you through stress, anxiety, and depression.
+                  Expert insights for your mental health journey.
+                </p>
+              </div>
+            </div>
+
+            <div className="relative">
+              {/* Infinite Slider Effect */}
+              <div className="flex gap-6 animate-video-slider px-6 py-4">
+                {/* Ensure enough items for seamless scroll (multiply if count is low) */}
+                {(videos.length < 5 ? [...videos, ...videos, ...videos, ...videos] : [...videos, ...videos]).map((video, idx) => (
+                  <div
+                    key={`${video._id}-${idx}`}
+                    className="flex-shrink-0 w-[500px] group cursor-pointer"
+                    onClick={() => {
+                      setSelectedVideo(video);
+                      setIsVideoModalOpen(true);
+                    }}
+                  >
+                    <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl border-4 border-white transition-all duration-500 group-hover:scale-[1.02] group-hover:shadow-rose-400/30 ring-1 ring-rose-100/50">
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center group-hover:bg-black/40 transition-all duration-500">
+                        <div className="w-16 h-16 rounded-full bg-rose-600/90 flex items-center justify-center text-white transform transition-transform duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-rose-600/50">
+                          <FontAwesomeIcon icon={faPlay} className="h-6 w-6 ml-1" />
+                        </div>
+                      </div>
+                      <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1 rounded-full bg-rose-600/90 text-[10px] font-bold text-white uppercase tracking-widest backdrop-blur-md">
+                          {video.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mt-6 px-2 text-center">
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-rose-600 transition-colors line-clamp-1">
+                        {video.title}
+                      </h3>
+                      <p className="mt-2 text-sm text-gray-500 line-clamp-2 italic">
+                        {video.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <style dangerouslySetInnerHTML={{
+              __html: `
+                @keyframes video-slider {
+                  0% { transform: translateX(0); }
+                  100% { transform: translateX(-50%); }
+                }
+                .animate-video-slider {
+                  animation: video-slider 40s linear infinite;
+                  width: max-content;
+                  display: flex;
+                }
+                .animate-video-slider:hover {
+                  animation-play-state: paused;
+                }
+                @media (max-width: 768px) {
+                  .animate-video-slider {
+                    animation: none;
+                    overflow-x: auto;
+                    width: auto;
+                    display: flex;
+                    -webkit-overflow-scrolling: touch;
+                    padding-bottom: 20px;
+                  }
+                }
+              `
+            }} />
+
+            {/* Background elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-rose-100/30 rounded-full blur-3xl -z-0"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-rose-50/50 rounded-full blur-3xl -z-0"></div>
+          </section>
+        )}
+
         {/* Social Proof */}
         <section className="py-20 bg-gradient-to-br from-white via-rose-50/20 to-white relative overflow-hidden">
           {/* Background elements */}
@@ -2207,7 +2330,7 @@ export default function Home() {
       </footer >
 
       {/* Fixed Bottom Buttons */}
-      < div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-rose-100 shadow-lg" >
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-t border-rose-100 shadow-lg">
         <div className="max-w-4xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             {/* Continue with Google */}
@@ -2229,23 +2352,27 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div >
+      </div>
 
       {/* Login Modal */}
-      < LoginModal
+      <LoginModal
         isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)
-        }
+        onClose={() => setShowLoginModal(false)}
         onLoginSuccess={handleLoginSuccess}
       />
 
       {/* Onboarding Modal */}
-      < OnboardingModal
+      <OnboardingModal
         isOpen={showOnboardingModal}
         onClose={() => setShowOnboardingModal(false)}
         onComplete={handleOnboardingComplete}
       />
-    </div >
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+        video={selectedVideo}
+      />
+    </div>
   );
 }
 

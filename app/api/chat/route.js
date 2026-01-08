@@ -164,7 +164,7 @@ export async function POST(request) {
         const db = client.db('tara');
         const collection = db.collection('users');
 
-        let userData = await collection.findOne({ firebaseUid: userId });
+        let userData = await collection.findOne({ $or: [{ firebaseUid: userId }, { userId: userId }] });
         if (!userData) {
             const newUser = {
                 firebaseUid: userId,
@@ -179,7 +179,7 @@ export async function POST(request) {
         let chatUser = userData.chatUsers?.find(u => u.id === chatUserId);
         if (!chatUser && chatUserId === 'tara-ai') {
             chatUser = { id: 'tara-ai', name: 'TARA AI', conversations: [] };
-            await collection.updateOne({ firebaseUid: userId }, { $push: { chatUsers: chatUser } });
+            await collection.updateOne({ $or: [{ firebaseUid: userId }, { userId: userId }] }, { $push: { chatUsers: chatUser } });
         }
 
         if (!chatUser) {
@@ -250,12 +250,12 @@ export async function POST(request) {
         if (!groqResponse) throw new Error('All API keys failed');
 
         const aiText = groqResponse.choices[0].message.content;
-        const userMessage = { sender: 'user', content: message, timestamp: new Date() };
-        const aiMessage = { sender: 'ai', content: aiText, timestamp: new Date() };
+        const userMessage = { id: new ObjectId().toString(), sender: 'user', content: message, timestamp: new Date() };
+        const aiMessage = { id: new ObjectId().toString(), sender: 'ai', content: aiText, timestamp: new Date() };
 
         if (!skipChatHistory) {
             await collection.updateOne(
-                { firebaseUid: userId, 'chatUsers.id': chatUserId },
+                { $or: [{ firebaseUid: userId }, { userId: userId }], 'chatUsers.id': chatUserId },
                 {
                     $push: { 'chatUsers.$.conversations': { $each: [userMessage, aiMessage] } },
                     $set: { 'chatUsers.$.lastMessageAt': new Date() }

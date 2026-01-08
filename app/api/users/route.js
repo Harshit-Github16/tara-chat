@@ -97,7 +97,7 @@ export async function POST(request) {
         };
 
         // First, check if user document exists
-        const userDoc = await collection.findOne({ firebaseUid: userId });
+        const userDoc = await collection.findOne({ $or: [{ firebaseUid: userId }, { userId: userId }] });
 
         console.log('User document found:', userDoc ? 'Yes' : 'No');
         console.log('Current chatUsers count:', userDoc?.chatUsers?.length || 0);
@@ -124,7 +124,7 @@ export async function POST(request) {
         console.log('Adding new chat user:', newChatUser);
 
         const result = await collection.updateOne(
-            { firebaseUid: userId },
+            { $or: [{ firebaseUid: userId }, { userId: userId }] },
             {
                 $push: { chatUsers: newChatUser },
                 $set: { lastUpdated: new Date() }
@@ -181,7 +181,7 @@ export async function DELETE(request) {
 
         // Remove user from chatUsers array
         await collection.updateOne(
-            { firebaseUid: userId },
+            { $or: [{ firebaseUid: userId }, { userId: userId }] },
             {
                 $pull: { chatUsers: { id: chatUserId } },
                 $set: { lastUpdated: new Date() }
