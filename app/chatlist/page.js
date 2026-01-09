@@ -115,6 +115,7 @@ export default function ChatListPage() {
   const [chatMessages, setChatMessages] = useState({});
   // Track if mood greeting was sent
   const [moodGreetingSent, setMoodGreetingSent] = useState(false);
+  const moodGreetingInProgress = useRef(false);
   // Track session start time (when user logged in/opened chat)
   const [sessionStartTime, setSessionStartTime] = useState(null);
   // Track if older messages are shown
@@ -331,9 +332,10 @@ export default function ChatListPage() {
       const fromMood = urlParams.get('fromMood');
       const moodDataParam = urlParams.get('moodData');
 
-      console.log('Mood greeting check:', { fromMood, moodDataParam, activeId });
+      console.log('Mood greeting check:', { fromMood, moodDataParam, activeId, moodGreetingSent, inProgress: moodGreetingInProgress.current });
 
-      if (fromMood === 'true' && moodDataParam) {
+      if (fromMood === 'true' && moodDataParam && !moodGreetingSent && !moodGreetingInProgress.current) {
+        moodGreetingInProgress.current = true;
         try {
           const moodData = JSON.parse(decodeURIComponent(moodDataParam));
           console.log('Parsed mood data:', moodData);
@@ -367,11 +369,12 @@ export default function ChatListPage() {
 
           // Add Tara's greeting message
           const taraGreeting = {
-            id: Date.now().toString(),
+            id: 'mood-greeting-' + Date.now(),
             content: greetingMessage,
             sender: 'them', // Message from Tara
             timestamp: now,
-            type: 'text'
+            type: 'text',
+            isTemp: true // Mark as temporary so it's replaced by DB version
           };
 
           // Mark that mood greeting was sent
@@ -973,6 +976,19 @@ export default function ChatListPage() {
     if (activeId === "tara-ai" && user?.uid) {
       setIsSendingMessage(true);
 
+      // Show user message immediately with a temporary ID
+      const tempId = `temp-${Date.now()}`;
+      const tempUserMessage = {
+        id: tempId,
+        content: suggestedText,
+        sender: 'user',
+        timestamp: new Date(),
+        isTemp: true // Mark as temporary
+      };
+
+      // Add to current session messages (always visible)
+      setCurrentSessionMessages(prev => [...prev, tempUserMessage]);
+
       try {
         await taraChat.sendMessage(suggestedText, {
           name: user.name,
@@ -982,8 +998,13 @@ export default function ChatListPage() {
           interests: user.interests,
           personalityTraits: user.personalityTraits
         });
+
+        // Remove temp message after successful send
+        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
       } catch (error) {
         console.error('Failed to send suggested message to TARA:', error);
+        // Remove the temp message on error
+        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
       } finally {
         setIsSendingMessage(false);
       }

@@ -105,7 +105,7 @@ export async function GET(request) {
                 $lookup: {
                     from: 'users',
                     localField: 'userId',
-                    foreignField: '_id',
+                    foreignField: 'firebaseUid',
                     as: 'user'
                 }
             },

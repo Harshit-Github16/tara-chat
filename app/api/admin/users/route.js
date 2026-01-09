@@ -11,7 +11,7 @@ export async function GET() {
             {
                 $lookup: {
                     from: 'user_sessions',
-                    localField: 'uid',
+                    localField: 'firebaseUid',
                     foreignField: 'userId',
                     as: 'sessions'
                 }

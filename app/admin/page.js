@@ -176,8 +176,9 @@ export default function AdminPage() {
         const seconds = Math.floor(ms / 1000);
         const minutes = Math.floor(seconds / 60);
         const hours = Math.floor(minutes / 60);
+
         if (hours > 0) return `${hours}h ${minutes % 60}m`;
-        if (minutes > 0) return `${minutes}m`;
+        if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
         return `${seconds}s`;
     };
 
@@ -430,7 +431,7 @@ export default function AdminPage() {
                                                 <div className="text-sm font-bold text-gray-700">{formatTimeSpent(user.totalTimeSpent)}</div>
                                             </td>
                                             <td className="py-3 px-4 text-gray-600 text-sm whitespace-nowrap">{user.profession || '-'}</td>
-                                            <td className="py-3 px-4 text-gray-500 text-sm whitespace-nowrap">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</td>
+                                            <td className="py-3 px-4 text-gray-500 text-sm whitespace-nowrap">{user.createdAt ? new Date(user.createdAt).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}</td>
                                         </tr>
                                     ))}
                                 </tbody>
