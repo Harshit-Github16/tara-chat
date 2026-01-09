@@ -434,9 +434,84 @@ export default function AdminPage() {
                                             <td className="py-3 px-4 text-gray-500 text-sm whitespace-nowrap">{user.createdAt ? new Date(user.createdAt).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}</td>
                                         </tr>
                                     ))}
+                                    {currentUsers.length === 0 && !loading && (
+                                        <tr>
+                                            <td colSpan="7" className="py-12 text-center text-gray-400 italic">
+                                                No users found matching your search.
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {loading && (
+                                        <tr>
+                                            <td colSpan="7" className="py-12 text-center">
+                                                <div className="flex justify-center flex-col items-center gap-3">
+                                                    <div className="w-8 h-8 border-4 border-rose-100 border-t-rose-600 rounded-full animate-spin"></div>
+                                                    <span className="text-xs text-rose-600 font-bold tracking-widest uppercase">Fetching Users...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="flex flex-col sm:flex-row items-center justify-between mt-6 gap-4 border-t border-rose-50 pt-6">
+                                <div className="text-sm text-gray-500 order-2 sm:order-1">
+                                    Showing <span className="font-semibold text-gray-700">{indexOfFirstUser + 1}</span> to <span className="font-semibold text-gray-700">{Math.min(indexOfLastUser, filteredAndSortedUsers.length)}</span> of <span className="font-semibold text-gray-700">{filteredAndSortedUsers.length}</span> users
+                                </div>
+                                <div className="flex items-center gap-2 order-1 sm:order-2">
+                                    <button
+                                        onClick={() => paginate(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className="w-10 h-10 flex items-center justify-center rounded-xl border border-rose-100 text-gray-600 hover:bg-rose-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                                        title="Previous Page"
+                                    >
+                                        <FontAwesomeIcon icon={faArrowLeft} className="h-3 w-3" />
+                                    </button>
+
+                                    <div className="flex items-center gap-1">
+                                        {[...Array(totalPages)].map((_, i) => {
+                                            const page = i + 1;
+                                            if (
+                                                page === 1 ||
+                                                page === totalPages ||
+                                                (page >= currentPage - 1 && page <= currentPage + 1)
+                                            ) {
+                                                return (
+                                                    <button
+                                                        key={page}
+                                                        onClick={() => paginate(page)}
+                                                        className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${currentPage === page
+                                                            ? 'bg-rose-600 text-white shadow-lg shadow-rose-200 scale-110'
+                                                            : 'text-gray-500 hover:bg-rose-50 hover:text-rose-600'
+                                                            }`}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                );
+                                            } else if (
+                                                page === currentPage - 2 ||
+                                                page === currentPage + 2
+                                            ) {
+                                                return <span key={page} className="px-1 text-gray-400">...</span>;
+                                            }
+                                            return null;
+                                        })}
+                                    </div>
+
+                                    <button
+                                        onClick={() => paginate(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className="w-10 h-10 flex items-center justify-center rounded-xl border border-rose-100 text-gray-600 hover:bg-rose-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                                        title="Next Page"
+                                    >
+                                        <FontAwesomeIcon icon={faArrowLeft} className="h-3 w-3 rotate-180" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </main>
                 <BottomNav activePage="admin" />

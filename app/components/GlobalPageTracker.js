@@ -89,13 +89,15 @@ export default function GlobalPageTracker() {
 
         // Track page exit
         const trackPageExit = async () => {
-            if (!startTimeRef.current) return;
+            if (!startTimeRef.current || !lastHeartbeatRef.current) return;
 
             const now = Date.now();
-            const timeSpent = now - (lastHeartbeatRef.current || startTimeRef.current);
-            lastHeartbeatRef.current = now; // Update last heartbeat to avoid double counting
+            const timeSpent = now - lastHeartbeatRef.current; // Only time since last heartbeat
 
-            if (timeSpent < 100) return; // Ignore negligible time
+            // Don't update lastHeartbeatRef here to prevent issues
+            if (timeSpent < 100) return; // Ignore negligible time (less than 100ms)
+
+            console.log('🚪 Exit tracking - Time since last heartbeat:', timeSpent, 'ms');
 
             try {
                 await fetch('/api/analytics/time-tracking', {
@@ -107,7 +109,7 @@ export default function GlobalPageTracker() {
                         page: pathname,
                         action: 'exit',
                         timestamp: now,
-                        timeSpent, // Incremental time
+                        timeSpent, // Only incremental time since last heartbeat
                         userAgent: navigator.userAgent,
                         referrer: document.referrer
                     }),
@@ -124,9 +126,13 @@ export default function GlobalPageTracker() {
 
             const now = Date.now();
             const timeSpent = now - (lastHeartbeatRef.current || startTimeRef.current);
-            lastHeartbeatRef.current = now;
 
             if (timeSpent < 1000) return; // Don't track if less than 1 second
+
+            console.log('💓 Heartbeat tracking - Time spent:', timeSpent, 'ms');
+
+            // Update AFTER calculating to ensure we track the full interval
+            lastHeartbeatRef.current = now;
 
             try {
                 await fetch('/api/analytics/time-tracking', {
@@ -138,7 +144,7 @@ export default function GlobalPageTracker() {
                         page: pathname,
                         action: 'heartbeat',
                         timestamp: now,
-                        timeSpent, // Incremental time
+                        timeSpent, // Incremental time since last heartbeat or start
                         userAgent: navigator.userAgent,
                         referrer: document.referrer
                     })
