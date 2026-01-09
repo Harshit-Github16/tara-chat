@@ -10,7 +10,9 @@ import {
     faVideo,
     faTrash,
     faPlus,
-    faExternalLinkAlt
+    faExternalLinkAlt,
+    faEdit,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useAuth } from "../contexts/AuthContext";
@@ -43,6 +45,8 @@ export default function AdminPage() {
         category: 'Wellness'
     });
     const [isSubmittingVideo, setIsSubmittingVideo] = useState(false);
+    const [editingVideo, setEditingVideo] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
     const usersPerPage = 10;
 
     const fetchStats = async () => {
@@ -123,6 +127,37 @@ export default function AdminPage() {
             }
         } catch (error) {
             console.error('Error deleting video:', error);
+        }
+    };
+
+    const handleEditVideo = (video) => {
+        setEditingVideo(video);
+        setShowEditModal(true);
+    };
+
+    const handleUpdateVideo = async (e) => {
+        e.preventDefault();
+        setIsSubmittingVideo(true);
+        try {
+            const response = await fetch(`/api/admin/videos?id=${editingVideo._id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editingVideo)
+            });
+            const data = await response.json();
+            if (data.success) {
+                setShowEditModal(false);
+                setEditingVideo(null);
+                fetchVideos();
+                alert('Video updated successfully!');
+            } else {
+                alert(data.error || 'Failed to update video');
+            }
+        } catch (error) {
+            console.error('Error updating video:', error);
+            alert('Failed to update video');
+        } finally {
+            setIsSubmittingVideo(false);
         }
     };
 
@@ -378,9 +413,14 @@ export default function AdminPage() {
                                                 <span className="px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 text-[10px] font-bold uppercase tracking-wider">{video.category}</span>
                                             </td>
                                             <td className="py-4 px-4 text-right">
-                                                <button onClick={() => handleDeleteVideo(video._id)} className="p-2 text-gray-400 hover:text-rose-600 transition-colors">
-                                                    <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
-                                                </button>
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button onClick={() => handleEditVideo(video)} className="p-2 text-gray-400 hover:text-blue-600 transition-colors" title="Edit Video">
+                                                        <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
+                                                    </button>
+                                                    <button onClick={() => handleDeleteVideo(video._id)} className="p-2 text-gray-400 hover:text-rose-600 transition-colors" title="Delete Video">
+                                                        <FontAwesomeIcon icon={faTrash} className="h-4 w-4" />
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
@@ -515,6 +555,110 @@ export default function AdminPage() {
                     </div>
                 </main>
                 <BottomNav activePage="admin" />
+
+                {/* Edit Video Modal */}
+                {showEditModal && editingVideo && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowEditModal(false)}>
+                        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                            <div className="sticky top-0 bg-white border-b border-rose-100 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faEdit} className="h-5 w-5 text-rose-600" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-bold text-gray-800">Edit Video</h2>
+                                        <p className="text-xs text-gray-400">Update video details</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowEditModal(false)}
+                                    className="w-8 h-8 rounded-lg hover:bg-rose-50 text-gray-400 hover:text-rose-600 transition-colors flex items-center justify-center"
+                                >
+                                    <FontAwesomeIcon icon={faTimes} className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleUpdateVideo} className="p-6 space-y-4">
+                                <div className="space-y-1">
+                                    <label className="text-xs font-semibold text-gray-600 uppercase">Video Title *</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        placeholder="Enter video title"
+                                        value={editingVideo.title}
+                                        onChange={(e) => setEditingVideo({ ...editingVideo, title: e.target.value })}
+                                        className="w-full px-4 py-3 bg-white border border-rose-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                    />
+                                </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-xs font-semibold text-gray-600 uppercase">YouTube Link *</label>
+                                    <input
+                                        type="url"
+                                        required
+                                        placeholder="https://www.youtube.com/watch?v=..."
+                                        value={editingVideo.url}
+                                        onChange={(e) => setEditingVideo({ ...editingVideo, url: e.target.value })}
+                                        className="w-full px-4 py-3 bg-white border border-rose-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                    />
+                                </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-xs font-semibold text-gray-600 uppercase">Category</label>
+                                    <select
+                                        value={editingVideo.category}
+                                        onChange={(e) => setEditingVideo({ ...editingVideo, category: e.target.value })}
+                                        className="w-full px-4 py-3 bg-white border border-rose-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                    >
+                                        <option value="Wellness">Wellness</option>
+                                        <option value="Meditation">Meditation</option>
+                                        <option value="Self-Care">Self-Care</option>
+                                        <option value="Mental Health">Mental Health</option>
+                                        <option value="Anxiety">Anxiety</option>
+                                        <option value="Work-Life Balance">Work-Life Balance</option>
+                                    </select>
+                                </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-xs font-semibold text-gray-600 uppercase">Description</label>
+                                    <textarea
+                                        placeholder="Short description"
+                                        value={editingVideo.description || ''}
+                                        onChange={(e) => setEditingVideo({ ...editingVideo, description: e.target.value })}
+                                        className="w-full px-4 py-3 bg-white border border-rose-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[100px] resize-none"
+                                    />
+                                </div>
+
+                                <div className="flex items-center gap-3 pt-4 border-t border-rose-50">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowEditModal(false)}
+                                        className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmittingVideo}
+                                        className="flex-1 px-6 py-3 bg-rose-600 text-white rounded-xl font-semibold hover:bg-rose-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                    >
+                                        {isSubmittingVideo ? (
+                                            <>
+                                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                Updating...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <FontAwesomeIcon icon={faEdit} className="h-4 w-4" />
+                                                Update Video
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </ProtectedRoute>
     );

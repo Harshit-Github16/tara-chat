@@ -50,3 +50,35 @@ export async function DELETE(request) {
         return NextResponse.json({ error: 'Failed to delete video' }, { status: 500 });
     }
 }
+
+export async function PUT(request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+        const data = await request.json();
+
+        if (!id) {
+            return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+        }
+
+        if (!data.url || !data.title) {
+            return NextResponse.json({ error: 'Title and URL are required' }, { status: 400 });
+        }
+
+        const result = await Video.updateById(id, {
+            title: data.title,
+            description: data.description,
+            url: data.url,
+            category: data.category
+        });
+
+        if (result.matchedCount === 0) {
+            return NextResponse.json({ error: 'Video not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Error updating video:', error);
+        return NextResponse.json({ error: 'Failed to update video' }, { status: 500 });
+    }
+}
