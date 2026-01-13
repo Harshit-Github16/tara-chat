@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
 import clientPromise from '../../../lib/mongodb';
 import { ObjectId } from 'mongodb';
+import {
+    preprocessMessage,
+    detectIntentAndEmotion,
+    selectStrategy,
+    buildPrompt,
+    safetyFilter,
+    toneChecker,
+    getCrisisResponse
+} from '../../lib/tara-pipeline';
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
@@ -20,121 +29,77 @@ export async function POST(request) {
         const client = await clientPromise;
         const db = client.db('Cluster0');
         const collection = db.collection('tara_chats');
-        const usersCollection = db.collection('users');
+        // Users collection might be used for fetching user name or deeper profile later
+        // const usersCollection = db.collection('users');
 
-        // Get user's chat history with TARA
+        // 1. Fetch Context (Memory)
         const userChat = await collection.findOne({ userId: userId });
         const chatHistory = userChat?.messages || [];
 
-        // Get user's latest mood from users collection
-        const user = await usersCollection.findOne({ _id: new ObjectId(userId) });
-        const latestMood = user?.moods && user.moods.length > 0
-            ? user.moods[user.moods.length - 1]
-            : null;
-
-        // Add user's new message to history
-        const userMessage = {
-            id: new ObjectId().toString(),
-            content: message,
-            sender: 'user',
-            timestamp: new Date()
+        // Simple Memory Object (STM) - Last few turns
+        const stm = {
+            recentAttempts: chatHistory.slice(-3),
+            lastIntent: chatHistory.length > 0 ? chatHistory[chatHistory.length - 1].intent : null
         };
 
-        // Create mood-aware system prompt
-        let systemPrompt = `You are TARA (Talk, Align, Reflect, Act), a compassionate AI mental wellness companion. You provide emotional support, mindfulness guidance, and mental health resources. 
+        // 2. Pre-processing
+        const preprocessed = preprocessMessage(message);
+        console.log("Preprocessed:", preprocessed);
 
-CRITICAL: Keep responses VERY SHORT - maximum 1 sentence or 10-15 words. Be conversational, not explanatory.
+        // 3. Intent & Emotion Detection
+        // Using chatHistory for context could be added to the prompt inside detectIntentAndEmotion if needed
+        const intentData = await detectIntentAndEmotion(preprocessed, GROQ_API_KEY, chatHistory);
+        console.log("Intent Data:", intentData);
 
-Examples:
-User: "hii"
-You: "Hey! How's it going? 😊"
+        // 4. Crisis Override Check (Immediate)
+        if (intentData.intent === 'crisis' || preprocessed.crisis_flag !== 'none') {
+            const crisisLevel = preprocessed.crisis_flag === 'immediate' ? 'immediate' : 'likely';
+            const crisisResponseText = getCrisisResponse(crisisLevel);
 
-User: "I'm stressed"
-You: "I hear you. What's up? 🥺"
-
-User: "I'm happy"
-You: "That's great! What happened? 💛"
-
-Remember the conversation context and provide personalized responses based on the user's previous messages.`;
-
-        // Add archetype-based support orientation
-        if (user?.archetype && user?.supportPreference) {
-            const archetypeSupport = {
-                'empathic_explorer': {
-                    tone: 'gentle, reflective, and deeply validating',
-                    approach: 'Create safe space for emotional exploration. Validate feelings deeply.',
-                },
-                'thoughtful_thinker': {
-                    tone: 'logical, structured, and clear',
-                    approach: 'Provide practical solutions and clear frameworks.',
-                },
-                'energetic_driver': {
-                    tone: 'motivating, action-oriented, and encouraging',
-                    approach: 'Focus on goals and progress. Celebrate wins.',
-                },
-                'calm_stabilizer': {
-                    tone: 'peaceful, grounding, and consistent',
-                    approach: 'Provide stability and calming presence.',
-                },
-                'caring_supporter': {
-                    tone: 'warm, nurturing, and compassionate',
-                    approach: 'Remind them to care for themselves.',
-                }
+            // Save and Return immediately
+            const taraMessage = {
+                id: new ObjectId().toString(),
+                content: crisisResponseText,
+                sender: 'tara',
+                timestamp: new Date(),
+                intent: 'crisis',
+                emotion: intentData.primary_emotion || 'anxiety'
+            };
+            const userMessageObj = {
+                id: new ObjectId().toString(),
+                content: message,
+                sender: 'user',
+                timestamp: new Date()
             };
 
-            const supportStyle = {
-                'calming_voice': 'Use soothing, peaceful language.',
-                'problem_solving': 'Provide clear, practical solutions.',
-                'express_feelings': 'Create space for emotional expression.',
-                'quick_motivation': 'Be energizing and uplifting.',
-                'deep_insights': 'Explore deeper meaning behind emotions.'
-            };
+            await collection.updateOne(
+                { userId: userId },
+                { $set: { messages: [...chatHistory, userMessageObj, taraMessage], lastUpdated: new Date() } },
+                { upsert: true }
+            );
 
-            const archetypeInfo = archetypeSupport[user.archetype];
-            const preferenceInfo = supportStyle[user.supportPreference];
-
-            if (archetypeInfo && preferenceInfo) {
-                systemPrompt += `\n\n🎯 SUPPORT PROFILE: ${archetypeInfo.tone}. ${archetypeInfo.approach} ${preferenceInfo}`;
-            }
+            return NextResponse.json({
+                success: true,
+                userMessage: userMessageObj,
+                taraMessage: taraMessage,
+                chatHistory: [...chatHistory, userMessageObj, taraMessage]
+            });
         }
 
-        // Add mood context if available and this is the first message
-        if (latestMood && chatHistory.length === 0) {
-            const moodContext = {
-                'happy': `The user is feeling happy and positive. Start with an uplifting greeting that acknowledges their good mood and encourages them to share what's making them feel great.`,
-                'sad': `The user is feeling sad. Start with a gentle, empathetic greeting that shows you understand they're going through a difficult time and you're here to listen without judgment.`,
-                'anxious': `The user is feeling anxious. Start with a calming, reassuring greeting that acknowledges their anxiety and offers support. Let them know it's okay to feel this way.`,
-                'angry': `The user is feeling angry. Start with a validating greeting that acknowledges their feelings are valid and you're here to help them process these emotions constructively.`,
-                'stressed': `The user is feeling stressed. Start with a supportive greeting that recognizes their stress and offers to help them find ways to manage it.`,
-                'calm': `The user is feeling calm. Start with a peaceful greeting that honors their state of tranquility and encourages them to share what's on their mind.`,
-                'excited': `The user is feeling excited. Start with an enthusiastic greeting that matches their energy and invites them to share what's exciting them.`,
-                'tired': `The user is feeling tired. Start with a gentle, understanding greeting that acknowledges their fatigue and offers support.`,
-                'confused': `The user is feeling confused. Start with a clear, supportive greeting that offers to help them work through their confusion.`,
-                'grateful': `The user is feeling grateful. Start with a warm greeting that celebrates their gratitude and invites them to share what they're thankful for.`
-            };
+        // 5. Strategy Selection
+        const strategyData = selectStrategy(intentData, stm, preprocessed);
+        console.log("Strategy:", strategyData);
 
-            const moodPrompt = moodContext[latestMood.mood] || moodContext['calm'];
-            systemPrompt += ` IMPORTANT: This is the user's first message. ${moodPrompt} Keep your greeting brief, warm, and inviting (2-3 sentences max).`;
-        }
+        // 6. Prompt Builder
+        const prompt = buildPrompt(strategyData, intentData, preprocessed, stm);
 
-        // Prepare messages for Grok API (include chat history for context)
+        // 7. LLM Response Generation
         const groqMessages = [
-            {
-                role: 'system',
-                content: systemPrompt
-            },
-            // Include recent chat history for context (last 10 messages)
-            ...chatHistory.slice(-10).map(msg => ({
-                role: msg.sender === 'user' ? 'user' : 'assistant',
-                content: msg.content
-            })),
-            {
-                role: 'user',
-                content: message
-            }
+            { role: 'system', content: prompt }
+            // Note: detailed chat history is not passed in the prompt builder as per "Safe Memory" rule
+            // The prompt builder relied on specialized Context block. 
         ];
 
-        // Call Grok API
         const groqResponse = await fetch(GROQ_API_URL, {
             method: 'POST',
             headers: {
@@ -144,57 +109,46 @@ Remember the conversation context and provide personalized responses based on th
             body: JSON.stringify({
                 model: 'llama-3.3-70b-versatile',
                 messages: groqMessages,
-                max_tokens: 50, // Very short responses
-                temperature: 0.9,
-                top_p: 0.95,
-                stop: ['\n\n', '\n', 'User:', 'TARA:', '।।'], // Stop at line breaks
+                max_tokens: 150,
+                temperature: 0.7, // Warmer
             }),
         });
 
-        if (!groqResponse.ok) {
-            throw new Error(`Grok API error: ${groqResponse.status}`);
-        }
-
+        if (!groqResponse.ok) throw new Error(`Groq API error: ${groqResponse.status}`);
         const groqData = await groqResponse.json();
-        let taraReply = groqData.choices[0]?.message?.content || "I'm here to help. Could you tell me more about how you're feeling?";
+        let rawResponse = groqData.choices[0]?.message?.content || "I'm here with you.";
 
-        // Ensure response ends at a complete sentence
-        taraReply = taraReply.trim();
-        const lastChar = taraReply[taraReply.length - 1];
-        const sentenceEnders = ['.', '!', '?', '।', '॥']; // Including Hindi sentence enders
+        // 8. Safety Filter
+        let safeResponse = safetyFilter(rawResponse, strategyData, preprocessed);
 
-        if (!sentenceEnders.includes(lastChar)) {
-            // Find the last complete sentence
-            let lastSentenceEnd = -1;
-            for (let i = taraReply.length - 1; i >= 0; i--) {
-                if (sentenceEnders.includes(taraReply[i])) {
-                    lastSentenceEnd = i;
-                    break;
-                }
-            }
+        // 9. Tone Checker
+        // Ensure intentData has primary_emotion, fallback to 'neutral' if missing
+        if (!intentData.primary_emotion) intentData.primary_emotion = 'neutral';
+        let finalResponse = toneChecker(safeResponse, intentData);
 
-            // If we found a sentence ending, cut there
-            if (lastSentenceEnd > 0) {
-                taraReply = taraReply.substring(0, lastSentenceEnd + 1).trim();
-            }
-        }
-
-        // Create TARA's response message
-        const taraMessage = {
+        // 10. Save to DB
+        const userMessageObj = {
             id: new ObjectId().toString(),
-            content: taraReply,
-            sender: 'tara',
+            content: message,
+            sender: 'user',
             timestamp: new Date()
         };
 
-        // Update chat history in database
-        const updatedMessages = [...chatHistory, userMessage, taraMessage];
+        const taraMessage = {
+            id: new ObjectId().toString(),
+            content: finalResponse,
+            sender: 'tara',
+            timestamp: new Date(),
+            intent: intentData.intent,
+            emotion: intentData.primary_emotion
+        };
+
+        const updatedMessages = [...chatHistory, userMessageObj, taraMessage];
 
         await collection.updateOne(
             { userId: userId },
             {
                 $set: {
-                    userId: userId,
                     messages: updatedMessages,
                     lastUpdated: new Date()
                 }
@@ -204,7 +158,7 @@ Remember the conversation context and provide personalized responses based on th
 
         return NextResponse.json({
             success: true,
-            userMessage,
+            userMessage: userMessageObj,
             taraMessage,
             chatHistory: updatedMessages
         });
