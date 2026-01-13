@@ -2,7 +2,7 @@
  * Centralized language detection utility for Tara Chat
  */
 
-export function detectLanguage(message) {
+function detectLanguage(message) {
     if (!message) return 'english';
 
     const lowerMessage = message.toLowerCase().trim();
@@ -104,3 +104,6 @@ export function detectLanguage(message) {
     // Default to English
     return 'english';
 }
+
+// CommonJS exports for compatibility
+module.exports = { detectLanguage };

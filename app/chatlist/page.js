@@ -121,15 +121,43 @@ export default function ChatListPage() {
   // Track if older messages are shown
   const [showOlderMessages, setShowOlderMessages] = useState(false);
   // Store current session messages (mood greeting + new messages) - these should ALWAYS be visible
-  const [currentSessionMessages, setCurrentSessionMessages] = useState([]);
+  const [tempMessages, setTempMessages] = useState([]);
   // Track which message is currently typing
   const [typingMessageId, setTypingMessageId] = useState(null);
+  const prevTaraMessagesRef = useRef([]);
+
+  // Handle typing indicators when new messages arrive
+  useEffect(() => {
+    const msgs = chatMessages['tara-ai'] || [];
+    const prevMsgs = prevTaraMessagesRef.current;
+
+    if (msgs.length > prevMsgs.length) {
+      // Find new messages that are from 'them' or 'ai'
+      // Get IDs of previous messages for faster lookup
+      const prevIds = new Set(prevMsgs.map(m => m.id));
+
+      const newItems = msgs.filter(m => !prevIds.has(m.id));
+
+      newItems.forEach(m => {
+        if (m.sender === 'them' || m.sender === 'ai') {
+          setTypingMessageId(m.id);
+        }
+      });
+    }
+    prevTaraMessagesRef.current = msgs;
+  }, [chatMessages]);
+
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
 
   // Reset typing state after a delay (when typing animation completes)
   useEffect(() => {
     if (typingMessageId) {
       // Find the message to get its content length
-      const typingMessage = currentSessionMessages.find(m => m.id === typingMessageId);
+      // Look in both committed messages and temp messages
+      const allMsgs = [...(chatMessages['tara-ai'] || []), ...tempMessages];
+      const typingMessage = allMsgs.find(m => m.id === typingMessageId);
+
       if (typingMessage && typingMessage.content) {
         // Calculate typing duration (20ms per character + 500ms buffer)
         const typingDuration = (typingMessage.content.length * 20) + 500;
@@ -139,22 +167,19 @@ export default function ChatListPage() {
         return () => clearTimeout(timer);
       }
     }
-  }, [typingMessageId, currentSessionMessages]);
+  }, [typingMessageId, chatMessages, tempMessages]);
 
-  const [aiSuggestions, setAiSuggestions] = useState([]);
-  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+
 
   // Fetch AI suggestions when the last message is from the AI
   useEffect(() => {
     const fetchSuggestions = async () => {
       // Determine current messages based on activeId
-      let currentMsgs = [];
+      let currentMsgs = chatMessages[activeId] || [];
+
+      // Merge with temp messages if any
       if (activeId === "tara-ai") {
-        currentMsgs = showOlderMessages
-          ? [...(chatMessages["tara-ai"] || []), ...currentSessionMessages]
-          : currentSessionMessages;
-      } else {
-        currentMsgs = chatMessages[activeId] || [];
+        currentMsgs = [...currentMsgs, ...tempMessages];
       }
 
       if (currentMsgs.length === 0) return;
@@ -201,7 +226,7 @@ export default function ChatListPage() {
     // Add a small delay to ensure message processing is complete
     const timeout = setTimeout(fetchSuggestions, 500);
     return () => clearTimeout(timeout);
-  }, [chatMessages, currentSessionMessages, activeId, showOlderMessages]);
+  }, [chatMessages, tempMessages, activeId]);
 
   const msgIdProcessedRef = useRef(new Set());
 
@@ -212,8 +237,16 @@ export default function ChatListPage() {
   // Initialize TaraChat component
   // Set session start time when component mounts
   useEffect(() => {
-    if (user?.uid && !sessionStartTime) {
-      setSessionStartTime(new Date());
+    if (user?.uid) {
+      // Check if we have a stored session start time
+      const storedStartTime = sessionStorage.getItem(`taraSessionStart_${user.uid}`);
+      if (storedStartTime) {
+        setSessionStartTime(new Date(storedStartTime));
+      } else if (!sessionStartTime) {
+        const now = new Date();
+        setSessionStartTime(now);
+        sessionStorage.setItem(`taraSessionStart_${user.uid}`, now.toISOString());
+      }
     }
   }, [user?.uid]);
 
@@ -227,55 +260,11 @@ export default function ChatListPage() {
     onMessagesUpdate: (messages) => {
       console.log('TaraChat onMessagesUpdate called with', messages.length, 'messages');
 
-      // Filter messages based on session start time
-      if (sessionStartTime) {
-        // Separate old messages (before session) and new messages (during session)
-        const oldMessages = messages.filter(msg => {
-          const msgTime = msg.timestamp ? new Date(msg.timestamp) : new Date();
-          return msgTime < sessionStartTime;
-        });
-
-        const newMessages = messages.filter(msg => {
-          const msgTime = msg.timestamp ? new Date(msg.timestamp) : new Date();
-          return msgTime >= sessionStartTime;
-        });
-
-        // Store old messages separately (for "See Older Messages")
-        setChatMessages(prev => ({
-          ...prev,
-          "tara-ai": oldMessages
-        }));
-
-        // Add new messages to current session with typing effect for Tara's messages
-        if (newMessages.length > 0) {
-          setCurrentSessionMessages(prev => {
-            // Remove any temporary messages first
-            const nonTempMessages = prev.filter(m => !m.isTemp);
-
-            // Avoid duplicates by checking IDs ONLY
-            // Content-based deduplication was hiding valid identical responses (e.g., for '?' or '<<')
-            const existingIds = new Set(nonTempMessages.map(m => m.id));
-
-            const uniqueNewMessages = newMessages.filter(m => !existingIds.has(m.id));
-
-            // For Tara's messages (sender: 'them'), add typing effect
-            uniqueNewMessages.forEach(msg => {
-              if (msg.sender === 'them' || msg.sender === 'ai') {
-                // Trigger typing animation for this message
-                setTypingMessageId(msg.id);
-              }
-            });
-
-            return [...nonTempMessages, ...uniqueNewMessages];
-          });
-        }
-      } else {
-        // No session start time yet, just store all messages
-        setChatMessages(prev => ({
-          ...prev,
-          "tara-ai": messages
-        }));
-      }
+      // Update messages store
+      setChatMessages(prev => ({
+        ...prev,
+        "tara-ai": messages
+      }));
 
       // Update last message in chat list
       if (messages.length > 0) {
@@ -363,6 +352,10 @@ export default function ChatListPage() {
           // IMPORTANT: Set session start time to NOW
           const now = new Date();
           setSessionStartTime(now);
+          // Persist session start to storage so it survives navigation
+          if (user?.uid) {
+            sessionStorage.setItem(`taraSessionStart_${user.uid}`, now.toISOString());
+          }
 
           // Ensure older messages are hidden by default
           setShowOlderMessages(false);
@@ -380,8 +373,8 @@ export default function ChatListPage() {
           // Mark that mood greeting was sent
           setMoodGreetingSent(true);
 
-          // Add greeting to CURRENT SESSION messages (these will ALWAYS be visible)
-          setCurrentSessionMessages([taraGreeting]);
+          // Add greeting to TEMP messages (will be replaced by DB version later)
+          setTempMessages([taraGreeting]);
 
           // Trigger typing effect for mood greeting
           setTypingMessageId(taraGreeting.id);
@@ -526,14 +519,29 @@ export default function ChatListPage() {
   let olderMessagesCount = 0;
 
   if (activeId === "tara-ai") {
-    if (showOlderMessages) {
-      // Show ALL messages (old + current session)
-      messages = [...allMessages, ...currentSessionMessages];
+    // Get ALL messages from legacy/persistent storage
+    const allTaraMsgs = chatMessages["tara-ai"] || [];
+
+    // Separate into old and recent based on sessionStartTime
+    let historical = [];
+    let recent = [];
+
+    if (sessionStartTime) {
+      historical = allTaraMsgs.filter(m => new Date(m.timestamp) < sessionStartTime);
+      recent = allTaraMsgs.filter(m => new Date(m.timestamp) >= sessionStartTime);
     } else {
-      // Show ONLY current session messages (mood greeting + new messages)
-      messages = currentSessionMessages;
+      // Fallback if no session start (should be rare due to useEffect)
+      recent = allTaraMsgs;
+    }
+
+    if (showOlderMessages) {
+      // Show ALL messages
+      messages = [...historical, ...recent, ...tempMessages];
+    } else {
+      // Show ONLY current session messages + temp
+      messages = [...recent, ...tempMessages];
       // Count older messages
-      olderMessagesCount = allMessages.length;
+      olderMessagesCount = historical.length;
     }
   } else {
     // For other chats, show all messages
@@ -868,8 +876,8 @@ export default function ChatListPage() {
         isTemp: true // Mark as temporary
       };
 
-      // Add to current session messages (always visible)
-      setCurrentSessionMessages(prev => [...prev, tempUserMessage]);
+      // Add to temp messages (always visible)
+      setTempMessages(prev => [...prev, tempUserMessage]);
 
       try {
         console.log('Sending message to TARA with user details:', {
@@ -891,13 +899,13 @@ export default function ChatListPage() {
         console.log('Message sent successfully, result:', result);
 
         // Remove temp message after successful send (real message will come from onMessagesUpdate)
-        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
+        setTempMessages(prev => prev.filter(m => m.id !== tempId));
       } catch (error) {
         console.error('Failed to send message to TARA:', error);
         console.error('Error details:', error.message, error.stack);
         alert(`Failed to send message: ${error.message}`);
         // Remove the temp message on error from current session
-        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
+        setTempMessages(prev => prev.filter(m => m.id !== tempId));
       } finally {
         setIsSendingMessage(false);
       }
@@ -986,8 +994,8 @@ export default function ChatListPage() {
         isTemp: true // Mark as temporary
       };
 
-      // Add to current session messages (always visible)
-      setCurrentSessionMessages(prev => [...prev, tempUserMessage]);
+      // Add to temp messages (always visible)
+      setTempMessages(prev => [...prev, tempUserMessage]);
 
       try {
         await taraChat.sendMessage(suggestedText, {
@@ -1000,11 +1008,11 @@ export default function ChatListPage() {
         });
 
         // Remove temp message after successful send
-        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
+        setTempMessages(prev => prev.filter(m => m.id !== tempId));
       } catch (error) {
         console.error('Failed to send suggested message to TARA:', error);
         // Remove the temp message on error
-        setCurrentSessionMessages(prev => prev.filter(m => m.id !== tempId));
+        setTempMessages(prev => prev.filter(m => m.id !== tempId));
       } finally {
         setIsSendingMessage(false);
       }
@@ -1743,6 +1751,20 @@ function ChatBubble({ who, type = 'text', content, duration, messageId, isTyping
   const [isPlaying, setIsPlaying] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const [typingComplete, setTypingComplete] = useState(false);
+
+  // Validate content - filter out corrupted/garbage messages
+  const isValidContent = (text) => {
+    if (!text || typeof text !== 'string') return false;
+    if (text.trim().length === 0) return false;
+    // Filter out obvious garbage patterns (random characters with lots of colons, etc.)
+    if (/^[\d\s]*[a-zA-Z]{2,4}\s+[A-Z][a-z]{2}\s+[a-z]+:+[a-z]+$/i.test(text)) return false;
+    return true;
+  };
+
+  // Skip rendering if content is invalid
+  if (type === 'text' && !isValidContent(content)) {
+    return null;
+  }
 
   // Typing effect for Tara's messages
   useEffect(() => {

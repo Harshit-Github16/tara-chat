@@ -191,28 +191,54 @@ export async function POST(request) {
         const role = chatUser.role || chatUser.type || 'Chill Friend';
         let systemPrompt = ROLE_PROMPTS[role] || ROLE_PROMPTS['Chill Friend'];
 
-        // Apply dynamic strategy
-        const { getResponseStrategy, generateSystemInstruction } = require('../../utils/conversationStrategy');
-        const strategy = getResponseStrategy(message, recentHistory);
-        const strategyInstruction = generateSystemInstruction(strategy, userDetails ? `Name: ${userDetails.name}` : "");
-        systemPrompt += `\n\n${strategyInstruction}`;
+        // ========================================
+        // NEW: Use comprehensive chat pipeline
+        // ========================================
+        const { buildSystemPrompt } = require('../../utils/chatPipeline');
 
-        // Language detection
-        const currentLanguage = detectLanguage(message);
-        const recentHistoryText = recentHistory.map(m => m.content).join(' ');
-        let detectedLanguage = currentLanguage;
-        if (message.length < 5 && recentHistoryText) {
-            const historyLang = detectLanguage(recentHistoryText);
-            if (historyLang !== 'english') detectedLanguage = historyLang;
+        // Build system prompt using the new pipeline
+        const pipelineResult = await buildSystemPrompt(message, recentHistory, {
+            name: userDetails?.name,
+            gender: userDetails?.gender,
+            ageRange: userDetails?.ageRange,
+            profession: userDetails?.profession,
+            interests: userDetails?.interests
+        });
+
+        // Check for crisis - if skipLLM is true, use crisis response directly
+        if (pipelineResult.skipLLM && pipelineResult.crisisResponse) {
+            // Crisis detected - use pre-built crisis response
+            const userMessage = { id: new ObjectId().toString(), sender: 'user', content: message, timestamp: new Date() };
+            const aiMessage = { id: new ObjectId().toString(), sender: 'ai', content: pipelineResult.crisisResponse, timestamp: new Date() };
+
+            if (!skipChatHistory) {
+                await collection.updateOne(
+                    { $or: [{ firebaseUid: userId }, { userId: userId }], 'chatUsers.id': chatUserId },
+                    {
+                        $push: { 'chatUsers.$.conversations': { $each: [userMessage, aiMessage] } },
+                        $set: { 'chatUsers.$.lastMessageAt': new Date() }
+                    }
+                );
+            }
+
+            return NextResponse.json({
+                success: true,
+                userMessage,
+                aiMessage,
+                chatHistory: [...chatHistory, userMessage, aiMessage],
+                pipelineStrategy: 'CRISIS',
+                crisisHandled: true
+            });
         }
 
-        const languageInstructions = {
-            'english': 'Respond ONLY in English. Natural and conversational.',
-            'hindi': 'Respond ONLY in Hindi (Roman script). Warm and simple.',
-            'hinglish': 'Respond in HINGLISH (mix Hindi/English). Mirror the user\'s style.'
-        };
+        // Merge pipeline prompt with role prompt
+        systemPrompt = pipelineResult.systemPrompt + '\n\n' + systemPrompt;
 
-        systemPrompt += `\n\nLANGUAGE RULE: ${languageInstructions[detectedLanguage]}`;
+        // Get detected language from pipeline
+        const detectedLanguage = pipelineResult.language || 'english';
+
+        console.log(`📋 Pipeline: Strategy=${pipelineResult.strategy}, Intent=${pipelineResult.intent}, Language=${detectedLanguage}`);
+
 
         const groqPayload = {
             model: 'llama-3.3-70b-versatile',
